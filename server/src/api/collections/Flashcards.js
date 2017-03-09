@@ -1,8 +1,4 @@
-import mongoose from 'mongoose';
+import { mongoose } from '../../startup';
 
-const FlashcardSchema = new mongoose.Schema({
-    question: String,
-    answer: String,
-});
+console.log("mongoose", mongoose);
 
-export default mongoose.model('Flashcards', FlashcardSchema);

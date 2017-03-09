@@ -1,6 +1,7 @@
 const resolvers = {
     Query: {
         Flashcards(root, args, context) {
+            console.log("flashcards resolver");
             return context.Flashcards.getFlashcards();
         },
         Flashcard(root, args, context) {

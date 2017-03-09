@@ -1,8 +1,8 @@
 import Flashcards from '../collections/Flashcards';
 
 export default class ChannelRepository {
-    getFlashcards() {
-        return await Flashcards.find().fetch();
+    async getFlashcards() {
+        return await Flashcards.find();
     }
 
     getFlashcard(name) {

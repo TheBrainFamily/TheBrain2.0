@@ -8,7 +8,7 @@ const gql = schema => schema;
 export const typeDefs = gql`
     type Lesson {
         _id: String,
-        position: Number,
+        position: Int,
         description: String,
         flashcardIds: [String]!,
         youtubeId: String,

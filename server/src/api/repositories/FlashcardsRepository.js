@@ -1,8 +1,11 @@
 import Flashcards from '../collections/Flashcards';
 
 export default class ChannelRepository {
-    getFlashcards() {
-        return await Flashcards.find().fetch();
+    async getFlashcards() {
+        console.log("flashcards repository");
+        const dupa = await Flashcards.find().exec();
+        console.log("dupa ", dupa);
+        return dupa;
     }
 
     getFlashcard(_id) {

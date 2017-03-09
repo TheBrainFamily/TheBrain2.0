@@ -3,8 +3,10 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
-import FlashcardsRepository from './api/repositories/FlashcardsRepository';
-import LessonsRepository from './api/repositories/LessonsRepository';
+import mongoose from 'mongoose';
+
+// import FlashcardsRepository from './api/repositories/FlashcardsRepository';
+// import LessonsRepository from './api/repositories/LessonsRepository';
 import schema from './api/schema';
 const app = express();
 const port = 8080;
@@ -15,6 +17,51 @@ app.use(
     },
 );
 let OPTICS_API_KEY;
+
+
+mongoose.connect('mongodb://localhost/thebrain');
+
+const FlashcardSchema = new mongoose.Schema({
+    question: String,
+    answer: String,
+});
+
+export const Flashcards = mongoose.model('Flashcards', FlashcardSchema);
+const LessonSchema = new mongoose.Schema({
+    position: Number,
+    description: String,
+    flashcardIds: Array,
+    youtubeId: String,
+});
+
+export const Lessons = mongoose.model('Lessons', LessonSchema);
+
+
+class LessonsRepository {
+    async getFlashcards() {
+        return await Flashcards.find();
+    }
+
+    getFlashcard(name) {
+        console.log("getChannel by ", name);
+        return Flashcards.findOne({name});
+    }
+}
+
+
+class FlashcardsRepository {
+    async getFlashcards() {
+        console.log("flashcards repository");
+        const dupa = await Flashcards.find().exec();
+        console.log("dupa ", dupa);
+        return dupa;
+    }
+
+    getFlashcard(_id) {
+        console.log("getChannel by ", _id);
+        return Flashcards.findOne({_id});
+    }
+}
 
 
 app.use(bodyParser.urlencoded({extended: true}));
