@@ -1,12 +1,12 @@
-import Flashcards from '../collections/Flashcards';
-
-export default class ChannelRepository {
-    async getFlashcards() {
-        return await Flashcards.find();
-    }
-
-    getFlashcard(name) {
-        console.log("getChannel by ", name);
-        return Flashcards.findOne({name});
-    }
-}
+// import Lessons from '../collections/Lessons';
+//
+// export default class LessonsRepository {
+//     async getFlashcards() {
+//         return await Lessons.find();
+//     }
+//
+//     getFlashcard(name) {
+//         console.log("getChannel by ", name);
+//         return Lessons.findOne({name});
+//     }
+// }

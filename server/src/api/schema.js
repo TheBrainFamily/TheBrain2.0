@@ -18,23 +18,30 @@ export const typeDefs = gql`
         question: String!,
         answer: String!
     }
+    type Item {
+        actualTimesRepeated: Int,
+        easinessFactor: Float,
+        extraRepeatToday: Boolean,
+        flashcardId: String,
+        lastRepetition: String,
+        nextRepetition: String,
+        previousDaysChange: Int,
+        timesRepeated: Int
+    }
 
     type Query {
         Lessons: [Lesson]!,
-        Lesson(_id:String!): Lesson,
+        Lesson(position:Int!): Lesson,
         Flashcards: [Flashcard],
         Flashcard(_id: String!): Flashcard
+        Item: Item
     }
-    #    type Mutation {
-    #        addMessage(channelName: String!, message: String!, handle: String!): Message!
-    #        addChannel(channelName: String!): Channel!
-    #    }
-    #    type Subscription {
-    #        messageAdded(channelName: String!): Message
-    #    }
+    type Mutation {
+        createItemsForLesson(_id: String!): [Item],
+    }
     schema {
         query: Query
-        #        mutation: Mutation
+        mutation: Mutation
         #        subscription: Subscription
     }
 `;
