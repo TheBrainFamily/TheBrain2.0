@@ -3,7 +3,7 @@ import React from 'react';
 export default class extends React.Component {
     render() {
         return <div>
-            <div className="question">How many countries are on the earth?</div>
+            <div className="question">How many countries are on the Earth?</div>
             <div className="answer">
                 <br/>
                 <br/>
