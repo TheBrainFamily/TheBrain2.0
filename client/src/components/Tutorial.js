@@ -3,8 +3,8 @@ import YouTube from 'react-youtube';
 
 export default class extends React.Component {
     render() {
-        return <div>Placeholder for youtube video
-        <TutorialVideo/></div>
+        return <div id="video">
+            <TutorialVideo/></div>
     }
 }
 
@@ -19,7 +19,7 @@ class TutorialVideo extends React.Component {
             height: '390',
             width: '640',
             playerVars: { // https://developers.google.com/youtube/player_parameters
-                autoplay: 1
+                autoplay: 0
             }
         };
 
