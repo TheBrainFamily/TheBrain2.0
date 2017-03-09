@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import YouTube from 'react-youtube';
 
 export default class extends React.Component {
@@ -9,6 +9,11 @@ export default class extends React.Component {
 }
 
 class TutorialVideo extends React.Component {
+
+    static contextTypes = {
+        router: PropTypes.object
+    };
+
     render() {
         const opts = {
             height: '390',
@@ -22,12 +27,13 @@ class TutorialVideo extends React.Component {
             <YouTube
                 videoId="2g811Eo7K8U"
                 opts={opts}
-                onReady={this._onEnd}
+                onEnd={this._onEnd}
             />
         );
     }
 
-    _onEnd() {
-        console.log("hello world");
+    _onEnd = () => {
+        this.context.router.transitionTo("/wellDone");
     }
 }
+

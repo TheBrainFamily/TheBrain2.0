@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.17.1",
     "find-cache-dir": "^0.1.1",
+    "graphql": "^0.9.1",
+    "graphql-server-express": "^0.6.0",
+    "optics-agent": "^1.1.1",
     "react": "^15.4.2",
+    "react-apollo": "^0.13.3",
     "react-dom": "^15.4.2",
-    "react-router": "^4.0.0-beta.8",
+    "react-router": "4.0.0-alpha.5",
     "react-youtube": "^7.3.0"
   },
   "devDependencies": {
