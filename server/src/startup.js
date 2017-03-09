@@ -3,22 +3,21 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
-
+import FlashcardsRepository from './api/repositories/FlashcardsRepository';
+import LessonsRepository from './api/repositories/LessonsRepository';
+import schema from './api/schema';
+const app = express();
+const port = 8080;
 app.use(
     '/graphql',
     (req, resp, next) => {
-        if (config.persistedQueries) {
-            // eslint-disable-next-line no-param-reassign
-            req.body.query = invertedMap[req.body.id];
-        }
         next();
     },
 );
 let OPTICS_API_KEY;
 
-const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 if (OPTICS_API_KEY) {
@@ -57,7 +56,8 @@ app.use('/graphql', graphqlExpress((req) => {
         schema,
         context: {
             // user,
-            Lessons: new Lessons(),
+            Flashcards: new FlashcardsRepository(),
+            Lessons: new LessonsRepository(),
             opticsContext,
         },
     };
