@@ -1,10 +1,16 @@
 {
+  "parser": "babel-eslint",
   "plugins": [
-    "meteor"
+    "meteor",
+    "react",
+    "flowtype"
   ],
   "extends": [
+    "eslint:recommended",
     "airbnb-base",
-    "plugin:meteor/recommended"
+    "plugin:meteor/recommended",
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended"
   ],
   "env": {
     "browser": true,
@@ -18,11 +24,25 @@
   },
   "rules": {
     "no-console": "off",
-//    "import/no-extraneous-dependencies": "off",
-//    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-unresolved": "off",
+    "import/no-duplicates": "off",
+    "import/extensions": "off",
+    "import/no-absolute-path": "off",
+    "indent": ["error", 4],
     "strict": [
       "error",
       "global"
     ]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-root-import": {
+
+      }
+    },
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
   }
 }
