@@ -73,17 +73,19 @@ TUTORIAL
 }
 
 .welldone {
-    margin: 178px 0;
+    margin: 180px 0;
 }
 
 .questions {
     margin: 145px 0;
 }
 
-
-
 button {
     margin: 10px 20px;
+}
+
+button:hover {
+    background-color: #7fdbff;
 }
 
 /***********************
