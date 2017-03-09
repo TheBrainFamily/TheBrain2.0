@@ -24,12 +24,12 @@ class App extends Component {
                             <img src={logo} className="App-logo" alt="logo"/>
                             <h2 className="make-it-bigger">Welcome to TheBrain.Pro</h2>
                         </div>
-                        <div className="App-intro">
+                        <div className="App-intro styleIntroduction">
                             <Introduction/>
-                            <Match exactly pattern="/" component={Tutorial}/>
-                            <Match exactly pattern="/wellDone" component={WellDone}/>
-                            <Match exactly pattern="/questions" component={Questions}/>
                             <Content/>
+                            {/*<Match exactly pattern="/" component={Tutorial}/>*/}
+                            {/*<Match exactly pattern="/wellDone" component={WellDone}/>*/}
+                            {/*<Match exactly pattern="/questions" component={Questions}/>*/}
                             <Footer/>
                         </div>
                     </div>
