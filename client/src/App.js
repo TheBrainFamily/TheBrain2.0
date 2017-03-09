@@ -27,9 +27,9 @@ class App extends Component {
                         <div className="App-intro styleIntroduction">
                             <Introduction/>
                             <Content/>
-                            {/*<Match exactly pattern="/" component={Tutorial}/>*/}
-                            {/*<Match exactly pattern="/wellDone" component={WellDone}/>*/}
-                            {/*<Match exactly pattern="/questions" component={Questions}/>*/}
+                            <Match exactly pattern="/" component={Tutorial}/>
+                            <Match exactly pattern="/wellDone" component={WellDone}/>
+                            <Match exactly pattern="/questions" component={Questions}/>
                             <Footer/>
                         </div>
                     </div>

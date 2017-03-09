@@ -64,6 +64,29 @@ INTRODUCTION
 }
 
 /***********************
+TUTORIAL
+***********************/
+
+#video {
+    margin: 0;
+    padding: 0;
+}
+
+.welldone {
+    margin: 178px 0;
+}
+
+.questions {
+    margin: 145px 0;
+}
+
+
+
+button {
+    margin: 10px 20px;
+}
+
+/***********************
 CONTENT
 ***********************/
 
@@ -84,7 +107,7 @@ CONTACT
 .contact {
     border-top: 1px solid black;
     max-width: 100%;
-    margin: 400px 100px 0 100px;
+    margin: 100px 100px 0 100px;
     padding: 0 5%;
     background: #ffffff;
     text-align: center;
