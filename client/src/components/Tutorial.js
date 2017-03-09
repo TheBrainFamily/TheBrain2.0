@@ -1,9 +1,12 @@
 import React, {PropTypes} from 'react';
 import YouTube from 'react-youtube';
-
+import Introduction from './Introduction';
+import Content from './Content';
 export default class extends React.Component {
     render() {
         return <div id="video">
+            <Introduction/>
+            <Content/>
             <TutorialVideo/></div>
     }
 }
@@ -25,7 +28,7 @@ class TutorialVideo extends React.Component {
 
         return (
             <YouTube
-                videoId="2g811Eo7K8U"
+                videoId='FSyAehMdpyI'
                 opts={opts}
                 onEnd={this._onEnd}
             />
