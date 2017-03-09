@@ -1,0 +1,28 @@
+{
+  "plugins": [
+    "meteor"
+  ],
+  "extends": [
+    "airbnb-base",
+    "plugin:meteor/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "es6": true,
+    "meteor": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "no-console": "off",
+//    "import/no-extraneous-dependencies": "off",
+//    "import/no-unresolved": "off",
+    "strict": [
+      "error",
+      "global"
+    ]
+  }
+}
