@@ -54,6 +54,18 @@ a {
 
 }
 
+.fade {
+    opacity: 0.8;
+}
+
+.fade:hover {
+    opacity: 1;
+}
+
+.fade-in {
+    opacity: 0;
+}
+
 /***********************
 CONTENT
 ***********************/
