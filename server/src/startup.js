@@ -2,6 +2,7 @@ import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
+import { createServer } from 'http';
 
 app.use(
     '/graphql',
