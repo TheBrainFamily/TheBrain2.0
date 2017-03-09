@@ -4,10 +4,8 @@ export default class Content extends React.Component {
     render() {
         return (
             <div className="content">
-                <h3>Why don't you try it yourself?</h3>
-                <h3>Just follow the instructions visible below</h3>
-                <div>
-                </div>
+                <h2>Why don't you try it yourself?</h2>
+                <h2>Just whatch a video below and start your fascinating journey with TheBrain !</h2>
             </div>)
     }
 }
