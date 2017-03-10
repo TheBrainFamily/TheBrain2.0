@@ -30,12 +30,6 @@ const returnItemAfterEvaluation = function (evaluation, item) {
     const _repetitionTime = moment().toString();
     item.lastRepetition = _repetitionTime;
 
-    // // console.log("Item changed", item);
-    // const refreshedItem = {
-    //     ...item,
-    //     lastRepetition: _repetitionTime
-    // };
-    // console.log("JMOZGAWA: refreshedItem",refreshedItem);
     return item;
 };
 
