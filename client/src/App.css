@@ -22,7 +22,6 @@
 h2 {
     font-family: 'Slackey', cursive;
     color: black;
-
 }
 
 a {
@@ -35,6 +34,53 @@ a {
     background: white;
     border-bottom: 1px solid black;
 
+}
+
+/***********************
+FLASHCARDS
+***********************/
+
+.flashcard {
+    position: relative;
+    text-align: left;
+    background: #f2f2f2;
+    color: #000000;
+    border: 2px solid rgb(0, 0, 0) !important;
+    font-weight: normal;
+    height: 70px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    padding: 15px;
+    overflow-y: auto;
+    max-width: 60%;
+}
+
+.button-answer {
+    font-family: 'Orbitron', cursive;
+    position: relative;
+    text-align: center;
+    background: #f2f2f2;
+    color: #000000;
+    border: 2px solid rgb(0, 0, 0) !important;
+    font-weight: normal;
+    padding: 15px 40px;
+}
+
+.center {
+    left: 20%;
+}
+
+.input-answer {
+    width: 100%;
+    height: 60%;
+}
+
+.hidden>p {
+    display:none;
+}
+
+.visible>p {
+    display:block;
 }
 
 /***********************
@@ -60,7 +106,6 @@ INTRODUCTION
     font-size: 15px;
     text-align: center;
     margin: 10px 0;
-    padding: 20px;
 }
 
 /***********************
@@ -135,19 +180,4 @@ CONTACT
 
 .email1 {
     margin: 0 10px 0 40px;
-}
-
-.flashcard {
-    position: relative;
-    text-align: left;
-    background: #f2f2f2;
-    color: #000000;
-    border: 2px solid rgb(0, 0, 0) !important;
-    font-weight: normal;
-    resize: none;
-    height: 70px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    padding: 15px;
-    overflow-y: auto;
 }
