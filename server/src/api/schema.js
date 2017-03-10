@@ -24,8 +24,8 @@ export const typeDefs = gql`
         easinessFactor: Float,
         extraRepeatToday: Boolean,
         flashcardId: String,
-        lastRepetition: String,
-        nextRepetition: String,
+        lastRepetition: Int,
+        nextRepetition: Int,
         previousDaysChange: Int,
         timesRepeated: Int
     }

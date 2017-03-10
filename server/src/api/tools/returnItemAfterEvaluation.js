@@ -1,9 +1,9 @@
 import moment from 'moment';
 const returnItemAfterEvaluation = function (evaluation, item) {
     const currentDate = moment();
-    const nextRepetitionDate = moment(item.nextRepetition);
+    const nextRepetitionDate = item.nextRepetition;
     
-    if (item.extraRepeatToday && item.actualTimesRepeated > 0 && currentDate.unix() <= nextRepetitionDate.unix()) {
+    if (item.extraRepeatToday && item.actualTimesRepeated > 0 && currentDate.unix() <= nextRepetitionDate) {
         if (evaluation >= 4) {
             item.extraRepeatToday = false;
         }
@@ -12,7 +12,7 @@ const returnItemAfterEvaluation = function (evaluation, item) {
         const newParameters = processEvaluation(evaluation, item.easinessFactor, item.timesRepeated, item.previousDaysChange);
 
         // nextRepetition is to 18 hours earlier than it should be
-        item.nextRepetition = moment(currentDate).add("days", newParameters.daysChange - 1).add("hours", 6).toString();
+        item.nextRepetition = moment(currentDate).add("days", newParameters.daysChange - 1).add("hours", 6).unix();
         item.easinessFactor = newParameters.easinessFactor;
 
         if (newParameters.resetTimesRepeated) {
@@ -30,7 +30,7 @@ const returnItemAfterEvaluation = function (evaluation, item) {
         item.previousDaysChange = newParameters.daysChange;
     }
 
-    const _repetitionTime = moment().toString();
+    const _repetitionTime = moment().unix();
     item.lastRepetition = _repetitionTime;
 
     return item;

@@ -56,8 +56,8 @@ const ItemSchema = new mongoose.Schema({
     easinessFactor: Number,
     extraRepeatToday: Boolean,
     flashcardId: String,
-    lastRepetition: String,
-    nextRepetition: String,
+    lastRepetition: Number,
+    nextRepetition: Number,
     previousDaysChange: Number,
     timesRepeated: Number,
 });
@@ -84,8 +84,8 @@ export class ItemsRepository {
             actualTimesRepeated: 0,
             easinessFactor: 2.5,
             extraRepeatToday: false,
-            lastRepetition: '',
-            nextRepetition: '',
+            lastRepetition: 0,
+            nextRepetition: 0,
             previousDaysChange: 0,
             timesRepeated: 0,
         };
@@ -107,16 +107,9 @@ export class ItemsWithFlashcardRepository {
                 flashcard: flashcards.find(flashcard => flashcard._id == item.flashcardId)
             }
         }).sort((a, b)=> {
-            if (a.item.lastRepetition === '') {
-                return -1;
-            }
-            if (b.item.lastRepetition === '') {
-                return 1;
-            }
-            return moment(a.item.lastRepetition).unix() - moment(b.item.lastRepetition).unix();
+            return a.item.lastRepetition - b.item.lastRepetition;
         });
         
-        console.log("JMOZGAWA: sortedResults",sortedResults);
         return sortedResults;
     }
 
