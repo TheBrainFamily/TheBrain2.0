@@ -21,18 +21,24 @@ class Flashcard extends React.Component {
 
             <div>{!this.state.visibleAnswer ?
                 <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> :
-                <div className="center flashcard answer">CORRECT ANSWER :<br/><br/>{this.props.answer}</div>}</div>
+                    <div>
+                        <div className="center flashcard answer">CORRECT ANSWER :<br/><br/>{this.props.answer}
+                    </div>
+                    <p>How would you describe experience answering this question?</p>
+                    <br/>
+                    <button className="button-answer">Blackout</button>
+                    <button className="button-answer">Terrible</button>
+                    <button className="button-answer">Bad</button>
+                    <button className="button-answer">Hardly</button>
+                    <button className="button-answer">Good</button>
+                    <button className="button-answer">Perfect!</button>
+                </div>
+            }
+            </div>
 
-            <br/>
 
-            <p>How would you describe experience answering this question?</p>
 
-            <button className="button-answer">Blackout</button>
-            <button className="button-answer">Terrible</button>
-            <button className="button-answer">Bad</button>
-            <button className="button-answer">Hardly</button>
-            <button className="button-answer">Good</button>
-            <button className="button-answer">Perfect!</button>
+
         </div>
     }
 }
