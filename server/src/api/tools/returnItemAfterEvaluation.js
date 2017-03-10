@@ -9,7 +9,8 @@ const returnItemAfterEvaluation = function (evaluation, item) {
     else {
         const newParameters = processEvaluation(evaluation, item.easinessFactor, item.timesRepeated, item.previousDaysChange);
 
-        item.nextRepetition = moment(currentDate).add("days", newParameters.daysChange - 1).add("hours", 6)._d.toString();
+        // nextRepetition is to 18 hours earlier than it should be
+        item.nextRepetition = moment(currentDate).add("days", newParameters.daysChange - 1).add("hours", 6).toString();
         item.easinessFactor = newParameters.easinessFactor;
 
         if (newParameters.resetTimesRepeated) {
