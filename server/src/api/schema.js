@@ -19,6 +19,7 @@ export const typeDefs = gql`
         answer: String!
     }
     type Item {
+        _id: String,
         actualTimesRepeated: Int,
         easinessFactor: Float,
         extraRepeatToday: Boolean,
@@ -45,7 +46,7 @@ export const typeDefs = gql`
     }
     type Mutation {
         createItemsForLesson(_id: String!): [Item],
-        processEvaluation(itemId: String!, evaluation: Int!): Item
+        processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!
     }
     schema {
         query: Query

@@ -21,7 +21,7 @@ const resolvers = {
             return context.Items.getItemById(args._id);
         },
         ItemsWithFlashcard(root, args, context) {
-            return context.ItemsWithFlashcard.getItemsWithFlashcard()
+            return context.ItemsWithFlashcard.getItemsWithFlashcard();
         }
     },
     Mutation: {
@@ -40,7 +40,7 @@ const resolvers = {
             const newItem = returnItemAfterEvaluation(args.evaluation, item);
             await context.Items.update(args.itemId, newItem);
 
-            return newItem;
+            return context.ItemsWithFlashcard.getItemsWithFlashcard();
         }
     }
 };

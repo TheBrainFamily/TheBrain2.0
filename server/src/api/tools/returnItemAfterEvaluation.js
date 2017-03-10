@@ -1,7 +1,9 @@
 import moment from 'moment';
 const returnItemAfterEvaluation = function (evaluation, item) {
     const currentDate = moment();
-    if (item.extraRepeatToday && item.actualTimesRepeated > 0 && item.nextRepetition <= currentDate) {
+    const nextRepetitionDate = moment(item.nextRepetition);
+    
+    if (item.extraRepeatToday && item.actualTimesRepeated > 0 && currentDate.unix() <= nextRepetitionDate.unix()) {
         if (evaluation >= 4) {
             item.extraRepeatToday = false;
         }
