@@ -8,10 +8,12 @@ import Footer from './components/Footer';
 
 import { Match, BrowserRouter } from 'react-router';
 
-import ApolloClient from 'apollo-client';
+import { ApolloClient ,createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
-const client = new ApolloClient();
+const client = new ApolloClient({
+    networkInterface: createNetworkInterface({ uri: 'http://localhost:8080/graphql' }),
+});
 
 class App extends Component {
     render() {
@@ -25,7 +27,7 @@ class App extends Component {
                         </div>
                         <div className="App-intro styleIntroduction">
 
-                            <Match exactly pattern="/" component={Tutorial}/>
+                            <Match exactly pattern="/" component={Tutorial} />
                             <Match exactly pattern="/wellDone" component={WellDone}/>
                             <Match exactly pattern="/questions" component={Questions}/>
                             <Footer/>

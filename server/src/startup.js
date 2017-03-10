@@ -4,6 +4,7 @@ import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { FlashcardsRepository, LessonsRepository, ItemsRepository } from './api/mongooseSetup';
+import  cors  from 'cors';
 
 import schema from './api/schema';
 const app = express();
@@ -16,10 +17,20 @@ app.use(
 );
 let OPTICS_API_KEY;
 
+//FIXES CORS ERROR
+const whitelist = [
+    'http://localhost:3000',
+];
 
+const corsOptions = {
+    origin: function(origin, callback){
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+    credentials: true
+};
 
-
-
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -73,5 +84,5 @@ app.use('/graphiql', graphiqlExpress({
 const server = createServer(app);
 
 server.listen(port, () => console.log( // eslint-disable-line no-console
-    `API Server is now running on http://localhost:${port}`,
+    `API Server is now running on http://localhost:${port}/graphql`,
 ));

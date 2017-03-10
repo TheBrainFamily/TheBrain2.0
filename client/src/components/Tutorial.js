@@ -2,12 +2,28 @@ import React, {PropTypes} from 'react';
 import YouTube from 'react-youtube';
 import Introduction from './Introduction';
 import Content from './Content';
-export default class extends React.Component {
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
+
+
+class Tutorial extends React.Component {
+
+
     render() {
+        
+        if (this.props.data.loading) {
+            return (<p>Loading...</p>)
+        }
+
+        if (this.props.data.error) {
+            return (<p>Error...</p>)
+        }
+
         return <div id="video">
             <Introduction/>
             <Content/>
-            <TutorialVideo/></div>
+            <TutorialVideo lesson={this.props.data.Lesson}/>
+        </div>
     }
 }
 
@@ -28,7 +44,7 @@ class TutorialVideo extends React.Component {
 
         return (
             <YouTube
-                videoId='FSyAehMdpyI'
+                videoId={this.props.lesson.youtubeId}
                 opts={opts}
                 onEnd={this._onEnd}
             />
@@ -39,4 +55,20 @@ class TutorialVideo extends React.Component {
         this.context.router.transitionTo("/wellDone");
     }
 }
+
+const query = gql`
+    query Lesson($position:Int!) {
+        Lesson(position:$position) {
+            _id, position, description, flashcardIds, youtubeId
+        }
+    }
+`;
+
+export default graphql(query, {
+    options: ownProps => {
+        let lessonPosition = ownProps.params.lessonPosition ? ownProps.params.lessonPosition : 1;
+
+        return ({variables: {position: lessonPosition}});
+    },
+})(Tutorial);
 
