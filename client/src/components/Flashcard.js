@@ -21,6 +21,7 @@ class Flashcard extends React.Component {
             itemId: this.props.evalItemId,
             evaluation: value
         });
+        this.setState({visibleAnswer: false})
     }
 
     render() {
