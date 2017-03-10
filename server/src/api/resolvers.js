@@ -19,6 +19,9 @@ const resolvers = {
         Item(root, args, context) {
             return context.Items.getItemById(args._id);
         },
+        ItemsWithFlashcard(root, args, context) {
+            return context.ItemsWithFlashcard.getItemsWithFlashcard()
+        }
     },
     Mutation: {
        async createItemsForLesson(root, args, context) {

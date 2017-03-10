@@ -1,4 +1,5 @@
 import React from 'react';
+import { withApollo } from 'react-apollo';
 
 import { Link } from 'react-router';
 
@@ -10,7 +11,7 @@ import { Link } from 'react-router';
 //     }`;
 //
 
-export default class extends React.Component {
+export class WellDone extends React.Component {
     componentDidMount() {
 
     }
@@ -20,3 +21,5 @@ export default class extends React.Component {
         </div>
     }
 }
+
+export default withApollo(WellDone);

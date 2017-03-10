@@ -28,13 +28,20 @@ export const typeDefs = gql`
         previousDaysChange: Int,
         timesRepeated: Int
     }
+    
+    type ItemWithFlashcard {
+        item: Item!,
+        flashcard: Flashcard!
+    }
 
     type Query {
         Lessons: [Lesson]!,
         Lesson(position:Int!): Lesson,
-        Flashcards: [Flashcard],
+        Flashcards: [Flashcard],        
         Flashcard(_id: String!): Flashcard
-        Item: Item
+        Item: Item,
+        ItemsWithFlashcard: [ItemWithFlashcard]!
+        
     }
     type Mutation {
         createItemsForLesson(_id: String!): [Item],
