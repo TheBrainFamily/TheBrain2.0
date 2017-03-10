@@ -37,8 +37,10 @@ const resolvers = {
         },
         async processEvaluation(root, args, context) {
             const item = await context.Items.getItemById(args.itemId);
+            console.log("JMOZGAWA: item",item);
             const newItem = returnItemAfterEvaluation(args.evaluation, item);
-            await context.Items.update({_id: args.itemId}, {$set: newItem});
+            console.log("JMOZGAWA: newItem",newItem);
+            await context.Items.update(args.itemId, newItem);
 
             return newItem;
         }

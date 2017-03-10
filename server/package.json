@@ -5,7 +5,7 @@
   "main": "src/startup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/startup.js --watch api --exec babel-node"
+    "dev": "nodemon --debug=6666 src/startup.js --watch src --exec babel-node"
   },
   "author": "",
   "license": "ISC",

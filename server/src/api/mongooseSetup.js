@@ -70,6 +70,10 @@ export class ItemsRepository {
 
     }
 
+    async update(id, item) {
+        return await Items.update({_id: id}, {$set: item});
+    }
+
     async getItemById(_id) {
         return await Items.findOne({_id});
     }

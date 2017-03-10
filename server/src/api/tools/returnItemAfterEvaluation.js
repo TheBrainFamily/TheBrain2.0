@@ -26,11 +26,17 @@ const returnItemAfterEvaluation = function (evaluation, item) {
         item.actualTimesRepeated++;
         item.previousDaysChange = newParameters.daysChange;
     }
+
     const _repetitionTime = moment().toString();
-    return {
-        ...item,
-        lastRepetition: _repetitionTime
-    };
+    item.lastRepetition = _repetitionTime;
+
+    // // console.log("Item changed", item);
+    // const refreshedItem = {
+    //     ...item,
+    //     lastRepetition: _repetitionTime
+    // };
+    // console.log("JMOZGAWA: refreshedItem",refreshedItem);
+    return item;
 };
 
 export default returnItemAfterEvaluation;
