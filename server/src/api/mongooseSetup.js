@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import moment from 'moment';
 
 mongoose.connect('mongodb://localhost/thebrain');
 
@@ -101,13 +101,23 @@ export class ItemsWithFlashcardRepository {
     async getItemsWithFlashcard() {
         const currentItems = await Items.find({$or: [{actualTimesRepeated: 0}, {extraRepeatToday: true}]});
         const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}});
-        return currentItems.map(item => {
+        const sortedResults = currentItems.map(item => {
             return {
                 item,
                 flashcard: flashcards.find(flashcard => flashcard._id == item.flashcardId)
             }
+        }).sort((a, b)=> {
+            if (a.item.lastRepetition === '') {
+                return -1;
+            }
+            if (b.item.lastRepetition === '') {
+                return 1;
+            }
+            return moment(a.item.lastRepetition).unix() - moment(b.item.lastRepetition).unix();
         });
-
+        
+        console.log("JMOZGAWA: sortedResults",sortedResults);
+        return sortedResults;
     }
 
 }
