@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+
 mongoose.connect('mongodb://localhost/thebrain');
 
 const FlashcardSchema = new mongoose.Schema({
@@ -69,6 +70,10 @@ export class ItemsRepository {
 
     }
 
+    async getItemById(_id) {
+        return await Items.findOne({_id});
+    }
+
     async create(flashcardId) {
         const newItem = {
             flashcardId,
@@ -90,7 +95,7 @@ export class ItemsRepository {
 export class ItemsWithFlashcardRepository {
 
     async getItemsWithFlashcard() {
-        const currentItems = await Items.find({$or: [{timesRepeated: 0}, {extraRepeatToday: true}]});
+        const currentItems = await Items.find({$or: [{actualTimesRepeated: 0}, {extraRepeatToday: true}]});
         const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}});
         return currentItems.map(item => {
             return {

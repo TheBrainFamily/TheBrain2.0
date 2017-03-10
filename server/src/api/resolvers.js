@@ -1,5 +1,6 @@
 // import Flashcards from './repositories/FlashcardsRepository';
 import Lessons from './repositories/LessonsRepository';
+import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation';
 
 const resolvers = {
     Query: {
@@ -34,6 +35,13 @@ const resolvers = {
             });
             return items;
         },
+        async processEvaluation(root, args, context) {
+            const item = await context.Items.getItemById(args.itemId);
+            const newItem = returnItemAfterEvaluation(args.evaluation, item);
+            await context.Items.update({_id: args.itemId}, {$set: newItem});
+
+            return newItem;
+        }
     }
 };
 

@@ -45,6 +45,7 @@ export const typeDefs = gql`
     }
     type Mutation {
         createItemsForLesson(_id: String!): [Item],
+        processEvaluation(itemId: String!, evaluation: Int!): Item
     }
     schema {
         query: Query
