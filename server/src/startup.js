@@ -3,7 +3,7 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
-import { FlashcardsRepository, LessonsRepository, ItemsRepository, ItemsWithFlashcardRepository } from './api/mongooseSetup';
+import { FlashcardsRepository, LessonsRepository, ItemsRepository, ItemsWithFlashcardRepository, UserDetailsRepository } from './api/mongooseSetup';
 import  cors  from 'cors';
 
 import schema from './api/schema';
@@ -73,7 +73,8 @@ app.use('/graphql', graphqlExpress((req) => {
             Flashcards: new FlashcardsRepository(),
             Lessons: new LessonsRepository(),
             Items: new ItemsRepository(),
-            ItemsWithFlashcard: new ItemsWithFlashcardRepository()
+            ItemsWithFlashcard: new ItemsWithFlashcardRepository(),
+            UserDetails: new UserDetailsRepository(),
         },
     };
 }));

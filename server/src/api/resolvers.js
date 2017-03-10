@@ -11,8 +11,10 @@ const resolvers = {
         Flashcard(root, args, context) {
             return context.Flashcards.getFlashcard(args._id);
         },
-        Lesson(root, args, context) {
-            return context.Lessons.getLessonByPosition(args.position);
+        async Lesson(root, args, context) {
+            const userId = "1";
+            const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
+            return await context.Lessons.getLessonByPosition(nextLessonPosition);
         },
         Lessons(root, args, context) {
             return context.Lessons.getLessons();
@@ -25,22 +27,30 @@ const resolvers = {
         }
     },
     Mutation: {
-       async createItemsForLesson(root, args, context) {
-            const lesson = await context.Lessons.getLessonById(args._id);
+        async createItemsAndMarkLessonAsWatched(root, args, context) {
+            const userId = "1";
+            const currentLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
+            console.log("JMOZGAWA: currentLessonPosition",currentLessonPosition);
+            const lesson = await context.Lessons.getLessonByPosition(currentLessonPosition);
+            console.log("JMOZGAWA: lesson",lesson);
             const flashcardIds = lesson.flashcardIds;
             const items = [];
-            const shorterFlashcardIds = flashcardIds.splice(2);
-           shorterFlashcardIds.forEach((flashcardId) => {
+            flashcardIds.splice(2);
+            flashcardIds.forEach((flashcardId) => {
                 items.push(context.Items.create(flashcardId));
             });
-            return items;
+            await context.UserDetails.updateNextLessonPosition(userId);
+            const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
+            return await context.Lessons.getLessonByPosition(nextLessonPosition);
+
         },
         async processEvaluation(root, args, context) {
             const item = await context.Items.getItemById(args.itemId);
             const newItem = returnItemAfterEvaluation(args.evaluation, item);
+            //TODO move this to repository
             await context.Items.update(args.itemId, newItem);
 
-            return context.ItemsWithFlashcard.getItemsWithFlashcard();
+            return await context.ItemsWithFlashcard.getItemsWithFlashcard();
         }
     }
 };

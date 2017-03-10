@@ -1,6 +1,7 @@
 import React from 'react';
-import { withApollo } from 'react-apollo';
-
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
+import update from 'immutability-helper';
 import { Link } from 'react-router';
 
 // const createMessage = gql`
@@ -13,7 +14,7 @@ import { Link } from 'react-router';
 
 export class WellDone extends React.Component {
     componentDidMount() {
-
+        this.props.lessonWatchedMutation();
     }
     render() {
         return <div className="welldone">
@@ -22,4 +23,29 @@ export class WellDone extends React.Component {
     }
 }
 
-export default withApollo(WellDone);
+const lessonWatchedMutationSchema = gql`
+    mutation createItemsAndMarkLessonAsWatched{
+        createItemsAndMarkLessonAsWatched{
+            _id, position, description, flashcardIds, youtubeId
+        }
+    }
+`;
+
+
+export default graphql(lessonWatchedMutationSchema, {
+    props: ({ownProps, mutate}) => ({
+        lessonWatchedMutation: () => mutate({
+            updateQueries: {
+                Lesson: (prev, {mutationResult}) => {
+                    console.log("JMOZGAWA: mutationResult",mutationResult);
+                    const updateResults = update(prev, {
+                        Lesson: {
+                            $set: mutationResult.data.createItemsAndMarkLessonAsWatched
+                        }
+                    });
+                    return updateResults;
+                }
+            }
+        })
+    })
+})(WellDone);

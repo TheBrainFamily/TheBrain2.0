@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import Flashcard from './Flashcard';
@@ -6,13 +6,16 @@ import SessionSummary from './SessionSummary';
 
 class Questions extends React.Component {
 
+    static contextTypes = {
+        router: PropTypes.object
+    };
+
     constructor(props) {
         super(props);
         this.state = {
 
         }
     }
-
     onEvaluationCompleted = (value)=> {
 
     }
@@ -34,8 +37,11 @@ class Questions extends React.Component {
                     <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}  onSubmitEvaluation={this.onEvaluationCompleted}/>
                 </div>
             } else {
-                return <p>THE END</p>
+                setTimeout(() => {
+                    this.context.router.transitionTo("/");
+                }, 3000);
 
+                return <div></div>
             }
 
         }

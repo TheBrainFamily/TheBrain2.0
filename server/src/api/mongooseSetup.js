@@ -99,18 +99,43 @@ export class ItemsRepository {
 export class ItemsWithFlashcardRepository {
 
     async getItemsWithFlashcard() {
-        const currentItems = await Items.find({$or: [{actualTimesRepeated: 0}, {extraRepeatToday: true}]});
+        const currentItems = await Items.find({
+            $or: [
+                {actualTimesRepeated: 0},
+                {extraRepeatToday: true},
+                {nextRepetition: {$lte: moment().unix()}}
+            ]
+        });
         const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}});
         const sortedResults = currentItems.map(item => {
             return {
                 item,
                 flashcard: flashcards.find(flashcard => flashcard._id == item.flashcardId)
             }
-        }).sort((a, b)=> {
+        }).sort((a, b) => {
             return a.item.lastRepetition - b.item.lastRepetition;
         });
-        
+
         return sortedResults;
     }
 
+}
+
+
+const UserDetailsSchema = new mongoose.Schema({
+    userId: String,
+    nextLessonPosition: Number,
+});
+
+export const UserDetails = mongoose.model('userDetails', UserDetailsSchema);
+
+export class UserDetailsRepository {
+
+    async getNextLessonPosition(userId) {
+        const userDetails = await UserDetails.findOne({userId});
+        return userDetails.nextLessonPosition;
+    }
+    async updateNextLessonPosition(userId) {
+        await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}});
+    }
 }

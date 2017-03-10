@@ -35,19 +35,26 @@ export const typeDefs = gql`
         flashcard: Flashcard!
     }
 
+    type UserDetails {
+        watchedLessonsIds: [String!]!
+    }
+
     type Query {
         Lessons: [Lesson]!,
-        Lesson(position:Int!): Lesson,
+        Lesson: Lesson,
         Flashcards: [Flashcard],        
         Flashcard(_id: String!): Flashcard
         Item: Item,
         ItemsWithFlashcard: [ItemWithFlashcard]!
         
+        
     }
     type Mutation {
-        createItemsForLesson(_id: String!): [Item],
+        createItemsAndMarkLessonAsWatched: Lesson!,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!
     }
+
+    
     schema {
         query: Query
         mutation: Mutation

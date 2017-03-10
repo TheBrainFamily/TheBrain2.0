@@ -57,18 +57,12 @@ class TutorialVideo extends React.Component {
 }
 
 const query = gql`
-    query Lesson($position:Int!) {
-        Lesson(position:$position) {
+    query Lesson {
+        Lesson {
             _id, position, description, flashcardIds, youtubeId
         }
     }
 `;
 
-export default graphql(query, {
-    options: ownProps => {
-        let lessonPosition = ownProps.params.lessonPosition ? ownProps.params.lessonPosition : 1;
-
-        return ({variables: {position: lessonPosition}});
-    },
-})(Tutorial);
+export default graphql(query)(Tutorial);
 
