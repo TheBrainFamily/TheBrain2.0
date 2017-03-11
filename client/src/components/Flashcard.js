@@ -60,6 +60,8 @@ const submitEval = gql`
             item {
                 _id
                 flashcardId
+                extraRepeatToday
+                actualTimesRepeated 
             }
             flashcard
             {
