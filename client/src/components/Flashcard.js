@@ -22,7 +22,7 @@ class Flashcard extends React.Component {
             evaluation: value
         });
         this.setState({visibleAnswer: false})
-    }
+    };
 
     render() {
         return <div>
@@ -47,10 +47,6 @@ class Flashcard extends React.Component {
                 </div>
             }
             </div>
-
-
-
-
         </div>
     }
 }

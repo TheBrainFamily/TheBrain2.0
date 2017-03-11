@@ -149,6 +149,19 @@ CONTENT
 }
 
 /***********************
+SESSION SUMMARY
+***********************/
+
+.session-summary {
+    align-content: center;
+    text-align: center;
+    display: inline-block;
+    padding: 20px 20px;
+}
+
+
+
+/***********************
 CONTACT
 ***********************/
 
