@@ -148,6 +148,11 @@ CONTENT
     text-decoration: none;
 }
 
+.progress-bar {
+    height: 40px;
+    width: 70px;
+}
+
 /***********************
 SESSION SUMMARY
 ***********************/
