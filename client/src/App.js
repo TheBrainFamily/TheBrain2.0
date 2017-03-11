@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo_thebrain.jpg';
 import './App.css';
-import Tutorial from './components/Tutorial';
+import Home from './components/Home';
 import WellDone from './components/WellDone';
+import Tutorial from './components/Tutorial';
 import Questions from './components/Questions';
 import Footer from './components/Footer';
 
@@ -28,7 +29,9 @@ class App extends Component {
                         </div>
 
                         <div className="App-intro styleIntroduction">
-                            <Route exact key="tutorial" path="/" component={Tutorial}/>
+                            <Route exact key="tutorial" path="/" component={Home}/>
+                            <Route exact key="Tutorial" path="/lecture"
+                                   component={Tutorial}/>
 
                             <Route exact key="wellDone" path="/wellDone"
                                    component={WellDone}/>
