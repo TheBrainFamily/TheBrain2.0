@@ -1,25 +1,16 @@
-import React, {PropTypes} from 'react';
-import {graphql} from 'react-apollo';
+import React, { PropTypes } from 'react';
+import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { withRouter } from 'react-router'
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
 
 class Questions extends React.Component {
-
-    static contextTypes = {
-        router: PropTypes.object
-    };
-
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
+        this.state = {}
     }
-    onEvaluationCompleted = (value)=> {
 
-    }
-    
     render() {
         if (this.props.data.loading) {
             return <div>Loading...</div>
@@ -34,13 +25,10 @@ class Questions extends React.Component {
                                     repetitions={{done: 0, todo: 1}}
                                     extraRepetitions={{done: 0, todo: 1}}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}  onSubmitEvaluation={this.onEvaluationCompleted}/>
+                    <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
                 </div>
             } else {
-                setTimeout(() => {
-                    this.context.router.transitionTo("/");
-                }, 3000);
-
+                this.props.history.push("/");
                 return <div></div>
             }
 
@@ -64,5 +52,9 @@ const query = gql`
     }
 `;
 
-export default graphql(query)(Questions);
+export default withRouter(graphql(query, {
+    options: {
+        forceFetch: true,
+    }
+})(Questions));
 

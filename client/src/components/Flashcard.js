@@ -16,7 +16,6 @@ class Flashcard extends React.Component {
     };
 
     onSubmitEvaluation = (value) => {
-        console.log("JMOZGAWA: this",this);
         this.props.submit({
             itemId: this.props.evalItemId,
             evaluation: value

@@ -4,6 +4,7 @@ import Introduction from './Introduction';
 import Content from './Content';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
+import { withRouter } from 'react-router'
 
 
 class Tutorial extends React.Component {
@@ -22,17 +23,11 @@ class Tutorial extends React.Component {
         return <div id="video">
             <Introduction/>
             <Content/>
-            <TutorialVideo lesson={this.props.data.Lesson}/>
+            <TutorialVideoWithRouter lesson={this.props.data.Lesson}/>
         </div>
     }
 }
-
 class TutorialVideo extends React.Component {
-
-    static contextTypes = {
-        router: PropTypes.object
-    };
-
     render() {
         const opts = {
             height: '390',
@@ -52,9 +47,12 @@ class TutorialVideo extends React.Component {
     }
 
     _onEnd = () => {
-        this.context.router.transitionTo("/wellDone");
+        this.props.history.push("/wellDone");
     }
 }
+
+const TutorialVideoWithRouter = withRouter(TutorialVideo);
+
 
 const query = gql`
     query Lesson {

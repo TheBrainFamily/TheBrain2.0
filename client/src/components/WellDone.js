@@ -2,7 +2,7 @@ import React from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 // const createMessage = gql`
 //     mutation addMessage($channelName: String!, $handle: String!, $message: String!) {

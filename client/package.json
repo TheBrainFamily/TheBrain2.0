@@ -12,8 +12,8 @@
     "immutability-helper": "^2.1.2",
     "react": "^15.4.2",
     "react-apollo": "^0.13.3",
-    "react-dom": "^15.4.2",
-    "react-router": "4.0.0-alpha.5",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "react-youtube": "^7.3.0",
     "resolve-pathname": "^2.0.2",
     "warning": "^3.0.0"
