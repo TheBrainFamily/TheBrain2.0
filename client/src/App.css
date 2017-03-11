@@ -148,6 +148,24 @@ CONTENT
     text-decoration: none;
 }
 
+.progress-bar {
+    height: 40px;
+    width: 70px;
+}
+
+/***********************
+SESSION SUMMARY
+***********************/
+
+.session-summary {
+    align-content: center;
+    text-align: center;
+    display: inline-block;
+    padding: 20px 20px;
+}
+
+
+
 /***********************
 CONTACT
 ***********************/
