@@ -3,23 +3,73 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
+import passport from 'passport';
+import { Strategy } from 'passport-local';
+import session from 'express-session';
+
 import { FlashcardsRepository, LessonsRepository, ItemsRepository, ItemsWithFlashcardRepository, UserDetailsRepository } from './api/mongooseSetup';
 import  cors  from 'cors';
 
 import schema from './api/schema';
 const app = express();
 const port = 8080;
-app.use(
-    '/graphql',
-    (req, resp, next) => {
-        next();
-    },
+
+
+passport.use(new Strategy(
+    function(username, password, done) {
+        console.log("inside strategy logn");
+        return done(null, {username: "test", _id: "test"});
+        // User.findOne({ username: username }, function (err, user) {
+        //     if (err) { return done(err); }
+        //     if (!user) {
+        //         return done(null, false, { message: 'Incorrect username.' });
+        //     }
+        //     if (!user.validPassword(password)) {
+        //         return done(null, false, { message: 'Incorrect password.' });
+        //     }
+        //     return done(null, user);
+        // });
+    }
+));
+
+passport.serializeUser((user, cb) => cb(null, user));
+passport.deserializeUser((obj, cb) => cb(null, obj));
+
+app.use(session({
+    secret: '***REMOVED***',
+    resave: true,
+    saveUninitialized: true,
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/login', function(req, res, next) {
+        passport.authenticate('local', function (err, user, info) {
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                res.send(user);
+            });
+        })(req, res, next);
+    }
 );
+
+app.get('/test', (req, res) => {
+    console.log("Gozdecki: req in test",req);
+})
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
+
 let OPTICS_API_KEY;
 
 //FIXES CORS ERROR
 const whitelist = [
     'http://localhost:3000',
+    'http://localhost:3040',
 ];
 
 const corsOptions = {
@@ -47,7 +97,7 @@ app.use('/graphql', graphqlExpress((req) => {
         // Probably indicates someone trying to send an overly expensive query
         throw new Error('Query too large.');
     }
-
+    console.log("Gozdecki: req",req.user);
     // let user;
     // if (req.user) {
     //     // We get req.user from passport-github with some pretty oddly named fields,
@@ -69,6 +119,7 @@ app.use('/graphql', graphqlExpress((req) => {
     return {
         schema,
         context: {
+            user: req.user,
             opticsContext,
             Flashcards: new FlashcardsRepository(),
             Lessons: new LessonsRepository(),

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import YouTube from 'react-youtube';
 import Introduction from './Introduction';
 import Content from './Content';
