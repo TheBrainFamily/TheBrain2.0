@@ -12,6 +12,8 @@ const resolvers = {
             return context.Flashcards.getFlashcard(args._id);
         },
         async Lesson(root, args, context) {
+            console.log("Gozdecki: context",context);
+            console.log("Gozdecki: args",args);
             const userId = "1";
             const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
             return await context.Lessons.getLessonByPosition(nextLessonPosition);

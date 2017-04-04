@@ -6,14 +6,22 @@ import WellDone from './components/WellDone';
 import Tutorial from './components/Tutorial';
 import Questions from './components/Questions';
 import Footer from './components/Footer';
+import Login from './components/Login';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
+const networkInterface = createNetworkInterface({
+    uri: 'http://localhost:8080/graphql',
+    opts: {
+        credentials: 'include',
+    },
+});
+
 const client = new ApolloClient({
-    networkInterface: createNetworkInterface({uri: 'http://localhost:8080/graphql'}),
+    networkInterface,
 });
 
 class App extends Component {
@@ -39,6 +47,7 @@ class App extends Component {
 
                             <Route exact key="questions" path="/questions"
                                    component={Questions}/>
+                            <Route exact key="login" path="/login" component={Login}/>
                             <Footer/>
                         </div>
 

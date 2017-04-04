@@ -18,12 +18,15 @@
     "body-parser": "^1.17.1",
     "cors": "^2.8.1",
     "express": "^4.15.2",
+    "express-session": "^1.15.2",
     "graphql": "^0.9.1",
     "graphql-server-express": "^0.6.0",
     "moment": "^2.17.1",
     "mongodb": "^2.2.24",
     "mongoose": "^4.8.6",
-    "optics-agent": "^1.1.1"
+    "optics-agent": "^1.1.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.22.0",

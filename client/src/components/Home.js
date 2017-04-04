@@ -1,6 +1,4 @@
-import React, { PropTypes } from 'react';
-import Tutorial from './Tutorial';
-import Questions from './Questions';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
