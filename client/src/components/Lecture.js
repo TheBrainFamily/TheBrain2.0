@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
 
 
-class Tutorial extends React.Component {
+class Lecture extends React.Component {
 
 
     render() {
@@ -23,11 +23,11 @@ class Tutorial extends React.Component {
         return <div id="video">
             <Introduction/>
             <Content/>
-            <TutorialVideoWithRouter lesson={this.props.data.Lesson}/>
+            <LectureVideoWithRouter lesson={this.props.data.Lesson}/>
         </div>
     }
 }
-class TutorialVideo extends React.Component {
+class LectureVideo extends React.Component {
     render() {
         const opts = {
             height: '390',
@@ -51,7 +51,7 @@ class TutorialVideo extends React.Component {
     }
 }
 
-const TutorialVideoWithRouter = withRouter(TutorialVideo);
+const LectureVideoWithRouter = withRouter(LectureVideo);
 
 
 const query = gql`
@@ -62,5 +62,5 @@ const query = gql`
     }
 `;
 
-export default graphql(query)(Tutorial);
+export default graphql(query)(Lecture);
 

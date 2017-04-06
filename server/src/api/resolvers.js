@@ -4,15 +4,12 @@ import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation';
 const resolvers = {
     Query: {
         Flashcards(root, args, context) {
-            console.log("flashcards resolver", context);
             return context.Flashcards.getFlashcards();
         },
         Flashcard(root, args, context) {
             return context.Flashcards.getFlashcard(args._id);
         },
         async Lesson(root, args, context) {
-            console.log("Gozdecki: context",context);
-            console.log("Gozdecki: args",args);
             let nextLessonPosition;
             if (context.user) {
                 nextLessonPosition = await context.UserDetails.getNextLessonPosition(context.user._id);
@@ -29,11 +26,13 @@ const resolvers = {
         },
         ItemsWithFlashcard(root, args, context) {
             if (context.user) {
-                console.log("Gozdecki: context.user in ItemsWithFlashcard", context.user);
                 return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id);
             } else {
                 return [];
             }
+        },
+        CurrentUser(root, args, context) {
+            return context.user;
         }
     },
     Mutation: {
@@ -43,10 +42,7 @@ const resolvers = {
                 const guestUser = await context.Users.createGuest();
                 console.log("Gozdecki: guestUser",guestUser);
                 userId = guestUser._id;
-                context.req.logIn(guestUser, function(err) {
-                    console.log("inside logIn");
-                    if (err) { console.log("err", err); return next(err); }
-                });
+                context.req.logIn(guestUser, (err) => { if (err) throw err });
             }
             const currentLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
             console.log("JMOZGAWA: currentLessonPosition",currentLessonPosition);
@@ -62,6 +58,18 @@ const resolvers = {
             const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
             return await context.Lessons.getLessonByPosition(nextLessonPosition);
 
+        },
+        async logIn(root, args, context) {
+            try {
+                const user = await context.Users.findByUsername(args.username);
+                const isMatch = await user.comparePassword(args.password);
+                if (isMatch) {
+                    context.req.logIn(user, (err) => { if (err) throw err });
+                    return user;
+                }
+            } catch(e) {
+                throw e;
+            }
         },
         async setUsernameAndPasswordForGuest(root, args, context) {
             return await context.Users.updateUser(context.user._id, args.username, args.password);
