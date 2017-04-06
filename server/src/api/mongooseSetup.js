@@ -141,11 +141,7 @@ export class UserDetailsRepository {
     }
 
     async getNextLessonPosition(userId) {
-        console.log("Gozdecki: userId", userId.constructor.name);
-        // new mongoose.Types.ObjectId(userId.toString())
         const userDetails = await UserDetails.findOne({userId});
-        const userDetailsAny = await UserDetails.findOne();
-        console.log("Gozdecki: userDetailsAny", userDetailsAny);
         return userDetails.nextLessonPosition;
     }
 
@@ -160,6 +156,7 @@ const UserSchema = new mongoose.Schema({
     username: String,
     password: String,
     createdAt: Number,
+    activated: Boolean,
 });
 
 //TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -167,7 +164,6 @@ const SALT_WORK_FACTOR = 1034;
 const bcryptPassword = async function (next) {
     try {
         const user = this;
-
         if (!user.isModified('password')) {
             return next();
         }
@@ -182,22 +178,30 @@ const bcryptPassword = async function (next) {
 };
 
 UserSchema.pre('save', bcryptPassword);
-UserSchema.pre('update', bcryptPassword);
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
+};
 
 export const Users = mongoose.model('users', UserSchema);
 
 export class UsersRepository {
     async createGuest() {
-        const newUser = new Users({username: "guest", password: "werw", createdAt: moment().unix()});
+        const newUser = new Users({username: "guest", password: "notSet", activated: false, createdAt: moment().unix()});
         const insertedUser = await newUser.save();
         await new UserDetailsRepository().create(insertedUser._id);
         return insertedUser;
     }
 
     async updateUser(userId, username, password) {
-        console.log("Gozdecki: username", username);
-        console.log("Gozdecki: password", password);
-        console.log("Gozdecki: userId", userId);
-        await Users.update({_id: userId}, {$set: {username, password}});
+        const userToBeUpdated = await Users.findOne({_id: userId});
+        userToBeUpdated.username = username;
+        userToBeUpdated.password = password;
+        userToBeUpdated.activated = true;
+        await userToBeUpdated.save();
+        // await Users.update({_id: userId}, {$set: {username, password}});
+    }
+    async findByUsername(username) {
+        return await Users.findOne({username});
     }
 }

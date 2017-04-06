@@ -6,8 +6,10 @@ import { withRouter } from 'react-router'
 class Signup extends React.Component {
     submit = (e) => {
         e.preventDefault();
-        console.log("Gozdecki: this",this);
-      this.props.submit({username: this.refs.username.value, password: this.refs.password.value});
+      this.props.submit({username: this.refs.username.value, password: this.refs.password.value})
+          .then(() => {
+              this.props.history.push("/");
+          });
     };
     render() {
         return (
@@ -45,4 +47,3 @@ export default withRouter(graphql(signup, {
         })
     })
 })(Signup));
-
