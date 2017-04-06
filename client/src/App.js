@@ -7,6 +7,7 @@ import Tutorial from './components/Tutorial';
 import Questions from './components/Questions';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Signup from './components/Signup';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
@@ -48,9 +49,9 @@ class App extends Component {
                             <Route exact key="questions" path="/questions"
                                    component={Questions}/>
                             <Route exact key="login" path="/login" component={Login}/>
+                            <Route exact key="signup" path="/signup" component={Signup}/>
                             <Footer/>
                         </div>
-
                     </div>
                 </ApolloProvider>
             </BrowserRouter>

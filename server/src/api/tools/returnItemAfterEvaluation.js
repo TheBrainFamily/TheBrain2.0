@@ -30,8 +30,8 @@ const returnItemAfterEvaluation = function (evaluation, item) {
         item.previousDaysChange = newParameters.daysChange;
     }
 
-    const _repetitionTime = moment().unix();
-    item.lastRepetition = _repetitionTime;
+    const repetitionTime = moment().unix();
+    item.lastRepetition = repetitionTime;
 
     return item;
 };
