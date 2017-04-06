@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import moment from 'moment';
+import bcrypt from 'bcrypt';
 
 mongoose.connect('mongodb://localhost/thebrain');
+
 
 const FlashcardSchema = new mongoose.Schema({
     question: String,
@@ -13,9 +15,9 @@ export const Flashcards = mongoose.model('Flashcards', FlashcardSchema);
 export class FlashcardsRepository {
     async getFlashcards() {
         console.log("flashcards repository");
-        const dupa = await Flashcards.find().exec();
-        console.log("dupa ", dupa);
-        return dupa;
+        const flashcards = await Flashcards.find().exec();
+        console.log("flashcards ", flashcards);
+        return flashcards;
     }
 
     async getFlashcard(_id) {
@@ -52,10 +54,11 @@ export class LessonsRepository {
 
 
 const ItemSchema = new mongoose.Schema({
+    flashcardId: mongoose.Schema.Types.ObjectId,
+    userId: mongoose.Schema.Types.ObjectId,
     actualTimesRepeated: Number,
     easinessFactor: Number,
     extraRepeatToday: Boolean,
-    flashcardId: String,
     lastRepetition: Number,
     nextRepetition: Number,
     previousDaysChange: Number,
@@ -70,17 +73,18 @@ export class ItemsRepository {
 
     }
 
-    async update(id, item) {
-        return await Items.update({_id: id}, {$set: item});
+    async update(id, item, userId) {
+        return await Items.update({_id: id, userId}, {$set: item});
     }
 
-    async getItemById(_id) {
-        return await Items.findOne({_id});
+    async getItemById(_id, userId) {
+        return await Items.findOne({_id, userId});
     }
 
-    async create(flashcardId) {
+    async create(flashcardId, userId) {
         const newItem = {
             flashcardId,
+            userId,
             actualTimesRepeated: 0,
             easinessFactor: 2.5,
             extraRepeatToday: false,
@@ -98,8 +102,9 @@ export class ItemsRepository {
 
 export class ItemsWithFlashcardRepository {
 
-    async getItemsWithFlashcard() {
+    async getItemsWithFlashcard(userId) {
         const currentItems = await Items.find({
+            userId,
             $or: [
                 {actualTimesRepeated: 0},
                 {extraRepeatToday: true},
@@ -110,7 +115,7 @@ export class ItemsWithFlashcardRepository {
         const sortedResults = currentItems.map(item => {
             return {
                 item,
-                flashcard: flashcards.find(flashcard => flashcard._id == item.flashcardId)
+                flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
             }
         }).sort((a, b) => {
             return a.item.lastRepetition - b.item.lastRepetition;
@@ -123,19 +128,76 @@ export class ItemsWithFlashcardRepository {
 
 
 const UserDetailsSchema = new mongoose.Schema({
-    userId: String,
+    userId: mongoose.Schema.Types.ObjectId,
     nextLessonPosition: Number,
 });
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema);
 
 export class UserDetailsRepository {
+    async create(userId) {
+        const newUserDetails = new UserDetails({userId, nextLessonPosition: 1})
+        await newUserDetails.save();
+    }
 
     async getNextLessonPosition(userId) {
+        console.log("Gozdecki: userId", userId.constructor.name);
+        // new mongoose.Types.ObjectId(userId.toString())
         const userDetails = await UserDetails.findOne({userId});
+        const userDetailsAny = await UserDetails.findOne();
+        console.log("Gozdecki: userDetailsAny", userDetailsAny);
         return userDetails.nextLessonPosition;
     }
+
     async updateNextLessonPosition(userId) {
         await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}});
+    }
+}
+
+
+const UserSchema = new mongoose.Schema({
+    //TODO username should be unique but now all new are called guest
+    username: String,
+    password: String,
+    createdAt: Number,
+});
+
+//TODO THIS SHOULD BE TAKEN FROM THE ENV
+const SALT_WORK_FACTOR = 1034;
+const bcryptPassword = async function (next) {
+    try {
+        const user = this;
+
+        if (!user.isModified('password')) {
+            return next();
+        }
+
+        const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+        const hash = await bcrypt.hash(user.password, salt);
+        user.password = hash;
+        next();
+    } catch (e) {
+        next(e);
+    }
+};
+
+UserSchema.pre('save', bcryptPassword);
+UserSchema.pre('update', bcryptPassword);
+
+export const Users = mongoose.model('users', UserSchema);
+
+export class UsersRepository {
+    async createGuest() {
+        const newUser = new Users({username: "guest", password: "werw", createdAt: moment().unix()});
+        const insertedUser = await newUser.save();
+        await new UserDetailsRepository().create(insertedUser._id);
+        return insertedUser;
+    }
+
+    async updateUser(userId, username, password) {
+        console.log("Gozdecki: username", username);
+        console.log("Gozdecki: password", password);
+        console.log("Gozdecki: userId", userId);
+        await Users.update({_id: userId}, {$set: {username, password}});
     }
 }

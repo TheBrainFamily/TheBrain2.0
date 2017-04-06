@@ -38,6 +38,12 @@ export const typeDefs = gql`
     type UserDetails {
         watchedLessonsIds: [String!]!
     }
+    
+    type User {
+        _id: String!,
+        password: String!,
+        username: String!
+    }
 
     type Query {
         Lessons: [Lesson]!,
@@ -49,11 +55,13 @@ export const typeDefs = gql`
         
         
     }
+    
     type Mutation {
         createItemsAndMarkLessonAsWatched: Lesson!,
-        processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!
+        processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
+        addUser: User!
+        setUsernameAndPasswordForGuest(username: String!, password: String!): User
     }
-
     
     schema {
         query: Query

@@ -6,11 +6,17 @@ import { createServer } from 'http';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 import session from 'express-session';
+import mongoose from 'mongoose';
 
-import { FlashcardsRepository, LessonsRepository, ItemsRepository, ItemsWithFlashcardRepository, UserDetailsRepository } from './api/mongooseSetup';
+import { FlashcardsRepository, LessonsRepository, ItemsRepository,
+    ItemsWithFlashcardRepository, UserDetailsRepository, UsersRepository } from './api/mongooseSetup';
+
 import  cors  from 'cors';
 
 import schema from './api/schema';
+
+const MongoStore = require('connect-mongo')(session);
+
 const app = express();
 const port = 8080;
 
@@ -36,9 +42,11 @@ passport.serializeUser((user, cb) => cb(null, user));
 passport.deserializeUser((obj, cb) => cb(null, obj));
 
 app.use(session({
+    //TODO this should come from the environment settings
     secret: '***REMOVED***',
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 
 
@@ -119,13 +127,15 @@ app.use('/graphql', graphqlExpress((req) => {
     return {
         schema,
         context: {
-            user: req.user,
             opticsContext,
+            user: req.user,
+            req,
             Flashcards: new FlashcardsRepository(),
             Lessons: new LessonsRepository(),
             Items: new ItemsRepository(),
             ItemsWithFlashcard: new ItemsWithFlashcardRepository(),
             UserDetails: new UserDetailsRepository(),
+            Users: new UsersRepository(),
         },
     };
 }));
