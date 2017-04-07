@@ -62,6 +62,7 @@ export const typeDefs = gql`
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
+        logOut: User
     }
     
     schema {

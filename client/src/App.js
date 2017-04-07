@@ -14,8 +14,17 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Header from './components/Header';
 
+let uri;
+const localhostRegexp = /localhost/;
+if (localhostRegexp.test(window.location.origin)) {
+    uri = 'http://localhost:8080/graphql';
+} else {
+    uri = 'http://new.thebrain.pro:8080/graphql';
+}
+console.log("Gozdecki: uri",uri);
+
 const networkInterface = createNetworkInterface({
-    uri: 'http://localhost:8080/graphql',
+    uri,
     opts: {
         credentials: 'include',
     },
@@ -39,7 +48,6 @@ class App extends Component {
 
                             <Route exact key="wellDone" path="/wellDone"
                                    component={WellDone}/>
-
 
                             <Route exact key="questions" path="/questions"
                                    component={Questions}/>

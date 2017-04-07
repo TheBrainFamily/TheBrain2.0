@@ -47,6 +47,8 @@ let OPTICS_API_KEY;
 const whitelist = [
     'http://localhost:3000',
     'http://localhost:3040',
+    'http://new.thebrain.pro',
+    'https://new.thebrain.pro'
 ];
 
 const corsOptions = {
