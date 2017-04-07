@@ -4,9 +4,13 @@ import gql from 'graphql-tag';
 import {withRouter} from 'react-router';
 // import {compose} from 'recompose';
 import _ from 'lodash';
+import {
+    Text,
+View,
+} from 'react-native';
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
-import currentUserQuery from '../queries/currentUser';
+import currentUserQuery from './../queries/currentUser';
 
 class Questions extends React.Component {
     constructor(props) {
@@ -16,7 +20,7 @@ class Questions extends React.Component {
 
     render() {
         if (this.props.currentItems.loading || this.props.currentUser.loading) {
-            return <div>Loading...</div>
+            return <Text>Loading...</Text>
         } else {
             const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard;
 
@@ -33,20 +37,21 @@ class Questions extends React.Component {
                     return "repetition";
                 });
 
-                return <div className="questions">
+                return (<View>
                     <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0}}
                                     repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
                                     extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
-                </div>
+                    <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/></View>)
             } else {
                 if (this.props.currentUser.activated) {
+                    console.log("going to /")
                     this.props.history.push("/");
                 } else {
+                    console.log("going to signup");
                     this.props.history.push("/signup");
                 }
-                return <div></div>
+                return <Text>Test</Text>
             }
         }
     }
@@ -76,10 +81,9 @@ export default withRouter(
         graphql(currentItemsQuery, {
                 name: "currentItems",
                 options: {
-                    forceFetch: true,
+                    fetchPolicy: "network-only",
                 }
             }
         ),
     )(Questions)
 );
-

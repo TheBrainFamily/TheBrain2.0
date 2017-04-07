@@ -42,7 +42,8 @@ export const typeDefs = gql`
     type User {
         _id: String!,
         password: String!,
-        username: String!
+        username: String!,
+        activated: Boolean!
     }
 
     type Query {
@@ -52,8 +53,7 @@ export const typeDefs = gql`
         Flashcard(_id: String!): Flashcard
         Item: Item,
         ItemsWithFlashcard: [ItemWithFlashcard]!
-        
-        
+        CurrentUser: User
     }
     
     type Mutation {
@@ -61,6 +61,7 @@ export const typeDefs = gql`
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
+        logIn(username: String!, password: String!): User
     }
     
     schema {
