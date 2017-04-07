@@ -7,10 +7,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "immutability-helper": "^2.1.2",
     "react": "16.0.0-alpha.6",
     "react-apollo": "^1.0.0",
     "react-native": "0.43.2",
-    "react-native-youtube": "github:davidohayon669/react-native-youtube#v1",
+    "react-native-youtube": "^0.8.1",
     "react-router-native": "^4.0.0"
   },
   "devDependencies": {

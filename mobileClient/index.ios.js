@@ -15,32 +15,12 @@ import {
 import {NativeRouter, Route, Link} from 'react-router-native'
 
 // import Home from './components/Home';
-// import WellDone from './components/WellDone';
+import WellDone from './components/WellDone';
 import Lecture from './components/Lecture';
-// import Questions from './components/Questions';
+import Questions from './components/Questions';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
-
-
-// export default class MobileClient extends Component {
-//     render() {
-//         return (
-//             <View style={styles.container}>
-//                 <Text style={styles.welcome}>
-//                     Welcome to React Native!
-//                 </Text>
-//                 <Text style={styles.instructions}>
-//                     To get started, edit index.ios.js
-//                 </Text>
-//                 <Text style={styles.instructions}>
-//                     Press Cmd+R to reload,{'\n'}
-//                     Cmd+D or shake for dev menu
-//                 </Text>
-//             </View>
-//         );
-//     }
-// }
 
 const networkInterface = createNetworkInterface({
     uri: 'http://localhost:8080/graphql',
@@ -55,17 +35,51 @@ const client = new ApolloClient({
 
 export default class App extends Component {
     render() {
-        return (<NativeRouter>
-          <ApolloProvider client={client}>
-            <View>
-              <Route exact key="home" path="/" component={Lecture}/>
-              <Route exact key="lecture" path="/lecture" component={Lecture}/>
+        return (
+            <ApolloProvider client={client}>
 
-            </View>
-          </ApolloProvider>
-        </NativeRouter>)
+                <NativeRouter>
+                    <View style={{marginTop: 30}}>
+                        <View>
+                            <Route exact path="/" component={Lecture}/>
+                            <Route exact path="/wellDone" component={WellDone}/>
+                            <Route exact path="/questions" component={Questions}/>
+
+                        </View>
+                    </View>
+                </NativeRouter>
+            </ApolloProvider>
+        )
     }
 };
 
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 25,
+        padding: 10,
+    },
+    header: {
+        fontSize: 20,
+    },
+    nav: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    navItem: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10,
+    },
+    subNavItem: {
+        padding: 5,
+    },
+    topic: {
+        textAlign: 'center',
+        fontSize: 15,
+    }
+})
+
+{/*<Route exact key="lecture" path="/lecture" component={Lecture}/>*/
+}
 
 AppRegistry.registerComponent('mobileClient', () => App);
