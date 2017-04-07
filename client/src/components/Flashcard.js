@@ -76,8 +76,6 @@ export default graphql(submitEval, {
             },
             updateQueries: {
                 CurrentItems: (prev, {mutationResult}) => {
-
-                    console.log("JMOZGAWA: mutationResult",mutationResult);
                     const updateResults = update(prev, {
                         ItemsWithFlashcard: {
                             $set: mutationResult.data.processEvaluation

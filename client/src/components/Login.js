@@ -1,17 +1,26 @@
 import React from 'react';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
+import update from 'immutability-helper';
 
 class Login extends React.Component {
+    submit = (e) => {
+        e.preventDefault();
+        this.props.submit({username: this.refs.username.value, password: this.refs.password.value}).then(() => {
+            this.props.history.push("/");
+        })
+    };
     render() {
         return (
-            <form action="http://localhost:8080/login" method="get">
+            <form onSubmit={this.submit}>
                 <div>
                     <label>Username:</label>
-                    <input type="text" name="username"/>
+                    <input ref="username" type="text" name="username"/>
                 </div>
                 <div>
                     <label>Password:</label>
-                    <input type="password" name="password"/>
+                    <input ref="password" type="password" name="password"/>
                 </div>
                 <div>
                     <input type="submit" value="Log In"/>
@@ -19,5 +28,32 @@ class Login extends React.Component {
             </form>)
     }
 }
+const logIn = gql`
+    mutation logIn($username: String!, $password: String!){
+        logIn(username: $username, password: $password) {
+            _id, username, activated
+        }
+    }
+`;
 
-export default withRouter(Login);
+export default withRouter(graphql(logIn, {
+    props: ({ownProps, mutate}) => ({
+        submit: ({username, password}) => mutate({
+            variables: {
+                username,
+                password
+            },
+            updateQueries: {
+                CurrentUser: (prev, {mutationResult}) => {
+                    console.log("Gozdecki: mutationResult",mutationResult);
+                    console.log("Gozdecki: prev",prev);
+                    return update(prev, {
+                        CurrentUser: {
+                            $set: mutationResult.data.logIn
+                        }
+                    });
+                }
+            }
+        })
+    })
+})(Login));

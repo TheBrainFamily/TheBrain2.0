@@ -1,10 +1,12 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
+import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
+// import {compose} from 'recompose';
 import _ from 'lodash';
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
+import currentUserQuery from '../queries/currentUser';
 
 class Questions extends React.Component {
     constructor(props) {
@@ -13,10 +15,10 @@ class Questions extends React.Component {
     }
 
     render() {
-        if (this.props.data.loading) {
+        if (this.props.currentItems.loading || this.props.currentUser.loading) {
             return <div>Loading...</div>
         } else {
-            const itemsWithFlashcard = this.props.data.ItemsWithFlashcard;
+            const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard;
 
             if (itemsWithFlashcard.length > 0) {
                 const flashcard = itemsWithFlashcard[0].flashcard;
@@ -31,25 +33,27 @@ class Questions extends React.Component {
                     return "repetition";
                 });
 
-                console.log("ItemscounteR", itemsCounter);
                 return <div className="questions">
-                    <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0 }}
-                                    repetitions={{done: 0, todo: itemsCounter.repetition || 0 }}
+                    <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0}}
+                                    repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
                                     extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
                     />
                     <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
                 </div>
             } else {
-                this.props.history.push("/");
+                if (this.props.currentUser.activated) {
+                    this.props.history.push("/");
+                } else {
+                    this.props.history.push("/signup");
+                }
                 return <div></div>
             }
-
         }
-
     }
 }
 
-const query = gql`
+
+const currentItemsQuery = gql`
     query CurrentItems {
         ItemsWithFlashcard {
             item {
@@ -66,9 +70,16 @@ const query = gql`
     }
 `;
 
-export default withRouter(graphql(query, {
-    options: {
-        forceFetch: true,
-    }
-})(Questions));
+export default withRouter(
+    compose(
+        graphql(currentUserQuery, {name: "currentUser"}),
+        graphql(currentItemsQuery, {
+                name: "currentItems",
+                options: {
+                    forceFetch: true,
+                }
+            }
+        ),
+    )(Questions)
+);
 

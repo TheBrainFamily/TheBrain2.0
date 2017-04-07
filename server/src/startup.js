@@ -21,23 +21,6 @@ const app = express();
 const port = 8080;
 
 
-passport.use(new Strategy(
-    function(username, password, done) {
-        console.log("inside strategy logn");
-        return done(null, {username: "test", _id: "test"});
-        // User.findOne({ username: username }, function (err, user) {
-        //     if (err) { return done(err); }
-        //     if (!user) {
-        //         return done(null, false, { message: 'Incorrect username.' });
-        //     }
-        //     if (!user.validPassword(password)) {
-        //         return done(null, false, { message: 'Incorrect password.' });
-        //     }
-        //     return done(null, user);
-        // });
-    }
-));
-
 passport.serializeUser((user, cb) => cb(null, user));
 passport.deserializeUser((obj, cb) => cb(null, obj));
 
@@ -52,20 +35,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get('/login', function(req, res, next) {
-        passport.authenticate('local', function (err, user, info) {
-            req.logIn(user, function(err) {
-                if (err) { return next(err); }
-                res.send(user);
-            });
-        })(req, res, next);
-    }
-);
-
-app.get('/test', (req, res) => {
-    console.log("Gozdecki: req in test",req);
-})
 
 app.get('/logout', (req, res) => {
     req.logout();
@@ -105,7 +74,7 @@ app.use('/graphql', graphqlExpress((req) => {
         // Probably indicates someone trying to send an overly expensive query
         throw new Error('Query too large.');
     }
-    console.log("Gozdecki: req",req.user);
+    console.log("Gozdecki: req.user in graphql",req.user);
     // let user;
     // if (req.user) {
     //     // We get req.user from passport-github with some pretty oddly named fields,
