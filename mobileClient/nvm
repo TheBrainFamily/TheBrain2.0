@@ -1,0 +1,10 @@
+__tests__
+android
+app.json
+components
+index.android.js
+index.ios.js
+ios
+node_modules
+nvm
+package.json

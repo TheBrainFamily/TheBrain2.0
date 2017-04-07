@@ -5,7 +5,7 @@ import { Text, View, StyleSheet } from 'react-native';
 // import Content from './Content';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
-import { withRouter } from 'react-router-native'
+import { withRouter, Link } from 'react-router-native'
 
 
 class Lecture extends React.Component {
@@ -25,15 +25,6 @@ class Lecture extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#222222',
-        }
-    }
-)
 class LectureVideo extends React.Component {
     render() {
         // const opts = {
@@ -57,7 +48,7 @@ class LectureVideo extends React.Component {
                 rel={false}
 
                 onReady={(e)=>{this.setState({isReady: true})}}
-                onChangeState={(e)=>{this.setState({status: e.state})}}
+                onChangeState={this._onChangeState}
                 onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
                 onError={(e)=>{this.setState({error: e.error})}}
                 onProgress={(e)=>{this.setState({currentTime: e.currentTime, duration: e.duration})}}
@@ -68,22 +59,15 @@ class LectureVideo extends React.Component {
         );
     }
 
-    _onChangeState = (state) => {
-        console.log("Gozdecki: state",state);
-        if (state === "test") {
+    _onChangeState = (event) => {
+        console.log("Gozdecki: event",event);
+        if (event.state === "ended") {
             this.props.history.push("/wellDone");
         }
     }
 }
 
 const LectureVideoWithRouter = withRouter(LectureVideo);
-//
-// <YouTube
-//     videoId={this.props.lesson.youtubeId}
-//     onChangeState={this._onChangeState}
-//     play={true}
-//     modestbranding={true}
-// />
 
 const query = gql`
     query Lesson {
@@ -92,6 +76,8 @@ const query = gql`
         }
     }
 `;
+
+// export default Lecture;
 
 export default graphql(query)(Lecture);
 
