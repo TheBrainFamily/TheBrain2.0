@@ -54,6 +54,7 @@ const whitelist = [
 const corsOptions = {
     origin: function(origin, callback){
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        console.log("Gozdecki: originIsWhitelisted",originIsWhitelisted);
         callback(null, originIsWhitelisted);
     },
     credentials: true
