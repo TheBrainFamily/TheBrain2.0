@@ -71,6 +71,12 @@ const resolvers = {
                 throw e;
             }
         },
+        async logOut(root, args, context) {
+            if (context.user) {
+                context.req.logOut();
+            }
+            return {_id: "loggedOut"};
+        },
         async setUsernameAndPasswordForGuest(root, args, context) {
             return await context.Users.updateUser(context.user._id, args.username, args.password);
         },
