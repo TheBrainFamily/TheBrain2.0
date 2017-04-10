@@ -158,7 +158,7 @@ const UserSchema = new mongoose.Schema({
     password: String,
     createdAt: Number,
     activated: Boolean,
-
+    facebookId: String,
 });
 
 //TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -201,9 +201,20 @@ export class UsersRepository {
         userToBeUpdated.password = password;
         userToBeUpdated.activated = true;
         await userToBeUpdated.save();
-        // await Users.update({_id: userId}, {$set: {username, password}});
+        //TODO this didn't return anything, need investigation
+        return userToBeUpdated;
+    }
+    async updateFacebookUser(userId, facebookId) {
+        const userToBeUpdated = await Users.findOne({_id: userId});
+        userToBeUpdated.facebookId = facebookId;
+        userToBeUpdated.activated = true;
+        await userToBeUpdated.save();
+        return userToBeUpdated;
     }
     async findByUsername(username) {
         return await Users.findOne({username});
+    }
+    async findByFacebookId(facebookId) {
+        return await Users.findOne({facebookId});
     }
 }

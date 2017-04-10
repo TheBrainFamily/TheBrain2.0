@@ -1,6 +1,10 @@
 // import Flashcards from './repositories/FlashcardsRepository';
+import fetch from 'node-fetch';
+
 import Lessons from './repositories/LessonsRepository';
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation';
+import facebookIds from '../facebook';
+
 const resolvers = {
     Query: {
         Flashcards(root, args, context) {
@@ -58,6 +62,29 @@ const resolvers = {
             const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId);
             return await context.Lessons.getLessonByPosition(nextLessonPosition);
 
+        },
+        async logInWithFacebook(root, args, context) {
+            const { accessToken:userToken } = args;
+            const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`;
+            const res = await fetch(requestUrl);
+            const parsedResponse = await res.json();
+
+            if (parsedResponse.data.is_valid) {
+                const facebookId = parsedResponse.data.user_id;
+                const user = await context.Users.findByFacebookId(facebookId);
+
+                console.log("JMOZGAWA: facebookId",facebookId);
+                console.log("JMOZGAWA: existing user", user);
+                if(user) {
+                    context.req.logIn(user, (err) => { if (err) throw err });
+                    return user;
+                }
+                const newUser = await context.Users.updateFacebookUser(context.user._id, facebookId);
+                console.log("JMOZGAWA: newUser",newUser);
+                return newUser;
+            } else {
+                return null;
+            }
         },
         async logIn(root, args, context) {
             try {
