@@ -3,6 +3,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import { Link } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
 
 // const createMessage = gql`
 //     mutation addMessage($channelName: String!, $handle: String!, $message: String!) {
@@ -12,6 +13,12 @@ import { Link } from 'react-router-dom';
 //     }`;
 //
 
+
+const responseFacebook = (response) => {
+    console.log(response);
+}
+
+
 export class WellDone extends React.Component {
     componentDidMount() {
         this.props.lessonWatchedMutation();
@@ -19,6 +26,11 @@ export class WellDone extends React.Component {
     render() {
         return <div className="welldone">
             First video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the video
+            <FacebookLogin
+                appId="***REMOVED***"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={responseFacebook} />
         </div>
     }
 }
