@@ -6,17 +6,18 @@ import logo from './../logo_thebrain.jpg';
 import currentUserQuery from '../queries/currentUser';
 import { Link } from 'react-router-dom';
 
-const LoginSwitcher = (props) => {
-    if (props.activated) {
-        return <Link to="/logout" onClick={this.logout}>Logout</Link>
-
+class LoginSwitcher extends React.Component {
+    logout = (e) => {
+        e.preventDefault();
+        this.props.logout();
     }
-    return <Link to="/login">Login</Link>;
-};
+    render() {
+        if (this.props.activated) {
+            return <Link to="/logout" onClick={this.logout}>Logout</Link>
 
-LoginSwitcher.logout = (e) => {
-    e.preventDefault();
-    this.props.logout();
+        }
+        return <Link to="/login">Login</Link>;
+    }
 };
 
 const logOutQuery = gql`
