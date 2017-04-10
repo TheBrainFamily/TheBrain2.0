@@ -22,8 +22,10 @@ import Questions from './components/Questions';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
 
+
+
 const networkInterface = createNetworkInterface({
-    uri: 'http://localhost:8080/graphql',
+    uri: 'http://new.thebrain.pro:8080/graphql',
     opts: {
         credentials: 'include',
     },
