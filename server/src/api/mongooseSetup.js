@@ -152,11 +152,13 @@ export class UserDetailsRepository {
 
 
 const UserSchema = new mongoose.Schema({
+    oauthID: Number,
     //TODO username should be unique but now all new are called guest
     username: String,
     password: String,
     createdAt: Number,
     activated: Boolean,
+
 });
 
 //TODO THIS SHOULD BE TAKEN FROM THE ENV
