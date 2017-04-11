@@ -23,7 +23,7 @@ class LoginSwitcher extends React.Component {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id
+            _id, username, activated
         }  
     }
 `;
@@ -37,7 +37,7 @@ const LoginSwitcherWithGraphQl = graphql(logOutQuery, {
                     console.log("Gozdecki: prev",prev);
                     return update(prev, {
                         CurrentUser: {
-                            $set: mutationResult.data.logIn
+                            $set: mutationResult.data.logOut
                         }
                     });
                 }
