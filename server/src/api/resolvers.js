@@ -102,7 +102,7 @@ const resolvers = {
             if (context.user) {
                 context.req.logOut();
             }
-            return {_id: "loggedOut"};
+            return {_id: "loggedOut", username: "loggedOut", activated: false};
         },
         async setUsernameAndPasswordForGuest(root, args, context) {
             return await context.Users.updateUser(context.user._id, args.username, args.password);
