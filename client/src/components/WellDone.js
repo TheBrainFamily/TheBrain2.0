@@ -28,7 +28,7 @@ export class WellDone extends React.Component {
             First video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the video
             <FacebookLogin
                 appId="***REMOVED***"
-                autoLoad={true}
+                autoLoad={false}
                 fields="name,email,picture"
                 callback={this.responseFacebook} />
         </div>

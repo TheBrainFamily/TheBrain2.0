@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import Lessons from './repositories/LessonsRepository';
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation';
 import facebookIds from '../facebook';
+import { sendMail } from './tools/emailService';
 
 const resolvers = {
     Query: {
@@ -114,7 +115,22 @@ const resolvers = {
             await context.Items.update(args.itemId, newItem, context.user._id);
 
             return await context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id);
-        }
+        },
+        async resetPassword(root ,args, context) {
+            const updatedUser = await context.Users.resetUserPassword(args.username);
+            if (updatedUser) {
+                //TODO check after domain successfully verified, send email with reset link
+                // sendMail({
+                //     from: 'thebrain.pro',
+                //     to: 'jmozgawa@thebrain.pro',
+                //     subject: 'logInWithFacebook',
+                //     text: 'THIS IS TEST MESSAGE'
+                // });
+                return { success: true };
+            } else {
+                return { success: false };
+            }
+        },
     }
 };
 
