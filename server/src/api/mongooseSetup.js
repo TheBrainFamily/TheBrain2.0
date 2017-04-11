@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import moment from 'moment';
 import bcrypt from 'bcrypt';
+import urlencode from 'urlencode';
 
 mongoose.connect('mongodb://localhost/thebrain');
 
@@ -159,6 +160,7 @@ const UserSchema = new mongoose.Schema({
     createdAt: Number,
     activated: Boolean,
     facebookId: String,
+    resetPasswordToken: String,
 });
 
 //TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -183,6 +185,13 @@ UserSchema.pre('save', bcryptPassword);
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
+};
+
+const generateResetPasswordToken =  async (userId)=> {
+    const rawToken = `${userId}_W3GojrLkVLKH9l`;
+    // we are using hashing function as a clean way to generate a random string
+    const salt = await bcrypt.genSalt(Math.random());
+    return urlencode.encode(await bcrypt.hash(rawToken, salt));
 };
 
 export const Users = mongoose.model('users', UserSchema);
@@ -216,5 +225,16 @@ export class UsersRepository {
     }
     async findByFacebookId(facebookId) {
         return await Users.findOne({facebookId});
+    }
+    async resetUserPassword(username) {
+        const userToBeUpdated = await this.findByUsername(username);
+        if(userToBeUpdated) {
+            userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id);
+            await userToBeUpdated.save();
+            return userToBeUpdated;
+        }
+        else {
+            return null;
+        }
     }
 }
