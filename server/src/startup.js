@@ -16,7 +16,7 @@ import  cors  from 'cors';
 
 import schema from './api/schema';
 
-import facebookConfig from './facebook';
+import facebookConfig from './configuration/facebook';
 
 const MongoStore = require('connect-mongo')(session);
 
