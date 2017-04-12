@@ -1,7 +1,13 @@
 import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
-import facebookIds from 'configuration/facebook'
+import facebookIds from '../configuration/facebook'
 // import { sendMail } from './tools/emailService'
+
+export const helperTools = {
+  checkToken: () => {
+
+  }
+}
 
 const resolvers = {
   Query: {
@@ -63,9 +69,12 @@ const resolvers = {
     async logInWithFacebook (root, args, context) {
       const {accessToken: userToken} = args
       const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
-      const res = await fetch(requestUrl)
-      const parsedResponse = await res.json()
+        console.log("JMOZGAWA: fetch()",fetch);
 
+      const res = await fetch(requestUrl)
+        console.log("JMOZGAWA: res",res);
+      const parsedResponse = await res.json()
+      console.log("JMOZGAWA: parsedResponse",parsedResponse);
       if (parsedResponse.data.is_valid) {
         const facebookId = parsedResponse.data.user_id
         const user = await context.Users.findByFacebookId(facebookId)

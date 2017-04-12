@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import urlencode from 'urlencode';
 
 mongoose.connect('mongodb://localhost/thebrain');
-
+console.log("mongoose start");
 
 const FlashcardSchema = new mongoose.Schema({
     question: String,
@@ -15,9 +15,8 @@ export const Flashcards = mongoose.model('Flashcards', FlashcardSchema);
 
 export class FlashcardsRepository {
     async getFlashcards() {
-        console.log("flashcards repository");
         const flashcards = await Flashcards.find().exec();
-        console.log("flashcards ", flashcards);
+        // console.log("flashcards ", flashcards);
         return flashcards;
     }
 
@@ -224,7 +223,7 @@ export class UsersRepository {
         return await Users.findOne({username});
     }
     async findByFacebookId(facebookId) {
-        return await Users.findOne({facebookId});
+        return Users.findOne({facebookId});
     }
     async resetUserPassword(username) {
         const userToBeUpdated = await this.findByUsername(username);

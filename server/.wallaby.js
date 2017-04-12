@@ -39,7 +39,7 @@ module.exports = (wallaby) => {
         ],
         compilers: {'**/*.js': wallaby.compilers.babel()},
         env: {type: 'node'},
-        // workers: {initial: 1, regular: 1, recycle: true},
+        workers: {initial: 1, regular: 1, recycle: true},
         // preprocessors: {
         //     'modules/**/*.js': file => '!global.$_$wp && (global.$_$wp = global.$_$wpe = global.$_$w = global.$_$wf = () => {});' + file.content
         // },
