@@ -1,15 +1,17 @@
 import resolvers from './resolvers'
-import { validate } from 'graphql/validation';
+import {validate} from 'graphql/validation';
 import schema from './schema';
-import { FlashcardsRepository } from './mongooseSetup';
+import {FlashcardsRepository} from './mongooseSetup';
 
 jest.mock('node-fetch', () => {
     // track(‘data-mock’)
-    return ()=> Promise.resolve({json: ()=> Promise.resolve( {
-        data:{
-            is_valid: true,
-        }
-    })});
+    return async() => ({
+        json: async() => ( {
+            data: {
+                is_valid: true,
+            }
+        })
+    });
 });
 
 // test('adds 1 + 2 to equal 3', () => {
@@ -35,18 +37,18 @@ describe('query.flashcards', () => {
     })
 });
 
-describe('login with facebook', async ()=> {
-    it('returns user if it already exists', async ()=> {
-        const { logInWithFacebook } = resolvers.Mutation;
+describe('login with facebook', async() => {
+    it('returns user if it already exists', async() => {
+        const {logInWithFacebook} = resolvers.Mutation;
         const args = {
             accessToken: 'TOKEN',
         };
 
-        const user =  Object.freeze({username: "test"});
+        const user = Object.freeze({username: "test"});
 
         const context = {
             Users: {
-                findByFacebookId: () => Promise.resolve(user),
+                findByFacebookId: async() => (user),
             },
             req: {
                 logIn: jest.fn()
