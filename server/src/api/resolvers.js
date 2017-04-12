@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
-import facebookIds from 'facebook'
+import facebookIds from 'configuration/facebook'
 // import { sendMail } from './tools/emailService'
 
 const resolvers = {
@@ -51,7 +51,7 @@ const resolvers = {
       const lesson = await context.Lessons.getLessonByPosition(currentLessonPosition)
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
-            // TODO THIS SPLICE HAS TO GO
+      // TODO THIS SPLICE HAS TO GO
       flashcardIds.splice(2)
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
@@ -61,7 +61,7 @@ const resolvers = {
       return context.Lessons.getLessonByPosition(nextLessonPosition)
     },
     async logInWithFacebook (root, args, context) {
-      const { accessToken: userToken } = args
+      const {accessToken: userToken} = args
       const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
@@ -107,7 +107,7 @@ const resolvers = {
     async processEvaluation (root, args, context) {
       const item = await context.Items.getItemById(args.itemId, context.user._id)
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
-            // TODO move this to repository
+      // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
@@ -115,16 +115,16 @@ const resolvers = {
     async resetPassword (root, args, context) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
-                // TODO check after domain successfully verified, send email with reset link
-                // sendMail({
-                //     from: 'thebrain.pro',
-                //     to: 'jmozgawa@thebrain.pro',
-                //     subject: 'logInWithFacebook',
-                //     text: 'THIS IS TEST MESSAGE'
-                // });
-        return { success: true }
+        // TODO check after domain successfully verified, send email with reset link
+        // sendMail({
+        //     from: 'thebrain.pro',
+        //     to: 'jmozgawa@thebrain.pro',
+        //     subject: 'logInWithFacebook',
+        //     text: 'THIS IS TEST MESSAGE'
+        // });
+        return {success: true}
       } else {
-        return { success: false }
+        return {success: false}
       }
     }
   }
