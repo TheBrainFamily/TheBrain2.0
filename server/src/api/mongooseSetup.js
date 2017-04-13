@@ -3,8 +3,22 @@ import moment from 'moment';
 import bcrypt from 'bcrypt';
 import urlencode from 'urlencode';
 
-mongoose.connect('mongodb://localhost/thebrain');
-console.log("mongoose start");
+const dbURI = 'mongodb://localhost/thebrain';
+const productionDBURI = 'mongodb://localhost/thebrain';
+const testingDBURI = 'mongodb://localhost:27030/testing';
+
+switch (process.env.NODE_ENV) {
+    case 'TESTING':
+        mongoose.connect(testingDBURI);
+        break;
+    case 'PRODUCTION':
+        mongoose.connect(productionDBURI);
+        break;
+    case 'DEVELOPMENT':
+    default:
+        mongoose.connect(dbURI);
+        break;
+}
 
 const FlashcardSchema = new mongoose.Schema({
     question: String,
@@ -15,8 +29,8 @@ export const Flashcards = mongoose.model('Flashcards', FlashcardSchema);
 
 export class FlashcardsRepository {
     async getFlashcards() {
+        console.log("inside code");
         const flashcards = await Flashcards.find().exec();
-        // console.log("flashcards ", flashcards);
         return flashcards;
     }
 

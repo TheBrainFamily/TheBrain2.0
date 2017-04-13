@@ -22,13 +22,14 @@
 // };
 
 module.exports = (wallaby) => {
-    // process.env.NODE_PATH += `:${require('path').join(wallaby.localProjectDir, 'node_modules')}`;
     const path = require('path');
+    process.env.NODE_PATH = `${path.join(wallaby.localProjectDir, 'src')}`;
     return {
-        debug: false,
+        // debug: true,
         testFramework: 'jest',
         files: [
             'src/**/*.js',
+            'package.json',
             // {pattern: 'modules/**/node_modules', ignore: true},
             {pattern: 'src/**/*.spec.js', ignore: true},
             // {pattern: 'modules/*(browser|ui)*', ignore: true},
@@ -38,8 +39,12 @@ module.exports = (wallaby) => {
             'src/**/*.spec.js',
         ],
         compilers: {'**/*.js': wallaby.compilers.babel()},
-        env: {type: 'node'},
-        workers: {initial: 1, regular: 1, recycle: true},
+        env: {type: 'node', params: {
+            env: "NODE_ENV=TESTING"
+            }
+        },
+        // workers: {recycle: tru}
+        workers: {initial: 1, regular: 1, recycle: false},
         // preprocessors: {
         //     'modules/**/*.js': file => '!global.$_$wp && (global.$_$wp = global.$_$wpe = global.$_$w = global.$_$wf = () => {});' + file.content
         // },
@@ -49,3 +54,26 @@ module.exports = (wallaby) => {
         },
     }
 };
+//
+//
+// module.exports = function (wallaby) {
+//     return {
+//         testFramework: 'jest',
+//         env: {type: 'node'},
+//         files: [
+//             'src/**/*.js',
+//             'package.json',
+//             {pattern: 'src/**/*.spec.js', ignore: true},
+//         ],
+//
+//         tests: [
+//             'src/**/*.spec.js'
+//         ],
+//         compilers: {'**/*.js': wallaby.compilers.babel()},
+//         workers: {
+//             initial: 1,
+//             regular: 1,
+//             recycle: true
+//         },
+//     };
+// };
