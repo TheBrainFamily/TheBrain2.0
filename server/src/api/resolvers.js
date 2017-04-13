@@ -3,12 +3,6 @@ import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
 // import { sendMail } from './tools/emailService'
 
-export const helperTools = {
-  checkToken: () => {
-
-  }
-}
-
 const resolvers = {
   Query: {
     Flashcards (root, args, context) {
@@ -69,6 +63,7 @@ const resolvers = {
     async logInWithFacebook (root, args, context) {
       const {accessToken: userToken} = args
       const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
+        console.log("Gozdecki: requestUrl",requestUrl);
         console.log("JMOZGAWA: fetch()",fetch);
 
       const res = await fetch(requestUrl)

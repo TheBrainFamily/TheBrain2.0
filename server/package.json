@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
-    "start": "NODE_PATH='src' babel-node src/startup.js"
+    "start": "NODE_PATH='src' babel-node src/startup.js",
+    "startLocalDB": "docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
+    "startTestingDB": "docker run -d -p 27030:27017 mongo"
   },
   "author": "",
   "license": "ISC",
@@ -50,6 +52,7 @@
     "graphql-tools": "^0.10.1",
     "jest": "^19.0.2",
     "nodemon": "^1.11.0",
-    "standard": "^10.0.1"
+    "standard": "^10.0.1",
+    "testdouble": "^2.1.2"
   }
 }

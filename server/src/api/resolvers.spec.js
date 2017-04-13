@@ -1,10 +1,13 @@
 import resolvers from './resolvers'
+import mongoose from 'mongoose';
 import {validate} from 'graphql/validation';
 import schema from './schema';
-import {FlashcardsRepository} from './mongooseSetup';
+import {FlashcardsRepository, Flashcards} from './mongooseSetup';
+import {extendExpect, deepFreeze} from 'testHelpers/testHelpers';
 
+extendExpect();
+console.log("Gozdecki: process.env.NODE_PATH",process.env.NODE_PATH);
 jest.mock('node-fetch', () => {
-    // track(‘data-mock’)
     return async() => ({
         json: async() => ( {
             data: {
@@ -14,34 +17,68 @@ jest.mock('node-fetch', () => {
     });
 });
 
-// test('adds 1 + 2 to equal 3', () => {
-//     expect(sum(1, 2)).toBe(3);
-// });
 
-// test('flashcards query returns all flashcard items', ()=> {
-//     const { Flashcards } = resolvers.Query;
-//     const context = {
-//         Flashcards: {
-//             getFlashcards: ()=> {
-//                 return '';
-//             }
-//         }
-//     }
-//
-//     expect(validate(schema, schema.getQueryType('Flashcards'), Flashcards({}, {}, context)));
-// });
+const flashcardsHelpers = {
+    insertRandom(number) {
 
-describe('query.flashcards', () => {
-    it('returns a flashcard', () => {
-        resolvers.Query.Flashcards(undefined, undefined, {Flashcards: new FlashcardsRepository()});
+    }
+}
+
+
+
+
+describe('query.flashcards 1', () => {
+    afterEach(async() => {
+        await mongoose.connection.db.dropDatabase();
+    });
+    it('returns flashcards from the db 1', async() => {
+        const flashcardsData = deepFreeze([{
+            question: "questionOne",
+            answer: "answerOne"
+        },
+            {
+                question: "questionTwo",
+                answer: "answerTwoAE"
+            },
+        ]);
+        await Promise.all(flashcardsData.map(async(fd) => {
+            const newFlashcard = new Flashcards(fd);
+            await newFlashcard.save();
+        }));
+        const dbFlashcards = await resolvers.Query.Flashcards(undefined, undefined,
+            {Flashcards: new FlashcardsRepository()}
+        );
+
+        expect(dbFlashcards).toContainDocuments(flashcardsData);
     })
+});
+
+const houseForSale = {
+    bath: true,
+    bedrooms: 4,
+    kitchen: {
+        amenities: ['oven', 'stove', 'washer'],
+        area: 20,
+        wallColor: 'white',
+    },
+};
+const desiredHouse = {
+    bath: true,
+    kitchen: {
+        amenities: ['oven', 'stove', 'washer'],
+        wallColor: 'white',
+    },
+};
+
+test('the house has my desired features', () => {
+    expect(houseForSale).toMatchObject(desiredHouse);
 });
 
 describe('login with facebook', async() => {
     it('returns user if it already exists', async() => {
         const {logInWithFacebook} = resolvers.Mutation;
         const args = {
-            accessToken: 'TOKEN',
+            accessToken: 'TOKENsA',
         };
 
         const user = Object.freeze({username: "test"});
