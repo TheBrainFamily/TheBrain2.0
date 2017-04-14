@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: node:7.4.0
+      - image: circleci/mongo:3
     working_directory: ~/TheBrain2.0
     steps:
       - checkout
