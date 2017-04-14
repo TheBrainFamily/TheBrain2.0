@@ -3,13 +3,12 @@ jobs:
   build:
     docker:
       - image: node:7.4.0
-    working_directory: ~/TheBrain2.0
+    working_directory: ~/TheBrain2.0/server
     steps:
       - checkout
       - run: mkdir -p ~/TheBrain2.0/artifacts
       - run: ls -la ~/TheBrain2.0/
-      - run: cd ~/TheBrain2.0/server/
-      - run: pushd ~/TheBrain2.0/ ; npm install
-      - run: pushd ~/TheBrain2.0/ ; npm test
+      - run: npm install
+      - run: npm test
       - store_artifacts:
           path: ~/TheBrain2.0/artifacts
