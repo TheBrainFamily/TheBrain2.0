@@ -1,5 +1,8 @@
-import resolvers from './resolvers'
 import mongoose from 'mongoose';
+import casual from 'casual';
+import _ from 'lodash'
+
+import resolvers from './resolvers'
 import {validate} from 'graphql/validation';
 import schema from './schema';
 import {FlashcardsRepository, Flashcards} from './mongooseSetup';
@@ -18,61 +21,104 @@ jest.mock('node-fetch', () => {
 });
 
 
-const flashcardsHelpers = {
-    insertRandom(number) {
 
-    }
+async function createFlashcard(props) {
+    const newFlashcard = new Flashcards(props);
+    await newFlashcard.save();
 }
 
+async function createFlashcards(flashcardsData) {
+    await Promise.all(flashcardsData.map(createFlashcard));
+}
+
+casual.define('flashcard', function() {
+    return {
+        // _id: mongoose.Types.ObjectId(),
+        question: casual.sentence,
+        answer: casual.sentence
+    };
+});
 
 
 
-describe('query.flashcards 1', () => {
+async function makeFlashcards({number = 3, flashcardsToExtend = []} = {}) {
+    const addedFlashcards = [];
+    // await mongoose.connection.on("open", async() => {
+
+
+        console.log("Gozdecki: new Date().getTime()",new Date().getTime());
+        // console.log("Gozdecki: connection",connection);
+        console.log("Gozdecki: new Date().getTime()",new Date().getTime());
+
+        _.times(number, (index) => {
+
+                let newFlashcard = casual.flashcard;
+                if (flashcardsToExtend[index]) {
+                    newFlashcard = {
+                        ...newFlashcard,
+                        ...flashcardsToExtend[index]
+                    }
+                }
+                addedFlashcards.push(newFlashcard);
+                // await mongoose.connection.db.collection('flashcards').insert(newFlashcard)
+
+            }
+        )
+        await mongoose.connection.db.collection('flashcards').insert(addedFlashcards)
+
+        console.log("Gozdecki: addedFlashcards",addedFlashcards);
+
+    // });
+    console.log("Gozdecki: addedFlashcards",addedFlashcards);
+    console.log("Gozdecki: new Date().getTime()",new Date().getTime());
+
+    return addedFlashcards;
+}
+
+describe('query.flashcards', () => {
+
+    beforeEach(function(done) {
+        mongoose.connection.on("open", done);
+    });
     afterEach(async() => {
         await mongoose.connection.db.dropDatabase();
     });
     it('returns flashcards from the db 1', async() => {
-        const flashcardsData = deepFreeze([{
-            question: "questionOne",
-            answer: "answerOne"
-        },
-            {
-                question: "questionTwo",
-                answer: "answerTwoAE"
-            },
-        ]);
-        await Promise.all(flashcardsData.map(async(fd) => {
-            const newFlashcard = new Flashcards(fd);
-            await newFlashcard.save();
-        }));
+        const flashcardsData = await deepFreeze(makeFlashcards());
+        // await createFlashcards(flashcardsData);
+
         const dbFlashcards = await resolvers.Query.Flashcards(undefined, undefined,
             {Flashcards: new FlashcardsRepository()}
         );
+        console.log("Gozdecki: flashcarsddsewgaData",flashcardsData);
 
+        console.log("Gozdecki: dbFlashcards",dbFlashcards);
+        expect(dbFlashcards.length).toBe(3)
         expect(dbFlashcards).toContainDocuments(flashcardsData);
     })
 });
 
-const houseForSale = {
-    bath: true,
-    bedrooms: 4,
-    kitchen: {
-        amenities: ['oven', 'stove', 'washer'],
-        area: 20,
-        wallColor: 'white',
-    },
-};
-const desiredHouse = {
-    bath: true,
-    kitchen: {
-        amenities: ['oven', 'stove', 'washer'],
-        wallColor: 'white',
-    },
-};
+describe('query.flashcard', () => {
+        afterEach(async() => {
+            await mongoose.connection.db.dropDatabase();
+        });
+    it('returns a flashcard by id', async() => {
 
-test('the house has my desired features', () => {
-    expect(houseForSale).toMatchObject(desiredHouse);
-});
+        const flashcardsToExtend = [
+            {_id: mongoose.Types.ObjectId()}, {_id: mongoose.Types.ObjectId()}
+        ];
+
+        console.log("Gozdecki: flashcardsToExtend",JSON.stringify(flashcardsToExtend));
+        const flashcardsData = await makeFlashcards({flashcardsToExtend});
+
+        const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsToExtend[1]._id},
+            {Flashcards: new FlashcardsRepository()}
+        );
+
+        console.log("Gozdecki: dbFlashcards", dbFlashcards);
+        expect(dbFlashcards._id).toEqual(flashcardsToExtend[1]._id);
+    })
+})
 
 describe('login with facebook', async() => {
     it('returns user if it already exists', async() => {
@@ -81,7 +127,7 @@ describe('login with facebook', async() => {
             accessToken: 'TOKENsA',
         };
 
-        const user = Object.freeze({username: "test"});
+        const user = deepFreeze({username: "test"});
 
         const context = {
             Users: {

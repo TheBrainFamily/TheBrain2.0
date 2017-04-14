@@ -31,12 +31,18 @@ export class FlashcardsRepository {
     async getFlashcards() {
         console.log("inside code");
         const flashcards = await Flashcards.find().exec();
+        console.log("Gozdecki: flashcards",flashcards.length);
         return flashcards;
     }
 
     async getFlashcard(_id) {
         console.log("getChannel by ", _id);
         return await Flashcards.findOne({_id});
+    }
+    // This API is currently not used by the app,
+    // but it's required for setting up tests
+    async insertFlashcard() {
+
     }
 }
 
@@ -117,6 +123,8 @@ export class ItemsRepository {
 export class ItemsWithFlashcardRepository {
 
     async getItemsWithFlashcard(userId) {
+
+
         const currentItems = await Items.find({
             userId,
             $or: [
@@ -125,8 +133,14 @@ export class ItemsWithFlashcardRepository {
                 {nextRepetition: {$lte: moment().unix()}}
             ]
         });
+
+
+
         const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}});
-        const sortedResults = currentItems.map(item => {
+
+
+
+        return currentItems.map(item => {
             return {
                 item,
                 flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
@@ -135,7 +149,6 @@ export class ItemsWithFlashcardRepository {
             return a.item.lastRepetition - b.item.lastRepetition;
         });
 
-        return sortedResults;
     }
 
 }
