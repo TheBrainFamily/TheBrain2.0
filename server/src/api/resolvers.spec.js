@@ -108,14 +108,12 @@ describe('query.flashcard', () => {
             {_id: mongoose.Types.ObjectId()}, {_id: mongoose.Types.ObjectId()}
         ];
 
-        console.log("Gozdecki: flashcardsToExtend",JSON.stringify(flashcardsToExtend));
         const flashcardsData = await makeFlashcards({flashcardsToExtend});
 
         const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsToExtend[1]._id},
             {Flashcards: new FlashcardsRepository()}
         );
 
-        console.log("Gozdecki: dbFlashcards", dbFlashcards);
         expect(dbFlashcards._id).toEqual(flashcardsToExtend[1]._id);
     })
 })
@@ -124,7 +122,7 @@ describe('login with facebook', async() => {
     it('returns user if it already exists', async() => {
         const {logInWithFacebook} = resolvers.Mutation;
         const args = {
-            accessToken: 'TOKENsA',
+            accessToken: 'TOKEN',
         };
 
         const user = deepFreeze({username: "test"});
