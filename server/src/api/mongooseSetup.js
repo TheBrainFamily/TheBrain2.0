@@ -5,7 +5,7 @@ import urlencode from 'urlencode';
 
 const dbURI = 'mongodb://localhost/thebrain';
 const productionDBURI = 'mongodb://localhost/thebrain';
-const testingDBURI = 'mongodb://localhost:27030/testing';
+const testingDBURI = 'mongodb://localhost/testing';
 
 switch (process.env.NODE_ENV) {
     case 'TESTING':
