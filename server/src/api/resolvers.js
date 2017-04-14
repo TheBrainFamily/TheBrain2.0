@@ -9,7 +9,6 @@ const resolvers = {
       return context.Flashcards.getFlashcards()
     },
     Flashcard (root, args, context) {
-      console.log("Gozdecki: args._id",JSON.stringify(args._id));
       return context.Flashcards.getFlashcard(args._id)
     },
     async Lesson (root, args, context) {
@@ -64,25 +63,18 @@ const resolvers = {
     async logInWithFacebook (root, args, context) {
       const {accessToken: userToken} = args
       const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
-        console.log("Gozdecki: requestUrl",requestUrl);
-        console.log("JMOZGAWA: fetch()",fetch);
 
       const res = await fetch(requestUrl)
-        console.log("JMOZGAWA: res",res);
       const parsedResponse = await res.json()
-      console.log("JMOZGAWA: parsedResponse",parsedResponse);
       if (parsedResponse.data.is_valid) {
         const facebookId = parsedResponse.data.user_id
         const user = await context.Users.findByFacebookId(facebookId)
 
-        console.log('JMOZGAWA: facebookId', facebookId)
-        console.log('JMOZGAWA: existing user', user)
         if (user) {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
         const newUser = await context.Users.updateFacebookUser(context.user._id, facebookId)
-        console.log('JMOZGAWA: newUser', newUser)
         return newUser
       } else {
         return null
