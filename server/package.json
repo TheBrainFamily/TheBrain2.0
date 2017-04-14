@@ -4,13 +4,16 @@
   "description": "Server for TheBrain 2.0",
   "main": "src/startup.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
-    "start": "babel-node src/startup.js"
+    "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
+    "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
+    "start": "NODE_PATH='src' babel-node src/startup.js",
+    "startLocalDB": "docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
+    "startTestingDB": "docker run -d -p 27030:27017 mongo"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.40.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -20,6 +23,9 @@
     "body-parser": "^1.17.1",
     "connect-mongo": "^1.3.2",
     "cors": "^2.8.1",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "graphql": "^0.9.1",
@@ -27,18 +33,28 @@
     "moment": "^2.17.1",
     "mongodb": "^2.2.24",
     "mongoose": "^4.8.6",
+    "node-fetch": "^1.6.3",
+    "nodemailer": "^4.0.0",
     "optics-agent": "^1.1.1",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
+    "urlencode": "^1.1.0"
   },
   "devDependencies": {
+    "babel-jest": "^19.0.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "casual": "^1.5.12",
+    "codecov": "^2.1.0",
     "eslint": "^3.17.1",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
     "graphql-tools": "^0.10.1",
-    "nodemon": "^1.11.0"
+    "jest": "^19.0.2",
+    "nodemon": "^1.11.0",
+    "standard": "^10.0.1",
+    "testdouble": "^2.1.2"
   }
 }
