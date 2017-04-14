@@ -25,7 +25,10 @@ import Questions from './components/Questions';
 
 
 const networkInterface = createNetworkInterface({
-    uri: 'http://new.thebrain.pro:8080/graphql',
+    uri: 'http://localhost:8080/graphql',
+// This needs to be changed to new.thebrain.pro if running from a real phone
+//    uri: 'http://new.thebrain.pro:8080/graphql',
+
     opts: {
         credentials: 'include',
     },
