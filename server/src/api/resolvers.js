@@ -9,6 +9,7 @@ const resolvers = {
       return context.Flashcards.getFlashcards()
     },
     Flashcard (root, args, context) {
+      console.log("Gozdecki: args._id",JSON.stringify(args._id));
       return context.Flashcards.getFlashcard(args._id)
     },
     async Lesson (root, args, context) {
