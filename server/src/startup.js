@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
 import session from 'express-session';
 import mongoose from 'mongoose';
 
@@ -15,14 +16,30 @@ import  cors  from 'cors';
 
 import schema from './api/schema';
 
+import facebookConfig from './configuration/facebook';
+
 const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 const port = 8080;
 
 
+
 passport.serializeUser((user, cb) => cb(null, user));
 passport.deserializeUser((obj, cb) => cb(null, obj));
+
+passport.use(new FacebookStrategy({
+        clientID: facebookConfig.clientID,
+        clientSecret: facebookConfig.clientSecret,
+        callbackURL: facebookConfig.callbackURL
+    },
+    function(accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            console.log("Gozdecki: profile",profile);
+            return done(null, profile);
+        });
+    }
+));
 
 app.use(session({
     //TODO this should come from the environment settings
@@ -53,7 +70,8 @@ const whitelist = [
 
 const corsOptions = {
     origin: function(origin, callback){
-        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        console.log("Gozdecki: origin",origin);
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1 || !origin;
         console.log("Gozdecki: originIsWhitelisted",originIsWhitelisted);
         callback(null, originIsWhitelisted);
     },
@@ -63,6 +81,20 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+
+app.get('/auth/facebook',
+    passport.authenticate('facebook'),
+    function (req, res) {
+        console.log("starting facebook authentication")
+    });
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {failureRedirect: '/'}),
+    function (req, res) {
+        console.log("Gozdecki: correct");
+        res.redirect('/');
+    }
+);
 
 if (OPTICS_API_KEY) {
     app.use('/graphql', OpticsAgent.middleware());

@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:7.4.0
+      - image: circleci/mongo:3
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run: mkdir -p ~/TheBrain2.0/server/artifacts
+      - run: ls -la ~/TheBrain2.0/
+#      - run: pushd ~/TheBrain2.0/server/
+#      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
+      - run:  pushd ~/TheBrain2.0/server/ ; npm install
+      - run:  pushd ~/TheBrain2.0/server/ ; CI=true npm test
+      - run:  pushd ~/TheBrain2.0/server/artifacts ; CODECOV_TOKEN="c2740296-3f65-4994-beac-37a127192011" ../node_modules/.bin/codecov -f lcov.info
+#      - run:  pushd ~/TheBrain2.0/server/artifacts ; COVERALLS_SERVICE_NAME="circle" COVERALLS_REPO_TOKEN="ZWNKI8CkeOa1Fl292BmtSygJaakdxS34Y" COVERALLS_SERVICE_JOB_ID=$CIRCLE_BUILD_NUM cat lcov.info | ../node_modules/.bin/coveralls
+      - store_artifacts:
+          path: ~/TheBrain2.0/server/artifacts
