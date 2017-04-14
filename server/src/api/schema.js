@@ -56,13 +56,19 @@ export const typeDefs = gql`
         CurrentUser: User
     }
     
+    type Status {
+        success: Boolean!
+    }
+    
     type Mutation {
         createItemsAndMarkLessonAsWatched: Lesson!,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
+        logInWithFacebook(accessToken: String!): User
         logOut: User
+        resetPassword(username: String!): Status
     }
     
     schema {

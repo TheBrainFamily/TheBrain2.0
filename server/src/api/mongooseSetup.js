@@ -1,9 +1,24 @@
 import mongoose from 'mongoose';
 import moment from 'moment';
 import bcrypt from 'bcrypt';
+import urlencode from 'urlencode';
 
-mongoose.connect('mongodb://localhost/thebrain');
+const dbURI = 'mongodb://localhost/thebrain';
+const productionDBURI = 'mongodb://localhost/thebrain';
+const testingDBURI = 'mongodb://localhost/testing';
 
+switch (process.env.NODE_ENV) {
+    case 'TESTING':
+        mongoose.connect(testingDBURI);
+        break;
+    case 'PRODUCTION':
+        mongoose.connect(productionDBURI);
+        break;
+    case 'DEVELOPMENT':
+    default:
+        mongoose.connect(dbURI);
+        break;
+}
 
 const FlashcardSchema = new mongoose.Schema({
     question: String,
@@ -14,15 +29,20 @@ export const Flashcards = mongoose.model('Flashcards', FlashcardSchema);
 
 export class FlashcardsRepository {
     async getFlashcards() {
-        console.log("flashcards repository");
+        console.log("inside code");
         const flashcards = await Flashcards.find().exec();
-        console.log("flashcards ", flashcards);
+        console.log("Gozdecki: flashcards",flashcards.length);
         return flashcards;
     }
 
     async getFlashcard(_id) {
         console.log("getChannel by ", _id);
         return await Flashcards.findOne({_id});
+    }
+    // This API is currently not used by the app,
+    // but it's required for setting up tests
+    async insertFlashcard() {
+
     }
 }
 
@@ -103,6 +123,8 @@ export class ItemsRepository {
 export class ItemsWithFlashcardRepository {
 
     async getItemsWithFlashcard(userId) {
+
+
         const currentItems = await Items.find({
             userId,
             $or: [
@@ -111,8 +133,14 @@ export class ItemsWithFlashcardRepository {
                 {nextRepetition: {$lte: moment().unix()}}
             ]
         });
+
+
+
         const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}});
-        const sortedResults = currentItems.map(item => {
+
+
+
+        return currentItems.map(item => {
             return {
                 item,
                 flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
@@ -121,7 +149,6 @@ export class ItemsWithFlashcardRepository {
             return a.item.lastRepetition - b.item.lastRepetition;
         });
 
-        return sortedResults;
     }
 
 }
@@ -152,11 +179,14 @@ export class UserDetailsRepository {
 
 
 const UserSchema = new mongoose.Schema({
+    oauthID: Number,
     //TODO username should be unique but now all new are called guest
     username: String,
     password: String,
     createdAt: Number,
     activated: Boolean,
+    facebookId: String,
+    resetPasswordToken: String,
 });
 
 //TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -183,6 +213,13 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
+const generateResetPasswordToken =  async (userId)=> {
+    const rawToken = `${userId}_W3GojrLkVLKH9l`;
+    // we are using hashing function as a clean way to generate a random string
+    const salt = await bcrypt.genSalt(Math.random());
+    return urlencode.encode(await bcrypt.hash(rawToken, salt));
+};
+
 export const Users = mongoose.model('users', UserSchema);
 
 export class UsersRepository {
@@ -199,9 +236,31 @@ export class UsersRepository {
         userToBeUpdated.password = password;
         userToBeUpdated.activated = true;
         await userToBeUpdated.save();
-        // await Users.update({_id: userId}, {$set: {username, password}});
+        //TODO this didn't return anything, need investigation
+        return userToBeUpdated;
+    }
+    async updateFacebookUser(userId, facebookId) {
+        const userToBeUpdated = await Users.findOne({_id: userId});
+        userToBeUpdated.facebookId = facebookId;
+        userToBeUpdated.activated = true;
+        await userToBeUpdated.save();
+        return userToBeUpdated;
     }
     async findByUsername(username) {
         return await Users.findOne({username});
+    }
+    async findByFacebookId(facebookId) {
+        return Users.findOne({facebookId});
+    }
+    async resetUserPassword(username) {
+        const userToBeUpdated = await this.findByUsername(username);
+        if(userToBeUpdated) {
+            userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id);
+            await userToBeUpdated.save();
+            return userToBeUpdated;
+        }
+        else {
+            return null;
+        }
     }
 }

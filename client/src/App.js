@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Header from './components/Header';
+import ResetPassword from './components/ResetPassword';
 
 let uri;
 const localhostRegexp = /localhost/;
@@ -53,6 +54,7 @@ class App extends Component {
                                    component={Questions}/>
                             <Route exact key="login" path="/login" component={Login}/>
                             <Route exact key="signup" path="/signup" component={Signup}/>
+                            <Route exact key="resetpassword" path="/resetpassword" component={ResetPassword}/>
                             <Footer/>
                         </div>
                     </div>
