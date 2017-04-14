@@ -7,11 +7,11 @@ jobs:
     working_directory: ~/TheBrain2.0
     steps:
       - checkout
-      - run: mkdir -p ~/TheBrain2.0/artifacts
+      - run: mkdir -p ~/TheBrain2.0/server/artifacts
       - run: ls -la ~/TheBrain2.0/
       - run: pushd ~/TheBrain2.0/server/
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
       - run: npm install
       - run: CI=true npm test
       - store_artifacts:
-          path: ~/TheBrain2.0/artifacts
+          path: ~/TheBrain2.0/server/artifacts

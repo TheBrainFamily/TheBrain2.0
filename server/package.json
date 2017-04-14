@@ -4,7 +4,7 @@
   "description": "Server for TheBrain 2.0",
   "main": "src/startup.js",
   "scripts": {
-    "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js ",
+    "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
