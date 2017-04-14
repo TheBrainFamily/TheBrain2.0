@@ -3,26 +3,27 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import logo from './../logo_thebrain.jpg';
-import currentUserQuery from '../queries/currentUser';
+import currentUserQuery from 'queries/currentUser';
 import { Link } from 'react-router-dom';
 
-const LoginSwitcher = (props) => {
-    if (props.activated) {
-        return <Link to="/logout" onClick={this.logout}>Logout</Link>
-
+class LoginSwitcher extends React.Component {
+    logout = (e) => {
+        e.preventDefault();
+        this.props.logout();
     }
-    return <Link to="/login">Login</Link>;
-};
+    render() {
+        if (this.props.activated) {
+            return <Link to="/logout" onClick={this.logout}>Logout</Link>
 
-LoginSwitcher.logout = (e) => {
-    e.preventDefault();
-    this.props.logout();
+        }
+        return <Link to="/login">Login</Link>;
+    }
 };
 
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id
+            _id, username, activated
         }  
     }
 `;
@@ -36,7 +37,7 @@ const LoginSwitcherWithGraphQl = graphql(logOutQuery, {
                     console.log("Gozdecki: prev",prev);
                     return update(prev, {
                         CurrentUser: {
-                            $set: mutationResult.data.logIn
+                            $set: mutationResult.data.logOut
                         }
                     });
                 }
