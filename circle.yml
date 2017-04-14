@@ -9,9 +9,9 @@ jobs:
       - checkout
       - run: mkdir -p ~/TheBrain2.0/server/artifacts
       - run: ls -la ~/TheBrain2.0/
-      - run: pushd ~/TheBrain2.0/server/
+#      - run: pushd ~/TheBrain2.0/server/
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
-      - run: npm install
-      - run: CI=true npm test
+      - run:  pushd ~/TheBrain2.0/server/ ; npm install
+      - run:  pushd ~/TheBrain2.0/server/ ; CI=true npm test
       - store_artifacts:
           path: ~/TheBrain2.0/server/artifacts
