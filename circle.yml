@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run: mkdir -p ~/TheBrain2.0/artifacts
       - run: ls -la ~/TheBrain2.0/
-      - run: cd ~/TheBrain2.0/server/
+      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
       - run: pushd ~/TheBrain2.0/server/ ; npm install
       - run: pushd ~/TheBrain2.0/server/ ; npm test
       - store_artifacts:
