@@ -205,22 +205,12 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password)
 }
 
-
-
 const generateResetPasswordToken = async (userId) => {
   const rawToken = `${userId}_W3GojrLkVLKH9l`
   // we are using hashing function as a clean way to generate a random string
   const salt = await bcrypt.genSalt(Math.random())
   return urlencode.encode(await bcrypt.hash(rawToken, salt))
 }
-
-export const generateResetPasswordTokenNew = async (userId) => {
-  const salt = await bcrypt.genSalt('abc')
-  return urlencode.encode(await bcrypt.hash(rawToken, salt))
-}
-
-
-export generateResetPasswordTokenNew;
 
 export const Users = mongoose.model('users', UserSchema)
 
