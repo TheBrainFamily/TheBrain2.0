@@ -126,5 +126,10 @@ const resolvers = {
     }
   }
 }
+//
+process.on('unhandledRejection', (reason) => {
+  // console.log('Reason: ' + reason)
+  throw (reason);
+})
 
 export default resolvers
