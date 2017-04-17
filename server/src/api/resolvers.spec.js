@@ -164,7 +164,3 @@ describe('login with facebook', async () => {
     expect(context.req.logIn.mock.calls[0]).toContain(user)
   })
 })
-
-describe('mutation.resetPassword', async () => {
-  generateResetPasswordTokenNew("sdf");
-})
