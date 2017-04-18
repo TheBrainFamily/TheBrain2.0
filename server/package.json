@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
+    "instrumentedDev": "NODE_PATH='src' COVERAGE='true' babel-node src/newStartup.js",
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
     "startTestingDB": "docker run -d -p 27017:27017 mongo"
@@ -42,6 +43,7 @@
     "urlencode": "^1.1.0"
   },
   "devDependencies": {
+    "babel-istanbul-middleware": "^1.0.0",
     "babel-jest": "^19.0.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
     "casual": "^1.5.12",
