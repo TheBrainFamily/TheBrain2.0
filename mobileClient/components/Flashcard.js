@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 
 const DIRECTION = {
-  LEFT: 1,
-  UP: 2,
-  RIGHT: 3,
-  DOWN: 4,
+    LEFT: 1,
+    UP: 2,
+    RIGHT: 3,
+    DOWN: 4,
 };
 
 class Flashcard extends React.Component {
@@ -43,7 +43,6 @@ class Flashcard extends React.Component {
                 padding: 40,
             },
             upMarker: {
-                backgroundColor: 'green',
                 position: 'absolute',
                 top: 5,
                 left: '50%',
@@ -117,24 +116,15 @@ class Flashcard extends React.Component {
         return (Math.round(angleDeg / 90) + 2) % 4 + 1;
     };
 
-    isDragLongEnough = (direction) => {
-      switch(direction) {
-        case DIRECTION.LEFT:
-          return this.state.x < -100;
-        case DIRECTION.UP:
-          return this.state.y < -100;
-        case DIRECTION.RIGHT:
-          return this.state.x > 100;
-        case DIRECTION.DOWN:
-          return this.state.y > 100;
-      }
-      return false;
+    isDragLongEnough = () => {
+        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
+        return dragLen > 100;
     };
 
     resetPosition = (e) => {
         const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
-        if(this.isDragLongEnough(direction)) {
-          this.onSubmitEvaluation(direction);
+        if (this.isDragLongEnough()) {
+            this.onSubmitEvaluation(direction);
         }
         this.dragging = false;
         //Reset on release
@@ -157,12 +147,20 @@ class Flashcard extends React.Component {
         return true;
     };
 
+    calculateDragLength = (x, y) => {
+        return (y ^ 2 + x ^ 2) ^ -2;
+    };
+
     setPosition = (event) => {
         //Update our state with the deltaX/deltaY of the movement
         this.setState({
             x: this.state.x + (event.nativeEvent.pageX - this.drag.x),
             y: this.state.y + (event.nativeEvent.pageY - this.drag.y)
         });
+        const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
+        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
+        console.log('PINGWIN: dragLen', dragLen);
+
         //Set our drag to be the new position so our delta can be calculated next time correctly
         this.drag.x = event.nativeEvent.pageX;
         this.drag.y = event.nativeEvent.pageY;
@@ -189,7 +187,7 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={this.styles.upMarker}>UP</Text>
+                    <Text style={[this.styles.upMarker, ]}>UP</Text>
                     <Text style={this.styles.leftMarker}>LEFT</Text>
                     <Text style={this.styles.downMarker}>DOWN</Text>
                     <Text style={this.styles.rightMarker}>RIGHT</Text>
