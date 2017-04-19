@@ -6,34 +6,17 @@ import {
   Text,
   View,
   Button,
-  StyleSheet,
   Animated,
   TouchableOpacity,
   AppRegistry,
 } from 'react-native';
+import styles from '../styles/styles';
 
 class Flashcard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.styles = StyleSheet.create({
-      flipCard: {
-        backfaceVisibility: 'hidden',
-        width: 350,
-        height: 600,
-        backgroundColor: '#9ACAF4',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      flipCardBack: {
-        position: 'absolute',
-        width: 350,
-        height: 600,
-        backgroundColor: '#E5BA9E',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }
-    });
+
 
     this.state = {visibleAnswer: false};
     this.toAnswerSide = 180;
@@ -93,13 +76,13 @@ class Flashcard extends React.Component {
 
     return (
       <TouchableOpacity onPress={() => this.flipCard()}>
-        <Animated.View style={[this.styles.flipCard, frontAnimatedStyle]}>
+        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
           <Text>QUESTION: {this.props.question}</Text>
           <Text>
             SHOW ANSWER
           </Text>
         </Animated.View>
-        <Animated.View style ={[backAnimatedStyle, this.styles.flipCard, this.styles.flipCardBack]}>
+        <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
           { this.state.visibleAnswer && <View>
             <Text >CORRECT ANSWER: {this.props.answer}</Text>
             <Text >How would you describe experience answering this question?</Text>
