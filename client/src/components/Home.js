@@ -2,7 +2,9 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
+import { push } from 'react-router-redux'
 
+import store from '../store'
 
 class Home extends React.Component {
 
@@ -17,9 +19,9 @@ class Home extends React.Component {
             return (<p>Error...</p>)
         }
         if (this.props.data.ItemsWithFlashcard.length > 0) {
-            this.props.history.push("/questions");
+            store.dispatch(push("/questions"));
         } else {
-            this.props.history.push("/lecture")
+            store.dispatch(push("/lecture"))
         }
         return <div></div>
     }
