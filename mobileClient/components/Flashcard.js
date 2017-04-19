@@ -188,10 +188,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={this.styles.upMarker}>UP</Text>
-                    <Text style={this.styles.leftMarker}>LEFT</Text>
-                    <Text style={this.styles.downMarker}>DOWN</Text>
-                    <Text style={this.styles.rightMarker}>RIGHT</Text>
+                    <Text style={this.styles.upMarker}>☹️</Text>
+                    <Text style={this.styles.leftMarker}>😵</Text>
+                    <Text style={this.styles.downMarker}>😇</Text>
+                    <Text style={this.styles.rightMarker}>🙃</Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
