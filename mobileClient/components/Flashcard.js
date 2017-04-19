@@ -16,8 +16,6 @@ class Flashcard extends React.Component {
 
   constructor(props) {
     super(props);
-
-
     this.state = {visibleAnswer: false};
     this.toAnswerSide = 180;
     this.toQuestionSide = 0;
