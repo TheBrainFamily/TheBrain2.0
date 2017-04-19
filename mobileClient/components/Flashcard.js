@@ -91,15 +91,16 @@ class Flashcard extends React.Component {
     };
 
     resetPosition = (e) => {
+        console.log('PINGWIN: this.state', this.state);
         this.dragging = false;
         //Reset on release
         this.setState({
             x: 0,
             y: 0,
         })
+        
     };
     _onStartShouldSetResponder = (e) => {
-        console.log('PINGWIN: _onStartShouldSetResponder');
         this.dragging = true;
         //Setup initial drag coordinates
         this.drag = {
@@ -113,13 +114,11 @@ class Flashcard extends React.Component {
     };
 
     setPosition = (event) => {
-        console.log('PINGWIN: dziala setPosition', event);
         //Update our state with the deltaX/deltaY of the movement
         this.setState({
             x: this.state.x + (event.nativeEvent.pageX - this.drag.x),
             y: this.state.y + (event.nativeEvent.pageY - this.drag.y)
         });
-        console.log('PINGWIN: this.state', this.state);
         //Set our drag to be the new position so our delta can be calculated next time correctly
         this.drag.x = event.nativeEvent.pageX;
         this.drag.y = event.nativeEvent.pageY;
@@ -131,9 +130,6 @@ class Flashcard extends React.Component {
     };
 
     render = () => {
-
-        console.log('PINGWIN: getCardStyle', this.getCardStyle());
-
         const frontAnimatedStyle = {
             transform: [
                 {rotateY: this.frontInterpolate}
