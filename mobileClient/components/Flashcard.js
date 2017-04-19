@@ -89,9 +89,35 @@ class Flashcard extends React.Component {
         });
         this.setState({visibleAnswer: false})
     };
+    
+    calculateSwipeDirection = (x, y) => {
+        const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
+
+        const angleDividedTo4Directions = (Math.round(angleDeg / 90) + 2) % 4;
+
+        let direction;
+        switch(angleDividedTo4Directions) {
+            case 0:
+                direction = 'left';
+                break;
+            case 1:
+                direction = 'up';
+                break;
+            case 2:
+                direction = 'right';
+                break;
+            case 3:
+                direction = 'down';
+                break;
+        }
+        // return direction;
+        console.log('PINGWIN: submited value angleDividedTo4Directions + 1', angleDividedTo4Directions + 1);
+        this.onSubmitEvaluation(angleDividedTo4Directions + 1);
+    };
 
     resetPosition = (e) => {
-        console.log('PINGWIN: this.state', this.state);
+        const swipeDirection = this.calculateSwipeDirection(this.state.x, this.state.y);
+        console.log('PINGWIN: swipeDirection', swipeDirection);
         this.dragging = false;
         //Reset on release
         this.setState({
