@@ -73,17 +73,17 @@ class Flashcard extends React.Component {
     };
 
     return (
-      <TouchableOpacity onPress={() => this.flipCard()}>
+      <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-          <Text>QUESTION: {this.props.question}</Text>
-          <Text>
-            SHOW ANSWER
-          </Text>
+          <Text style={styles.primaryHeader}>QUESTION:</Text>
+          <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
+          <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
         </Animated.View>
         <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
           { this.state.visibleAnswer && <View>
-            <Text >CORRECT ANSWER: {this.props.answer}</Text>
-            <Text >How would you describe experience answering this question?</Text>
+            <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
+            <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
+            <Text style={styles.primaryHeader}>How would you describe experience answering this question?</Text>
           </View> }
         </Animated.View>
       </TouchableOpacity>
