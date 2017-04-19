@@ -8,6 +8,9 @@ import {
     Text,
 View,
 } from 'react-native';
+import { push } from 'react-router-redux'
+
+import store from '../store'
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
 import currentUserQuery from './../queries/currentUser';
@@ -46,10 +49,10 @@ class Questions extends React.Component {
             } else {
                 if (this.props.currentUser.activated) {
                     console.log("going to /")
-                    this.props.history.push("/");
+                    store.dispatch(push("/"));
                 } else {
                     console.log("going to signup");
-                    this.props.history.push("/signup");
+                    store.dispatch(push("/signup"));
                 }
                 return <Text>Test</Text>
             }

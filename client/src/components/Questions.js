@@ -4,6 +4,9 @@ import gql from 'graphql-tag'
 import {withRouter} from 'react-router'
 // import {compose} from 'recompose';
 import _ from 'lodash'
+import { push } from 'react-router-redux'
+
+import store from '../store'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
@@ -42,9 +45,9 @@ class Questions extends React.Component {
         </div>
       } else {
         if (this.props.currentUser.activated) {
-          this.props.history.push('/')
+          store.dispatch(push('/'))
         } else {
-          this.props.history.push('/signup')
+          store.dispatch(push('/signup'))
         }
         return <div />
       }

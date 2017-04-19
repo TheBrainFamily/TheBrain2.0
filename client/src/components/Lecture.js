@@ -5,13 +5,15 @@ import Content from './Content';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
+import { push } from 'react-router-redux'
 
+import store from '../store'
 
 class Lecture extends React.Component {
 
 
     render() {
-        
+
         if (this.props.data.loading) {
             return (<p>Loading...</p>)
         }
@@ -47,7 +49,7 @@ class LectureVideo extends React.Component {
     }
 
     _onEnd = () => {
-        this.props.history.push("/wellDone");
+        store.dispatch(push("/wellDone"));
     }
 }
 
