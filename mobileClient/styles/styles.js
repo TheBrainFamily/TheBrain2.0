@@ -3,19 +3,19 @@ import { StyleSheet } from 'react-native';
 export default styles = StyleSheet.create({
     flipCard: {
         backfaceVisibility: 'hidden',
-        width: 350,
-        height: 600,
-        backgroundColor: '#9ACAF4',
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: 'steelblue',
+        width: '90%',
     },
     flipCardBack: {
         position: 'absolute',
-        width: 350,
-        height: 600,
-        backgroundColor: '#E5BA9E',
+        backgroundColor: '#DDD',
+        width: '90%',
+    },
+    flipCardContent: {
+    },
+    centerChildren: {
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
     },
     summaryContainer: {
         flexDirection: 'row',
