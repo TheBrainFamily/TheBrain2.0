@@ -30,7 +30,8 @@ class Flashcard extends React.Component {
                 height: 600,
                 backgroundColor: '#9ACAF4',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                padding: 40,
             },
             flipCardBack: {
                 position: 'absolute',
@@ -38,8 +39,29 @@ class Flashcard extends React.Component {
                 height: 600,
                 backgroundColor: '#E5BA9E',
                 alignItems: 'center',
-                justifyContent: 'center'
-            }
+                justifyContent: 'center',
+                padding: 40,
+            },
+            upMarker: {
+                position: 'absolute',
+                top: 5,
+                left: '50%',
+            },
+            rightMarker: {
+                position: 'absolute',
+                top: '50%',
+                right: 5,
+            },
+            downMarker: {
+                position: 'absolute',
+                bottom: 5,
+                left: '50%',
+            },
+            leftMarker: {
+                position: 'absolute',
+                top: '50%',
+                left: 5,
+            },
         });
 
         this.state = {
@@ -88,7 +110,7 @@ class Flashcard extends React.Component {
         this.setState({visibleAnswer: false});
         this.flipCard();
     };
-    
+
     calculateSwipeDirection = (x, y) => {
         const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
         return (Math.round(angleDeg / 90) + 2) % 4 + 1;
@@ -119,7 +141,7 @@ class Flashcard extends React.Component {
             x: 0,
             y: 0,
         })
-        
+
     };
     _onStartShouldSetResponder = (e) => {
         this.dragging = true;
@@ -166,6 +188,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
+                    <Text style={this.styles.upMarker}>UP</Text>
+                    <Text style={this.styles.leftMarker}>LEFT</Text>
+                    <Text style={this.styles.downMarker}>DOWN</Text>
+                    <Text style={this.styles.rightMarker}>RIGHT</Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
