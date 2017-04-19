@@ -12,6 +12,13 @@ import {
     AppRegistry,
 } from 'react-native';
 
+const DIRECTION = {
+  LEFT: 1,
+  UP: 2,
+  RIGHT: 3,
+  DOWN: 4,
+};
+
 class Flashcard extends React.Component {
 
     constructor(props) {
@@ -43,15 +50,6 @@ class Flashcard extends React.Component {
         this.toQuestionSide = 0;
     }
 
-    onSubmitEvaluation = (value) => {
-        this.props.submit({
-            itemId: this.props.evalItemId,
-            evaluation: value
-        });
-        this.flipCard();
-        this.setState({visibleAnswer: false})
-    };
-
     componentWillMount = () => {
         this.animatedValue = new Animated.Value(0);
         this.frontInterpolate = this.animatedValue.interpolate({
@@ -62,7 +60,7 @@ class Flashcard extends React.Component {
             inputRange: [0, 180],
             outputRange: ['180deg', '360deg'],
         })
-    }
+    };
 
     animate = (value) => {
         Animated.spring(this.animatedValue, {
@@ -70,7 +68,7 @@ class Flashcard extends React.Component {
             friction: 8,
             tension: 10,
         }).start();
-    }
+    };
 
     flipCard = () => {
         if (this.state.visibleAnswer) {
@@ -87,37 +85,34 @@ class Flashcard extends React.Component {
             itemId: this.props.evalItemId,
             evaluation: value
         });
-        this.setState({visibleAnswer: false})
+        this.setState({visibleAnswer: false});
+        this.flipCard();
     };
     
     calculateSwipeDirection = (x, y) => {
         const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
+        return (Math.round(angleDeg / 90) + 2) % 4 + 1;
+    };
 
-        const angleDividedTo4Directions = (Math.round(angleDeg / 90) + 2) % 4;
-
-        let direction;
-        switch(angleDividedTo4Directions) {
-            case 0:
-                direction = 'left';
-                break;
-            case 1:
-                direction = 'up';
-                break;
-            case 2:
-                direction = 'right';
-                break;
-            case 3:
-                direction = 'down';
-                break;
-        }
-        // return direction;
-        console.log('PINGWIN: submited value angleDividedTo4Directions + 1', angleDividedTo4Directions + 1);
-        this.onSubmitEvaluation(angleDividedTo4Directions + 1);
+    isDragLongEnough = (direction) => {
+      switch(direction) {
+        case DIRECTION.LEFT:
+          return this.state.x < -100;
+        case DIRECTION.UP:
+          return this.state.y < -100;
+        case DIRECTION.RIGHT:
+          return this.state.x > 100;
+        case DIRECTION.DOWN:
+          return this.state.y > 100;
+      }
+      return false;
     };
 
     resetPosition = (e) => {
-        const swipeDirection = this.calculateSwipeDirection(this.state.x, this.state.y);
-        console.log('PINGWIN: swipeDirection', swipeDirection);
+        const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
+        if(this.isDragLongEnough(direction)) {
+          this.onSubmitEvaluation(direction);
+        }
         this.dragging = false;
         //Reset on release
         this.setState({
@@ -170,8 +165,7 @@ class Flashcard extends React.Component {
                         SHOW ANSWER
                     </Text>
                 </Animated.View>
-                <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}
-                               >
+                <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
