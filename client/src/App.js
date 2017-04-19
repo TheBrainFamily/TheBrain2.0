@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {graphql} from 'react-apollo';
-import {BrowserRouter, Route} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { Route } from 'react-router';
+import { ConnectedRouter as Router } from 'react-router-redux';
 import {ApolloClient, createNetworkInterface} from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 
+import store, { history } from './store'
 import './App.css';
 import Home from './components/Home';
 import WellDone from './components/WellDone';
@@ -38,28 +40,30 @@ const client = new ApolloClient({
 class App extends Component {
     render() {
         return (
-            <BrowserRouter>
-                <ApolloProvider client={client}>
-                    <div className="App">
-                        <Header/>
-                        <div className="App-intro styleIntroduction">
-                            <Route exact key="tutorial" path="/" component={Home}/>
-                            <Route exact key="Lecture" path="/lecture"
-                                   component={Lecture}/>
+            <Provider store={store}>
+                <Router history={history}>
+                    <ApolloProvider client={client}>
+                        <div className="App">
+                            <Header/>
+                            <div className="App-intro styleIntroduction">
+                                <Route exact key="tutorial" path="/" component={Home}/>
+                                <Route exact key="Lecture" path="/lecture"
+                                       component={Lecture}/>
 
-                            <Route exact key="wellDone" path="/wellDone"
-                                   component={WellDone}/>
+                                <Route exact key="wellDone" path="/wellDone"
+                                       component={WellDone}/>
 
-                            <Route exact key="questions" path="/questions"
-                                   component={Questions}/>
-                            <Route exact key="login" path="/login" component={Login}/>
-                            <Route exact key="signup" path="/signup" component={Signup}/>
-                            <Route exact key="resetpassword" path="/resetpassword" component={ResetPassword}/>
-                            <Footer/>
+                                <Route exact key="questions" path="/questions"
+                                       component={Questions}/>
+                                <Route exact key="login" path="/login" component={Login}/>
+                                <Route exact key="signup" path="/signup" component={Signup}/>
+                                <Route exact key="resetpassword" path="/resetpassword" component={ResetPassword}/>
+                                <Footer/>
+                            </div>
                         </div>
-                    </div>
-                </ApolloProvider>
-            </BrowserRouter>
+                    </ApolloProvider>
+                </Router>
+            </Provider>
         );
     }
 }
