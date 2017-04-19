@@ -36,6 +36,7 @@ class Flashcard extends React.Component {
                 padding: 40,
             },
             upMarker: {
+                backgroundColor: 'green',
                 position: 'absolute',
                 top: 5,
                 left: '50%',
