@@ -7,25 +7,79 @@ import {
     View,
     Button,
     StyleSheet,
+    Animated,
+    TouchableOpacity,
+    AppRegistry,
 } from 'react-native';
 
 class Flashcard extends React.Component {
 
     constructor(props) {
         super(props);
+        this.styles = StyleSheet.create({
+            flipCard: {
+                backfaceVisibility: 'hidden',
+                width: 350,
+                height: 600,
+                backgroundColor: '#9ACAF4',
+                alignItems: 'center',
+                justifyContent: 'center'
+            },
+            flipCardBack: {
+                position: 'absolute',
+                width: 350,
+                height: 600,
+                backgroundColor: '#E5BA9E',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }
+        });
 
-        this.state = {visibleAnswer: false};
+        this.state = {
+            visibleAnswer: false, x: 0,
+            y: 0,
+        };
+        this.toAnswerSide = 180;
+        this.toQuestionSide = 0;
     }
 
-    getInitialState = () => {
-        return {
-            x: 0,
-            y: 0
-        }
+    onSubmitEvaluation = (value) => {
+        this.props.submit({
+            itemId: this.props.evalItemId,
+            evaluation: value
+        });
+        this.flipCard();
+        this.setState({visibleAnswer: false})
     };
 
-    answeredQuestion = () => {
-        this.setState({visibleAnswer: true})
+    componentWillMount = () => {
+        this.animatedValue = new Animated.Value(0);
+        this.frontInterpolate = this.animatedValue.interpolate({
+            inputRange: [0, 180],
+            outputRange: ['0deg', '180deg'],
+        });
+        this.backInterpolate = this.animatedValue.interpolate({
+            inputRange: [0, 180],
+            outputRange: ['180deg', '360deg'],
+        })
+    }
+
+    animate = (value) => {
+        Animated.spring(this.animatedValue, {
+            toValue: value,
+            friction: 8,
+            tension: 10,
+        }).start();
+    }
+
+    flipCard = () => {
+        if (this.state.visibleAnswer) {
+            this.animate(this.toQuestionSide);
+            this.setState({visibleAnswer: false})
+        } else {
+            this.animate(this.toAnswerSide);
+            this.setState({visibleAnswer: true})
+        }
     };
 
     onSubmitEvaluation = (value) => {
@@ -59,6 +113,7 @@ class Flashcard extends React.Component {
     };
 
     setPosition = (event) => {
+        console.log('PINGWIN: dziala setPosition', event);
         //Update our state with the deltaX/deltaY of the movement
         this.setState({
             x: this.state.x + (event.nativeEvent.pageX - this.drag.x),
@@ -71,91 +126,40 @@ class Flashcard extends React.Component {
     };
 
     getCardStyle = function () {
-        const transform = [{translateX: this.state.x}, {translateY: this.state.y}];
-        return {transform: transform};
+        const transform = [{rotateY: this.backInterpolate}, {translateX: this.state.x}, {translateY: this.state.y}];
+        return {transform};
     };
 
-    render() {
-        const styles = StyleSheet.create({
-            container: {
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-            },
-            card: {
-                borderWidth: 3,
-                borderRadius: 3,
-                borderColor: '#000',
-                width: 300,
-                height: 300,
-                padding: 10,
-                marginTop: 300,
-            }
-        });
+    render = () => {
 
-        // const style = this.getCardStyle();
-        // console.log('PINGWIN: style', style);
-        console.log('PINGWIN: dziala');
-        return <View style={styles.container}>
-            <View style={[styles.card]}
-                  onResponderMove={this.setPosition}
-                  onResponderRelease={this.resetPosition}
-                  onStartShouldSetResponder={this._onStartShouldSetResponder}
-                  onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
-                <Text>QUESTION : {this.props.question}</Text>
-                <View>{!this.state.visibleAnswer ?
-                    <Button
-                        onPress={this.answeredQuestion}
-                        title="SHOW ANSWER"
-                        color="#841584"
-                        accessibilityLabel="SHOW ANSWER"
-                    />
-                    :
-                    <View>
-                        <Text>CORRECT ANSWER :{this.props.answer}
-                        </Text>
-                        <Text>How would you describe experience answering this question?</Text>
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(1)}
-                            title="Blackout"
-                            color="#841584"
-                            accessibilityLabel="Blackout"
-                        />
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(2)}
-                            title="Terrible"
-                            color="#841584"
-                            accessibilityLabel="Terrible"
-                        />
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(3)}
-                            title="Bad"
-                            color="#841584"
-                            accessibilityLabel="Bad"
-                        />
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(4)}
-                            title="Hardly"
-                            color="#841584"
-                            accessibilityLabel="Hardly"
-                        />
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(5)}
-                            title="Good"
-                            color="#841584"
-                            accessibilityLabel="Good"
-                        />
-                        <Button
-                            onPress={() => this.onSubmitEvaluation(6)}
-                            title="Perfect!"
-                            color="#841584"
-                            accessibilityLabel="Perfect!"
-                        />
-                    </View>
-                }
-                </View>
-            </View>
-        </View>
+        console.log('PINGWIN: getCardStyle', this.getCardStyle());
+
+        const frontAnimatedStyle = {
+            transform: [
+                {rotateY: this.frontInterpolate}
+            ]
+        };
+
+        return (
+            <TouchableOpacity onPress={() => this.flipCard()}>
+                <Animated.View style={[this.styles.flipCard, frontAnimatedStyle]}>
+                    <Text>QUESTION: {this.props.question}</Text>
+                    <Text>
+                        SHOW ANSWER
+                    </Text>
+                </Animated.View>
+                <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}
+                               >
+                    { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
+                                                        onResponderRelease={this.resetPosition}
+                                                        onStartShouldSetResponder={this._onStartShouldSetResponder}
+                                                        onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
+                        <Text >CORRECT ANSWER: {this.props.answer}</Text>
+                        <Text >How would you describe experience answering this question?</Text>
+                    </View> }
+                </Animated.View>
+            </TouchableOpacity>
+        )
     }
 }
 
