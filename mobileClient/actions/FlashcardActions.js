@@ -4,3 +4,11 @@ export const updateAnswerVisibility = (value) => {
     visibleAnswer: value,
   };
 };
+
+export const updatePosition = (x, y) => {
+  return {
+    type: 'UPDATE_POSITION',
+    x,
+    y,
+  };
+};

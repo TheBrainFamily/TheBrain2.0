@@ -1,83 +1,77 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+    topContainer: {
+        height: 20,
+        backgroundColor: 'white',
+        zIndex: 999,
+    },
+    mainPage: {
+        backgroundColor: '#9ACAF4',
+        height: '100%',
+    },
     flipCard: {
         backfaceVisibility: 'hidden',
-        width: 350,
-        height: 600,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#9ACAF4',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 40,
+        paddingTop: '50%',
+        margin: 0,
     },
     flipCardBack: {
         position: 'absolute',
-        width: 350,
-        height: 600,
-        backgroundColor: '#E5BA9E',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 40,
+    },
+    baseMarkerStyle: {
+        position: 'absolute',
+        opacity: 1,
+        zIndex: 100,
+        backgroundColor: 'transparent',
+        fontWeight: 'bold',
+        transform: [{scale: 0}],
+        borderRadius: 10,
     },
     upMarker: {
-        position: 'absolute',
         top: 5,
         left: '50%',
     },
     rightMarker: {
-        position: 'absolute',
         top: '50%',
         right: 5,
     },
     downMarker: {
-        position: 'absolute',
-        bottom: 5,
+        bottom: 100,
         left: '50%',
     },
     leftMarker: {
-        position: 'absolute',
         top: '50%',
         left: 5,
     },
-
     flipCardContent: {
-    },
-    centeredContent: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        height: '50%',
     },
     contentBox: {
         padding: 20,
-        borderRadius: 10,
-    },
-    centerChildren: {
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     summaryContainer: {
+        backgroundColor: 'white',
+        zIndex: 50,
         flexDirection: 'row',
+        margin: 0,
         padding: 5,
     },
-    summaryLeftRow: {
-        color: 'black',
+    summaryRow: {
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 12,
+    },
+    summaryLeftRow: {
         textAlign: 'left',
         width: 150,
     },
     summaryCenterRow: {
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 10,
         textAlign: 'center',
         flex: 1,
     },
     summaryRightRow: {
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 10,
         textAlign: 'right',
         width: 150,
     },
