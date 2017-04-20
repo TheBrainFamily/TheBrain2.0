@@ -191,10 +191,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>UP</Text>
-                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>LEFT</Text>
-                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>DOWN</Text>
-                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>RIGHT</Text>
+                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>☹️</Text>
+                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>😵</Text>
+                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>😇</Text>
+                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>🙃</Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
