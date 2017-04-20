@@ -14,10 +14,10 @@ import {
 import Emoji from 'react-native-emoji';
 
 const DIRECTION = {
-  LEFT: 1,
-  UP: 2,
-  RIGHT: 3,
-  DOWN: 4,
+    LEFT: 1,
+    UP: 2,
+    RIGHT: 3,
+    DOWN: 4,
 };
 
 class Flashcard extends React.Component {
@@ -117,24 +117,15 @@ class Flashcard extends React.Component {
         return (Math.round(angleDeg / 90) + 2) % 4 + 1;
     };
 
-    isDragLongEnough = (direction) => {
-      switch(direction) {
-        case DIRECTION.LEFT:
-          return this.state.x < -100;
-        case DIRECTION.UP:
-          return this.state.y < -100;
-        case DIRECTION.RIGHT:
-          return this.state.x > 100;
-        case DIRECTION.DOWN:
-          return this.state.y > 100;
-      }
-      return false;
+    isDragLongEnough = () => {
+        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
+        return dragLen > 100;
     };
 
     resetPosition = (e) => {
         const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
-        if(this.isDragLongEnough(direction)) {
-          this.onSubmitEvaluation(direction);
+        if (this.isDragLongEnough()) {
+            this.onSubmitEvaluation(direction);
         }
         this.dragging = false;
         //Reset on release
@@ -157,12 +148,17 @@ class Flashcard extends React.Component {
         return true;
     };
 
+    calculateDragLength = (x, y) => {
+        return (y ^ 2 + x ^ 2) ^ -2;
+    };
+
     setPosition = (event) => {
         //Update our state with the deltaX/deltaY of the movement
         this.setState({
             x: this.state.x + (event.nativeEvent.pageX - this.drag.x),
             y: this.state.y + (event.nativeEvent.pageY - this.drag.y)
         });
+
         //Set our drag to be the new position so our delta can be calculated next time correctly
         this.drag.x = event.nativeEvent.pageX;
         this.drag.y = event.nativeEvent.pageY;
@@ -171,6 +167,13 @@ class Flashcard extends React.Component {
     getCardStyle = function () {
         const transform = [{rotateY: this.backInterpolate}, {translateX: this.state.x}, {translateY: this.state.y}];
         return {transform};
+    };
+
+    getMarkerStyle = () => {
+        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
+        const alpha = dragLen/100;
+        const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
+        return {backgroundColor};
     };
 
     render = () => {
@@ -189,10 +192,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={this.styles.upMarker}><Emoji name="pensive"/></Text>
-                    <Text style={this.styles.leftMarker}><Emoji name="fearful"/></Text>
-                    <Text style={this.styles.downMarker}><Emoji name="innocent"/></Text>
-                    <Text style={this.styles.rightMarker}><Emoji name="smile"/></Text>
+                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>️</Text>
+                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/></Text>
+                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/></Text>
+                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/></Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
