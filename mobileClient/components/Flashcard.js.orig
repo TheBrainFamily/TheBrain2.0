@@ -3,6 +3,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import {
+<<<<<<< HEAD
     Text,
     View,
     Button,
@@ -10,6 +11,14 @@ import {
     Animated,
     TouchableOpacity,
     AppRegistry,
+=======
+  Text,
+  View,
+  Button,
+  Animated,
+  TouchableOpacity,
+  AppRegistry,
+>>>>>>> 94fff2e8d0a4e9c3be608ba5bd9c42625cf701a6
 } from 'react-native';
 import styles from '../styles/styles';
 
@@ -22,9 +31,28 @@ const DIRECTION = {
 
 class Flashcard extends React.Component {
 
+<<<<<<< HEAD
     constructor(props) {
         super(props);
         this.styles = StyleSheet.create({
+            flipCard: {
+                backfaceVisibility: 'hidden',
+                width: 350,
+                height: 600,
+                backgroundColor: '#9ACAF4',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 40,
+            },
+            flipCardBack: {
+                position: 'absolute',
+                width: 350,
+                height: 600,
+                backgroundColor: '#E5BA9E',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 40,
+            },
             upMarker: {
                 position: 'absolute',
                 top: 5,
@@ -53,16 +81,52 @@ class Flashcard extends React.Component {
         };
         this.toAnswerSide = 180;
         this.toQuestionSide = 0;
-    }
+=======
+  constructor(props) {
+    super(props);
+    this.state = {visibleAnswer: false};
+    this.toAnswerSide = 180;
+    this.toQuestionSide = 0;
+  }
 
-    onSubmitEvaluation = (value) => {
-        this.props.submit({
-            itemId: this.props.evalItemId,
-            evaluation: value
-        });
-        this.flipCard();
-        this.setState({visibleAnswer: false})
-    };
+  onSubmitEvaluation = (value) => {
+    this.props.submit({
+      itemId: this.props.evalItemId,
+      evaluation: value
+    });
+    this.flipCard();
+    this.setState({visibleAnswer: false})
+  };
+
+  componentWillMount = () => {
+    this.animatedValue = new Animated.Value(0);
+    this.frontInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ['0deg', '180deg'],
+    });
+    this.backInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ['180deg', '360deg'],
+    })
+  }
+
+  animate = (value) => {
+    Animated.spring(this.animatedValue, {
+      toValue: value,
+      friction: 8,
+      tension: 10,
+    }).start();
+  }
+
+  flipCard = () => {
+    if (this.state.visibleAnswer) {
+      this.animate(this.toQuestionSide);
+      this.setState({visibleAnswer: false})
+    } else {
+      this.animate(this.toAnswerSide);
+      this.setState({visibleAnswer: true})
+>>>>>>> 94fff2e8d0a4e9c3be608ba5bd9c42625cf701a6
+    }
 
     componentWillMount = () => {
         this.animatedValue = new Animated.Value(0);
@@ -74,7 +138,7 @@ class Flashcard extends React.Component {
             inputRange: [0, 180],
             outputRange: ['180deg', '360deg'],
         })
-    }
+    };
 
     animate = (value) => {
         Animated.spring(this.animatedValue, {
@@ -82,7 +146,7 @@ class Flashcard extends React.Component {
             friction: 8,
             tension: 10,
         }).start();
-    }
+    };
 
     flipCard = () => {
         if (this.state.visibleAnswer) {
@@ -92,7 +156,16 @@ class Flashcard extends React.Component {
             this.animate(this.toAnswerSide);
             this.setState({visibleAnswer: true})
         }
-    }
+    };
+
+    onSubmitEvaluation = (value) => {
+        this.props.submit({
+            itemId: this.props.evalItemId,
+            evaluation: value
+        });
+        this.setState({visibleAnswer: false});
+        this.flipCard();
+    };
 
     calculateSwipeDirection = (x, y) => {
         const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
@@ -104,6 +177,7 @@ class Flashcard extends React.Component {
         return dragLen > 100;
     };
 
+<<<<<<< HEAD
     resetPosition = (e) => {
         const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
         if (this.isDragLongEnough()) {
@@ -153,7 +227,7 @@ class Flashcard extends React.Component {
 
     getMarkerStyle = () => {
         const dragLen = this.calculateDragLength(this.state.x, this.state.y);
-        const alpha = dragLen / 100;
+        const alpha = dragLen/100;
         const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
         return {backgroundColor};
     };
@@ -166,30 +240,48 @@ class Flashcard extends React.Component {
         };
 
         return (
-            <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
-                <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-                    <Text style={styles.primaryHeader}>QUESTION:</Text>
-                    <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
-                    <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
+            <TouchableOpacity onPress={() => this.flipCard()}>
+                <Animated.View style={[this.styles.flipCard, frontAnimatedStyle]}>
+                    <Text>QUESTION: {this.props.question}</Text>
+                    <Text>
+                        SHOW ANSWER
+                    </Text>
                 </Animated.View>
-                <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
-                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>UP</Text>
-                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>LEFT</Text>
-                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>DOWN</Text>
-                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>RIGHT</Text>
+                <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
+                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>☹️</Text>
+                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>😵</Text>
+                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>😇</Text>
+                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>🙃</Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
                                                         onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
-                        <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
-                        <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
-                        <Text style={styles.primaryHeader}>How would you describe experience answering this
-                            question?</Text>
+                        <Text >CORRECT ANSWER: {this.props.answer}</Text>
+                        <Text >How would you describe experience answering this question?</Text>
                     </View> }
                 </Animated.View>
             </TouchableOpacity>
         )
     }
+=======
+    return (
+      <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
+        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+          <Text style={styles.primaryHeader}>QUESTION:</Text>
+          <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
+          <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
+        </Animated.View>
+        <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
+          { this.state.visibleAnswer && <View>
+            <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
+            <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
+            <Text style={styles.primaryHeader}>How would you describe experience answering this question?</Text>
+          </View> }
+        </Animated.View>
+      </TouchableOpacity>
+    )
+  }
+>>>>>>> 94fff2e8d0a4e9c3be608ba5bd9c42625cf701a6
 }
 
 const submitEval = gql`
