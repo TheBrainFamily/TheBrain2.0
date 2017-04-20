@@ -3,21 +3,14 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     flipCard: {
         backfaceVisibility: 'hidden',
-        width: 350,
-        height: 600,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#9ACAF4',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 40,
+        paddingTop: 50,
+        margin: 0,
     },
     flipCardBack: {
         position: 'absolute',
-        width: 350,
-        height: 600,
-        backgroundColor: '#E5BA9E',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 40,
     },
     upMarker: {
         position: 'absolute',
@@ -31,7 +24,7 @@ const styles = StyleSheet.create({
     },
     downMarker: {
         position: 'absolute',
-        bottom: 5,
+        bottom: 105,
         left: '50%',
     },
     leftMarker: {
@@ -43,7 +36,6 @@ const styles = StyleSheet.create({
     flipCardContent: {
     },
     centeredContent: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
