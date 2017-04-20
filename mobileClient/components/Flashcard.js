@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
@@ -9,16 +10,12 @@ import {
     Animated,
 } from 'react-native';
 import styles from '../styles/styles';
-
+import { updateAnswerVisibility } from '../actions/FlashcardActions';
 
 class Flashcard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            visibleAnswer: false, x: 0,
-            y: 0,
-        };
         this.toAnswerSide = 180;
         this.toQuestionSide = 0;
     }
@@ -43,18 +40,14 @@ class Flashcard extends React.Component {
     };
 
     flipCard = () => {
-        if (this.state.visibleAnswer) {
+        if (this.props.flashcard.visibleAnswer) {
             this.animate(this.toQuestionSide);
-            this.setState({visibleAnswer: false})
+            this.props.dispatch(updateAnswerVisibility(false));
         } else {
             this.animate(this.toAnswerSide);
-            this.setState({visibleAnswer: true})
+            this.props.dispatch(updateAnswerVisibility(true));
         }
     };
-
-  updateVisibleAnswer = (value) => {
-    this.setState({ visibleAnswer: value });
-  }
 
     render = () => {
         return (
@@ -63,8 +56,6 @@ class Flashcard extends React.Component {
                 <BackCard interpolateCb={this.interpolateWrapper}
                           flipCardCb={this.flipCard}
                           submitCb={this.props.submit}
-                          updateVisibleAnswer={this.updateVisibleAnswer}
-                          visibleAnswer={this.state.visibleAnswer}
                           answer={this.props.answer}
                           evalItemId={this.props.evalItemId}
                 />
@@ -110,4 +101,4 @@ export default graphql(submitEval, {
             }
         })
     })
-})(Flashcard);
+})(connect(state => state)(Flashcard));

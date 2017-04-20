@@ -21,6 +21,7 @@ import Questions from './components/Questions';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
+import store from './store';
 
 const networkInterface = createNetworkInterface({
     uri: 'http://localhost:8080/graphql',
@@ -39,8 +40,7 @@ const client = new ApolloClient({
 export default class App extends Component {
     render() {
         return (
-            <ApolloProvider client={client}>
-
+            <ApolloProvider client={client} store={store}>
                 <NativeRouter>
                     <View style={{marginTop: 30}}>
                         <View>
