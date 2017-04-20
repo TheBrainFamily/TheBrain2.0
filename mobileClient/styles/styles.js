@@ -48,18 +48,9 @@ const styles = StyleSheet.create({
     },
     flipCardContent: {
     },
-    centeredContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     contentBox: {
         padding: 20,
         borderRadius: 10,
-    },
-    centerChildren: {
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     summaryContainer: {
         backgroundColor: 'white',
