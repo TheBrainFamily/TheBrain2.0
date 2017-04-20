@@ -47,10 +47,10 @@ const styles = StyleSheet.create({
         left: 5,
     },
     flipCardContent: {
+        height: '50%',
     },
     contentBox: {
         padding: 20,
-        borderRadius: 10,
     },
     summaryContainer: {
         backgroundColor: 'white',
@@ -59,21 +59,19 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 5,
     },
-    summaryLeftRow: {
+    summaryRow: {
         fontWeight: 'bold',
         fontSize: 12,
+    },
+    summaryLeftRow: {
         textAlign: 'left',
         width: 150,
     },
     summaryCenterRow: {
-        fontWeight: 'bold',
-        fontSize: 12,
         textAlign: 'center',
         flex: 1,
     },
     summaryRightRow: {
-        fontWeight: 'bold',
-        fontSize: 12,
         textAlign: 'right',
         width: 150,
     },
