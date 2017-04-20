@@ -3,14 +3,43 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     flipCard: {
         backfaceVisibility: 'hidden',
-        backgroundColor: 'steelblue',
-        width: '90%',
+        width: 350,
+        height: 600,
+        backgroundColor: '#9ACAF4',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 40,
     },
     flipCardBack: {
         position: 'absolute',
-        backgroundColor: '#DDD',
-        width: '90%',
+        width: 350,
+        height: 600,
+        backgroundColor: '#E5BA9E',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 40,
     },
+    upMarker: {
+        position: 'absolute',
+        top: 5,
+        left: '50%',
+    },
+    rightMarker: {
+        position: 'absolute',
+        top: '50%',
+        right: 5,
+    },
+    downMarker: {
+        position: 'absolute',
+        bottom: 5,
+        left: '50%',
+    },
+    leftMarker: {
+        position: 'absolute',
+        top: '50%',
+        left: 5,
+    },
+
     flipCardContent: {
     },
     centeredContent: {

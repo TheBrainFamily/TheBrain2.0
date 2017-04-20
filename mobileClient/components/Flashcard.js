@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     AppRegistry,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
 
 const DIRECTION = {
@@ -24,29 +25,6 @@ class Flashcard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.styles = StyleSheet.create({
-            upMarker: {
-                position: 'absolute',
-                top: 5,
-                left: '50%',
-            },
-            rightMarker: {
-                position: 'absolute',
-                top: '50%',
-                right: 5,
-            },
-            downMarker: {
-                position: 'absolute',
-                bottom: 5,
-                left: '50%',
-            },
-            leftMarker: {
-                position: 'absolute',
-                top: '50%',
-                left: 5,
-            },
-        });
-
         this.state = {
             visibleAnswer: false, x: 0,
             y: 0,
@@ -54,15 +32,6 @@ class Flashcard extends React.Component {
         this.toAnswerSide = 180;
         this.toQuestionSide = 0;
     }
-
-    onSubmitEvaluation = (value) => {
-        this.props.submit({
-            itemId: this.props.evalItemId,
-            evaluation: value
-        });
-        this.flipCard();
-        this.setState({visibleAnswer: false})
-    };
 
     componentWillMount = () => {
         this.animatedValue = new Animated.Value(0);
@@ -74,7 +43,7 @@ class Flashcard extends React.Component {
             inputRange: [0, 180],
             outputRange: ['180deg', '360deg'],
         })
-    }
+    };
 
     animate = (value) => {
         Animated.spring(this.animatedValue, {
@@ -82,7 +51,7 @@ class Flashcard extends React.Component {
             friction: 8,
             tension: 10,
         }).start();
-    }
+    };
 
     flipCard = () => {
         if (this.state.visibleAnswer) {
@@ -93,6 +62,15 @@ class Flashcard extends React.Component {
             this.setState({visibleAnswer: true})
         }
     }
+
+    onSubmitEvaluation = (value) => {
+        this.props.submit({
+            itemId: this.props.evalItemId,
+            evaluation: value
+        });
+        this.setState({visibleAnswer: false});
+        this.flipCard();
+    };
 
     calculateSwipeDirection = (x, y) => {
         const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
@@ -173,10 +151,10 @@ class Flashcard extends React.Component {
                     <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
-                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>UP</Text>
-                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>LEFT</Text>
-                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>DOWN</Text>
-                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>RIGHT</Text>
+                    <Text style={[styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>️</Text>
+                    <Text style={[styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/></Text>
+                    <Text style={[styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/></Text>
+                    <Text style={[styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/></Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
