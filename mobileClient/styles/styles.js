@@ -16,21 +16,25 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 5,
         left: '50%',
+        opacity: 0,
     },
     rightMarker: {
         position: 'absolute',
         top: '50%',
         right: 5,
+        opacity: 0,
     },
     downMarker: {
         position: 'absolute',
         bottom: 105,
         left: '50%',
+        opacity: 0,
     },
     leftMarker: {
         position: 'absolute',
         top: '50%',
         left: 5,
+        opacity: 0,
     },
 
     flipCardContent: {
