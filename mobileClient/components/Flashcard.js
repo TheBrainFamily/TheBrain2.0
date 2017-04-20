@@ -153,7 +153,7 @@ class Flashcard extends React.Component {
                 <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/>Bad</Text>
                 <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/>Almost</Text>
                 <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/>Good</Text>
-                <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
+                <TouchableOpacity onPress={() => this.flipCard()}>
                     <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
                         <Text style={styles.primaryHeader}>QUESTION:</Text>
                         <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
