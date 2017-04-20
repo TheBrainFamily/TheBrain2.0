@@ -134,7 +134,8 @@ class Flashcard extends React.Component {
         if (direction === swipeDirectionString) {
             const alpha = dragLen / 100;
             // const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
-            markerStyle = {opacity: alpha};
+            markerStyle = {...markerStyle,
+                opacity: alpha*2, transform: [{scale: alpha}]};
         }
         return markerStyle;
     };
@@ -147,28 +148,30 @@ class Flashcard extends React.Component {
         };
 
         return (
-            <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
-                <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-                    <Text style={styles.primaryHeader}>QUESTION:</Text>
-                    <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
-                    <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
-                </Animated.View>
-                <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
-                    <Text style={[styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/></Text>
-                    <Text style={[styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/></Text>
-                    <Text style={[styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/></Text>
-                    <Text style={[styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/></Text>
-                    { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
-                                                        onResponderRelease={this.resetPosition}
-                                                        onStartShouldSetResponder={this._onStartShouldSetResponder}
-                                                        onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
-                        <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
-                        <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
-                        <Text style={styles.primaryHeader}>How would you describe experience answering this
-                            question?</Text>
-                    </View> }
-                </Animated.View>
-            </TouchableOpacity>
+            <View>
+                <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>Unsure</Text>
+                <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/>Bad</Text>
+                <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/>Almost</Text>
+                <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/>Good</Text>
+                <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
+                    <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+                        <Text style={styles.primaryHeader}>QUESTION:</Text>
+                        <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
+                        <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
+                    </Animated.View>
+                    <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
+                        { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
+                                                            onResponderRelease={this.resetPosition}
+                                                            onStartShouldSetResponder={this._onStartShouldSetResponder}
+                                                            onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
+                            <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
+                            <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
+                            <Text style={styles.primaryHeader}>How would you describe experience answering this
+                                question?</Text>
+                        </View> }
+                    </Animated.View>
+                </TouchableOpacity>
+            </View>
         )
     }
 }
