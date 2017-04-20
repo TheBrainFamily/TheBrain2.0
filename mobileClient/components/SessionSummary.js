@@ -13,9 +13,9 @@ export default class extends React.Component {
         const toBeRepeated = ((extraRepetitions.todo / (extraRepetitions.todo + extraRepetitions.done)) * 100) || 100;
 
         return <View style={styles.summaryContainer}>
-            <Text style={styles.summaryLeftRow}>Left: {newFlashcards.todo} / {newFlashcards.todo + newFlashcards.done}</Text>
-            <Text style={styles.summaryCenterRow}>Done: {repetitions.todo} / {repetitions.todo + repetitions.done} </Text>
-            <Text style={styles.summaryRightRow}>To be repeated: {extraRepetitions.todo} / {extraRepetitions.todo + extraRepetitions.done}</Text>
+            <Text style={[styles.summaryRow, styles.summaryLeftRow]}>Left: {newFlashcards.todo} / {newFlashcards.todo + newFlashcards.done}</Text>
+            <Text style={[styles.summaryRow, styles.summaryCenterRow]}>Done: {repetitions.todo} / {repetitions.todo + repetitions.done} </Text>
+            <Text style={[styles.summaryRow, styles.summaryRightRow]}>To be repeated: {extraRepetitions.todo} / {extraRepetitions.todo + extraRepetitions.done}</Text>
         </View>
     }
 }

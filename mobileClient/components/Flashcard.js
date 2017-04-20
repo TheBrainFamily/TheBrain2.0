@@ -5,12 +5,23 @@ import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import FrontCard from './FrontCard';
 import BackCard from './BackCard';
+import { calculateSwipeDirection, calculateDragLength } from '../helpers/SwipeHelpers';
 import {
     TouchableOpacity,
     Animated,
+    View,
+    Text,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
 import { updateAnswerVisibility } from '../actions/FlashcardActions';
+
+const DIRECTION = {
+  1: 'left',
+  2: 'up',
+  3: 'right',
+  4: 'down',
+};
 
 class Flashcard extends React.Component {
 
@@ -49,9 +60,27 @@ class Flashcard extends React.Component {
         }
     };
 
+    getMarkerStyle = (direction) => {
+        const dragLen = calculateDragLength(this.props.flashcard.x, this.props.flashcard.y);
+        const swipeDirection = calculateSwipeDirection(this.props.flashcard.x, this.props.flashcard.y);
+        const swipeDirectionString = DIRECTION[swipeDirection];
+        let markerStyle = {};
+        if (direction === swipeDirectionString) {
+            const alpha = dragLen / 100;
+            markerStyle = {...markerStyle,
+                opacity: alpha * 2, transform: [{scale: alpha}]};
+        }
+        return markerStyle;
+    };
+
     render = () => {
         return (
-            <TouchableOpacity style={styles.centerChildren} onPress={() => this.flipCard()}>
+        <View>
+            <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>Unsure</Text>
+            <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/>Bad</Text>
+            <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/>Almost</Text>
+            <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/>Good</Text>
+            <TouchableOpacity onPress={() => this.flipCard()}>
                 <FrontCard question={this.props.question} interpolateCb={this.interpolateWrapper}/>
                 <BackCard interpolateCb={this.interpolateWrapper}
                           flipCardCb={this.flipCard}
@@ -60,6 +89,7 @@ class Flashcard extends React.Component {
                           evalItemId={this.props.evalItemId}
                 />
             </TouchableOpacity>
+        </View>
         )
     }
 }
