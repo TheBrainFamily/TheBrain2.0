@@ -5,11 +5,8 @@ import update from 'immutability-helper';
 import {
     Text,
     View,
-    Button,
-    StyleSheet,
     Animated,
     TouchableOpacity,
-    AppRegistry,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
@@ -61,7 +58,7 @@ class Flashcard extends React.Component {
             this.animate(this.toAnswerSide);
             this.setState({visibleAnswer: true})
         }
-    }
+    };
 
     onSubmitEvaluation = (value) => {
         this.props.submit({
