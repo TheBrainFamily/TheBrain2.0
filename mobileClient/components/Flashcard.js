@@ -12,10 +12,10 @@ import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
 
 const DIRECTION = {
-    LEFT: 1,
-    UP: 2,
-    RIGHT: 3,
-    DOWN: 4,
+    1: 'left',
+    2: 'up',
+    3: 'right',
+    4: 'down',
 };
 
 class Flashcard extends React.Component {
@@ -106,7 +106,7 @@ class Flashcard extends React.Component {
     };
 
     calculateDragLength = (x, y) => {
-        return (y ^ 2 + x ^ 2) ^ -2;
+        return Math.sqrt((Math.pow(y, 2) + Math.pow(x, 2)));
     };
 
     setPosition = (event) => {
@@ -126,11 +126,17 @@ class Flashcard extends React.Component {
         return {transform};
     };
 
-    getMarkerStyle = () => {
+    getMarkerStyle = (direction) => {
         const dragLen = this.calculateDragLength(this.state.x, this.state.y);
-        const alpha = dragLen / 100;
-        const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
-        return {backgroundColor};
+        const swipeDirection = this.calculateSwipeDirection(this.state.x, this.state.y);
+        const swipeDirectionString = DIRECTION[swipeDirection];
+        let markerStyle = {};
+        if (direction === swipeDirectionString) {
+            const alpha = dragLen / 100;
+            // const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
+            markerStyle = {opacity: alpha};
+        }
+        return markerStyle;
     };
 
     render = () => {
