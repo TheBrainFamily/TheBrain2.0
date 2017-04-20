@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     AppRegistry,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 
 const DIRECTION = {
   LEFT: 1,
@@ -188,10 +189,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={this.styles.upMarker}>☹️</Text>
-                    <Text style={this.styles.leftMarker}>😵</Text>
-                    <Text style={this.styles.downMarker}>😇</Text>
-                    <Text style={this.styles.rightMarker}>🙃</Text>
+                    <Text style={this.styles.upMarker}><Emoji name="pensive"/></Text>
+                    <Text style={this.styles.leftMarker}><Emoji name="fearful"/></Text>
+                    <Text style={this.styles.downMarker}><Emoji name="innocent"/></Text>
+                    <Text style={this.styles.rightMarker}><Emoji name="smile"/></Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
