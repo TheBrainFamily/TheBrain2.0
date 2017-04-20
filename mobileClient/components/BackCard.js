@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {
   Text,
   View,
@@ -7,6 +8,7 @@ import {
 } from 'react-native';
 import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
+import { updateAnswerVisibility } from '../actions/FlashcardActions';
 
 const DIRECTION = {
   LEFT: 1,
@@ -15,11 +17,10 @@ const DIRECTION = {
   DOWN: 4,
 };
 
-export default class BackCard extends React.Component {
+class BackCard extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("BACK", props);
     this.state = {
       x: 0,
       y: 0,
@@ -37,7 +38,7 @@ export default class BackCard extends React.Component {
       itemId: this.props.evalItemId,
       evaluation: value
     });
-    this.props.updateVisibleAnswer(false);
+    this.props.dispatch(updateAnswerVisibility(false));
     this.props.flipCardCb();
   };
 
@@ -106,14 +107,13 @@ export default class BackCard extends React.Component {
   };
 
   render = () => {
-    console.log("ELO", this.getCardStyle());
     return (
       <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
         <Text style={[styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>️</Text>
         <Text style={[styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/></Text>
         <Text style={[styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/></Text>
         <Text style={[styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/></Text>
-        { this.props.visibleAnswer && <View onResponderMove={this.setPosition}
+        { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
                                             onResponderRelease={this.resetPosition}
                                             onStartShouldSetResponder={this._onStartShouldSetResponder}
                                             onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
@@ -127,4 +127,4 @@ export default class BackCard extends React.Component {
   }
 }
 
-
+export default connect(state => state)(BackCard);
