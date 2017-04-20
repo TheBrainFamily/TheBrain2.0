@@ -10,7 +10,7 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
-    View
+    View,
 } from 'react-native';
 import {NativeRouter, Route, Link} from 'react-router-native'
 
@@ -18,6 +18,7 @@ import {NativeRouter, Route, Link} from 'react-router-native'
 import WellDone from './components/WellDone';
 import Lecture from './components/Lecture';
 import Questions from './components/Questions';
+import styles from './styles/styles';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
@@ -42,7 +43,8 @@ export default class App extends Component {
             <ApolloProvider client={client}>
 
                 <NativeRouter>
-                    <View style={{marginTop: 30}}>
+                    <View style={styles.mainPage}>
+                        <View style={styles.topContainer}/>
                         <View>
                             <Route exact path="/" component={Lecture}/>
                             <Route exact path="/wellDone" component={WellDone}/>
@@ -55,32 +57,6 @@ export default class App extends Component {
         )
     }
 };
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 25,
-        padding: 10,
-    },
-    header: {
-        fontSize: 20,
-    },
-    nav: {
-        flexDirection: 'row',
-        justifyContent: 'space-around'
-    },
-    navItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-    },
-    subNavItem: {
-        padding: 5,
-    },
-    topic: {
-        textAlign: 'center',
-        fontSize: 15,
-    }
-})
 
 {/*<Route exact key="lecture" path="/lecture" component={Lecture}/>*/
 }

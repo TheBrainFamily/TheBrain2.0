@@ -1,42 +1,51 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+    topContainer: {
+        height: 20,
+        backgroundColor: 'white',
+        zIndex: 999,
+    },
+    mainPage: {
+        backgroundColor: '#9ACAF4',
+        height: '100%',
+    },
     flipCard: {
         backfaceVisibility: 'hidden',
         width: '100%',
         height: '100%',
         backgroundColor: '#9ACAF4',
-        paddingTop: 50,
+        paddingTop: '50%',
         margin: 0,
     },
     flipCardBack: {
         position: 'absolute',
     },
-    upMarker: {
+    baseMarkerStyle: {
         position: 'absolute',
+        opacity: 1,
+        zIndex: 100,
+        backgroundColor: 'transparent',
+        fontWeight: 'bold',
+        transform: [{scale: 0}],
+        borderRadius: 10,
+    },
+    upMarker: {
         top: 5,
         left: '50%',
-        opacity: 0,
     },
     rightMarker: {
-        position: 'absolute',
         top: '50%',
         right: 5,
-        opacity: 0,
     },
     downMarker: {
-        position: 'absolute',
-        bottom: 105,
+        bottom: 100,
         left: '50%',
-        opacity: 0,
     },
     leftMarker: {
-        position: 'absolute',
         top: '50%',
         left: 5,
-        opacity: 0,
     },
-
     flipCardContent: {
     },
     centeredContent: {
@@ -53,27 +62,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     summaryContainer: {
+        backgroundColor: 'white',
+        zIndex: 50,
         flexDirection: 'row',
+        margin: 0,
         padding: 5,
     },
     summaryLeftRow: {
-        color: 'black',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 12,
         textAlign: 'left',
         width: 150,
     },
     summaryCenterRow: {
-        color: 'black',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 12,
         textAlign: 'center',
         flex: 1,
     },
     summaryRightRow: {
-        color: 'black',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 12,
         textAlign: 'right',
         width: 150,
     },
