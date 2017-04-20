@@ -148,7 +148,7 @@ class Flashcard extends React.Component {
                     <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
-                    <Text style={[styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>️</Text>
+                    <Text style={[styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/></Text>
                     <Text style={[styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/></Text>
                     <Text style={[styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/></Text>
                     <Text style={[styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/></Text>
