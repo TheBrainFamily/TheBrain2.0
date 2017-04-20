@@ -4,12 +4,12 @@ import gql from 'graphql-tag';
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
 
-import store from '../store'
+// import store from '../store'
 
 class Home extends React.Component {
 
-
     render() {
+        const { store } = this.context
 
         if (this.props.data.loading) {
             return (<p>Loading...</p>)
@@ -25,6 +25,10 @@ class Home extends React.Component {
         }
         return <div></div>
     }
+}
+
+Home.contextTypes = {
+  store: React.PropTypes.object,
 }
 
 const query = gql`
