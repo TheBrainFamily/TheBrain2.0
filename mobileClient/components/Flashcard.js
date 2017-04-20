@@ -157,9 +157,6 @@ class Flashcard extends React.Component {
             x: this.state.x + (event.nativeEvent.pageX - this.drag.x),
             y: this.state.y + (event.nativeEvent.pageY - this.drag.y)
         });
-        const direction = this.calculateSwipeDirection(this.state.x, this.state.y);
-        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
-        console.log('PINGWIN: dragLen', dragLen);
 
         //Set our drag to be the new position so our delta can be calculated next time correctly
         this.drag.x = event.nativeEvent.pageX;
@@ -169,6 +166,13 @@ class Flashcard extends React.Component {
     getCardStyle = function () {
         const transform = [{rotateY: this.backInterpolate}, {translateX: this.state.x}, {translateY: this.state.y}];
         return {transform};
+    };
+
+    getMarkerStyle = () => {
+        const dragLen = this.calculateDragLength(this.state.x, this.state.y);
+        const alpha = dragLen/100;
+        const backgroundColor = `rgba(0, 255, 0, ${alpha});`;
+        return {backgroundColor};
     };
 
     render = () => {
@@ -187,10 +191,10 @@ class Flashcard extends React.Component {
                     </Text>
                 </Animated.View>
                 <Animated.View style={[this.getCardStyle(), this.styles.flipCard, this.styles.flipCardBack]}>
-                    <Text style={[this.styles.upMarker, ]}>UP</Text>
-                    <Text style={this.styles.leftMarker}>LEFT</Text>
-                    <Text style={this.styles.downMarker}>DOWN</Text>
-                    <Text style={this.styles.rightMarker}>RIGHT</Text>
+                    <Text style={[this.styles.upMarker, this.getMarkerStyle('up')]}>UP</Text>
+                    <Text style={[this.styles.leftMarker, this.getMarkerStyle('left')]}>LEFT</Text>
+                    <Text style={[this.styles.downMarker, this.getMarkerStyle('down')]}>DOWN</Text>
+                    <Text style={[this.styles.rightMarker, this.getMarkerStyle('right')]}>RIGHT</Text>
                     { this.state.visibleAnswer && <View onResponderMove={this.setPosition}
                                                         onResponderRelease={this.resetPosition}
                                                         onStartShouldSetResponder={this._onStartShouldSetResponder}
