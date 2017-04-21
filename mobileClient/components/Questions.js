@@ -21,6 +21,18 @@ class Questions extends React.Component {
         this.state = {}
     }
 
+    componentDidUpdate = () => {
+        if (this.props.currentItems.ItemsWithFlashcard.length === 0) {
+            if (this.props.currentUser.activated) {
+                console.log("going to /");
+                this.props.history.push("/");
+            } else {
+                console.log("going to signup");
+                this.props.history.push("/signup");
+            }
+        }
+    };
+
     render() {
         if (this.props.currentItems.loading || this.props.currentUser.loading) {
             return <Text>Loading...</Text>
@@ -47,13 +59,6 @@ class Questions extends React.Component {
                     />
                     <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/></View>)
             } else {
-                if (this.props.currentUser.activated) {
-                    console.log("going to /")
-                    this.props.history.push("/");
-                } else {
-                    console.log("going to signup");
-                    this.props.history.push("/signup");
-                }
                 return <Text>Test</Text>
             }
         }
