@@ -78,7 +78,7 @@ class BackCard extends React.Component {
 
   render = () => {
     return (
-      <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack, this.props.dynamicStyles.layout]}>
+      <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
         { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
                                             onResponderRelease={this.resetPosition}
                                             onStartShouldSetResponder={this._onStartShouldSetResponder}
