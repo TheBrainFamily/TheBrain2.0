@@ -87,7 +87,7 @@ class BackCard extends React.Component {
           <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
             <Text style={styles.primaryText}>{this.props.answer}</Text>
           </View>
-          <Text style={styles.primaryHeader}>How would you describe experience answering this question?</Text>
+          <Text style={styles.primaryHeader}>SWIPE TO EVALUATE</Text>
         </View> }
       </Animated.View>
     )

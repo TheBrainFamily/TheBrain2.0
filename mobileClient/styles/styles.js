@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     summaryLeftRow: {
         textAlign: 'left',
-        width: 150,
+        width: 100,
     },
     summaryCenterRow: {
         textAlign: 'center',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     },
     summaryRightRow: {
         textAlign: 'right',
-        width: 150,
+        width: 100,
     },
     primaryHeader: {
         height: 24,
