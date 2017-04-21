@@ -6,9 +6,6 @@ import { Text, View, StyleSheet } from 'react-native';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter, Link } from 'react-router-native'
-import { push } from 'react-router-redux'
-
-import store from '../store'
 
 
 class Lecture extends React.Component {
@@ -65,7 +62,7 @@ class LectureVideo extends React.Component {
     _onChangeState = (event) => {
         console.log("Gozdecki: event",event);
         if (event.state === "ended") {
-            store.dispatch(push("/wellDone"));
+            this.props.history.push("/wellDone");
         }
     }
 }
