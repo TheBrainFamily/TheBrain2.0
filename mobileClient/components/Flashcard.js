@@ -8,6 +8,7 @@ import BackCard from './BackCard';
 import { calculateSwipeDirection, calculateDragLength } from '../helpers/SwipeHelpers';
 import {
     TouchableOpacity,
+    Dimensions,
     Animated,
     View,
     Text,
@@ -29,6 +30,13 @@ class Flashcard extends React.Component {
         super(props);
         this.toAnswerSide = 180;
         this.toQuestionSide = 0;
+        this.state = {
+            dynamicStyles: {
+                content: this.getCardDynamicContentStyle(),
+                layout: this.getCardDynamicLayoutStyle(),
+            }
+        };
+        this.onLayout = this.onLayout.bind(this);
     }
 
     interpolateWrapper = ({ inputRange, outputRange }) => {
@@ -73,16 +81,41 @@ class Flashcard extends React.Component {
         return markerStyle;
     };
 
+    getCardDynamicContentStyle = () => {
+        const { width, height } = Dimensions.get('window');
+        return {
+            height: height - 100,
+        };
+    };
+
+    getCardDynamicLayoutStyle = () => {
+        const { width, height } = Dimensions.get('window');
+        return {
+            paddingTop: 0,
+        };
+    };
+
+    onLayout = () => {
+        this.setState({
+            dynamicStyles: {
+                content: this.getCardDynamicContentStyle(),
+                layout: this.getCardDynamicLayoutStyle(),
+            }
+        });
+    };
+
     render = () => {
         return (
-        <View>
+        <View onLayout={this.onLayout}>
             <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>Unsure</Text>
             <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/>Bad</Text>
             <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/>Almost</Text>
             <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/>Good</Text>
             <TouchableOpacity onPress={() => this.flipCard()}>
-                <FrontCard question={this.props.question} interpolateCb={this.interpolateWrapper}/>
-                <BackCard interpolateCb={this.interpolateWrapper}
+                <FrontCard dynamicStyles={this.state.dynamicStyles}
+                           question={this.props.question} interpolateCb={this.interpolateWrapper}/>
+                <BackCard dynamicStyles={this.state.dynamicStyles}
+                          interpolateCb={this.interpolateWrapper}
                           flipCardCb={this.flipCard}
                           submitCb={this.props.submit}
                           answer={this.props.answer}
