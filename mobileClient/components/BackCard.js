@@ -1,10 +1,11 @@
+// @flow
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {
   Text,
   View,
   Animated,
-  TouchableOpacity,
 } from 'react-native';
 
 import styles from '../styles/styles';
@@ -13,10 +14,12 @@ import { calculateSwipeDirection, calculateDragLength } from '../helpers/SwipeHe
 
 class BackCard extends React.Component {
 
+  backInterpolate: Object;
+  dragging: boolean;
+  drag: Object;
+
   constructor(props) {
     super(props);
-    this.toAnswerSide = 180;
-    this.toQuestionSide = 0;
     this.backInterpolate = props.interpolateCb({
       inputRange: [0, 180],
       outputRange: ['180deg', '360deg'],
