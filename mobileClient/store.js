@@ -3,17 +3,8 @@ import { routerReducer } from 'react-router-redux'
 import {ApolloClient, createNetworkInterface} from 'apollo-client';
 import flashcardReducer from './reducers/FlashcardReducer';
 
-let uri;
-const localhostRegexp = /localhost/;
-if (localhostRegexp.test(window.location.origin)) {
-  uri = 'http://localhost:8080/graphql';
-} else {
-  uri = 'http://new.thebrain.pro:8080/graphql';
-}
-console.log("Gozdecki: uri",uri);
-
 const networkInterface = createNetworkInterface({
-  uri,
+  uri: 'http://localhost:8080/graphql',
   opts: {
     credentials: 'include',
   },
@@ -38,4 +29,5 @@ const store = createStore(
   )
 )
 
-export default store
+export default store;
+export { client };
