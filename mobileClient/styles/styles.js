@@ -48,12 +48,13 @@ const styles = StyleSheet.create({
     flipCardContent: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#DDD',
+        backgroundColor: '#EEE',
     },
     contentBox: {
         padding: 20,
     },
     summaryContainer: {
+        height: 25,
         backgroundColor: 'white',
         zIndex: 50,
         flexDirection: 'row',
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
         width: 150,
     },
     primaryHeader: {
+        height: 24,
         color: 'white',
         fontWeight: 'bold',
         backgroundColor: 'steelblue',
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
     },
     primaryText: {
         color: 'black',
-        backgroundColor: '#DDD',
+        backgroundColor: '#EEE',
         fontSize: 20,
         padding: 10,
         textAlign: 'center',

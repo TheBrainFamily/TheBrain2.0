@@ -8,6 +8,7 @@ import BackCard from './BackCard';
 import { calculateSwipeDirection, calculateDragLength } from '../helpers/SwipeHelpers';
 import {
     TouchableOpacity,
+    StyleSheet,
     Dimensions,
     Animated,
     View,
@@ -33,7 +34,6 @@ class Flashcard extends React.Component {
         this.state = {
             dynamicStyles: {
                 content: this.getCardDynamicContentStyle(),
-                layout: this.getCardDynamicLayoutStyle(),
             }
         };
         this.onLayout = this.onLayout.bind(this);
@@ -83,15 +83,12 @@ class Flashcard extends React.Component {
 
     getCardDynamicContentStyle = () => {
         const { width, height } = Dimensions.get('window');
+        const heightOfOtherElements =
+            StyleSheet.flatten(styles.topContainer).height +
+            StyleSheet.flatten(styles.summaryContainer).height +
+            2 * StyleSheet.flatten(styles.primaryHeader).height;
         return {
-            height: height - 100,
-        };
-    };
-
-    getCardDynamicLayoutStyle = () => {
-        const { width, height } = Dimensions.get('window');
-        return {
-            paddingTop: 0,
+            height: height - heightOfOtherElements,
         };
     };
 
@@ -99,7 +96,6 @@ class Flashcard extends React.Component {
         this.setState({
             dynamicStyles: {
                 content: this.getCardDynamicContentStyle(),
-                layout: this.getCardDynamicLayoutStyle(),
             }
         });
     };
