@@ -20,6 +20,25 @@ const styles = StyleSheet.create({
     flipCardBack: {
         position: 'absolute',
     },
+    wellDonePage: {
+        backgroundColor: 'steelblue',
+        height: '100%',
+    },
+    wellDoneContainer: {
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    wellDoneHeader: {
+        height: 60,
+        fontSize: 30,
+    },
+    wellDoneContent: {
+        color: '#DDD',
+        padding: 20,
+        height: 150,
+        fontSize: 20,
+    },
     baseMarkerStyle: {
         position: 'absolute',
         opacity: 1,
@@ -49,9 +68,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#EEE',
-    },
-    contentBox: {
-        padding: 20,
     },
     summaryContainer: {
         height: 25,
@@ -91,13 +107,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#EEE',
         fontSize: 20,
         padding: 10,
-        textAlign: 'center',
-    },
-    secondaryText: {
-        color: 'white',
-        backgroundColor: 'steelblue',
-        fontSize: 10,
-        padding: 5,
         textAlign: 'center',
     },
 });
