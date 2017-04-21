@@ -46,7 +46,8 @@ class Flashcard extends React.Component {
         this.animatedValue = new Animated.Value(0);
     };
 
-    animate = (value) => {
+    animate = () => {
+        const value = this.props.flashcard.visibleAnswer ? this.toQuestionSide : this.toAnswerSide;
         Animated.spring(this.animatedValue, {
             toValue: value,
             friction: 8,
@@ -56,11 +57,15 @@ class Flashcard extends React.Component {
 
     flipCard = () => {
         if (this.props.flashcard.visibleAnswer) {
-            this.animate(this.toQuestionSide);
             this.props.dispatch(updateAnswerVisibility(false));
         } else {
-            this.animate(this.toAnswerSide);
             this.props.dispatch(updateAnswerVisibility(true));
+        }
+    };
+
+    componentWillUpdate = (nextProps) => {
+        if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
+            this.animate();
         }
     };
 
