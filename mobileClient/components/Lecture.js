@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import YouTube from 'react-native-youtube';
 import { Text, View, StyleSheet } from 'react-native';
@@ -26,6 +28,13 @@ class Lecture extends React.Component {
 }
 
 class LectureVideo extends React.Component {
+    state: Object;
+    constructor(props: Object) {
+      super(props);
+      this.state = {
+        isReady: false,
+      };
+    }
     render() {
         // const opts = {
         //     height: '390',
