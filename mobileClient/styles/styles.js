@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#9ACAF4',
-        paddingTop: '50%',
         margin: 0,
     },
     flipCardBack: {
@@ -47,7 +46,9 @@ const styles = StyleSheet.create({
         left: 5,
     },
     flipCardContent: {
-        height: '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#DDD',
     },
     contentBox: {
         padding: 20,
@@ -77,8 +78,9 @@ const styles = StyleSheet.create({
     },
     primaryHeader: {
         color: 'white',
+        fontWeight: 'bold',
         backgroundColor: 'steelblue',
-        fontSize: 10,
+        fontSize: 12,
         padding: 5,
         textAlign: 'center',
     },
