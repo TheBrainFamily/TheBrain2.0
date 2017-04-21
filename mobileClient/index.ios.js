@@ -22,21 +22,7 @@ import styles from './styles/styles';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
-import store from './store';
-
-const networkInterface = createNetworkInterface({
-    uri: 'http://localhost:8080/graphql',
-// This needs to be changed to new.thebrain.pro if running from a real phone
-//    uri: 'http://new.thebrain.pro:8080/graphql',
-
-    opts: {
-        credentials: 'include',
-    },
-});
-
-const client = new ApolloClient({
-    networkInterface,
-});
+import store, { client } from './store';
 
 export default class App extends Component {
     render() {
