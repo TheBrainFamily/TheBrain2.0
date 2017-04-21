@@ -91,36 +91,41 @@ class Flashcard extends React.Component {
         const swipeDirectionString = DIRECTION[swipeDirection];
         let markerStyle = {};
         if (direction === swipeDirectionString) {
-            const alpha = dragLen / 100;
+            const dragFactor = dragLen / 100;
             markerStyle = {
-                ...markerStyle,
-                opacity: alpha * 2, transform: [{scale: alpha}]
+                opacity: dragFactor * 2, transform: [{scale: dragFactor}]
             };
-            const widthCenter = (this.windowWidth / 2) - this.leftMarkerWidth + 12;
-            const heightCenter = (this.windowHeight / 2) - this.rightMarkerHeight - 30;
+            const leftPadding = 12;
+            const widthCenter = (this.windowWidth / 2) - this.leftMarkerWidth + leftPadding;
+            const topPadding = -30;
+            const heightCenter = (this.windowHeight / 2) - this.rightMarkerHeight + topPadding;
             if (direction === 'right') {
-                const right = ((this.rightMarkerWidth / 2) * alpha) - 20;
+                const rightPadding = -20;
+                const right = ((this.rightMarkerWidth / 2) * dragFactor) + rightPadding;
                 markerStyle = {
                     ...markerStyle,
                     right,
                     top: heightCenter,
                 }
             } else if (direction === 'left') {
-                const left = ((this.leftMarkerWidth / 2) * alpha) - 15;
+                const leftPadding = -15;
+                const left = ((this.leftMarkerWidth / 2) * dragFactor) + leftPadding;
                 markerStyle = {
                     ...markerStyle,
                     left,
                     top: heightCenter,
                 }
             } else if (direction === 'up') {
-                const top = ((this.upMarkerHeight / 2) * alpha) - 5;
+                const topPadding = -5;
+                const top = ((this.upMarkerHeight / 2) * dragFactor) + topPadding;
                 markerStyle = {
                     ...markerStyle,
                     top,
                     left: widthCenter,
                 }
             } else if (direction === 'down') {
-                const bottom = ((this.downMarkerHeight / 2) * alpha) + 90;
+                const bottomPadding = 90;
+                const bottom = ((this.downMarkerHeight / 2) * dragFactor) + bottomPadding;
                 markerStyle = {
                     ...markerStyle,
                     bottom,
