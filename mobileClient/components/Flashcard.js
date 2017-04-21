@@ -112,28 +112,28 @@ class Flashcard extends React.Component {
             };
             const widthCenter = (this.windowWidth / 2) - this.leftMarkerWidth + 12;
             const heightCenter = (this.windowHeight / 2) - this.rightMarkerHeight - 30;
-            if (direction === 'right') {
+            if (direction === 'RIGHT') {
                 const right = ((this.rightMarkerWidth / 2) * alpha) - 20;
                 markerStyle = {
                     ...markerStyle,
                     right,
                     top: heightCenter,
                 }
-            } else if (direction === 'left') {
+            } else if (direction === 'LEFT') {
                 const left = ((this.leftMarkerWidth / 2) * alpha) - 15;
                 markerStyle = {
                     ...markerStyle,
                     left,
                     top: heightCenter,
                 }
-            } else if (direction === 'up') {
+            } else if (direction === 'UP') {
                 const top = ((this.upMarkerHeight / 2) * alpha) - 5;
                 markerStyle = {
                     ...markerStyle,
                     top,
                     left: widthCenter,
                 }
-            } else if (direction === 'down') {
+            } else if (direction === 'DOWN') {
                 const bottom = ((this.downMarkerHeight / 2) * alpha) + 90;
                 markerStyle = {
                     ...markerStyle,
