@@ -1,53 +1,50 @@
-import React from 'react';
-import {graphql} from 'react-apollo';
-import gql from 'graphql-tag';
-import update from 'immutability-helper';
+import React from 'react'
+import { connect } from 'react-redux'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import update from 'immutability-helper'
+
+import store from '../store'
+import { flashcard } from '../actions'
 
 class Flashcard extends React.Component {
+  answeredQuestion = () => {
+    store.dispatch(flashcard.showAnswer(true))
+  }
 
-    constructor(props) {
-        super(props);
+  onSubmitEvaluation = (value) => {
+    this.props.submit({
+      itemId: this.props.evalItemId,
+      evaluation: value
+    })
+    store.dispatch(flashcard.showAnswer(false))
+  }
 
-        this.state = {visibleAnswer: false};
-    }
+  render() {
+    return <div>
+        <div className="center flashcard">QUESTION : <br /><br /><br />{this.props.question}</div>
 
-    answeredQuestion = () => {
-        this.setState({visibleAnswer: true})
-    };
+        <br />
+        <br />
 
-    onSubmitEvaluation = (value) => {
-        this.props.submit({
-            itemId: this.props.evalItemId,
-            evaluation: value
-        });
-        this.setState({visibleAnswer: false})
-    };
-
-    render() {
-        return <div>
-            <div className="center flashcard">QUESTION : <br/><br/><br/>{this.props.question}</div>
-
-            <br/>
-            <br/>
-
-            <div>{!this.state.visibleAnswer ?
-                <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> :
-                    <div>
-                        <div className="center flashcard answer">CORRECT ANSWER :<br/><br/>{this.props.answer}
-                    </div>
-                    <p>How would you describe experience answering this question?</p>
-                    <br/>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(1)} >Blackout</button>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(2)} >Terrible</button>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(3)} >Bad</button>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(4)} >Hardly</button>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(5)} >Good</button>
-                    <button className="button-answer" onClick={()=>this.onSubmitEvaluation(6)} >Perfect!</button>
-                </div>
-            }
-            </div>
+        <div>{!this.props.isAnswerVisible ?
+          <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> :
+          <div>
+              <div className="center flashcard answer">CORRECT ANSWER :<br /><br />{this.props.answer}
+              </div>
+              <p>How would you describe experience answering this question?</p>
+              <br />
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>Blackout</button>
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(2)}>Terrible</button>
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(3)}>Bad</button>
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(4)}>Hardly</button>
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(5)}>Good</button>
+              <button className="button-answer" onClick={() => this.onSubmitEvaluation(6)}>Perfect!</button>
+          </div>
+        }
         </div>
-    }
+    </div>
+  }
 }
 
 const submitEval = gql`    
@@ -65,26 +62,36 @@ const submitEval = gql`
             }
         }
     }
-`;
+`
+
+const mapStateToProps = (state) => {
+  return {
+    isAnswerVisible: state.flashcard.isAnswerVisible
+  }
+}
+
+const FlashcardContainer = connect(
+  mapStateToProps,
+  null,
+)(Flashcard)
 
 export default graphql(submitEval, {
-    props: ({ownProps, mutate}) => ({
-        submit: ({itemId, evaluation}) => mutate({
-            variables: {
-                itemId,
-                evaluation,
-            },
-            updateQueries: {
-                CurrentItems: (prev, {mutationResult}) => {
-                    const updateResults = update(prev, {
-                        ItemsWithFlashcard: {
-                            $set: mutationResult.data.processEvaluation
-                        }
-                    });
-                    return updateResults;
-                }
+  props: ({ ownProps, mutate }) => ({
+    submit: ({ itemId, evaluation }) => mutate({
+      variables: {
+        itemId,
+        evaluation,
+      },
+      updateQueries: {
+        CurrentItems: (prev, { mutationResult }) => {
+          const updateResults = update(prev, {
+            ItemsWithFlashcard: {
+              $set: mutationResult.data.processEvaluation
             }
-        })
+          })
+          return updateResults
+        }
+      }
     })
-})(Flashcard);
-
+  })
+})(FlashcardContainer)
