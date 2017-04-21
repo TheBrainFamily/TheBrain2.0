@@ -23,7 +23,7 @@ export default class FrontCard extends React.Component {
     };
 
     return (
-      <Animated.View style={[styles.flipCard, frontAnimatedStyle, this.props.dynamicStyles.layout]}>
+      <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
         <Text style={styles.primaryHeader}>QUESTION:</Text>
         <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
           <Text style={styles.primaryText}>{this.props.question}</Text>
