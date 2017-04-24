@@ -71,14 +71,14 @@ class BackCard extends React.Component {
     this.drag.y = event.nativeEvent.pageY;
   };
 
-  getCardStyle = function () {
+  getCardTransformation = function () {
     const transform = [{rotateY: this.backInterpolate}, {translateX: this.props.flashcard.x}, {translateY: this.props.flashcard.y}];
     return {transform};
   };
 
   render = () => {
     return (
-      <Animated.View style={[this.getCardStyle(), styles.flipCard, styles.flipCardBack]}>
+      <Animated.View style={[this.getCardTransformation(), styles.flipCard, styles.flipCardBack]}>
         { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
                                             onResponderRelease={this.resetPosition}
                                             onStartShouldSetResponder={this._onStartShouldSetResponder}
