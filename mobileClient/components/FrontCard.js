@@ -17,6 +17,7 @@ export default class FrontCard extends React.Component {
       outputRange: ['0deg', '180deg'],
     });
   }
+
   render = () => {
     const frontAnimatedStyle = {
       transform: [
@@ -24,12 +25,12 @@ export default class FrontCard extends React.Component {
       ]
     };
 
-
-
     return (
       <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
         <Text style={styles.primaryHeader}>QUESTION:</Text>
-        <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.question}</Text>
+        <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
+          <Text style={styles.primaryText}>{this.props.question}</Text>
+        </View>
         <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
       </Animated.View>
     )
