@@ -15,11 +15,29 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#9ACAF4',
-        paddingTop: '50%',
         margin: 0,
     },
     flipCardBack: {
         position: 'absolute',
+    },
+    wellDonePage: {
+        backgroundColor: 'steelblue',
+        height: '100%',
+    },
+    wellDoneContainer: {
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    wellDoneHeader: {
+        height: 60,
+        fontSize: 30,
+    },
+    wellDoneContent: {
+        color: '#DDD',
+        padding: 20,
+        height: 150,
+        fontSize: 20,
     },
     baseMarkerStyle: {
         position: 'absolute',
@@ -47,12 +65,12 @@ const styles = StyleSheet.create({
         left: 5,
     },
     flipCardContent: {
-        height: '50%',
-    },
-    contentBox: {
-        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#EEE',
     },
     summaryContainer: {
+        height: 25,
         backgroundColor: 'white',
         zIndex: 50,
         flexDirection: 'row',
@@ -65,7 +83,7 @@ const styles = StyleSheet.create({
     },
     summaryLeftRow: {
         textAlign: 'left',
-        width: 150,
+        width: 100,
     },
     summaryCenterRow: {
         textAlign: 'center',
@@ -73,27 +91,22 @@ const styles = StyleSheet.create({
     },
     summaryRightRow: {
         textAlign: 'right',
-        width: 150,
+        width: 100,
     },
     primaryHeader: {
+        height: 24,
         color: 'white',
+        fontWeight: 'bold',
         backgroundColor: 'steelblue',
-        fontSize: 10,
+        fontSize: 12,
         padding: 5,
         textAlign: 'center',
     },
     primaryText: {
         color: 'black',
-        backgroundColor: '#DDD',
+        backgroundColor: '#EEE',
         fontSize: 20,
         padding: 10,
-        textAlign: 'center',
-    },
-    secondaryText: {
-        color: 'white',
-        backgroundColor: 'steelblue',
-        fontSize: 10,
-        padding: 5,
         textAlign: 'center',
     },
 });
