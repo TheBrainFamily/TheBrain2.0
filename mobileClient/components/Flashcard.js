@@ -41,7 +41,6 @@ class Flashcard extends React.Component {
                 content: this.getCardDynamicContentStyle(),
             }
         };
-        this.onLayout = this.onLayout.bind(this);
     }
 
     interpolateWrapper = ({ inputRange, outputRange }) => {
