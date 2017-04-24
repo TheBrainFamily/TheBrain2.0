@@ -19,7 +19,8 @@ class Questions extends React.Component {
     }
 
     componentDidUpdate = () => {
-        if (this.props.currentItems.ItemsWithFlashcard.length === 0) {
+        if (this.props.currentItems.ItemsWithFlashcard &&
+            this.props.currentItems.ItemsWithFlashcard.length === 0) {
             if (this.props.currentUser.activated) {
                 console.log("going to /");
                 this.props.history.push("/");
