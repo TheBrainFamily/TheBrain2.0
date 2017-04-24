@@ -176,22 +176,18 @@ class Flashcard extends React.Component {
     render = () => {
         return (
         <View onLayout={this.onLayout}>
-            <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}><Emoji name="pensive"/>Unsure</Text>
-            <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}><Emoji name="fearful"/>Bad</Text>
-            <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}><Emoji name="innocent"/>Almost</Text>
-            <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}><Emoji name="smile"/>Good</Text>
+            <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}
+                  onLayout={(event) => this.measureUpMarker(event)}><Emoji
+                name="pensive"/>Unsure</Text>
+            <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}
+                  onLayout={(event) => this.measureLeftMarker(event)}><Emoji
+                name="fearful"/>Bad</Text>
+            <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}
+                  onLayout={(event) => this.measureDownMarker(event)}><Emoji
+                name="innocent"/>Almost</Text>
+            <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}
+                  onLayout={(event) => this.measureRightMarker(event)}><Emoji name="smile"/>Good</Text>
             <View>
-                <Text style={[styles.baseMarkerStyle, styles.upMarker, this.getMarkerStyle('up')]}
-                      onLayout={(event) => this.measureUpMarker(event)}><Emoji
-                    name="pensive"/>Unsure</Text>
-                <Text style={[styles.baseMarkerStyle, styles.leftMarker, this.getMarkerStyle('left')]}
-                      onLayout={(event) => this.measureLeftMarker(event)}><Emoji
-                    name="fearful"/>Bad</Text>
-                <Text style={[styles.baseMarkerStyle, styles.downMarker, this.getMarkerStyle('down')]}
-                      onLayout={(event) => this.measureDownMarker(event)}><Emoji
-                    name="innocent"/>Almost</Text>
-                <Text style={[styles.baseMarkerStyle, styles.rightMarker, this.getMarkerStyle('right')]}
-                      onLayout={(event) => this.measureRightMarker(event)}><Emoji name="smile"/>Good</Text>
                 <TouchableOpacity onPress={() => this.flipCard()}>
                     <FrontCard dynamicStyles={this.state.dynamicStyles}
                                question={this.props.question} interpolateCb={this.interpolateWrapper}/>
