@@ -20,7 +20,7 @@ class BackCard extends React.Component {
     this.backInterpolate = props.interpolateCb({
       inputRange: [0, 180],
       outputRange: ['180deg', '360deg'],
-    })
+    });
   }
 
   onSubmitEvaluation = (value) => {
@@ -31,8 +31,6 @@ class BackCard extends React.Component {
     this.props.dispatch(updateAnswerVisibility(false));
     this.props.flipCardCb();
   };
-
-
 
   isDragLongEnough = () => {
     const dragLen = calculateDragLength(this.props.flashcard.x, this.props.flashcard.y);
@@ -86,8 +84,10 @@ class BackCard extends React.Component {
                                             onStartShouldSetResponder={this._onStartShouldSetResponder}
                                             onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
           <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
-          <Text style={[styles.primaryText, styles.flipCardContent]}>{this.props.answer}</Text>
-          <Text style={styles.primaryHeader}>How would you describe experience answering this question?</Text>
+          <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
+            <Text style={styles.primaryText}>{this.props.answer}</Text>
+          </View>
+          <Text style={styles.primaryHeader}>SWIPE TO EVALUATE</Text>
         </View> }
       </Animated.View>
     )

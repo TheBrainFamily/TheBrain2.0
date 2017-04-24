@@ -15,7 +15,7 @@ export default class extends React.Component {
         return <View style={styles.summaryContainer}>
             <Text style={[styles.summaryRow, styles.summaryLeftRow]}>Left: {newFlashcards.todo} / {newFlashcards.todo + newFlashcards.done}</Text>
             <Text style={[styles.summaryRow, styles.summaryCenterRow]}>Done: {repetitions.todo} / {repetitions.todo + repetitions.done} </Text>
-            <Text style={[styles.summaryRow, styles.summaryRightRow]}>To be repeated: {extraRepetitions.todo} / {extraRepetitions.todo + extraRepetitions.done}</Text>
+            <Text style={[styles.summaryRow, styles.summaryRightRow]}>Repeat: {extraRepetitions.todo} / {extraRepetitions.todo + extraRepetitions.done}</Text>
         </View>
     }
 }
