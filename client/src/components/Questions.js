@@ -12,20 +12,38 @@ import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
 
 class Questions extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {}
   }
 
-  render() {
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
+      return
+    }
+
+    const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
+
+    if (itemsWithFlashcard.length > 0) {
+      return
+    }
+
+    if (nextProps.currentUser.activated) {
+      nextProps.dispatch(push('/'))
+    } else {
+      nextProps.dispatch(push('/signup'))
+    }
+  }
+
+  render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading) {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
 
       if (itemsWithFlashcard.length > 0) {
-        const flashcard = itemsWithFlashcard[ 0 ].flashcard
-        const evalItem = itemsWithFlashcard[ 0 ].item
+        const flashcard = itemsWithFlashcard[0].flashcard
+        const evalItem = itemsWithFlashcard[0].item
         const itemsCounter = _.countBy(itemsWithFlashcard, (itemWithFlashcard) => {
           if (itemWithFlashcard.item.extraRepeatToday) {
             return 'extraRepeat'
@@ -37,18 +55,13 @@ class Questions extends React.Component {
         })
 
         return <div className='questions'>
-          <SessionSummary newFlashcards={{ done: 0, todo: itemsCounter.newFlashcard || 0 }}
-                          repetitions={{ done: 0, todo: itemsCounter.repetition || 0 }}
-                          extraRepetitions={{ done: 0, todo: itemsCounter.extraRepeat || 0 }}
+          <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0}}
+                          repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
+                          extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
           />
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
+          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
         </div>
       } else {
-        if (this.props.currentUser.activated) {
-          this.props.dispatch(push('/'))
-        } else {
-          this.props.dispatch(push('/signup'))
-        }
         return <div />
       }
     }
@@ -74,7 +87,7 @@ const currentItemsQuery = gql`
 
 export default connect()(withRouter(
   compose(
-    graphql(currentUserQuery, { name: 'currentUser' }),
+    graphql(currentUserQuery, {name: 'currentUser'}),
     graphql(currentItemsQuery, {
         name: 'currentItems',
         options: {
