@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
 // import { sendMail } from './tools/emailService'
+import { UsersRepository } from './mongooseSetup';
 
 const resolvers = {
   Query: {
@@ -68,13 +69,13 @@ const resolvers = {
       const parsedResponse = await res.json()
       if (parsedResponse.data.is_valid) {
         const facebookId = parsedResponse.data.user_id
-        const user = await context.Users.findByFacebookId(facebookId)
+        const user = await UsersRepository.findByFacebookId(facebookId)
 
         if (user) {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
-        const newUser = await context.Users.updateFacebookUser(context.user._id, facebookId)
+        const newUser = await UsersRepository.updateFacebookUser(context.user._id, facebookId)
         return newUser
       } else {
         return null
