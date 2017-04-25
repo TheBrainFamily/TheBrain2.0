@@ -55,9 +55,8 @@ class BackCard extends React.Component {
         this.props.updateSwipeStateCb(baseSwipeValue, baseDrag);
 
     };
-    
+
     setupInitialDrag = (e) => {
-        //Setup initial drag coordinates
         this.drag = {
             x: e.nativeEvent.pageX,
             y: e.nativeEvent.pageY
