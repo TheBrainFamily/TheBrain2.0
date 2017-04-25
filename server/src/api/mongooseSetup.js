@@ -232,7 +232,7 @@ export class UsersRepository {
     return userToBeUpdated
   }
 
-  static async updateFacebookUser (userId, facebookId) {
+  async updateFacebookUser (userId, facebookId) {
     const userToBeUpdated = await Users.findOne({_id: userId})
     userToBeUpdated.facebookId = facebookId
     userToBeUpdated.activated = true
@@ -240,11 +240,11 @@ export class UsersRepository {
     return userToBeUpdated
   }
 
-  static async findByUsername (username) {
+  async findByUsername (username) {
     return Users.findOne({username})
   }
 
-  static async findByFacebookId (facebookId) {
+  async findByFacebookId (facebookId) {
     return Users.findOne({facebookId})
   }
 
