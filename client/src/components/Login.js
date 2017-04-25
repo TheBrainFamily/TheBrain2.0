@@ -4,14 +4,13 @@ import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import { push } from 'react-router-redux'
-
-import store from '../store'
+import { connect } from 'react-redux'
 
 class Login extends React.Component {
   submit = (e) => {
     e.preventDefault()
     this.props.submit({ username: this.refs.username.value, password: this.refs.password.value }).then(() => {
-      store.dispatch(push('/'))
+      this.props.dispatch(push('/'))
     })
   }
 
@@ -40,7 +39,7 @@ const logIn = gql`
     }
 `
 
-export default withRouter(graphql(logIn, {
+export default connect()(withRouter(graphql(logIn, {
   props: ({ ownProps, mutate }) => ({
     submit: ({ username, password }) => mutate({
       variables: {
@@ -60,4 +59,4 @@ export default withRouter(graphql(logIn, {
       }
     })
   })
-})(Login))
+})(Login)))

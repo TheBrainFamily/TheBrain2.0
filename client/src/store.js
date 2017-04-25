@@ -39,7 +39,7 @@ const store = createStore(
   }),
   {}, // initial state
   compose(
-    applyMiddleware(client.middleware(), routerMiddleware(history)),
+    applyMiddleware(routerMiddleware(history), client.middleware()),
     devToolsExtension ? devToolsExtension() : f => f,
   )
 )

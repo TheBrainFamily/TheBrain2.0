@@ -5,9 +5,8 @@ import Content from './Content'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
+import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-
-import store from '../store'
 
 class Lecture extends React.Component {
 
@@ -28,6 +27,7 @@ class Lecture extends React.Component {
     </div>
   }
 }
+
 class LectureVideo extends React.Component {
   render() {
     const opts = {
@@ -48,11 +48,11 @@ class LectureVideo extends React.Component {
   }
 
   _onEnd = () => {
-    store.dispatch(push('/wellDone'))
+    this.props.dispatch(push('/wellDone'))
   }
 }
 
-const LectureVideoWithRouter = withRouter(LectureVideo)
+const LectureVideoWithRouter = connect()(withRouter(LectureVideo))
 
 const query = gql`
     query Lesson {
