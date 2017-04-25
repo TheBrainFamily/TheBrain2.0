@@ -20,7 +20,7 @@ import Lecture from './components/Lecture';
 import Questions from './components/Questions';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
-// import Signup from './components/Signup';
+import Signup from './components/Signup';
 
 const networkInterface = createNetworkInterface({
     uri: 'http://localhost:8080/graphql',
@@ -47,6 +47,7 @@ export default class App extends Component {
                             <Route exact path="/" component={Lecture}/>
                             <Route exact path="/wellDone" component={WellDone}/>
                             <Route exact path="/questions" component={Questions}/>
+                            <Route exact path="/signup" component={Signup}/>
 
                         </View>
                     </View>
