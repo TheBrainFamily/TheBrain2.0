@@ -10,6 +10,18 @@ import {graphql, compose} from 'react-apollo';
 import currentUserQuery from './../queries/currentUser';
 
 class Signup extends React.Component {
+
+    componentDidUpdate = () => {
+        if (!this.props.currentUser.loading) {
+            if (this.props.currentUser &&
+                this.props.currentUser.CurrentUser &&
+                this.props.currentUser.CurrentUser.activated) {
+                console.log("going to /");
+                this.props.history.push("/");
+            }
+        }
+    };
+
     render = () => {
         return (<View><Text>In Signup</Text>
             <FBLogin style={{marginBottom: 10,}}
