@@ -18,7 +18,7 @@ class Lecture extends React.Component {
         }
 
         if (this.props.data.error) {
-            return (<Text>Error...</Text>)
+            return (<Text>Error... Check if server is running.</Text>)
         }
 
         return <LectureVideoWithRouter lesson={this.props.data.Lesson}/>
