@@ -4,13 +4,12 @@ import {
     View,
 } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
-import {withRouter} from 'react-router';
+import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import {graphql, compose} from 'react-apollo';
 import currentUserQuery from './../queries/currentUser';
 
 class Signup extends React.Component {
-
     render = () => {
         return (<View><Text>In Signup</Text>
             <FBLogin style={{marginBottom: 10,}}
@@ -21,9 +20,7 @@ class Signup extends React.Component {
                      loginBehavior={FBLoginManager.LoginBehaviors.Native}
                      onLogin={(data) => {
                          console.log("Logged in!");
-                         console.log(data);
-                         console.log('PINGWIN: this', this);
-                         this.setState({user: data.credentials});
+                         this.props.logInWithFacebook({accessToken: data.credentials.token});
                      }}
                      onLogout={() => {
                          console.log("Logged out.");
@@ -32,7 +29,7 @@ class Signup extends React.Component {
                      onLoginFound={(data) => {
                          console.log("Existing login found.");
                          console.log(data);
-                         this.setState({user: data.credentials});
+                         this.props.logInWithFacebook({accessToken: data.credentials.token});
                      }}
                      onLoginNotFound={() => {
                          console.log("No user logged in.");
