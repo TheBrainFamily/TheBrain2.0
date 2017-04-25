@@ -4,6 +4,10 @@ import {
     View,
 } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
+import {withRouter} from 'react-router';
+import gql from 'graphql-tag';
+import {graphql, compose} from 'react-apollo';
+import currentUserQuery from './../queries/currentUser';
 
 class Signup extends React.Component {
 
@@ -18,6 +22,7 @@ class Signup extends React.Component {
                      onLogin={(data) => {
                          console.log("Logged in!");
                          console.log(data);
+                         console.log('PINGWIN: this', this);
                          this.setState({user: data.credentials});
                      }}
                      onLogout={() => {
@@ -50,4 +55,34 @@ class Signup extends React.Component {
 
 }
 
-export default Signup;
+const logInWithFacebook = gql`
+    mutation logInWithFacebook($accessToken: String!){
+        logInWithFacebook(accessToken:$accessToken) {
+            _id, username, activated
+        }
+    }
+`;
+
+export default compose(
+    graphql(currentUserQuery, {name: "currentUser"}),
+    graphql(logInWithFacebook, {
+        props: ({ownProps, mutate}) => ({
+            logInWithFacebook: ({accessToken}) => mutate({
+                variables: {
+                    accessToken
+                },
+                updateQueries: {
+                    CurrentUser: (prev, {mutationResult}) => {
+                        console.log("Gozdecki: mutationResult", mutationResult);
+                        console.log("Gozdecki: prev", prev);
+                        return update(prev, {
+                            CurrentUser: {
+                                $set: mutationResult.data.logInWithFacebook
+                            }
+                        });
+                    }
+                }
+            })
+        })
+    })
+)(Signup);
