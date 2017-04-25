@@ -55,13 +55,13 @@ class BackCard extends React.Component {
         this.props.updateSwipeStateCb(baseSwipeValue, baseDrag);
 
     };
-    _onStartShouldSetResponder = (e) => {
+    
+    setupInitialDrag = (e) => {
         //Setup initial drag coordinates
         this.drag = {
             x: e.nativeEvent.pageX,
             y: e.nativeEvent.pageY
         };
-        return true;
     };
 
     setPosition = (event) => {
@@ -88,8 +88,9 @@ class BackCard extends React.Component {
             <Animated.View style={[this.getCardTransformation(), styles.flipCard, styles.flipCardBack]}>
                 { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
                                                               onResponderRelease={this.resetPosition}
-                                                              onStartShouldSetResponder={this._onStartShouldSetResponder}
-                                                              onMoveShouldSetResponder={() => true}>
+                                                              onStartShouldSetResponder={() => true}
+                                                              onMoveShouldSetResponder={() => true}
+                                                              onResponderGrant={this.setupInitialDrag}>
                     <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
                     <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
                         <Text style={styles.primaryText}>{this.props.answer}</Text>
