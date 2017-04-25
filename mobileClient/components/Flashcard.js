@@ -1,114 +1,133 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
+import FrontCard from './FrontCard';
+import BackCard from './BackCard';
+import EmojiWrapper from './EmojiWrapper';
+
 import {
-  Text,
-  View,
-  Button,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-  AppRegistry,
+    TouchableOpacity,
+    StyleSheet,
+    Dimensions,
+    Animated,
+    View,
+    Text,
 } from 'react-native';
+
+import styles from '../styles/styles';
+import {updateAnswerVisibility} from '../actions/FlashcardActions';
 
 class Flashcard extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.styles = StyleSheet.create({
-      flipCard: {
-        backfaceVisibility: 'hidden',
-        width: 350,
-        height: 600,
-        backgroundColor: '#9ACAF4',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      flipCardBack: {
-        position: 'absolute',
-        width: 350,
-        height: 600,
-        backgroundColor: '#E5BA9E',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }
-    });
-
-    this.state = {visibleAnswer: false};
-    this.toAnswerSide = 180;
-    this.toQuestionSide = 0;
-  }
-
-  onSubmitEvaluation = (value) => {
-    this.props.submit({
-      itemId: this.props.evalItemId,
-      evaluation: value
-    });
-    this.flipCard();
-    this.setState({visibleAnswer: false})
-  };
-
-  componentWillMount = () => {
-    this.animatedValue = new Animated.Value(0);
-    this.frontInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    });
-    this.backInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '360deg'],
-    })
-  }
-
-  animate = (value) => {
-    Animated.spring(this.animatedValue, {
-      toValue: value,
-      friction: 8,
-      tension: 10,
-    }).start();
-  }
-
-  flipCard = () => {
-    if (this.state.visibleAnswer) {
-      this.animate(this.toQuestionSide);
-      this.setState({visibleAnswer: false})
-    } else {
-      this.animate(this.toAnswerSide);
-      this.setState({visibleAnswer: true})
+    constructor(props) {
+        super(props);
+        this.toAnswerSide = 180;
+        this.toQuestionSide = 0;
+        const windowDimensions = Dimensions.get('window');
+        this.state = {
+            windowDimensions: {
+                width: windowDimensions.width,
+                height: windowDimensions.height,
+            },
+            dynamicStyles: {
+                content: this.getCardDynamicContentStyle(),
+            },
+            swipeDirection: 1,
+            dragLen: 0,
+        };
     }
-  }
 
-  render = () => {
-    const frontAnimatedStyle = {
-      transform: [
-        {rotateY: this.frontInterpolate}
-      ]
-    };
-    const backAnimatedStyle = {
-      transform: [
-        {rotateY: this.backInterpolate}
-      ]
+    interpolateWrapper = ({inputRange, outputRange}) => {
+        return this.animatedValue.interpolate({
+            inputRange,
+            outputRange,
+        });
     };
 
-    return (
-      <TouchableOpacity onPress={() => this.flipCard()}>
-        <Animated.View style={[this.styles.flipCard, frontAnimatedStyle]}>
-          <Text>QUESTION: {this.props.question}</Text>
-          <Text>
-            SHOW ANSWER
-          </Text>
-        </Animated.View>
-        <Animated.View style ={[backAnimatedStyle, this.styles.flipCard, this.styles.flipCardBack]}>
-          { this.state.visibleAnswer && <View>
-            <Text >CORRECT ANSWER: {this.props.answer}</Text>
-            <Text >How would you describe experience answering this question?</Text>
-          </View> }
-        </Animated.View>
-      </TouchableOpacity>
-    )
-  }
+    componentWillMount = () => {
+        this.animatedValue = new Animated.Value(0);
+    };
+
+    animate = () => {
+        const value = this.props.flashcard.visibleAnswer ? this.toQuestionSide : this.toAnswerSide;
+        Animated.spring(this.animatedValue, {
+            toValue: value,
+            friction: 8,
+            tension: 10,
+        }).start();
+    };
+
+    flipCard = () => {
+        if (this.props.flashcard.visibleAnswer) {
+            this.props.dispatch(updateAnswerVisibility(false));
+        } else {
+            this.props.dispatch(updateAnswerVisibility(true));
+        }
+    };
+
+    updateSwipeState = (swipeDirection, dragLen) => {
+        this.setState({
+            swipeDirection,
+            dragLen
+        });
+    };
+
+    componentWillUpdate = (nextProps) => {
+        if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
+            this.animate();
+        }
+    };
+
+    getCardDynamicContentStyle = (width, height) => {
+        const heightOfOtherElements =
+            StyleSheet.flatten(styles.topContainer).height +
+            StyleSheet.flatten(styles.summaryContainer).height +
+            2 * StyleSheet.flatten(styles.primaryHeader).height;
+        return {
+            height: height - heightOfOtherElements,
+        };
+    };
+
+    onLayout = () => {
+        const {width, height} = Dimensions.get('window');
+        this.setState({
+            windowDimensions: {
+                width,
+                height,
+            },
+            dynamicStyles: {
+                content: this.getCardDynamicContentStyle(width, height),
+            }
+        });
+    };
+
+    render = () => {
+        return (
+            <View onLayout={this.onLayout}>
+                <EmojiWrapper windowDimensions={this.state.windowDimensions}
+                              dragLen={this.state.dragLen}
+                              swipeDirection={this.state.swipeDirection}/>
+                <View>
+                    <TouchableOpacity onPress={() => this.flipCard()}>
+                        <FrontCard dynamicStyles={this.state.dynamicStyles}
+                                   question={this.props.question} interpolateCb={this.interpolateWrapper}/>
+                        <BackCard dynamicStyles={this.state.dynamicStyles}
+                                  interpolateCb={this.interpolateWrapper}
+                                  flipCardCb={this.flipCard}
+                                  submitCb={this.props.submit}
+                                  updateSwipeStateCb={this.updateSwipeState}
+                                  answer={this.props.answer}
+                                  evalItemId={this.props.evalItemId}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
 }
+
 
 const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
@@ -128,23 +147,22 @@ const submitEval = gql`
 `;
 
 export default graphql(submitEval, {
-  props: ({ownProps, mutate}) => ({
-    submit: ({itemId, evaluation}) => mutate({
-      variables: {
-        itemId,
-        evaluation,
-      },
-      updateQueries: {
-        CurrentItems: (prev, {mutationResult}) => {
-          const updateResults = update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
+    props: ({ownProps, mutate}) => ({
+        submit: ({itemId, evaluation}) => mutate({
+            variables: {
+                itemId,
+                evaluation,
+            },
+            updateQueries: {
+                CurrentItems: (prev, {mutationResult}) => {
+                    const updateResults = update(prev, {
+                        ItemsWithFlashcard: {
+                            $set: mutationResult.data.processEvaluation
+                        }
+                    });
+                    return updateResults;
+                }
             }
-          });
-          return updateResults;
-        }
-      }
+        })
     })
-  })
-})(Flashcard);
-
+})(connect(state => state)(Flashcard));

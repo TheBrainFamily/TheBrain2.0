@@ -8,7 +8,7 @@ import {
     View,
     Button
 } from 'react-native';
-
+import styles from '../styles/styles';
 
 export class WellDone extends React.Component {
     componentDidMount() {
@@ -16,8 +16,13 @@ export class WellDone extends React.Component {
     }
 
     render() {
-        return <View style={{width: 1000, height: 1000, backgroundColor: 'powderblue', marginTop:20}}>
-                <Text>First video done! Click:</Text><Link to="/Questions"><Text>to answer</Text></Link><Text> some questions about the video</Text>
+        return <View style={styles.wellDonePage}>
+            <Link to="/Questions">
+                <View style={styles.wellDoneContainer}>
+                    <Text style={[styles.primaryHeader, styles.wellDoneHeader]}>FIRST VIDEO DONE!</Text>
+                    <Text style={[styles.primaryHeader, styles.wellDoneContent]}>Tap anywhere to answer some questions about the video</Text>
+                </View>
+            </Link>
         </View>
     }
 }
