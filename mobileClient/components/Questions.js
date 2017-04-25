@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import {
     Text,
-View,
+    View,
 } from 'react-native';
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
@@ -17,6 +17,19 @@ class Questions extends React.Component {
         super(props);
         this.state = {}
     }
+
+    componentDidUpdate = () => {
+        if (this.props.currentItems.ItemsWithFlashcard &&
+            this.props.currentItems.ItemsWithFlashcard.length === 0) {
+            if (this.props.currentUser.activated) {
+                console.log("going to /");
+                this.props.history.push("/");
+            } else {
+                console.log("going to signup");
+                this.props.history.push("/signup");
+            }
+        }
+    };
 
     render() {
         if (this.props.currentItems.loading || this.props.currentUser.loading) {
@@ -44,13 +57,6 @@ class Questions extends React.Component {
                     />
                     <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/></View>)
             } else {
-                if (this.props.currentUser.activated) {
-                    console.log("going to /")
-                    this.props.history.push("/");
-                } else {
-                    console.log("going to signup");
-                    this.props.history.push("/signup");
-                }
                 return <Text>Test</Text>
             }
         }

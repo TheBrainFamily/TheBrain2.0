@@ -103,6 +103,7 @@ class Flashcard extends React.Component {
           { this.state.visibleAnswer && <View>
             <Text >CORRECT ANSWER: {this.props.answer}</Text>
             <Text >How would you describe experience answering this question?</Text>
+            <Button onPress={() => {this.onSubmitEvaluation(5)}} title="Learn More">Next</Button>
           </View> }
         </Animated.View>
       </TouchableOpacity>
