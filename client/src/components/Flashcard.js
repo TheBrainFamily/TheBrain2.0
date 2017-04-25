@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { withRouter } from 'react-router'
 
-import store from '../store'
 import { flashcard } from '../actions'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
-    store.dispatch(flashcard.showAnswer(true))
+    this.props.dispatch(flashcard.showAnswer(true))
   }
 
   onSubmitEvaluation = (value) => {
@@ -17,7 +17,7 @@ class Flashcard extends React.Component {
       itemId: this.props.evalItemId,
       evaluation: value
     })
-    store.dispatch(flashcard.showAnswer(false))
+    this.props.dispatch(flashcard.showAnswer(false))
   }
 
   render() {
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => {
 const FlashcardContainer = connect(
   mapStateToProps,
   null,
-)(Flashcard)
+)(withRouter(Flashcard))
 
 export default graphql(submitEval, {
   props: ({ ownProps, mutate }) => ({
