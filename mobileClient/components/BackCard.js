@@ -24,8 +24,10 @@ class BackCard extends React.Component {
             outputRange: ['180deg', '360deg'],
         });
         this.state = {
-            x: 0,
-            y: 0,
+            position: {
+                x: 0,
+                y: 0,
+            },
         }
     }
 
@@ -39,41 +41,37 @@ class BackCard extends React.Component {
     };
 
     isDragLongEnough = () => {
-        const dragLen = calculateDragLength(this.state.x, this.state.y);
+        const dragLen = calculateDragLength(this.state.position.x, this.state.position.y);
         return dragLen > 100;
     };
 
     resetPosition = (e) => {
-        const direction = calculateSwipeDirection(this.state.x, this.state.y);
+        const direction = calculateSwipeDirection(this.state.position.x, this.state.position.y);
         if (this.isDragLongEnough()) {
             this.onSubmitEvaluation(direction);
         }
         //Reset on release
-        this.setState({x: 0, y: 0});
+        this.setState({position: {x: 0, y: 0}});
         const baseSwipeValue = 1;
         const baseDrag = 0;
         this.props.updateSwipeStateCb(baseSwipeValue, baseDrag);
 
     };
-    _onStartShouldSetResponder = (e) => {
-        //Setup initial drag coordinates
+
+    setupInitialDrag = (e) => {
         this.drag = {
             x: e.nativeEvent.pageX,
             y: e.nativeEvent.pageY
         };
-        return true;
-    };
-    _onMoveShouldSetResponder = (e) => {
-        return true;
     };
 
     setPosition = (event) => {
         //Update our state with the deltaX/deltaY of the movement
-        const x = this.state.x + (event.nativeEvent.pageX - this.drag.x)
-        const y = this.state.y + (event.nativeEvent.pageY - this.drag.y)
-        this.setState({x, y});
-        const dragLen = calculateDragLength(this.state.x, this.state.y);
-        const swipeDirection = calculateSwipeDirection(this.state.x, this.state.y);
+        const x = this.state.position.x + (event.nativeEvent.pageX - this.drag.x);
+        const y = this.state.position.y + (event.nativeEvent.pageY - this.drag.y);
+        this.setState({position: {x, y}});
+        const dragLen = calculateDragLength(this.state.position.x, this.state.position.y);
+        const swipeDirection = calculateSwipeDirection(this.state.position.x, this.state.position.y);
         this.props.updateSwipeStateCb(swipeDirection, dragLen);
 
         //Set our drag to be the new position so our delta can be calculated next time correctly
@@ -82,7 +80,7 @@ class BackCard extends React.Component {
     };
 
     getCardTransformation = function () {
-        const transform = [{rotateY: this.backInterpolate}, {translateX: this.state.x}, {translateY: this.state.y}];
+        const transform = [{rotateY: this.backInterpolate}, {translateX: this.state.position.x}, {translateY: this.state.position.y}];
         return {transform};
     };
 
@@ -91,8 +89,9 @@ class BackCard extends React.Component {
             <Animated.View style={[this.getCardTransformation(), styles.flipCard, styles.flipCardBack]}>
                 { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
                                                               onResponderRelease={this.resetPosition}
-                                                              onStartShouldSetResponder={this._onStartShouldSetResponder}
-                                                              onMoveShouldSetResponder={this._onMoveShouldSetResponder}>
+                                                              onStartShouldSetResponder={() => true}
+                                                              onMoveShouldSetResponder={() => true}
+                                                              onResponderGrant={this.setupInitialDrag}>
                     <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
                     <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
                         <Text style={styles.primaryText}>{this.props.answer}</Text>
