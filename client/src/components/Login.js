@@ -14,7 +14,7 @@ class Login extends React.Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.submit}>
         <div>

@@ -20,7 +20,7 @@ class Flashcard extends React.Component {
     this.props.dispatch(flashcard.showAnswer(false))
   }
 
-  render() {
+  render () {
     return <div>
       <div className="center flashcard">QUESTION : <br /><br /><br />{this.props.question}</div>
 
@@ -28,8 +28,7 @@ class Flashcard extends React.Component {
       <br />
 
       <div>{!this.props.isAnswerVisible ?
-        <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> :
-        <div>
+        <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
           <div className="center flashcard answer">CORRECT ANSWER :<br /><br />{this.props.answer}
           </div>
           <p>How would you describe experience answering this question?</p>

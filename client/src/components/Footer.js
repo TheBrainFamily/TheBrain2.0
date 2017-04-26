@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default class Footer extends React.Component {
-  render() {
+  render () {
     return (
       <div className="contact" id="nav3">
         <h2>Contact us</h2>

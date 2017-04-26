@@ -6,19 +6,18 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 class Home extends React.Component {
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
       return
     }
 
     if (nextProps.data.ItemsWithFlashcard.length > 0) {
-      nextProps.dispatch(push("/questions"));
-
+      nextProps.dispatch(push('/questions'))
     } else {
-      nextProps.dispatch(push("/lecture"))
-
+      nextProps.dispatch(push('/lecture'))
     }
   }
+
   render () {
     if (this.props.data.loading) {
       return (<p>Loading...</p>)

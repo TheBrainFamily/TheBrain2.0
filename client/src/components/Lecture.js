@@ -10,7 +10,7 @@ import { push } from 'react-router-redux'
 
 class Lecture extends React.Component {
 
-  render() {
+  render () {
 
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
@@ -29,7 +29,7 @@ class Lecture extends React.Component {
 }
 
 class LectureVideo extends React.Component {
-  render() {
+  render () {
     const opts = {
       height: '390',
       width: '640',
