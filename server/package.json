@@ -7,7 +7,7 @@
     "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
-    "startLocalDB": "docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
+    "startLocalDB": "docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
     "startTestingDB": "docker run -d -p 27017:27017 mongo"
   },
   "author": "",
