@@ -8,7 +8,8 @@
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
-    "startTestingDB": "docker run -d -p 27017:27017 mongo"
+    "startTestingDB": "docker run -d -p 27017:27017 mongo",
+    "flow": "flow"
   },
   "author": "",
   "license": "ISC",
@@ -42,8 +43,10 @@
     "urlencode": "^1.1.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-jest": "^19.0.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-flow": "^6.23.0",
     "casual": "^1.5.12",
     "codecov": "^2.1.0",
     "eslint": "^3.18.0",
@@ -51,6 +54,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
+    "flow-bin": "^0.44.2",
     "graphql-tools": "^0.10.1",
     "jest": "^19.0.2",
     "nodemon": "^1.11.0",
