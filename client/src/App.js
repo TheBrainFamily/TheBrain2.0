@@ -22,13 +22,13 @@ class App extends Component {
           <div className="App">
             <Header />
             <div className="App-intro styleIntroduction">
-              <Route exact key="tutorial" path="/" component={Home}/>
-              <Route exact key="Lecture" path="/lecture" component={Lecture}/>
-              <Route exact key="wellDone" path="/wellDone" component={WellDone}/>
-              <Route exact key="questions" path="/questions" component={Questions}/>
-              <Route exact key="login" path="/login" component={Login}/>
-              <Route exact key="signup" path="/signup" component={Signup}/>
-              <Route exact key="resetpassword" path="/resetpassword" component={ResetPassword}/>
+              <Route exact key="tutorial" path="/" component={Home} />
+              <Route exact key="Lecture" path="/lecture" component={Lecture} />
+              <Route exact key="wellDone" path="/wellDone" component={WellDone} />
+              <Route exact key="questions" path="/questions" component={Questions} />
+              <Route exact key="login" path="/login" component={Login} />
+              <Route exact key="signup" path="/signup" component={Signup} />
+              <Route exact key="resetpassword" path="/resetpassword" component={ResetPassword} />
               <Footer />
             </div>
           </div>

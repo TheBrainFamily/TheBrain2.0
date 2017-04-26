@@ -55,11 +55,11 @@ class Questions extends React.Component {
         })
 
         return <div className='questions'>
-          <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0}}
-                          repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
-                          extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
+          <SessionSummary newFlashcards={{ done: 0, todo: itemsCounter.newFlashcard || 0 }}
+                          repetitions={{ done: 0, todo: itemsCounter.repetition || 0 }}
+                          extraRepetitions={{ done: 0, todo: itemsCounter.extraRepeat || 0 }}
           />
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
+          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
       } else {
         return <div />
@@ -87,7 +87,7 @@ const currentItemsQuery = gql`
 
 export default connect()(withRouter(
   compose(
-    graphql(currentUserQuery, {name: 'currentUser'}),
+    graphql(currentUserQuery, { name: 'currentUser' }),
     graphql(currentItemsQuery, {
         name: 'currentItems',
         options: {
