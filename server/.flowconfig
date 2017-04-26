@@ -6,5 +6,7 @@
 [libs]
 
 [options]
+experimental.strict_type_args=true
 
 [version]
+^0.40.0
