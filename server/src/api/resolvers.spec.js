@@ -1,3 +1,5 @@
+// @flow
+
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
@@ -5,8 +7,8 @@ import _ from 'lodash'
 import resolvers from './resolvers'
 import { validate } from 'graphql/validation'
 import schema from './schema'
-import { FlashcardsRepository, UserDetailsRepository, LessonsRepository, Flashcards, generateResetPasswordTokenNew } from './mongooseSetup'
-import { extendExpect, deepFreeze } from 'testHelpers/testHelpers'
+import { FlashcardsRepository, UserDetailsRepository, LessonsRepository, Flashcards } from './mongooseSetup'
+import { extendExpect, deepFreeze } from '../testHelpers/testHelpers'
 
 extendExpect()
 jest.mock('node-fetch', () => {
