@@ -1,5 +1,7 @@
+// @flow
+
 import moment from 'moment';
-const returnItemAfterEvaluation = function (evaluation, item) {
+const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
     const currentDate = moment();
     const nextRepetitionDate = item.nextRepetition;
     
