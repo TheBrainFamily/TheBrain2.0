@@ -2,6 +2,8 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import withProcessEvaluation from 'thebrain-shared-module/graphql/mutations/withProcessEvaluation'
+
 
 class Flashcard extends React.Component {
 
@@ -50,41 +52,5 @@ class Flashcard extends React.Component {
   }
 }
 
-const submitEval = gql`    
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
-        processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated 
-            }
-            flashcard
-            {
-                _id question answer
-            }
-        }
-    }
-`
-
-export default graphql(submitEval, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ itemId, evaluation }) => mutate({
-      variables: {
-        itemId,
-        evaluation,
-      },
-      updateQueries: {
-        CurrentItems: (prev, { mutationResult }) => {
-          const updateResults = update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
-            }
-          })
-          return updateResults
-        }
-      }
-    })
-  })
-})(Flashcard)
+export default withProcessEvaluation()(Flashcard)
 
