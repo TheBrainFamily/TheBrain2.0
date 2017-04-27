@@ -1,3 +1,5 @@
+// @flow
+
 import { combineReducers, createStore, compose } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import {ApolloClient, createNetworkInterface} from 'apollo-client';
