@@ -1,3 +1,5 @@
+// @flow
+
 import nodemailer from 'nodemailer';
 import aws from 'aws-sdk';
 
@@ -10,7 +12,8 @@ const transporter = nodemailer.createTransport({
     })
 });
 
-export const sendMail = ({ from, to, subject, text, })=> {
+export const sendMail = (opts: Object)=> {
+    const { from, to, subject, text } = opts;
     transporter.sendMail({
         Source: from,
         to,
