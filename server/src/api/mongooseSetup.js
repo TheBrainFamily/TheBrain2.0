@@ -1,3 +1,5 @@
+// @flow
+
 import mongoose from 'mongoose'
 import moment from 'moment'
 import bcrypt from 'bcrypt'
@@ -35,7 +37,7 @@ export class FlashcardsRepository {
     return flashcards
   }
 
-  async getFlashcard (_id) {
+  async getFlashcard (_id: string) {
     console.log('getChannel by ', _id)
     return await Flashcards.findOne({_id})
   }
@@ -61,12 +63,12 @@ export class LessonsRepository {
     return await Lessons.find()
   }
 
-  async getLessonByPosition (position) {
+  async getLessonByPosition (position: number) {
     console.log('getChannel by ', position)
     return await Lessons.findOne({position})
   }
 
-  async getLessonById (_id) {
+  async getLessonById (_id: string) {
     // console.log("_id ", _id);
     return await Lessons.findOne({_id}).exec()
   }
@@ -88,19 +90,19 @@ export const Items = mongoose.model('Items', ItemSchema)
 
 export class ItemsRepository {
 
-  async getItems (lessonPosition) {
+  async getItems (lessonPosition: number) {
 
   }
 
-  async update (id, item, userId) {
+  async update (id: string, item: Object, userId: string) {
     return await Items.update({_id: id, userId}, {$set: item})
   }
 
-  async getItemById (_id, userId) {
+  async getItemById (_id: string, userId: string) {
     return await Items.findOne({_id, userId})
   }
 
-  async create (flashcardId, userId) {
+  async create (flashcardId: string, userId: string) {
     const newItem = {
       flashcardId,
       userId,
@@ -121,7 +123,7 @@ export class ItemsRepository {
 
 export class ItemsWithFlashcardRepository {
 
-  async getItemsWithFlashcard (userId) {
+  async getItemsWithFlashcard (userId: string) {
 
     const currentItems = await Items.find({
       userId,
@@ -155,17 +157,17 @@ const UserDetailsSchema = new mongoose.Schema({
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
 
 export class UserDetailsRepository {
-  async create (userId) {
+  async create (userId: string) {
     const newUserDetails = new UserDetails({userId, nextLessonPosition: 1})
     await newUserDetails.save()
   }
 
-  async getNextLessonPosition (userId) {
+  async getNextLessonPosition (userId: string) {
     const userDetails = await UserDetails.findOne({userId})
     return userDetails.nextLessonPosition
   }
 
-  async updateNextLessonPosition (userId) {
+  async updateNextLessonPosition (userId: string) {
     await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}})
   }
 }
@@ -222,7 +224,7 @@ export class UsersRepository {
     return insertedUser
   }
 
-  async updateUser (userId, username, password) {
+  async updateUser (userId: string, username: string, password: string) {
     const userToBeUpdated = await Users.findOne({_id: userId})
     userToBeUpdated.username = username
     userToBeUpdated.password = password
@@ -232,7 +234,7 @@ export class UsersRepository {
     return userToBeUpdated
   }
 
-  async updateFacebookUser (userId, facebookId) {
+  async updateFacebookUser (userId: string, facebookId: string) {
     const userToBeUpdated = await Users.findOne({_id: userId})
     userToBeUpdated.facebookId = facebookId
     userToBeUpdated.activated = true
@@ -240,15 +242,15 @@ export class UsersRepository {
     return userToBeUpdated
   }
 
-  async findByUsername (username) {
+  async findByUsername (username: string) {
     return Users.findOne({username})
   }
 
-  async findByFacebookId (facebookId) {
+  async findByFacebookId (facebookId: string) {
     return Users.findOne({facebookId})
   }
 
-  async resetUserPassword (username) {
+  async resetUserPassword (username: string) {
     const userToBeUpdated = await this.findByUsername(username)
     if (userToBeUpdated) {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
