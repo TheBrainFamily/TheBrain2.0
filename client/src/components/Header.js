@@ -1,9 +1,11 @@
+// @flow
+
 import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import logo from './../logo_thebrain.jpg'
-import currentUserQuery from 'queries/currentUser'
+import currentUserQuery from '../queries/currentUser'
 import { Link } from 'react-router-dom'
 
 class LoginSwitcher extends React.Component {

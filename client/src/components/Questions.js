@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -6,9 +8,11 @@ import { withRouter } from 'react-router'
 import _ from 'lodash'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
-import currentUserQuery from 'queries/currentUser'
+import currentUserQuery from '../queries/currentUser'
 
 class Questions extends React.Component {
+  state: Object
+
   constructor(props) {
     super(props)
     this.state = {}

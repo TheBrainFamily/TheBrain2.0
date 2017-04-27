@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { BrowserRouter, Route } from 'react-router-dom'
