@@ -1,0 +1,8 @@
+[ignore]
+
+[include]
+
+[options]
+
+[version]
+^0.40.0
