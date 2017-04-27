@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -18,7 +20,7 @@ export class WellDone extends React.Component {
     this.props.lessonWatchedMutation()
   }
 
-  responseFacebook = (response) => {
+  responseFacebook = (response: Object) => {
     console.log(response)
     this.props.logInWithFacebook({ accessToken: response.accessToken })
   }
