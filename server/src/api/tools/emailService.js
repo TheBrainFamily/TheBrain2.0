@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     })
 });
 
-export const sendMail = (opts: Object)=> {
+export const sendMail = (opts: { from: string, to: string, subject: string, text: string })=> {
     const { from, to, subject, text } = opts;
     transporter.sendMail({
         Source: from,
