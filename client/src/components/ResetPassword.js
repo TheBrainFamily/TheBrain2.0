@@ -22,7 +22,7 @@ class ResetPassword extends React.Component {
           <input type="submit" value="Reset Password" />
         </div>
       </form>)
-  };
+  }
 }
 
 const resetPassword = gql`
