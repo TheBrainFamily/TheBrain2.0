@@ -29,7 +29,7 @@ class Signup extends React.Component {
           <input type="submit" value="Signup" />
         </div>
       </form>)
-  };
+  }
 }
 
 const signup = gql`
