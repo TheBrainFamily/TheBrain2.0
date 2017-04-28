@@ -13,9 +13,17 @@ import {updateAnswerVisibility} from '../actions/FlashcardActions';
 import {calculateSwipeDirection, calculateDragLength} from '../helpers/SwipeHelpers';
 
 class BackCard extends React.Component {
-	backInterpolate: Object;
-  	drag: Object;
-    state: Object;
+    backInterpolate: number;
+    drag : {
+        x: number,
+        y: number,
+    }
+    state: {
+        position: {
+            x: number,
+            y: number,
+        }
+    }
 
     constructor(props) {
         super(props);
