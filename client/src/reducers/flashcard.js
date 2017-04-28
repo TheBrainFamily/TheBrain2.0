@@ -1,3 +1,5 @@
+import update from 'immutability-helper'
+
 const initialState = {
   isAnswerVisible: false,
 }
@@ -5,10 +7,9 @@ const initialState = {
 const flashcard = (state = initialState, action) => {
   switch (action.type) {
     case 'SHOW_ANSWER':
-      return {
-        ...state,
-        isAnswerVisible: action.value
-      }
+      return update(state, {
+        isAnswerVisible: { $set: action.value }
+      })
 
     default:
       return state
