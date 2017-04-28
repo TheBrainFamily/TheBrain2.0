@@ -25,7 +25,17 @@ class Flashcard extends React.Component {
     toAnswerSide: number;
     toQuestionSide: number;
     animatedValue: Animated.Value;
-    state: Object;
+    state: {
+        windowDimensions: {
+            width: number,
+            height: number,
+        },
+        dynamicStyles: {
+            content: Object,
+        },
+        swipeDirection: number,
+        dragLen: number,
+    };
     constructor(props: Object) {
         super(props);
         this.toAnswerSide = 180;
