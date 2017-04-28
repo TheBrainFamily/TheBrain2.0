@@ -1,23 +1,17 @@
 // @flow
 
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { connect } from 'react-redux'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { withRouter } from 'react-router'
+
+import { flashcard } from '../actions'
 
 class Flashcard extends React.Component {
-  state = {
-    visibleAnswer: Boolean,
-  }
-
-  constructor(props) {
-    super(props)
-
-    this.state = { visibleAnswer: false }
-  }
-
   answeredQuestion = () => {
-    this.setState({ visibleAnswer: true })
+    this.props.dispatch(flashcard.showAnswer(true))
   }
 
   onSubmitEvaluation = (value) => {
@@ -25,19 +19,18 @@ class Flashcard extends React.Component {
       itemId: this.props.evalItemId,
       evaluation: value
     })
-    this.setState({ visibleAnswer: false })
+    this.props.dispatch(flashcard.showAnswer(false))
   }
 
-  render() {
+  render () {
     return <div>
       <div className="center flashcard">QUESTION : <br /><br /><br />{this.props.question}</div>
 
       <br />
       <br />
 
-      <div>{!this.state.visibleAnswer ?
-        <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> :
-        <div>
+      <div>{!this.props.isAnswerVisible ?
+        <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
           <div className="center flashcard answer">CORRECT ANSWER :<br /><br />{this.props.answer}
           </div>
           <p>How would you describe experience answering this question?</p>
@@ -72,24 +65,33 @@ const submitEval = gql`
     }
 `
 
-export default graphql(submitEval, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ itemId, evaluation }) => mutate({
-      variables: {
-        itemId,
-        evaluation,
-      },
-      updateQueries: {
-        CurrentItems: (prev, { mutationResult }) => {
-          const updateResults = update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
-            }
-          })
-          return updateResults
+const mapStateToProps = (state) => {
+  return {
+    isAnswerVisible: state.flashcard.isAnswerVisible
+  }
+}
+
+export default compose(
+  connect(mapStateToProps),
+  withRouter,
+  graphql(submitEval, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ itemId, evaluation }) => mutate({
+        variables: {
+          itemId,
+          evaluation,
+        },
+        updateQueries: {
+          CurrentItems: (prev, { mutationResult }) => {
+            const updateResults = update(prev, {
+              ItemsWithFlashcard: {
+                $set: mutationResult.data.processEvaluation
+              }
+            })
+            return updateResults
+          }
         }
-      }
+      })
     })
   })
-})(Flashcard)
-
+)(Flashcard)
