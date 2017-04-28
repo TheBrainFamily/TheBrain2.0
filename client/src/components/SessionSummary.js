@@ -42,3 +42,9 @@ export default class extends React.Component {
     </div>
   }
 }
+
+function toPercent (partition = 0, total = 0) {
+  if (total === 0) return 0
+
+  return partition / total * 100
+}
