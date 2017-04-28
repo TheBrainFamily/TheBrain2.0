@@ -20,6 +20,12 @@ export default class EmojiWrapper extends React.Component {
 
     constructor(props: Object) {
         super(props);
+        this.direction = {
+            emojiDescription: '',
+            emoji: '',
+            emojiStyle: {},
+            padding: 0
+        };
         this.directionSettings = {
             right: {
                 emojiDescription: 'Good',
