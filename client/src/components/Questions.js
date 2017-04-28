@@ -11,13 +11,6 @@ import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
 
 class Questions extends React.Component {
-  state: Object
-
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
   render() {
     if (this.props.currentItems.loading || this.props.currentUser.loading) {
       return <div>Loading...</div>

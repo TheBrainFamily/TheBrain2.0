@@ -6,7 +6,9 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
 class Flashcard extends React.Component {
-  state: Object
+  state = {
+    visibleAnswer: Boolean,
+  }
 
   constructor(props) {
     super(props)
