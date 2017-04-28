@@ -2,7 +2,7 @@ import React from 'react'
 import { Circle } from 'rc-progress'
 
 export default class extends React.Component {
-  render() {
+  render () {
     const { newFlashcards, repetitions, extraRepetitions } = this.props
 
     const left = ((newFlashcards.todo / (newFlashcards.todo + newFlashcards.done)) * 100) || 100

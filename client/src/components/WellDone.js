@@ -14,7 +14,7 @@ import FacebookLogin from 'react-facebook-login'
 //
 
 export class WellDone extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.lessonWatchedMutation()
   }
 
@@ -23,7 +23,7 @@ export class WellDone extends React.Component {
     this.props.logInWithFacebook({ accessToken: response.accessToken })
   }
 
-  render() {
+  render () {
     return <div className="welldone">
       First video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the video
       <FacebookLogin
