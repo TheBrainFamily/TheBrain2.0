@@ -85,15 +85,14 @@ const currentItemsQuery = gql`
     }
 `
 
-export default connect()(withRouter(
-  compose(
-    graphql(currentUserQuery, { name: 'currentUser' }),
-    graphql(currentItemsQuery, {
-        name: 'currentItems',
-        options: {
-          forceFetch: true
-        }
-      }
-    )
-  )(Questions)
-))
+export default compose(
+  connect(),
+  withRouter,
+  graphql(currentUserQuery, { name: 'currentUser' }),
+  graphql(currentItemsQuery, {
+    name: 'currentItems',
+    options: {
+      forceFetch: true
+    }
+  })
+)(Questions)
