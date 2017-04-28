@@ -14,7 +14,7 @@ class LoginSwitcher extends React.Component {
     this.props.logout()
   }
 
-  render() {
+  render () {
     if (this.props.activated) {
       return <Link to="/logout" onClick={this.logout}>Logout</Link>
 
@@ -22,7 +22,6 @@ class LoginSwitcher extends React.Component {
     return <Link to="/login">Login</Link>
   }
 }
-
 
 const logOutQuery = gql`
     mutation logOut {
