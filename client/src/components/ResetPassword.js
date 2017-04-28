@@ -9,7 +9,7 @@ class ResetPassword extends React.Component {
     this.props.submit({ username: this.refs.username.value })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.submit}>
         <div>
