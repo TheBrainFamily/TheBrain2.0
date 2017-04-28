@@ -3,8 +3,6 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
-// import {compose} from 'recompose';
-import _ from 'lodash'
 import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
@@ -41,29 +39,26 @@ class Questions extends React.Component {
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
 
-      if (itemsWithFlashcard.length > 0) {
-        const flashcard = itemsWithFlashcard[0].flashcard
-        const evalItem = itemsWithFlashcard[0].item
-        const itemsCounter = _.countBy(itemsWithFlashcard, (itemWithFlashcard) => {
-          if (itemWithFlashcard.item.extraRepeatToday) {
-            return 'extraRepeat'
-          }
-          if (itemWithFlashcard.item.actualTimesRepeated === 0) {
-            return 'newFlashcard'
-          }
-          return 'repetition'
-        })
+      if (!itemsWithFlashcard.length > 0) {
+        return <div />
+      }
 
-        return <div className='questions'>
-          <SessionSummary newFlashcards={{ done: 0, todo: itemsCounter.newFlashcard || 0 }}
-                          repetitions={{ done: 0, todo: itemsCounter.repetition || 0 }}
-                          extraRepetitions={{ done: 0, todo: itemsCounter.extraRepeat || 0 }}
+      const flashcard = itemsWithFlashcard[0].flashcard
+      const evalItem = itemsWithFlashcard[0].item
+
+      const flashcardsByCount = getFlashcardsByCount(itemsWithFlashcard)
+
+      const newFlashcardsTotal = flashcardsByCount.new + flashcardsByCount.review
+
+      return (
+        <div className='questions'>
+          <SessionSummary newFlashcards={{ done: flashcardsByCount.review, total: newFlashcardsTotal }}
+                          dueFlashcards={{ done: 0, total: flashcardsByCount.due }}
+                          reviewFlashcards={{ done: 0, total: flashcardsByCount.review }}
           />
           <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
-      } else {
-        return <div />
-      }
+      )
     }
   }
 }
@@ -76,6 +71,7 @@ const currentItemsQuery = gql`
                 flashcardId
                 extraRepeatToday
                 actualTimesRepeated
+                timesRepeated
             }
             flashcard
             {
