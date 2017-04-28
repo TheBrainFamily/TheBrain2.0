@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
@@ -69,28 +69,27 @@ const mapStateToProps = (state) => {
   }
 }
 
-const FlashcardContainer = connect(
-  mapStateToProps,
-  null,
-)(withRouter(Flashcard))
-
-export default graphql(submitEval, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ itemId, evaluation }) => mutate({
-      variables: {
-        itemId,
-        evaluation,
-      },
-      updateQueries: {
-        CurrentItems: (prev, { mutationResult }) => {
-          const updateResults = update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
-            }
-          })
-          return updateResults
+export default compose(
+  connect(mapStateToProps),
+  withRouter,
+  graphql(submitEval, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ itemId, evaluation }) => mutate({
+        variables: {
+          itemId,
+          evaluation,
+        },
+        updateQueries: {
+          CurrentItems: (prev, { mutationResult }) => {
+            const updateResults = update(prev, {
+              ItemsWithFlashcard: {
+                $set: mutationResult.data.processEvaluation
+              }
+            })
+            return updateResults
+          }
         }
-      }
+      })
     })
   })
-})(FlashcardContainer)
+)(Flashcard)
