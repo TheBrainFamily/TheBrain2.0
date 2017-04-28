@@ -9,13 +9,17 @@ import styles from '../styles/styles';
 
 export default class EmojiWrapper extends React.Component {
     directionSettings: Object;
-    direction: Object;
+    direction: {
+        emojiDescription: string,
+        emoji: string,
+        emojiStyle: Object,
+        padding: number,
+    };
     markerWidth: number;
     markerHeight: number;
 
     constructor(props: Object) {
         super(props);
-        this.direction = {};
         this.directionSettings = {
             right: {
                 emojiDescription: 'Good',
