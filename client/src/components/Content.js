@@ -3,7 +3,7 @@
 import React from 'react'
 
 export default class Content extends React.Component {
-  render() {
+  render () {
     return (
       <div className="content">
         <h2>Why don't you try it yourself?</h2>

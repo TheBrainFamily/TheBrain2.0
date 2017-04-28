@@ -17,8 +17,9 @@
     "react-apollo": "^0.13.3",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
-    "react-router": "^4.0.0",
+    "react-redux": "^5.0.4",
     "react-router-dom": "^4.0.0",
+    "react-router-redux": "next",
     "react-youtube": "^7.3.0",
     "resolve-pathname": "^2.0.2",
     "warning": "^3.0.0"

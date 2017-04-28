@@ -3,7 +3,7 @@
 import React from 'react'
 
 export default class Introduction extends React.Component {
-  render() {
+  render () {
     return (
       <div>
         <div className="Introduction">Mobile-friendly spaced-repetition flashcard app created in ReactJS / GraphQL /
