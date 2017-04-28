@@ -15,12 +15,6 @@ import SessionSummary from './SessionSummary';
 import currentUserQuery from './../queries/currentUser';
 
 class Questions extends React.Component {
-    state: Object;
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
-
     componentDidUpdate = () => {
         if (this.props.currentItems.ItemsWithFlashcard &&
             this.props.currentItems.ItemsWithFlashcard.length === 0) {
