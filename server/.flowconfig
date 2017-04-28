@@ -7,6 +7,7 @@
 
 [options]
 experimental.strict_type_args=true
+module.name_mapper='^\([a-zA-Z]+\/[a-zA-Z]+\)$' -> '<PROJECT_ROOT>/src/\1'
 
 [version]
 ^0.40.0
