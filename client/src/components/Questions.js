@@ -96,3 +96,23 @@ export default compose(
     }
   })
 )(Questions)
+
+function getFlashcardsByCount (flashcards) {
+  const flashcardsByCount = {
+    'new': 0,
+    'due': 0,
+    'review': 0
+  }
+
+  flashcards.forEach((flashcard) => {
+    if (flashcard.item.extraRepeatToday) {
+      flashcardsByCount['review']++
+    } else if (flashcard.item.actualTimesRepeated <= 1) {
+      flashcardsByCount['new']++
+    } else {
+      flashcardsByCount['due']++
+    }
+  })
+
+  return flashcardsByCount
+}
