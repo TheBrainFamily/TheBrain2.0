@@ -19,6 +19,7 @@
     "react-redux": "^5.0.4",
     "react-router-native": "^4.0.0",
     "react-router-redux": "^4.0.8",
+    "remote-redux-devtools": "^0.5.7",
     "stream": "0.0.2"
   },
   "devDependencies": {
