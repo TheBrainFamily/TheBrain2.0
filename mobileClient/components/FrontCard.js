@@ -9,7 +9,7 @@ import {
 import styles from '../styles/styles';
 
 export default class FrontCard extends React.Component {
-  frontInterpolate: Object;
+  frontInterpolate: number;
   constructor(props: Object) {
     super(props);
     this.frontInterpolate = props.interpolateCb({
