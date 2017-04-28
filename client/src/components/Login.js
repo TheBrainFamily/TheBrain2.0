@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
@@ -39,24 +39,28 @@ const logIn = gql`
     }
 `
 
-export default connect()(withRouter(graphql(logIn, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ username, password }) => mutate({
-      variables: {
-        username,
-        password
-      },
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          console.log('Gozdecki: mutationResult', mutationResult)
-          console.log('Gozdecki: prev', prev)
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logIn
-            }
-          })
+export default compose(
+  connect(),
+  withRouter,
+  graphql(logIn, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ username, password }) => mutate({
+        variables: {
+          username,
+          password
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logIn
+              }
+            })
+          }
         }
-      }
+      })
     })
   })
-})(Login)))
+)(Login)

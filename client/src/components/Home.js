@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
@@ -40,4 +40,8 @@ const query = gql`
         }
     }
 `
-export default connect()(withRouter(graphql(query)(Home)))
+export default compose(
+  connect(),
+  withRouter,
+  graphql(query)
+)(Home)

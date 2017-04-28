@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
@@ -40,13 +40,17 @@ const signup = gql`
     }
 `
 
-export default connect()(withRouter(graphql(signup, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ username, password }) => mutate({
-      variables: {
-        username,
-        password
-      }
+export default compose(
+  connect(),
+  withRouter,
+  graphql(signup, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ username, password }) => mutate({
+        variables: {
+          username,
+          password
+        }
+      })
     })
   })
-})(Signup)))
+)(Signup)
