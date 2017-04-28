@@ -33,12 +33,10 @@ class Flashcard extends React.Component {
           </div>
           <p>How would you describe experience answering this question?</p>
           <br />
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>Blackout</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(2)}>Terrible</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(3)}>Bad</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(4)}>Hardly</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(5)}>Good</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(6)}>Perfect!</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(2)}>Wrong</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(3)}>Good</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(4)}>Easy</button>
         </div>
       }
       </div>
