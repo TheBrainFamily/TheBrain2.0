@@ -8,7 +8,7 @@ import resolvers from './resolvers'
 import { validate } from 'graphql/validation'
 import schema from './schema'
 import { FlashcardsRepository, UserDetailsRepository, LessonsRepository, Flashcards } from './mongooseSetup'
-import { extendExpect, deepFreeze } from '../testHelpers/testHelpers'
+import { extendExpect, deepFreeze } from 'testHelpers/testHelpers'
 
 extendExpect()
 jest.mock('node-fetch', () => {
