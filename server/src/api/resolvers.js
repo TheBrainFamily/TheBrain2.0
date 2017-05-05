@@ -52,7 +52,7 @@ const resolvers = {
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(2)
+      flashcardIds.splice(4)
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
       })

@@ -126,11 +126,28 @@ export class ItemsWithFlashcardRepository {
     const currentItems = await Items.find({
       userId,
       $or: [
-        {actualTimesRepeated: 0},
-        {extraRepeatToday: true},
-        {nextRepetition: {$lte: moment().unix()}}
+        { lastRepetition: 0 },
+        { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } }
       ]
+      // $and: [
+      //   {
+      //     $or: [
+      //       { lastRepetition: 0 },
+      //       { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } }
+      //     ]
+      //   },
+      //   {
+      //     $or: [
+      //       // { actualTimesRepeated: 0 },
+      //       { actualTimesRepeated: { $lte: 1 } },
+      //       { extraRepeatToday: true },
+      //       { nextRepetition: { $lte: moment().unix() } }
+      //     ]
+      //   }
+      // ]
     })
+
+    console.log('* LOG * currentItems', currentItems.length)
 
     const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}})
 

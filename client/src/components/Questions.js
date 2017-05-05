@@ -8,6 +8,7 @@ import { push } from 'react-router-redux'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
+import getItemsWithFlashcardsByCount from 'helpers/getItemsWithFlashcardsByCount'
 
 class Questions extends React.Component {
   constructor (props) {
@@ -46,16 +47,15 @@ class Questions extends React.Component {
       const flashcard = itemsWithFlashcard[0].flashcard
       const evalItem = itemsWithFlashcard[0].item
 
-      const flashcardsByCount = getFlashcardsByCount(itemsWithFlashcard)
-
-      const newFlashcardsTotal = flashcardsByCount.new + flashcardsByCount.review
+      const itemsWithFlashcardsByCount = getItemsWithFlashcardsByCount(itemsWithFlashcard)
+      console.log('* LOG * itemsWithFlashcardsByCount', itemsWithFlashcardsByCount)
+      const newFlashcards = { done: itemsWithFlashcardsByCount.newDone, total: itemsWithFlashcardsByCount.newTotal }
+      const dueFlashcards = { done: itemsWithFlashcardsByCount.dueDone, total: itemsWithFlashcardsByCount.dueTotal }
+      const reviewFlashcards = { done: itemsWithFlashcardsByCount.reviewDone, total: itemsWithFlashcardsByCount.reviewTotal }
 
       return (
         <div className='questions'>
-          <SessionSummary newFlashcards={{ done: flashcardsByCount.review, total: newFlashcardsTotal }}
-                          dueFlashcards={{ done: 0, total: flashcardsByCount.due }}
-                          reviewFlashcards={{ done: 0, total: flashcardsByCount.review }}
-          />
+          <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
           <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
       )
@@ -92,23 +92,3 @@ export default compose(
     }
   })
 )(Questions)
-
-function getFlashcardsByCount (flashcards) {
-  const flashcardsByCount = {
-    'new': 0,
-    'due': 0,
-    'review': 0
-  }
-
-  flashcards.forEach((flashcard) => {
-    if (flashcard.item.extraRepeatToday) {
-      flashcardsByCount['review']++
-    } else if (flashcard.item.actualTimesRepeated <= 1) {
-      flashcardsByCount['new']++
-    } else {
-      flashcardsByCount['due']++
-    }
-  })
-
-  return flashcardsByCount
-}
