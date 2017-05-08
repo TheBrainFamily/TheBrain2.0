@@ -83,6 +83,11 @@ const resolvers = {
     async logIn (root, args, context) {
       try {
         const user = await context.Users.findByUsername(args.username)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
         const isMatch = await user.comparePassword(args.password)
         if (isMatch) {
           context.req.logIn(user, (err) => { if (err) throw err })
