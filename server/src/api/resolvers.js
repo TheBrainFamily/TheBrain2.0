@@ -22,13 +22,13 @@ const resolvers = {
       }
       return context.Lessons.getLessonByPosition(nextLessonPosition)
     },
-    Lessons (root: string, args: Object, context: Object) {
+    Lessons (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessons()
     },
-    Item (root: string, args: Object, context: Object) {
+    Item (root: ?string, args: Object, context: Object) {
       return context.Items.getItemById(args._id, context.user._id)
     },
-    ItemsWithFlashcard (root: string, args: Object, context: Object) {
+    ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
       } else {
@@ -40,7 +40,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    async createItemsAndMarkLessonAsWatched (root: string, args: Object, context: Object) {
+    async createItemsAndMarkLessonAsWatched (root: ?string, args: ?Object, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
         const guestUser = await context.Users.createGuest()
@@ -82,7 +82,7 @@ const resolvers = {
         return null
       }
     },
-    async logIn (root: string, args: Object, context: Object) {
+    async logIn (root: ?string, args: Object, context: Object) {
       try {
         const user = await context.Users.findByUsername(args.username)
         const isMatch = await user.comparePassword(args.password)
@@ -94,16 +94,16 @@ const resolvers = {
         throw e
       }
     },
-    async logOut (root: string, args: Object, context: Object) {
+    async logOut (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         context.req.logOut()
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
-    async setUsernameAndPasswordForGuest (root: string, args: Object, context: Object) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: Object, context: Object) {
       return context.Users.updateUser(context.user._id, args.username, args.password)
     },
-    async processEvaluation (root: string, args: Object, context: Object) {
+    async processEvaluation (root: ?string, args: Object, context: Object) {
       const item = await context.Items.getItemById(args.itemId, context.user._id)
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       // TODO move this to repository
@@ -111,7 +111,7 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
-    async resetPassword (root: string, args: Object, context: Object) {
+    async resetPassword (root: ?string, args: Object, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
