@@ -1,15 +1,16 @@
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 // import {compose} from 'recompose';
 import _ from 'lodash'
-import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
+import currentItemsQuery from 'queries/currentItems'
+
+import redirectUnauthorizedUsers from 'helpers/redirectUnauthorizedUsers'
 
 class Questions extends React.Component {
   constructor (props) {
@@ -18,21 +19,7 @@ class Questions extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
-      return
-    }
-
-    const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
-
-    if (itemsWithFlashcard.length > 0) {
-      return
-    }
-
-    if (nextProps.currentUser.activated) {
-      nextProps.dispatch(push('/'))
-    } else {
-      nextProps.dispatch(push('/signup'))
-    }
+    redirectUnauthorizedUsers(nextProps)
   }
 
   render () {
@@ -67,23 +54,6 @@ class Questions extends React.Component {
     }
   }
 }
-
-const currentItemsQuery = gql`
-    query CurrentItems {
-        ItemsWithFlashcard {
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer
-            }
-        }
-    }
-`
 
 export default compose(
   connect(),
