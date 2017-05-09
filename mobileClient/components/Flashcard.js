@@ -15,7 +15,7 @@ import {
 
 import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
-import withProcessEvaluation from 'thebrain-shared-module/graphql/mutations/withProcessEvaluation';
+import withProcessEvaluation from '../../client/shared/graphql/mutations/withProcessEvaluation';
 
 
 class Flashcard extends React.Component {
