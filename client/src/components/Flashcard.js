@@ -1,7 +1,4 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import withProcessEvaluation from 'thebrain-shared-module/graphql/mutations/withProcessEvaluation'
 
 
