@@ -13,8 +13,7 @@ class Signup extends React.Component {
 
     componentDidUpdate = () => {
         if (!this.props.currentUser.loading) {
-            if (this.props.currentUser &&
-                this.props.currentUser.CurrentUser &&
+            if (this.props.currentUser.CurrentUser &&
                 this.props.currentUser.CurrentUser.activated) {
                 console.log("going to /");
                 this.props.history.push("/");
@@ -28,7 +27,7 @@ class Signup extends React.Component {
                      ref={(fbLogin) => {
                          this.fbLogin = fbLogin
                      }}
-                     permissions={["email", "user_friends"]}
+                     permissions={["email",]}
                      loginBehavior={FBLoginManager.LoginBehaviors.Native}
                      onLogin={(data) => {
                          console.log("Logged in!");
@@ -36,7 +35,6 @@ class Signup extends React.Component {
                      }}
                      onLogout={() => {
                          console.log("Logged out.");
-                         this.setState({user: null});
                      }}
                      onLoginFound={(data) => {
                          console.log("Existing login found.");
@@ -45,7 +43,6 @@ class Signup extends React.Component {
                      }}
                      onLoginNotFound={() => {
                          console.log("No user logged in.");
-                         this.setState({user: null});
                      }}
                      onError={(data) => {
                          console.log("ERROR");
