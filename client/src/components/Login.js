@@ -9,16 +9,31 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
 class Login extends React.Component {
+  state = {
+    error: '',
+  }
+
   submit = (e) => {
     e.preventDefault()
-    this.props.submit({ username: this.refs.username.value, password: this.refs.password.value }).then(() => {
-      this.props.dispatch(push('/'))
-    })
+    this.setState({ error: '' })
+
+    this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
+      .then(() => {
+        this.props.dispatch(push('/'))
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
+      })
+
   }
 
   render () {
     return (
       <form onSubmit={this.submit}>
+        {this.state.error &&
+          <div className="text-error">{ this.state.error }</div>
+        }
         <div>
           <label>Username:</label>
           <input ref="username" type="text" name="username" />

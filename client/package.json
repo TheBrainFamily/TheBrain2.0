@@ -72,7 +72,7 @@
     "start": "NODE_PATH='src' node scripts/start.js",
     "build": "NODE_PATH='src' node scripts/build.js",
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
-    "flow": "node_modules/.bin/flow"
+    "flow": "flow"
   },
   "jest": {
     "collectCoverageFrom": [
