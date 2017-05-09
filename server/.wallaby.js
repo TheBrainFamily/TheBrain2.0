@@ -30,6 +30,7 @@ module.exports = (wallaby) => {
         files: [
             'src/**/*.js',
             'package.json',
+            'aws_config.json',
             // {pattern: 'modules/**/node_modules', ignore: true},
             {pattern: 'src/**/*.spec.js', ignore: true},
             // {pattern: 'modules/*(browser|ui)*', ignore: true},
