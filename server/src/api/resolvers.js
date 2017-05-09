@@ -83,6 +83,11 @@ const resolvers = {
     async logIn (root, args, context) {
       try {
         const user = await context.Users.findByUsername(args.username)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
         const isMatch = await user.comparePassword(args.password)
         if (isMatch) {
           context.req.logIn(user, (err) => { if (err) throw err })
@@ -99,7 +104,12 @@ const resolvers = {
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
     async setUsernameAndPasswordForGuest (root, args, context) {
-      return context.Users.updateUser(context.user._id, args.username, args.password)
+      let user = context.user
+      if (!user) {
+        user = await context.Users.createGuest()
+      }
+
+      return context.Users.updateUser(user._id, args.username, args.password)
     },
     async processEvaluation (root, args, context) {
       const item = await context.Items.getItemById(args.itemId, context.user._id)
