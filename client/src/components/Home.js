@@ -1,28 +1,34 @@
-import React from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import React from 'react'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
-
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 class Home extends React.Component {
-
-
-    render() {
-
-        if (this.props.data.loading) {
-            return (<p>Loading...</p>)
-        }
-
-        if (this.props.data.error) {
-            return (<p>Error...</p>)
-        }
-        if (this.props.data.ItemsWithFlashcard.length > 0) {
-            this.props.history.push("/questions");
-        } else {
-            this.props.history.push("/lecture")
-        }
-        return <div></div>
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
+      return
     }
+
+    if (nextProps.data.ItemsWithFlashcard.length > 0) {
+      nextProps.dispatch(push('/questions'))
+    } else {
+      nextProps.dispatch(push('/lecture'))
+    }
+  }
+
+  render () {
+    if (this.props.data.loading) {
+      return (<p>Loading...</p>)
+    }
+
+    if (this.props.data.error) {
+      return (<p>Error...</p>)
+    }
+
+    return <div></div>
+  }
 }
 
 const query = gql`
@@ -33,6 +39,9 @@ const query = gql`
             }
         }
     }
-`;
-export default withRouter(graphql(query)(Home));
-
+`
+export default compose(
+  connect(),
+  withRouter,
+  graphql(query)
+)(Home)
