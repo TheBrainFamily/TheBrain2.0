@@ -61,8 +61,8 @@ export default class EmojiWrapper extends React.Component {
         }
     }
 
-    getMarkerStyleForVertical = (directionName: string, markerStyle: Object, padding: number, dragFactor: number) => {
-        const leftPadding = 12;
+    getMarkerStyleForVertical = (directionName, markerStyle, padding, dragFactor) => {
+        const leftPadding = 35;
         const widthCenter = (this.props.windowDimensions.width / 2) - this.markerWidth + leftPadding;
         return {
             ...markerStyle,
