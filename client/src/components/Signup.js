@@ -23,6 +23,10 @@ class Signup extends React.Component {
   }
 
   render () {
+    if (this.props.currentUser.loading) {
+      return <div>Loading...</div>
+    }
+
     return (
       <form onSubmit={this.submit}>
         <div>
