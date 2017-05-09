@@ -7,6 +7,13 @@ import {
 import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
 
+const DIRECTION = {
+    '1': 'left',
+    '2': 'top',
+    '3': 'right',
+    '4': 'bottom'
+}
+
 export default class EmojiWrapper extends React.Component {
     directionSettings: Object;
     direction: {
@@ -74,21 +81,8 @@ export default class EmojiWrapper extends React.Component {
         }
     };
 
-    getDirectionName = (direction: number) => {
-        switch(direction) {
-            case 1:
-                return 'left';
-            case 2:
-                return 'top';
-            case 3:
-                return 'right';
-            default:
-                return 'bottom';
-        }
-    }
-
     getMarkerStyle = () => {
-        const directionName = this.getDirectionName(this.props.swipeDirection);
+        const directionName = DIRECTION[this.props.swipeDirection];
         const dragFactor = this.props.dragLen / 100;
 
         let markerStyle = {
