@@ -22,8 +22,6 @@ import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
 
 class Flashcard extends React.Component {
-    toAnswerSide: number;
-    toQuestionSide: number;
     animatedValue: Animated.Value;
     state: {
         windowDimensions: {
@@ -38,8 +36,6 @@ class Flashcard extends React.Component {
     };
     constructor(props: Object) {
         super(props);
-        this.toAnswerSide = 180;
-        this.toQuestionSide = 0;
         const windowDimensions = Dimensions.get('window');
         this.state = {
             windowDimensions: {
@@ -66,7 +62,9 @@ class Flashcard extends React.Component {
     };
 
     animate = () => {
-        const value = this.props.flashcard.visibleAnswer ? this.toQuestionSide : this.toAnswerSide;
+        const toAnswerSide = 180;
+        const toQuestionSide = 0;
+        const value = this.props.flashcard.visibleAnswer ? toQuestionSide : toAnswerSide;
         Animated.spring(this.animatedValue, {
             toValue: value,
             friction: 8,
