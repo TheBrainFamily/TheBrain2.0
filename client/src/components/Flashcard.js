@@ -1,6 +1,5 @@
 import React from 'react'
-import withProcessEvaluation from 'thebrain-shared-module/graphql/mutations/withProcessEvaluation'
-
+import withProcessEvaluation from '../../shared/graphql/mutations/withProcessEvaluation';
 
 class Flashcard extends React.Component {
 
