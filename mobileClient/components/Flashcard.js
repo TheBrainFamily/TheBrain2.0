@@ -8,6 +8,8 @@ import update from 'immutability-helper';
 import FrontCard from './FrontCard';
 import BackCard from './BackCard';
 import EmojiWrapper from './EmojiWrapper';
+import type { DIRECTION } from '../helpers/SwipeHelpers';
+import { DIRECTION_PROTO } from '../helpers/SwipeHelpers';
 
 import {
     TouchableOpacity,
@@ -31,7 +33,7 @@ class Flashcard extends React.Component {
         dynamicStyles: {
             content: Object,
         },
-        swipeDirection: number,
+        swipeDirection: DIRECTION,
         dragLen: number,
     };
     constructor(props: Object) {
@@ -45,7 +47,7 @@ class Flashcard extends React.Component {
             dynamicStyles: {
                 content: this.getCardDynamicContentStyle(0, 0),
             },
-            swipeDirection: 1,
+            swipeDirection: DIRECTION_PROTO.left,
             dragLen: 0,
         };
     }
