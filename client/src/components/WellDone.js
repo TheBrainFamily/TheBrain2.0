@@ -20,7 +20,7 @@ export class WellDone extends React.Component {
     this.props.lessonWatchedMutation()
   }
 
-  responseFacebook = (response: Object) => {
+  responseFacebook = (response: { accessToken: string }) => {
     console.log(response)
     this.props.logInWithFacebook({ accessToken: response.accessToken })
   }
