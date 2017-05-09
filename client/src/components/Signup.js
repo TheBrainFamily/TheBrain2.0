@@ -9,7 +9,7 @@ import currentUserQuery from 'queries/currentUser'
 
 class Signup extends React.Component {
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.currentUser.CurrentUser) {
+    if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
       nextProps.dispatch(push('/'))
     }
   }
