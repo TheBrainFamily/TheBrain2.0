@@ -16,10 +16,6 @@ import FacebookLogin from 'react-facebook-login'
 //
 
 export class WellDone extends React.Component {
-  componentDidMount () {
-    this.props.lessonWatchedMutation()
-  }
-
   responseFacebook = (response: { accessToken: string }) => {
     console.log(response)
     this.props.logInWithFacebook({ accessToken: response.accessToken })
@@ -35,32 +31,6 @@ export class WellDone extends React.Component {
         callback={this.responseFacebook} />
     </div>
   }
-}
-
-const lessonWatchedMutationSchema = gql`
-    mutation createItemsAndMarkLessonAsWatched{
-        createItemsAndMarkLessonAsWatched{
-            _id, position, description, flashcardIds, youtubeId
-        }
-    }
-`
-
-const lessonWatchedMutationParams = {
-  props: ({ ownProps, mutate }) => ({
-    lessonWatchedMutation: () => mutate({
-      updateQueries: {
-        Lesson: (prev, { mutationResult }) => {
-          console.log('JMOZGAWA: mutationResult', mutationResult)
-          const updateResults = update(prev, {
-            Lesson: {
-              $set: mutationResult.data.createItemsAndMarkLessonAsWatched
-            }
-          })
-          return updateResults
-        }
-      }
-    }),
-  })
 }
 
 // compose(
@@ -82,7 +52,6 @@ const logInWithFacebook = gql`
 `
 
 export default compose(
-  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   graphql(logInWithFacebook, {
     props: ({ ownProps, mutate }) => ({
       logInWithFacebook: ({ accessToken }) => mutate({
