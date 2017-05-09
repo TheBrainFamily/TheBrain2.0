@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -12,11 +14,6 @@ import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
 
 class Questions extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
-
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
       return

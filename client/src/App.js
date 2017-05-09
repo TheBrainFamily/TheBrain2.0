@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import { Route } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
