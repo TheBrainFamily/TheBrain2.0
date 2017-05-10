@@ -33,6 +33,13 @@ const resolvers = {
         return []
       }
     },
+    SessionCount (root, args, context) {
+      if (context.user) {
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id)
+      } else {
+        return {}
+      }
+    },
     CurrentUser (root, args, context) {
       return context.user
     }

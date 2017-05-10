@@ -196,38 +196,6 @@ describe('query.ItemsWithFlashcard', () => {
 
     expect(items.length).toBe(itemsToExtend.length)
   })
-
-  it('returns a correct number of items for the current session (last 3 hours)', async () => {
-    const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
-    const itemsToExtend = [
-      { userId },
-      { userId, lastRepetition: moment().subtract(5, 'hours').unix() },
-      { userId, lastRepetition: moment().subtract(2, 'hours').unix() },
-      { userId, lastRepetition: moment().unix() }
-    ]
-    await makeItems({ number: 4, itemsToExtend })
-
-    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
-
-    expect(items.length).toEqual(3)
-  })
-
-  it('returns correct number of items for the current session', async () => {
-    const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
-    const itemsToExtend = [
-      { userId },
-      { userId, lastRepetition: moment().subtract(5, 'hours').unix() },
-      { userId, lastRepetition: moment().subtract(2, 'hours').unix() },
-      { userId, lastRepetition: moment().unix() }
-    ]
-    await makeItems({ number: 4, itemsToExtend })
-
-    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
-
-    expect(items.length).toEqual(3)
-  })
 })
 
 describe('query.CurrentUser', () => {

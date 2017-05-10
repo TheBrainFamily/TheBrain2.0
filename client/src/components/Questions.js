@@ -10,11 +10,11 @@ import { push } from 'react-router-redux'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
-import getItemsWithFlashcardsByCount from 'helpers/getItemsWithFlashcardsByCount'
+import sessionCountQuery from 'queries/sessionCount'
 
 class Questions extends React.Component {
   componentWillReceiveProps (nextProps) {
-    if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
+    if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
     }
 
@@ -32,10 +32,11 @@ class Questions extends React.Component {
   }
 
   render () {
-    if (this.props.currentItems.loading || this.props.currentUser.loading) {
+    if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const sessionCount = this.props.sessionCount.SessionCount
 
       if (!itemsWithFlashcard.length > 0) {
         return <div />
@@ -44,11 +45,9 @@ class Questions extends React.Component {
       const flashcard = itemsWithFlashcard[0].flashcard
       const evalItem = itemsWithFlashcard[0].item
 
-      const itemsWithFlashcardsByCount = getItemsWithFlashcardsByCount(itemsWithFlashcard)
-      console.log('* LOG * itemsWithFlashcardsByCount', itemsWithFlashcardsByCount)
-      const newFlashcards = { done: itemsWithFlashcardsByCount.newDone, total: itemsWithFlashcardsByCount.newTotal }
-      const dueFlashcards = { done: itemsWithFlashcardsByCount.dueDone, total: itemsWithFlashcardsByCount.dueTotal }
-      const reviewFlashcards = { done: itemsWithFlashcardsByCount.reviewDone, total: itemsWithFlashcardsByCount.reviewTotal }
+      const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
+      const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
+      const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
 
       return (
         <div className='questions'>
@@ -84,6 +83,12 @@ export default compose(
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(currentItemsQuery, {
     name: 'currentItems',
+    options: {
+      forceFetch: true
+    }
+  }),
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
     options: {
       forceFetch: true
     }
