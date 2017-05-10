@@ -10,7 +10,7 @@ import {
 
 import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
-import { calculateSwipeDirection, calculateDragLength, DIRECTION_VAL } from '../helpers/SwipeHelpers';
+import { calculateSwipeDirection, calculateDragLength, directionEvaluationValue } from '../helpers/SwipeHelpers';
 
 class BackCard extends React.Component {
     backInterpolate: number;
@@ -56,7 +56,8 @@ class BackCard extends React.Component {
     resetPosition = (e) => {
         const direction = calculateSwipeDirection(this.state.position.x, this.state.position.y);
         if (this.isDragLongEnough()) {
-            this.onSubmitEvaluation(DIRECTION_VAL[direction]);
+            const evaluationValue = directionEvaluationValue(direction);
+            this.onSubmitEvaluation(evaluationValue);
         }
         //Reset on release
         this.setState({position: {x: 0, y: 0}});
