@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import { compose, graphql } from 'react-apollo'
+import {compose, graphql} from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 
 // const createMessage = gql`
@@ -15,24 +15,35 @@ import FacebookLogin from 'react-facebook-login'
 //     }`;
 //
 
+function getGetOrdinal(n) {
+  const s = ["th", "st", "nd", "rd"],
+    v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 export class WellDone extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     this.props.lessonWatchedMutation()
   }
 
   responseFacebook = (response: { accessToken: string }) => {
     console.log(response)
-    this.props.logInWithFacebook({ accessToken: response.accessToken })
+    this.props.logInWithFacebook({accessToken: response.accessToken})
   }
 
-  render () {
+  render() {
+    let lessonNumberString;
+    if (this.props.data.Lesson && this.props.data.Lesson.position) {
+      lessonNumberString = getGetOrdinal(this.props.data.Lesson.position - 1);
+    }
     return <div className="welldone">
-      First video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the video
+      {lessonNumberString} video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the
+      video
       <FacebookLogin
         appId="794881630542767"
         autoLoad={false}
         fields="name,email,picture"
-        callback={this.responseFacebook} />
+        callback={this.responseFacebook}/>
     </div>
   }
 }
@@ -46,10 +57,10 @@ const lessonWatchedMutationSchema = gql`
 `
 
 const lessonWatchedMutationParams = {
-  props: ({ ownProps, mutate }) => ({
+  props: ({ownProps, mutate}) => ({
     lessonWatchedMutation: () => mutate({
       updateQueries: {
-        Lesson: (prev, { mutationResult }) => {
+        Lesson: (prev, {mutationResult}) => {
           console.log('JMOZGAWA: mutationResult', mutationResult)
           const updateResults = update(prev, {
             Lesson: {
@@ -81,16 +92,25 @@ const logInWithFacebook = gql`
     }
 `
 
+const lessonPositionQuery = gql`
+    query Lesson {
+        Lesson {
+            _id, position,
+        }
+    }
+`
+
 export default compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  graphql(lessonPositionQuery),
   graphql(logInWithFacebook, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessToken }) => mutate({
+    props: ({ownProps, mutate}) => ({
+      logInWithFacebook: ({accessToken}) => mutate({
         variables: {
           accessToken
         },
         updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
+          CurrentUser: (prev, {mutationResult}) => {
             console.log('Gozdecki: mutationResult', mutationResult)
             console.log('Gozdecki: prev', prev)
             return update(prev, {
