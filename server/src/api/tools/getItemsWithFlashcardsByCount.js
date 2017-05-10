@@ -1,5 +1,7 @@
-export default function getItemsWithFlashcardsByCount (flashcards) {
-  const itemsWithFlashcardsByCount = {
+import moment from 'moment'
+
+export default function getItemsWithFlashcardsByCount (items) {
+  const sessionCount = {
     newDone: 0,
     newTotal: 0,
     dueDone: 0,
@@ -8,27 +10,49 @@ export default function getItemsWithFlashcardsByCount (flashcards) {
     reviewTotal: 0
   }
 
-  flashcards.forEach(({ item }) => {
-    if (item.actualTimesRepeated === 1) {
-      itemsWithFlashcardsByCount['newDone']++
+  items.forEach((item) => {
+    if (item.actualTimesRepeated === 0) {
+      sessionCount.newTotal++
     }
-    if (item.extraRepeatToday) {
-      itemsWithFlashcardsByCount['reviewTotal']++
-    } else if (item.timesRepeated === 1) {
-      itemsWithFlashcardsByCount['newDone']++
-      if (item.actualTimesRepeated > 1) {
-        itemsWithFlashcardsByCount['reviewDone']++
+    if (item.actualTimesRepeated === 1 && evaluatedInCurrentSession(item)) {
+      sessionCount.newDone++
+      sessionCount.newTotal++
+    }
+    if (item.extraRepeatToday && evaluatedInCurrentSession(item)) {
+      sessionCount.reviewTotal++
+    }
+
+    if (item.actualTimesRepeated > 1) {
+      if (evaluatedInCurrentSession(item)) {
+        sessionCount.dueDone++
       }
     }
-    if (item.nextRepetition) {
-      if (item.actualTimesRepeated > 1) {
-        itemsWithFlashcardsByCount['dueDone']++
+
+    if (dueCurrentSession(item)) {
+      sessionCount.dueTotal++
+    }
+
+    if (!dueCurrentSession(item) && evaluatedInCurrentSession(item) && item.actualTimesRepeated > 1) {
+      sessionCount.dueTotal++
+      if (!item.extraRepeatToday && item.timesRepeated === 0) {
+        sessionCount.reviewDone++
+        sessionCount.reviewTotal++
       }
-      itemsWithFlashcardsByCount['dueTotal']++
-    } else {
-      itemsWithFlashcardsByCount['newTotal']++
+    }
+
+    if (evaluatedInCurrentSession(item) && item.actualTimesRepeated === 1 && !item.extraRepeatToday && item.timesRepeated === 0) {
+      sessionCount.reviewDone++
+      sessionCount.reviewTotal++
     }
   })
 
-  return itemsWithFlashcardsByCount
+  return sessionCount
+}
+
+function evaluatedInCurrentSession (item) {
+  return item.lastRepetition >= moment().subtract(3, 'hours').unix()
+}
+
+function dueCurrentSession (item) {
+  return item.nextRepetition > 0 && item.nextRepetition <= moment().unix()
 }
