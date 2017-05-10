@@ -30,9 +30,7 @@ export default function getItemsWithFlashcardsByCount (items) {
 
     if (dueCurrentSession(item)) {
       sessionCount.dueTotal++
-    }
-
-    if (!dueCurrentSession(item) && evaluatedInCurrentSession(item) && item.actualTimesRepeated > 1) {
+    } else if (evaluatedInCurrentSession(item) && item.actualTimesRepeated > 1) {
       sessionCount.dueTotal++
       if (!item.extraRepeatToday && item.timesRepeated === 0) {
         sessionCount.reviewDone++
@@ -40,13 +38,22 @@ export default function getItemsWithFlashcardsByCount (items) {
       }
     }
 
-    if (evaluatedInCurrentSession(item) && item.actualTimesRepeated === 1 && !item.extraRepeatToday && item.timesRepeated === 0) {
+    if (
+      evaluatedInCurrentSession(item) &&
+      item.actualTimesRepeated === 1 &&
+      !item.extraRepeatToday &&
+      evaluatedIncorrectlyInCurrentSession(item)
+    ) {
       sessionCount.reviewDone++
       sessionCount.reviewTotal++
     }
   })
 
   return sessionCount
+}
+
+function evaluatedIncorrectlyInCurrentSession(item) {
+  return item.timesRepeated === 0 && item.actualTimesRepeated !== item.timesRepeated
 }
 
 function evaluatedInCurrentSession (item) {
