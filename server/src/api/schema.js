@@ -45,6 +45,15 @@ export const typeDefs = gql`
         username: String!,
         activated: Boolean!
     }
+    
+    type SessionCount {
+        newDone: Int,
+        newTotal: Int,
+        dueDone: Int,
+        dueTotal: Int,
+        reviewDone: Int,
+        reviewTotal: Int
+    }
 
     type Query {
         Lessons: [Lesson]!,
@@ -53,6 +62,7 @@ export const typeDefs = gql`
         Flashcard(_id: String!): Flashcard
         Item: Item,
         ItemsWithFlashcard: [ItemWithFlashcard]!
+        SessionCount: SessionCount
         CurrentUser: User
     }
     
@@ -77,7 +87,6 @@ export const typeDefs = gql`
         #        subscription: Subscription
     }
 `;
-
 
 const schema = makeExecutableSchema({
     typeDefs,
