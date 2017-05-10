@@ -143,7 +143,6 @@ class Flashcard extends React.Component {
     }
 }
 
-
 const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
