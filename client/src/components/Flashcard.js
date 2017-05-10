@@ -9,6 +9,8 @@ import { withRouter } from 'react-router'
 
 import { flashcard } from '../actions'
 
+import sessionCountQuery from 'queries/sessionCount'
+
 class Flashcard extends React.Component {
   answeredQuestion = () => {
     this.props.dispatch(flashcard.showAnswer(true))
@@ -88,7 +90,10 @@ export default compose(
             })
             return updateResults
           }
-        }
+        },
+        refetchQueries: [{
+          query: sessionCountQuery
+        }]
       })
     })
   })
