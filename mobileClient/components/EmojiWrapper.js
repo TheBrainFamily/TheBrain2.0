@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
-import type { DIRECTION } from '../helpers/SwipeHelpers';
+import type { Direction } from '../helpers/SwipeHelpers';
 
 export default class EmojiWrapper extends React.Component {
     directionSettings: Object;
@@ -55,7 +55,7 @@ export default class EmojiWrapper extends React.Component {
         }
     }
 
-    getMarkerStyleForVertical = (directionName: DIRECTION, markerStyle: Object, padding: number, dragFactor: number) => {
+    getMarkerStyleForVertical = (directionName: Direction, markerStyle: Object, padding: number, dragFactor: number) => {
         const leftPadding = 35;
         const widthCenter = (this.props.windowDimensions.width / 2) - this.markerWidth + leftPadding;
         return {
@@ -65,7 +65,7 @@ export default class EmojiWrapper extends React.Component {
         }
     };
 
-    getMarkerStyleForHorizontal = (directionName: DIRECTION, markerStyle: Object, padding: number, dragFactor: number) => {
+    getMarkerStyleForHorizontal = (directionName: Direction, markerStyle: Object, padding: number, dragFactor: number) => {
         const topPadding = -30;
         const heightCenter = (this.props.windowDimensions.height / 2) - this.markerHeight + topPadding;
         return {
