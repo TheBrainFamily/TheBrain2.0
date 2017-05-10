@@ -1,8 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+// @flow
 
 import React, {Component} from 'react';
 import {ApolloClient, ApolloProvider, createNetworkInterface} from 'react-apollo';
@@ -21,7 +17,7 @@ import Questions from './components/Questions';
 import styles from './styles/styles';
 // import Footer from './components/Footer';
 // import Login from './components/Login';
-// import Signup from './components/Signup';
+import Signup from './components/Signup';
 import store, { client } from './store';
 
 export default class App extends Component {
@@ -35,6 +31,7 @@ export default class App extends Component {
                             <Route exact path="/" component={Lecture}/>
                             <Route exact path="/wellDone" component={WellDone}/>
                             <Route exact path="/questions" component={Questions}/>
+                            <Route exact path="/signup" component={Signup}/>
 
                         </View>
                     </View>

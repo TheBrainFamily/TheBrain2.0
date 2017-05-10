@@ -4,19 +4,24 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "flow": "flow"
   },
   "dependencies": {
+    "events": "^1.1.1",
+    "flow-bin": "^0.40.0",
     "immutability-helper": "^2.1.2",
     "react": "16.0.0-alpha.6",
     "react-apollo": "^1.0.0",
     "react-native": "0.43.2",
     "react-native-emoji": "^1.2.0",
+    "react-native-facebook-login": "^1.5.0",
     "react-native-youtube": "github:inprogress-team/react-native-youtube",
     "react-redux": "^5.0.4",
     "react-router-native": "^4.0.0",
     "react-router-redux": "^4.0.8",
-    "remote-redux-devtools": "^0.5.7"
+    "remote-redux-devtools": "^0.5.7",
+    "stream": "0.0.2"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

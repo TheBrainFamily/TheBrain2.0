@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
@@ -6,6 +8,8 @@ import update from 'immutability-helper';
 import FrontCard from './FrontCard';
 import BackCard from './BackCard';
 import EmojiWrapper from './EmojiWrapper';
+import type { Direction } from '../helpers/SwipeHelpers';
+import { DIRECTIONS } from '../helpers/SwipeHelpers';
 
 import {
     TouchableOpacity,
@@ -20,11 +24,20 @@ import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
 
 class Flashcard extends React.Component {
-
-    constructor(props) {
+    animatedValue: Animated.Value;
+    state: {
+        windowDimensions: {
+            width: number,
+            height: number,
+        },
+        dynamicStyles: {
+            content: Object,
+        },
+        swipeDirection: Direction,
+        dragLen: number,
+    };
+    constructor(props: Object) {
         super(props);
-        this.toAnswerSide = 180;
-        this.toQuestionSide = 0;
         const windowDimensions = Dimensions.get('window');
         this.state = {
             windowDimensions: {
@@ -32,9 +45,9 @@ class Flashcard extends React.Component {
                 height: windowDimensions.height,
             },
             dynamicStyles: {
-                content: this.getCardDynamicContentStyle(),
+                content: this.getCardDynamicContentStyle(0, 0),
             },
-            swipeDirection: 1,
+            swipeDirection: DIRECTIONS.left,
             dragLen: 0,
         };
     }
@@ -51,7 +64,9 @@ class Flashcard extends React.Component {
     };
 
     animate = () => {
-        const value = this.props.flashcard.visibleAnswer ? this.toQuestionSide : this.toAnswerSide;
+        const toAnswerSide = 180;
+        const toQuestionSide = 0;
+        const value = this.props.flashcard.visibleAnswer ? toQuestionSide : toAnswerSide;
         Animated.spring(this.animatedValue, {
             toValue: value,
             friction: 8,
@@ -80,7 +95,7 @@ class Flashcard extends React.Component {
         }
     };
 
-    getCardDynamicContentStyle = (width, height) => {
+    getCardDynamicContentStyle = (width: number, height: number) => {
         const heightOfOtherElements =
             StyleSheet.flatten(styles.topContainer).height +
             StyleSheet.flatten(styles.summaryContainer).height +
@@ -127,7 +142,6 @@ class Flashcard extends React.Component {
         )
     }
 }
-
 
 const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
