@@ -10,7 +10,7 @@ View,
 } from 'react-native';
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
-import currentUserQuery from './../queries/currentUser';
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser';
 
 class Questions extends React.Component {
     constructor(props) {
