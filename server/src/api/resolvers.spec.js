@@ -47,7 +47,7 @@ casual.define('flashcard', function () {
   }
 })
 
-async function makeFlashcards (flashcardsToExtend = [], number: ?number = 3) {
+async function makeFlashcards ({number: number = 3, flashcardsToExtend = []} = {}) {
   const addedFlashcards = []
   _.times(number, (index) => {
 
@@ -96,13 +96,13 @@ describe('query.flashcard', () => {
       {_id: mongoose.Types.ObjectId()}, {_id: mongoose.Types.ObjectId()}
     ]
 
-    const flashcardsData = await makeFlashcards(flashcardsToExtend)
+    const flashcardsData = await makeFlashcards({number: 3, flashcardsToExtend})
 
-    const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsToExtend[1]._id},
+    const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsData[1]._id},
       {Flashcards: new FlashcardsRepository()}
     )
 
-    expect(dbFlashcards._id).toEqual(flashcardsToExtend[1]._id)
+    expect(dbFlashcards._id).toEqual(flashcardsData[1]._id)
   })
 })
 
