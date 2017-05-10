@@ -1,18 +1,22 @@
+// @flow
+
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
+import { push } from 'react-router-redux'
+import { connect } from 'react-redux'
 
 class Signup extends React.Component {
   submit = (e) => {
     e.preventDefault()
     this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
       .then(() => {
-        this.props.history.push('/')
+        this.props.dispatch(push('/'))
       })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.submit}>
         <div>
@@ -27,7 +31,7 @@ class Signup extends React.Component {
           <input type="submit" value="Signup" />
         </div>
       </form>)
-  };
+  }
 }
 
 const signup = gql`
@@ -38,13 +42,17 @@ const signup = gql`
     }
 `
 
-export default withRouter(graphql(signup, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ username, password }) => mutate({
-      variables: {
-        username,
-        password
-      }
+export default compose(
+  connect(),
+  withRouter,
+  graphql(signup, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ username, password }) => mutate({
+        variables: {
+          username,
+          password
+        }
+      })
     })
   })
-})(Signup))
+)(Signup)
