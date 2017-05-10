@@ -1,20 +1,39 @@
+// @flow
+
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
+import { push } from 'react-router-redux'
+import { connect } from 'react-redux'
 
 class Login extends React.Component {
-  submit = (e) => {
-    e.preventDefault()
-    this.props.submit({ username: this.refs.username.value, password: this.refs.password.value }).then(() => {
-      this.props.history.push('/')
-    })
+  state = {
+    error: '',
   }
 
-  render() {
+  submit = (e) => {
+    e.preventDefault()
+    this.setState({ error: '' })
+
+    this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
+      .then(() => {
+        this.props.dispatch(push('/'))
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
+      })
+
+  }
+
+  render () {
     return (
       <form onSubmit={this.submit}>
+        {this.state.error &&
+          <div className="text-error">{ this.state.error }</div>
+        }
         <div>
           <label>Username:</label>
           <input ref="username" type="text" name="username" />
@@ -37,24 +56,28 @@ const logIn = gql`
     }
 `
 
-export default withRouter(graphql(logIn, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ username, password }) => mutate({
-      variables: {
-        username,
-        password
-      },
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          console.log('Gozdecki: mutationResult', mutationResult)
-          console.log('Gozdecki: prev', prev)
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logIn
-            }
-          })
+export default compose(
+  connect(),
+  withRouter,
+  graphql(logIn, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ username, password }) => mutate({
+        variables: {
+          username,
+          password
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logIn
+              }
+            })
+          }
         }
-      }
+      })
     })
   })
-})(Login))
+)(Login)

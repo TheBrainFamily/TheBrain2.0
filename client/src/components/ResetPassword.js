@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -9,7 +11,7 @@ class ResetPassword extends React.Component {
     this.props.submit({ username: this.refs.username.value })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.submit}>
         <div>
@@ -20,7 +22,7 @@ class ResetPassword extends React.Component {
           <input type="submit" value="Reset Password" />
         </div>
       </form>)
-  };
+  }
 }
 
 const resetPassword = gql`

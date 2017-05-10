@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import YouTube from 'react-youtube'
 import Introduction from './Introduction'
@@ -5,10 +7,12 @@ import Content from './Content'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 class Lecture extends React.Component {
 
-  render() {
+  render () {
 
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
@@ -25,8 +29,9 @@ class Lecture extends React.Component {
     </div>
   }
 }
+
 class LectureVideo extends React.Component {
-  render() {
+  render () {
     const opts = {
       height: '390',
       width: '640',
@@ -45,11 +50,11 @@ class LectureVideo extends React.Component {
   }
 
   _onEnd = () => {
-    this.props.history.push('/wellDone')
+    this.props.dispatch(push('/wellDone'))
   }
 }
 
-const LectureVideoWithRouter = withRouter(LectureVideo)
+const LectureVideoWithRouter = connect()(withRouter(LectureVideo))
 
 const query = gql`
     query Lesson {

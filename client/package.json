@@ -17,8 +17,9 @@
     "react-apollo": "^0.13.3",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
-    "react-router": "^4.0.0",
+    "react-redux": "^5.0.4",
     "react-router-dom": "^4.0.0",
+    "react-router-redux": "next",
     "react-youtube": "^7.3.0",
     "resolve-pathname": "^2.0.2",
     "warning": "^3.0.0"
@@ -29,6 +30,7 @@
     "babel-eslint": "7.1.1",
     "babel-jest": "18.0.0",
     "babel-loader": "6.2.10",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react-app": "^2.1.1",
     "babel-runtime": "^6.20.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
@@ -47,6 +49,7 @@
     "eslint-plugin-react": "6.4.1",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.10.0",
+    "flow-bin": "^0.40.0",
     "fs-extra": "0.30.0",
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.3",
@@ -68,7 +71,8 @@
   "scripts": {
     "start": "NODE_PATH='src' node scripts/start.js",
     "build": "NODE_PATH='src' node scripts/build.js",
-    "test": "NODE_PATH='src' node scripts/test.js --env=jsdom"
+    "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
+    "flow": "flow"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -96,7 +100,8 @@
   },
   "babel": {
     "presets": [
-      "react-app"
+      "react-app",
+      "flow"
     ]
   },
   "eslintConfig": {

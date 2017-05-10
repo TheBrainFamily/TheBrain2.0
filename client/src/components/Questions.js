@@ -1,53 +1,60 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
-// import {compose} from 'recompose';
-import _ from 'lodash'
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import sessionCountQuery from 'queries/sessionCount'
 
 class Questions extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
+      return
+    }
+
+    const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
+
+    if (itemsWithFlashcard.length > 0) {
+      return
+    }
+
+    if (nextProps.currentUser.activated) {
+      nextProps.dispatch(push('/'))
+    } else {
+      nextProps.dispatch(push('/signup'))
+    }
   }
 
-  render() {
-    if (this.props.currentItems.loading || this.props.currentUser.loading) {
+  render () {
+    if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const sessionCount = this.props.sessionCount.SessionCount
 
-      if (itemsWithFlashcard.length > 0) {
-        const flashcard = itemsWithFlashcard[ 0 ].flashcard
-        const evalItem = itemsWithFlashcard[ 0 ].item
-        const itemsCounter = _.countBy(itemsWithFlashcard, (itemWithFlashcard) => {
-          if (itemWithFlashcard.item.extraRepeatToday) {
-            return 'extraRepeat'
-          }
-          if (itemWithFlashcard.item.actualTimesRepeated === 0) {
-            return 'newFlashcard'
-          }
-          return 'repetition'
-        })
-
-        return <div className='questions'>
-          <SessionSummary newFlashcards={{ done: 0, todo: itemsCounter.newFlashcard || 0 }}
-                          repetitions={{ done: 0, todo: itemsCounter.repetition || 0 }}
-                          extraRepetitions={{ done: 0, todo: itemsCounter.extraRepeat || 0 }}
-          />
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
-        </div>
-      } else {
-        if (this.props.currentUser.activated) {
-          this.props.history.push('/')
-        } else {
-          this.props.history.push('/signup')
-        }
+      if (!itemsWithFlashcard.length > 0) {
         return <div />
       }
+
+      const flashcard = itemsWithFlashcard[0].flashcard
+      const evalItem = itemsWithFlashcard[0].item
+
+      const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
+      const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
+      const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
+
+      return (
+        <div className='questions'>
+          <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
+          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
+        </div>
+      )
     }
   }
 }
@@ -69,15 +76,20 @@ const currentItemsQuery = gql`
     }
 `
 
-export default withRouter(
-  compose(
-    graphql(currentUserQuery, { name: 'currentUser' }),
-    graphql(currentItemsQuery, {
-        name: 'currentItems',
-        options: {
-          forceFetch: true
-        }
-      }
-    )
-  )(Questions)
-)
+export default compose(
+  connect(),
+  withRouter,
+  graphql(currentUserQuery, { name: 'currentUser' }),
+  graphql(currentItemsQuery, {
+    name: 'currentItems',
+    options: {
+      forceFetch: true
+    }
+  }),
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
+    options: {
+      forceFetch: true
+    }
+  })
+)(Questions)
