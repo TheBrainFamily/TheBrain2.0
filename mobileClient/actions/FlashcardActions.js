@@ -1,6 +1,8 @@
-export const updateAnswerVisibility = (value) => {
+// @flow
+
+export const updateAnswerVisibility = (shouldBeVisible: boolean) => {
   return {
     type: 'UPDATE_ANSWER_VISIBILITY',
-    visibleAnswer: value,
+    visibleAnswer: shouldBeVisible,
   };
 };

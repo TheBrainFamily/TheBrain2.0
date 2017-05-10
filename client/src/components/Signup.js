@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -29,7 +31,7 @@ class Signup extends React.Component {
           <input type="submit" value="Signup" />
         </div>
       </form>)
-  };
+  }
 }
 
 const signup = gql`
