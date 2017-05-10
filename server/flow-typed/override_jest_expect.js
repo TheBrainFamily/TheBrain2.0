@@ -1,3 +1,6 @@
+// this file contains definition of toContainDocuments which is not available in npm/jest_*
+// name of this file should be listed after jest_* when sorting files so jest expect will be overridden
+
 declare function expect(expectation: any): {
   toBeFalsy: Function,
   toBeTruthy: Function,
