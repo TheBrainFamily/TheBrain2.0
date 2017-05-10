@@ -6,7 +6,7 @@ import { withRouter } from 'react-router'
 import _ from 'lodash'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
-import currentUserQuery from 'queries/currentUser'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Questions extends React.Component {
   constructor(props) {
