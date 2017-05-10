@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -13,11 +15,6 @@ import SessionSummary from './SessionSummary';
 import currentUserQuery from './../queries/currentUser';
 
 class Questions extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
-
     componentDidUpdate = () => {
         if (this.props.currentItems.ItemsWithFlashcard &&
             this.props.currentItems.ItemsWithFlashcard.length === 0) {

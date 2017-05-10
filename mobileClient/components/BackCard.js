@@ -1,22 +1,32 @@
+// @flow
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {
-    Text,
-    View,
-    Animated,
-    TouchableOpacity,
+  Text,
+  View,
+  Animated,
 } from 'react-native';
 
 import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
-import {calculateSwipeDirection, calculateDragLength} from '../helpers/SwipeHelpers';
+import { calculateSwipeDirection, calculateDragLength, directionEvaluationValue } from '../helpers/SwipeHelpers';
 
 class BackCard extends React.Component {
+    backInterpolate: number;
+    drag : {
+        x: number,
+        y: number,
+    }
+    state: {
+        position: {
+            x: number,
+            y: number,
+        }
+    }
 
     constructor(props) {
         super(props);
-        this.toAnswerSide = 180;
-        this.toQuestionSide = 0;
         this.backInterpolate = props.interpolateCb({
             inputRange: [0, 180],
             outputRange: ['180deg', '360deg'],
@@ -46,11 +56,12 @@ class BackCard extends React.Component {
     resetPosition = (e) => {
         const direction = calculateSwipeDirection(this.state.position.x, this.state.position.y);
         if (this.isDragLongEnough()) {
-            this.onSubmitEvaluation(direction);
+            const evaluationValue = directionEvaluationValue(direction);
+            this.onSubmitEvaluation(evaluationValue);
         }
         //Reset on release
         this.setState({position: {x: 0, y: 0}});
-        const baseSwipeValue = 1;
+        const baseSwipeValue = 'left';
         const baseDrag = 0;
         this.props.updateSwipeStateCb(baseSwipeValue, baseDrag);
 
