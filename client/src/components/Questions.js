@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -11,11 +13,6 @@ import currentUserQuery from 'queries/currentUser'
 import getItemsWithFlashcardsByCount from 'helpers/getItemsWithFlashcardsByCount'
 
 class Questions extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
-
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
       return
