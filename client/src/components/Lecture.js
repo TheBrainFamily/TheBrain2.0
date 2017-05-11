@@ -77,7 +77,6 @@ const lessonWatchedMutationParams = {
     lessonWatchedMutation: () => mutate({
       updateQueries: {
         Lesson: (prev, { mutationResult }) => {
-          console.log('JMOZGAWA: mutationResult', mutationResult)
           const updateResults = update(prev, {
             Lesson: {
               $set: mutationResult.data.createItemsAndMarkLessonAsWatched
