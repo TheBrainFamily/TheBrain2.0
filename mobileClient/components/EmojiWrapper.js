@@ -1,21 +1,32 @@
+// @flow
+
 import React from 'react';
 import {
     Text,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
 import styles from '../styles/styles';
-
-const DIRECTION = {
-    1: 'left',
-    2: 'top',
-    3: 'right',
-    4: 'bottom',
-};
+import type { Direction } from '../helpers/SwipeHelpers';
 
 export default class EmojiWrapper extends React.Component {
-    constructor(props) {
+    directionSettings: Object;
+    direction: {
+        emojiDescription: string,
+        emoji: string,
+        emojiStyle: Object,
+        padding: number,
+    };
+    markerWidth: number;
+    markerHeight: number;
+
+    constructor(props: Object) {
         super(props);
-        this.direction = {};
+        this.direction = {
+            emojiDescription: '',
+            emoji: '',
+            emojiStyle: {},
+            padding: 0
+        };
         this.directionSettings = {
             right: {
                 emojiDescription: 'Good',
@@ -44,7 +55,7 @@ export default class EmojiWrapper extends React.Component {
         }
     }
 
-    getMarkerStyleForVertical = (directionName, markerStyle, padding, dragFactor) => {
+    getMarkerStyleForVertical = (directionName: Direction, markerStyle: Object, padding: number, dragFactor: number) => {
         const leftPadding = 35;
         const widthCenter = (this.props.windowDimensions.width / 2) - this.markerWidth + leftPadding;
         return {
@@ -54,7 +65,7 @@ export default class EmojiWrapper extends React.Component {
         }
     };
 
-    getMarkerStyleForHorizontal = (directionName, markerStyle, padding, dragFactor) => {
+    getMarkerStyleForHorizontal = (directionName: Direction, markerStyle: Object, padding: number, dragFactor: number) => {
         const topPadding = -30;
         const heightCenter = (this.props.windowDimensions.height / 2) - this.markerHeight + topPadding;
         return {
@@ -65,7 +76,7 @@ export default class EmojiWrapper extends React.Component {
     };
 
     getMarkerStyle = () => {
-        const directionName = DIRECTION[this.props.swipeDirection];
+        const directionName = this.props.swipeDirection;
         const dragFactor = this.props.dragLen / 100;
 
         let markerStyle = {
@@ -80,7 +91,7 @@ export default class EmojiWrapper extends React.Component {
     };
 
 
-    measureMarker = (event) => {
+    measureMarker = (event: Object) => {
         this.markerWidth = event.nativeEvent.layout.width;
         this.markerHeight = event.nativeEvent.layout.height;
     };

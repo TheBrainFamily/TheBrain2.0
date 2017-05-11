@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -6,27 +8,25 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import {
     Text,
-View,
+    View,
 } from 'react-native';
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
 import currentUserQuery from './../queries/currentUser';
 
 class Questions extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
-
     componentDidUpdate = () => {
-        if (this.props.currentItems.ItemsWithFlashcard &&
-            this.props.currentItems.ItemsWithFlashcard.length === 0) {
-            if (this.props.currentUser.activated) {
-                console.log("going to /");
-                this.props.history.push("/");
-            } else {
-                console.log("going to signup");
-                this.props.history.push("/signup");
+      if (!this.props.currentItems.loading && !this.props.currentUser.loading) {
+            if (this.props.currentItems.ItemsWithFlashcard &&
+                this.props.currentItems.ItemsWithFlashcard.length === 0 &&
+                this.props.currentUser.CurrentUser) {
+                if (this.props.currentUser.CurrentUser.activated) {
+                    console.log("going to /");
+                    this.props.history.push("/");
+                } else {
+                    console.log("going to signup");
+                    this.props.history.push("/signup");
+                }
             }
         }
     };
@@ -55,14 +55,14 @@ class Questions extends React.Component {
                                     repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
                                     extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/></View>)
+                    <Flashcard question={flashcard.question} answer={flashcard.answer}
+                               evalItemId={evalItem._id}/></View>)
             } else {
                 return <Text>Test</Text>
             }
         }
     }
 }
-
 
 const currentItemsQuery = gql`
     query CurrentItems {
