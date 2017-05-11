@@ -6,6 +6,8 @@ import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
+import FacebookLogin from 'react-facebook-login'
+import update from 'immutability-helper'
 
 import currentUserQuery from 'queries/currentUser'
 
@@ -23,7 +25,10 @@ class Signup extends React.Component {
         this.props.dispatch(push('/'))
       })
   }
-
+    responseFacebook = (response: { accessToken: string }) => {
+        console.log(response)
+        this.props.logInWithFacebook({ accessToken: response.accessToken })
+    }
   render () {
     if (this.props.currentUser.loading) {
       return <div>Loading...</div>
@@ -42,6 +47,12 @@ class Signup extends React.Component {
         <div>
           <input type="submit" value="Signup" />
         </div>
+
+          <FacebookLogin
+              appId="794881630542767"
+              autoLoad={false}
+              fields="name,email,picture"
+              callback={this.responseFacebook} />
       </form>)
   }
 }
@@ -50,6 +61,14 @@ const signup = gql`
     mutation setUsernameAndPasswordForGuest($username: String!, $password: String!){
         setUsernameAndPasswordForGuest(username: $username, password: $password) {
             username
+        }
+    }
+`
+
+const logInWithFacebook = gql`
+    mutation logInWithFacebook($accessToken: String!){
+        logInWithFacebook(accessToken:$accessToken) {
+            _id, username, activated
         }
     }
 `
@@ -67,5 +86,23 @@ export default compose(
       })
     })
   }),
-  graphql(currentUserQuery, { name: 'currentUser' })
+    graphql(logInWithFacebook, {
+        props: ({ownProps, mutate}) => ({
+            logInWithFacebook: ({accessToken}) => mutate({
+                variables: {
+                    accessToken
+                },
+                updateQueries: {
+                    CurrentUser: (prev, {mutationResult}) => {
+                        return update(prev, {
+                            CurrentUser: {
+                                $set: mutationResult.data.logInWithFacebook
+                            }
+                        })
+                    }
+                }
+            })
+        })
+    }),
+graphql(currentUserQuery, { name: 'currentUser' })
 )(Signup)
