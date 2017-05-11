@@ -1,44 +1,63 @@
+// @flow
+
 import React from 'react'
 import { Circle } from 'rc-progress'
 
-export default class extends React.Component {
+export default class SessionSummary extends React.Component {
   render () {
-    const { newFlashcards, repetitions, extraRepetitions } = this.props
+    const { newFlashcards, dueFlashcards, reviewFlashcards } = this.props
 
-    const left = ((newFlashcards.todo / (newFlashcards.todo + newFlashcards.done)) * 100) || 100
-    const done = ((repetitions.todo / (repetitions.todo + repetitions.done)) * 100) || 100
-    const toBeRepeated = ((extraRepetitions.todo / (extraRepetitions.todo + extraRepetitions.done)) * 100) || 100
+    const newFlashcardsProgress = toPercent(newFlashcards.done, newFlashcards.total)
+    const dueFlashcardsProgress = toPercent(dueFlashcards.done, dueFlashcards.total)
+    const reviewFlashcardsProgress = toPercent(reviewFlashcards.done, reviewFlashcards.total)
 
-    return <div>
+    return (
+      <div>
+        <div className="session-summary">
+          New: {newFlashcards.done} / {newFlashcards.total}
+          <Circle className="progress-bar"
+                percent={newFlashcardsProgress}
+                trailWidth="4"
+                strokeWidth="18"
+                strokeColor="#C8B600"
+                trailColor="#AA9F39"
+                strokeLinecap="square"
+          />
+        </div>
 
-      <div className="session-summary">Left: {newFlashcards.todo} / {newFlashcards.todo + newFlashcards.done}</div>
-      <Circle className="progress-bar"
-              percent={left}
-              trailWidth="4"
-              strokeWidth="18"
-              strokeColor="#C8B600"
-              trailColor="#AA9F39"
-              strokeLinecap="square" />
+        { (dueFlashcards.total > 0) &&
+          <div className="session-summary">
+            Due: {dueFlashcards.done} / {dueFlashcards.total}
+            <Circle className="progress-bar"
+                    percent={dueFlashcardsProgress}
+                    trailWidth="4"
+                    strokeWidth="18"
+                    strokeColor="#FF0000"
+                    trailColor="#AA3939"
+                    strokeLinecap="square"
+            />
+          </div>
+        }
 
-      <div className="session-summary">Done: {repetitions.todo} / {repetitions.todo + repetitions.done} </div>
-      <Circle className="progress-bar"
-              percent={done}
-              trailWidth="4"
-              strokeWidth="18"
-              strokeColor="#FF0000"
-              trailColor="#AA3939"
-              strokeLinecap="square" />
-
-      <div className="session-summary">To be repeated: {extraRepetitions.todo}
-        / {extraRepetitions.todo + extraRepetitions.done}</div>
-      <Circle className="progress-bar"
-              percent={toBeRepeated}
-              trailWidth="4"
-              strokeWidth="18"
-              strokeColor="#0388A7"
-              trailColor="#303E73"
-              strokeLinecap="square" />
-      <br />
-    </div>
+        <div className="session-summary">
+          Review: {reviewFlashcards.done} / {reviewFlashcards.total}
+          <Circle className="progress-bar"
+                  percent={reviewFlashcardsProgress}
+                  trailWidth="4"
+                  strokeWidth="18"
+                  strokeColor="#0388A7"
+                  trailColor="#303E73"
+                  strokeLinecap="square"
+          />
+        </div>
+        <br />
+      </div>
+    )
   }
+}
+
+function toPercent (partition = 0, total = 0) {
+  if (total === 0) return 0
+
+  return partition / total * 100
 }
