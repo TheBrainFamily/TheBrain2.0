@@ -9,7 +9,7 @@ import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
-import currentUserQuery from 'queries/currentUser'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import sessionCountQuery from 'queries/sessionCount'
 
 class Questions extends React.Component {
@@ -67,7 +67,6 @@ const currentItemsQuery = gql`
                 flashcardId
                 extraRepeatToday
                 actualTimesRepeated
-                timesRepeated
             }
             flashcard
             {
