@@ -16,6 +16,8 @@
 .*/node_modules/react-native-youtube/YouTube.ios.js
 
 [include]
+../client/shared
+../client/node_modules/graphql-tag
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
