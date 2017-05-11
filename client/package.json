@@ -14,7 +14,7 @@
     "lodash": "^4.17.4",
     "rc-progress": "^2.0.6",
     "react": "^15.5.3",
-    "react-apollo": "^0.13.3",
+    "react-apollo": "^1.0.0",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
     "react-redux": "^5.0.4",
