@@ -7,7 +7,15 @@ import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
+import currentUserQuery from 'queries/currentUser'
+
 class Signup extends React.Component {
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
+      nextProps.dispatch(push('/'))
+    }
+  }
+
   submit = (e) => {
     e.preventDefault()
     this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
@@ -17,6 +25,10 @@ class Signup extends React.Component {
   }
 
   render () {
+    if (this.props.currentUser.loading) {
+      return <div>Loading...</div>
+    }
+
     return (
       <form onSubmit={this.submit}>
         <div>
@@ -54,5 +66,6 @@ export default compose(
         }
       })
     })
-  })
+  }),
+  graphql(currentUserQuery, { name: 'currentUser' })
 )(Signup)
