@@ -10,7 +10,7 @@ import { push } from 'react-router-redux'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import sessionCountQuery from 'queries/sessionCount'
+import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -83,13 +83,13 @@ export default compose(
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
-      forceFetch: true
+        fetchPolicy: "network-only",
     }
   }),
   graphql(sessionCountQuery, {
     name: 'sessionCount',
     options: {
-      forceFetch: true
+        fetchPolicy: "network-only",
     }
   })
 )(Questions)
