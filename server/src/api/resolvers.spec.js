@@ -3,12 +3,19 @@
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
+import moment from 'moment'
 
 import resolvers from './resolvers'
-import { validate } from 'graphql/validation'
-import schema from './schema'
-import { FlashcardsRepository, UserDetailsRepository, LessonsRepository, Flashcards } from './mongooseSetup'
-import { extendExpect, deepFreeze } from 'testHelpers/testHelpers'
+import {
+  Flashcards,
+  FlashcardsRepository,
+  ItemsRepository,
+  ItemsWithFlashcardRepository,
+  LessonsRepository,
+  UserDetailsRepository,
+  UsersRepository
+} from './mongooseSetup'
+import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
 
 extendExpect()
 jest.mock('node-fetch', () => {
@@ -47,13 +54,27 @@ casual.define('flashcard', function () {
   }
 })
 
+casual.define('item', function () {
+  return {
+    flashcardId: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
+    actualTimesRepeated: 0,
+    easinessFactor: 2.5,
+    extraRepeatToday: false,
+    lastRepetition: 0,
+    nextRepetition: 0,
+    previousDaysChange: 0,
+    timesRepeated: 0
+  }
+})
+
 type MakeFlashcardsData = {
-  number?: number,
-  flashcardsToExtend?: Array<Object>
+    number?: number,
+    flashcardsToExtend?: Array<Object>
 }
 
 async function makeFlashcards ({number: number = 3, flashcardsToExtend = []}: MakeFlashcardsData = {}) {
-  const addedFlashcards = []
+    const addedFlashcards = []
   _.times(number, (index) => {
 
       let newFlashcard = casual.flashcard
@@ -71,6 +92,23 @@ async function makeFlashcards ({number: number = 3, flashcardsToExtend = []}: Ma
   await mongoose.connection.db.collection('flashcards').insert(addedFlashcards)
 
   return addedFlashcards
+}
+
+async function makeItems ({ number = 2, itemsToExtend = [] } = {}) {
+  const addedItems = []
+  _.times(number, (index) => {
+    let newFlashcard = casual.item
+    if (itemsToExtend[index]) {
+      newFlashcard = {
+        ...newFlashcard,
+        ...itemsToExtend[index]
+      }
+    }
+    addedItems.push(newFlashcard)
+  })
+  await mongoose.connection.db.collection('items').insert(addedItems)
+
+  return addedItems
 }
 
 describe('query.flashcards', () => {
@@ -138,6 +176,35 @@ describe('query.Lesson', () => {
   })
 })
 
+describe('query.ItemsWithFlashcard', () => {
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+
+  it('returns 0 items for a new user without any lessons watched', async () => {
+    const userId = mongoose.Types.ObjectId()
+    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+
+    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
+
+    expect(items.length).toBe(0)
+  })
+
+  it('returns all available items for a new user after watching the first lesson', async () => {
+    const userId = mongoose.Types.ObjectId()
+    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const itemsToExtend = [
+      { userId }, { userId }
+    ]
+    await makeItems({itemsToExtend})
+
+    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
+
+    expect(items.length).toBe(itemsToExtend.length)
+  })
+})
+
 describe('query.CurrentUser', () => {
   it('returns unchanged user from a context', () => {
     const context = deepFreeze({
@@ -146,6 +213,80 @@ describe('query.CurrentUser', () => {
 
     const currentUser = resolvers.Query.CurrentUser(undefined, undefined, context)
     expect(currentUser).toEqual(context.user)
+  })
+})
+
+describe('mutation.createItemsAndMarkLessonAsWatched', () => {
+  let context
+  beforeAll(async () => {
+    // we have those in different order to make sure the query doesn't return the first inserted lesson.
+    await mongoose.connection.db.collection('lessons').insert({position: 2})
+    await mongoose.connection.db.collection('lessons').insert({position: 1})
+
+    context = {
+      user: null,
+      Users: new UsersRepository(),
+      UserDetails: new UserDetailsRepository(),
+      Lessons: new LessonsRepository(),
+      Items: new ItemsRepository(),
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns the second lesson after watching the first one if you are a guest', async () => {
+    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, undefined, context)
+
+    expect(lesson.position).toBe(2)
+  })
+  it('returns the second lesson after watching the first one if you are a logged in user', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({userId, nextLessonPosition: 1})
+    context.user = { _id: userId }
+
+    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, undefined, context)
+
+    expect(lesson.position).toBe(2)
+  })
+})
+
+describe('mutation.processEvaluation', () => {
+  let context
+  beforeAll(async () => {
+    context = {
+      user: { _id: mongoose.Types.ObjectId() },
+      Items: new ItemsRepository(),
+      ItemsWithFlashcard: new ItemsWithFlashcardRepository()
+    }
+  })
+
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+
+  it('returns a correct item after "Wrong" evaluation', async () => {
+    const userId = context.user._id
+    const itemsToExtend = [
+      { userId, _id: mongoose.Types.ObjectId() },
+      { userId, _id: mongoose.Types.ObjectId() }
+    ]
+
+    await makeItems({ itemsToExtend })
+
+    const args = {
+      itemId: itemsToExtend[1]._id,
+      evaluation: 2.5
+    }
+
+    const itemsWithFlashcard = await resolvers.Mutation.processEvaluation(undefined, args, context)
+    const itemWithFlashcard = _.find(itemsWithFlashcard, (doc) => _.isEqual(doc.item._id, args.itemId))
+
+    expect(itemWithFlashcard.item.actualTimesRepeated).toEqual(1)
   })
 })
 
