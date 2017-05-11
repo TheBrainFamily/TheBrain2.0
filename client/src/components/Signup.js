@@ -9,10 +9,14 @@ import { connect } from 'react-redux'
 import FacebookLogin from 'react-facebook-login'
 import update from 'immutability-helper'
 
-import currentUserQuery from 'queries/currentUser'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Signup extends React.Component {
   componentWillReceiveProps (nextProps) {
+    if (nextProps.currentUser.loading) {
+      return
+    }
+
     if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
       nextProps.dispatch(push('/'))
     }
