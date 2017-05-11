@@ -148,7 +148,7 @@ export class ItemsWithFlashcardRepository {
     })
   }
 
-  async getSessionCount (userId) {
+  async getSessionCount (userId: string) {
     const items = await Items.find({
       userId,
       $or: [
