@@ -4,8 +4,6 @@ import React from 'react';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
 import {withRouter} from 'react-router';
-// import {compose} from 'recompose';
-import _ from 'lodash';
 import {
     Text,
     View,
@@ -13,6 +11,7 @@ import {
 import Flashcard from './Flashcard';
 import SessionSummary from './SessionSummary';
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser';
+import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount';
 
 class Questions extends React.Component {
     componentDidUpdate = () => {
@@ -32,33 +31,29 @@ class Questions extends React.Component {
     };
 
     render() {
-        if (this.props.currentItems.loading || this.props.currentUser.loading) {
+        if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
             return <Text>Loading...</Text>
         } else {
             const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard;
+            const sessionCount = this.props.sessionCount.SessionCount
 
             if (itemsWithFlashcard.length > 0) {
                 const flashcard = itemsWithFlashcard[0].flashcard;
                 const evalItem = itemsWithFlashcard[0].item;
-                const itemsCounter = _.countBy(itemsWithFlashcard, (itemWithFlashcard) => {
-                    if (itemWithFlashcard.item.extraRepeatToday) {
-                        return "extraRepeat";
-                    }
-                    if (itemWithFlashcard.item.actualTimesRepeated === 0) {
-                        return "newFlashcard";
-                    }
-                    return "repetition";
-                });
+
+                const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
+                const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
+                const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
 
                 return (<View>
-                    <SessionSummary newFlashcards={{done: 0, todo: itemsCounter.newFlashcard || 0}}
-                                    repetitions={{done: 0, todo: itemsCounter.repetition || 0}}
-                                    extraRepetitions={{done: 0, todo: itemsCounter.extraRepeat || 0}}
+                    <SessionSummary newFlashcards={newFlashcards}
+                                    dueFlashcards={dueFlashcards}
+                                    reviewFlashcards={reviewFlashcards}
                     />
                     <Flashcard question={flashcard.question} answer={flashcard.answer}
                                evalItemId={evalItem._id}/></View>)
             } else {
-                return <Text>Test</Text>
+                return <Text>no flashcards left</Text>
             }
         }
     }
@@ -91,5 +86,11 @@ export default withRouter(
                 }
             }
         ),
+        graphql(sessionCountQuery, {
+            name: 'sessionCount',
+            options: {
+                fetchPolicy: "network-only",
+            }
+        })
     )(Questions)
 );
