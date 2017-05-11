@@ -73,7 +73,7 @@ type MakeFlashcardsData = {
     flashcardsToExtend?: Array<Object>
 }
 
-async function makeFlashcards ({number: number = 3, flashcardsToExtend = []}: MakeFlashcardsData = {}) {
+async function makeFlashcards ({ number: number = 3, flashcardsToExtend = [] }: MakeFlashcardsData = {}) {
     const addedFlashcards = []
   _.times(number, (index) => {
 
@@ -94,7 +94,12 @@ async function makeFlashcards ({number: number = 3, flashcardsToExtend = []}: Ma
   return addedFlashcards
 }
 
-async function makeItems ({ number = 2, itemsToExtend = [] } = {}) {
+type MakeItemsData = {
+    number?: number,
+    itemsToExtend?: Array<Object>
+}
+
+async function makeItems ({ number: number = 2, itemsToExtend = [] }: MakeItemsData = {}) {
   const addedItems = []
   _.times(number, (index) => {
     let newFlashcard = casual.item
@@ -224,7 +229,7 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     await mongoose.connection.db.collection('lessons').insert({position: 1})
 
     context = {
-      user: null,
+      user: {},
       Users: new UsersRepository(),
       UserDetails: new UserDetailsRepository(),
       Lessons: new LessonsRepository(),
