@@ -1,24 +1,20 @@
+// @flow
+
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
-// import {compose} from 'recompose';
-import _ from 'lodash'
 import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import currentUserQuery from 'queries/currentUser'
-import currentItemsQuery from 'queries/currentItems'
+import sessionCountQuery from 'queries/sessionCount'
 
 class Questions extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
-
   componentWillReceiveProps (nextProps) {
-    if (nextProps.currentItems.loading || nextProps.currentUser.loading) {
+    if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
     }
 
@@ -36,37 +32,50 @@ class Questions extends React.Component {
   }
 
   render () {
-    if (this.props.currentItems.loading || this.props.currentUser.loading) {
+    if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const sessionCount = this.props.sessionCount.SessionCount
 
-      if (itemsWithFlashcard.length > 0) {
-        const flashcard = itemsWithFlashcard[0].flashcard
-        const evalItem = itemsWithFlashcard[0].item
-        const itemsCounter = _.countBy(itemsWithFlashcard, (itemWithFlashcard) => {
-          if (itemWithFlashcard.item.extraRepeatToday) {
-            return 'extraRepeat'
-          }
-          if (itemWithFlashcard.item.actualTimesRepeated === 0) {
-            return 'newFlashcard'
-          }
-          return 'repetition'
-        })
-
-        return <div className='questions'>
-          <SessionSummary newFlashcards={{ done: 0, todo: itemsCounter.newFlashcard || 0 }}
-                          repetitions={{ done: 0, todo: itemsCounter.repetition || 0 }}
-                          extraRepetitions={{ done: 0, todo: itemsCounter.extraRepeat || 0 }}
-          />
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
-        </div>
-      } else {
+      if (!itemsWithFlashcard.length > 0) {
         return <div />
       }
+
+      const flashcard = itemsWithFlashcard[0].flashcard
+      const evalItem = itemsWithFlashcard[0].item
+
+      const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
+      const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
+      const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
+
+      return (
+        <div className='questions'>
+          <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
+          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
+        </div>
+      )
     }
   }
 }
+
+const currentItemsQuery = gql`
+    query CurrentItems {
+        ItemsWithFlashcard {
+            item {
+                _id
+                flashcardId
+                extraRepeatToday
+                actualTimesRepeated
+                timesRepeated
+            }
+            flashcard
+            {
+                _id question answer
+            }
+        }
+    }
+`
 
 export default compose(
   connect(),
@@ -74,6 +83,12 @@ export default compose(
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(currentItemsQuery, {
     name: 'currentItems',
+    options: {
+      forceFetch: true
+    }
+  }),
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
     options: {
       forceFetch: true
     }

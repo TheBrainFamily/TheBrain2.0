@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
@@ -6,6 +8,8 @@ import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 
 import { flashcard } from '../actions'
+
+import sessionCountQuery from 'queries/sessionCount'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
@@ -33,12 +37,10 @@ class Flashcard extends React.Component {
           </div>
           <p>How would you describe experience answering this question?</p>
           <br />
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>Blackout</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(2)}>Terrible</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(3)}>Bad</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(4)}>Hardly</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(5)}>Good</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(6)}>Perfect!</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
+          <button className="button-answer" onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
         </div>
       }
       </div>
@@ -88,7 +90,10 @@ export default compose(
             })
             return updateResults
           }
-        }
+        },
+        refetchQueries: [{
+          query: sessionCountQuery
+        }]
       })
     })
   })
