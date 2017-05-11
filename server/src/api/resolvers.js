@@ -33,6 +33,13 @@ const resolvers = {
         return []
       }
     },
+    SessionCount (root, args, context) {
+      if (context.user) {
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id)
+      } else {
+        return {}
+      }
+    },
     CurrentUser (root, args, context) {
       return context.user
     }
@@ -52,7 +59,7 @@ const resolvers = {
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(2)
+      flashcardIds.splice(4)
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
       })
