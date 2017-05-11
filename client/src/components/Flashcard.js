@@ -9,7 +9,7 @@ import { withRouter } from 'react-router'
 
 import { flashcard } from '../actions'
 
-import sessionCountQuery from 'queries/sessionCount'
+import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
