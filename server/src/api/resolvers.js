@@ -112,7 +112,7 @@ const resolvers = {
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string ) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       return context.Users.updateUser(context.user._id, args.username, args.password)
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
