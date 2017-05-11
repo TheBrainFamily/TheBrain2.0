@@ -50,7 +50,6 @@ const lessonWatchedMutationParams = {
     lessonWatchedMutation: () => mutate({
       updateQueries: {
         Lesson: (prev, { mutationResult }) => {
-          console.log('JMOZGAWA: mutationResult', mutationResult)
           const updateResults = update(prev, {
             Lesson: {
               $set: mutationResult.data.createItemsAndMarkLessonAsWatched
@@ -63,16 +62,7 @@ const lessonWatchedMutationParams = {
   })
 }
 
-// compose(
-//     graphql(currentUserQuery, {name: "currentUser"}),
-//     graphql(currentItemsQuery, {
-//             name: "currentItems",
-//             options: {
-//                 forceFetch: true,
-//             }
-//         }
-//     ),
-// )(Questions)
+
 const logInWithFacebook = gql`
     mutation logInWithFacebook($accessToken: String!){
         logInWithFacebook(accessToken:$accessToken) {
@@ -91,8 +81,6 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logInWithFacebook
