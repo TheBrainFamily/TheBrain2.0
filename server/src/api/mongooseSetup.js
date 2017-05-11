@@ -3,6 +3,8 @@ import moment from 'moment'
 import bcrypt from 'bcrypt'
 import urlencode from 'urlencode'
 
+import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
+
 const dbURI = 'mongodb://localhost/thebrain'
 const productionDBURI = 'mongodb://localhost/thebrain'
 const testingDBURI = 'mongodb://localhost/testing'
@@ -126,9 +128,9 @@ export class ItemsWithFlashcardRepository {
     const currentItems = await Items.find({
       userId,
       $or: [
-        {actualTimesRepeated: 0},
-        {extraRepeatToday: true},
-        {nextRepetition: {$lte: moment().unix()}}
+        { actualTimesRepeated: 0 },
+        { extraRepeatToday: true },
+        { nextRepetition: { $lte: moment().unix() } }
       ]
     })
 
@@ -142,9 +144,20 @@ export class ItemsWithFlashcardRepository {
     }).sort((a, b) => {
       return a.item.lastRepetition - b.item.lastRepetition
     })
-
   }
 
+  async getSessionCount (userId) {
+    const items = await Items.find({
+      userId,
+      $or: [
+        { actualTimesRepeated: 0 },
+        { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
+        { nextRepetition: { $lte: moment().unix() } }
+      ]
+    })
+
+    return getItemsWithFlashcardsByCount(items)
+  }
 }
 
 const UserDetailsSchema = new mongoose.Schema({

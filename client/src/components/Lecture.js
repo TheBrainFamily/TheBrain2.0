@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import YouTube from 'react-youtube'
 import Introduction from './Introduction'
