@@ -88,7 +88,10 @@ export default compose(
         variables: {
           username,
           password
-        }
+        },
+        refetchQueries: [{
+          query: currentUserQuery
+        }]
       })
     })
   }),
