@@ -94,19 +94,22 @@ class BackCard extends React.Component {
     };
 
     render = () => {
+        if (!this.props.flashcard.visibleAnswer) {
+          return null
+        }
         return (
             <Animated.View style={[this.getCardTransformation(), styles.flipCard, styles.flipCardBack]}>
-                { this.props.flashcard.visibleAnswer && <View onResponderMove={this.setPosition}
-                                                              onResponderRelease={this.resetPosition}
-                                                              onStartShouldSetResponder={() => true}
-                                                              onMoveShouldSetResponder={() => true}
-                                                              onResponderGrant={this.setupInitialDrag}>
+                <View onResponderMove={this.setPosition}
+                      onResponderRelease={this.resetPosition}
+                      onStartShouldSetResponder={() => true}
+                      onMoveShouldSetResponder={() => true}
+                      onResponderGrant={this.setupInitialDrag}>
                     <Text style={styles.primaryHeader}>CORRECT ANSWER:</Text>
                     <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
                         <Text style={styles.primaryText}>{this.props.answer}</Text>
                     </View>
                     <Text style={styles.primaryHeader}>SWIPE TO EVALUATE</Text>
-                </View> }
+                </View>
             </Animated.View>
         )
     }
