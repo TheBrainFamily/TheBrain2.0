@@ -1,3 +1,5 @@
+// @flow
+
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
@@ -66,8 +68,13 @@ casual.define('item', function () {
   }
 })
 
-async function makeFlashcards ({number = 3, flashcardsToExtend = []} = {}) {
-  const addedFlashcards = []
+type MakeFlashcardsData = {
+    number?: number,
+    flashcardsToExtend?: Array<Object>
+}
+
+async function makeFlashcards ({ number: number = 3, flashcardsToExtend = [] }: MakeFlashcardsData = {}) {
+    const addedFlashcards = []
   _.times(number, (index) => {
 
       let newFlashcard = casual.flashcard
@@ -87,7 +94,12 @@ async function makeFlashcards ({number = 3, flashcardsToExtend = []} = {}) {
   return addedFlashcards
 }
 
-async function makeItems ({ number = 2, itemsToExtend = [] } = {}) {
+type MakeItemsData = {
+    number?: number,
+    itemsToExtend?: Array<Object>
+}
+
+async function makeItems ({ number: number = 2, itemsToExtend = [] }: MakeItemsData = {}) {
   const addedItems = []
   _.times(number, (index) => {
     let newFlashcard = casual.item
@@ -134,11 +146,11 @@ describe('query.flashcard', () => {
 
     const flashcardsData = await makeFlashcards({flashcardsToExtend})
 
-    const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsToExtend[1]._id},
+    const dbFlashcards = await resolvers.Query.Flashcard(undefined, {_id: flashcardsData[1]._id},
       {Flashcards: new FlashcardsRepository()}
     )
 
-    expect(dbFlashcards._id).toEqual(flashcardsToExtend[1]._id)
+    expect(dbFlashcards._id).toEqual(flashcardsData[1]._id)
   })
 })
 
@@ -217,7 +229,7 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     await mongoose.connection.db.collection('lessons').insert({position: 1})
 
     context = {
-      user: null,
+      user: {},
       Users: new UsersRepository(),
       UserDetails: new UserDetailsRepository(),
       Lessons: new LessonsRepository(),

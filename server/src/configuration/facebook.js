@@ -1,3 +1,5 @@
+// @flow
+
 const facebookIds = {
     appToken: '***REMOVED***',
     clientID: '794881630542767',
