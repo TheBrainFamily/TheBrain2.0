@@ -127,6 +127,7 @@ class Flashcard extends React.Component {
                 <View>
                     <TouchableOpacity onPress={() => this.flipCard()}>
                         <FrontCard dynamicStyles={this.state.dynamicStyles}
+                                   visibleAnswer={this.props.flashcard.visibleAnswer}
                                    question={this.props.question} interpolateCb={this.interpolateWrapper}/>
                         <BackCard dynamicStyles={this.state.dynamicStyles}
                                   interpolateCb={this.interpolateWrapper}
