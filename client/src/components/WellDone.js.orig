@@ -1,0 +1,90 @@
+// @flow
+
+import React from 'react'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import update from 'immutability-helper'
+import { Link } from 'react-router-dom'
+
+
+
+export class WellDone extends React.Component {
+<<<<<<< HEAD
+  responseFacebook = (response: { accessToken: string }) => {
+    console.log(response)
+    this.props.logInWithFacebook({ accessToken: response.accessToken })
+  }
+=======
+  componentDidMount () {
+    this.props.lessonWatchedMutation()
+  }
+
+>>>>>>> 34658024faacd8ea5c969d3220552ce1182d2a09
+
+  render () {
+    return <div className="welldone">
+      First video done! Click: <Link to={`/questions`}>here</Link> to answer some questions about the video
+    </div>
+  }
+}
+
+<<<<<<< HEAD
+const logInWithFacebook = gql`
+    mutation logInWithFacebook($accessToken: String!){
+        logInWithFacebook(accessToken:$accessToken) {
+            _id, username, activated
+        }
+    }
+`
+
+export default compose(
+  graphql(logInWithFacebook, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithFacebook: ({ accessToken }) => mutate({
+        variables: {
+          accessToken
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithFacebook
+              }
+            })
+          }
+        }
+      })
+    })
+  })
+=======
+const lessonWatchedMutationSchema = gql`
+    mutation createItemsAndMarkLessonAsWatched{
+        createItemsAndMarkLessonAsWatched{
+            _id, position, description, flashcardIds, youtubeId
+        }
+    }
+`
+
+const lessonWatchedMutationParams = {
+  props: ({ ownProps, mutate }) => ({
+    lessonWatchedMutation: () => mutate({
+      updateQueries: {
+        Lesson: (prev, { mutationResult }) => {
+          const updateResults = update(prev, {
+            Lesson: {
+              $set: mutationResult.data.createItemsAndMarkLessonAsWatched
+            }
+          })
+          return updateResults
+        }
+      }
+    }),
+  })
+}
+
+
+
+export default compose(
+  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+>>>>>>> 34658024faacd8ea5c969d3220552ce1182d2a09
+)(WellDone)
