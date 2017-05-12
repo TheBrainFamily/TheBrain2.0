@@ -13,7 +13,7 @@ import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Signup extends React.Component {
   componentWillReceiveProps (nextProps) {
-    if (nextProps.currentUser.loading) {
+    if (!nextProps.currentUser || nextProps.currentUser.loading) {
       return
     }
 
