@@ -11,6 +11,8 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
+
 class Lecture extends React.Component {
 
   render () {
@@ -84,7 +86,10 @@ const lessonWatchedMutationParams = {
           })
           return updateResults
         }
-      }
+      },
+      refetchQueries: [{
+        query: currentUserQuery
+      }]
     }),
   })
 }
