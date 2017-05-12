@@ -123,7 +123,7 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
-      async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+    async resetPassword (root: ?string, args: { username: string }, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
