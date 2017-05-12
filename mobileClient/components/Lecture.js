@@ -36,14 +36,6 @@ class LectureVideo extends React.Component {
       };
     }
     render() {
-        // const opts = {
-        //     height: '390',
-        //     width: '640',
-        //     playerVars: { // https://developers.google.com/youtube/player_parameters
-        //         autoplay: 0
-        //     }
-        // };
-
         return (
             <YouTube
                 ref="youtubePlayer"
@@ -56,11 +48,8 @@ class LectureVideo extends React.Component {
                 modestbranding={false}
                 rel={false}
 
-                onReady={(e)=>{this.setState({isReady: true})}}
+
                 onChangeState={this._onChangeState}
-                onChangeQuality={(e)=>{this.setState({quality: e.quality})}}
-                onError={(e)=>{this.setState({error: e.error})}}
-                onProgress={(e)=>{this.setState({currentTime: e.currentTime, duration: e.duration})}}
 
                 style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red', marginVertical: 10}}
             />
@@ -86,7 +75,6 @@ const query = gql`
     }
 `;
 
-// export default Lecture;
 
 export default graphql(query)(Lecture);
 

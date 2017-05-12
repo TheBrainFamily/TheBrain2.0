@@ -1,3 +1,5 @@
+// @flow
+
 import _ from 'lodash'
 
 export function extendExpect() {
@@ -38,7 +40,7 @@ export function extendExpect() {
     });
 }
 
-export function deepFreeze(obj) {
+export function deepFreeze(obj: Object) {
     const propNames = Object.getOwnPropertyNames(obj);
 
     propNames.forEach((name) => {
