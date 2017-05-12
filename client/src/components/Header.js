@@ -54,7 +54,9 @@ const AppHeader = (props) => {
 
   return (
     <div className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
+      <Link to="/">
+        <img src={logo} className="App-logo" alt="logo" />
+      </Link>
       <h2 className="make-it-bigger">Welcome to TheBrain.Pro</h2>
       {!props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
     </div>
