@@ -1,3 +1,5 @@
+// @flow
+
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import OpticsAgent from 'optics-agent';
@@ -150,6 +152,6 @@ app.use('/graphiql', graphiqlExpress({
 
 const server = createServer(app);
 
-server.listen(port, () => console.log( // eslint-disable-line no-console
+server.listen(port, undefined, undefined, () => console.log( // eslint-disable-line no-console
     `API Server is now running on http://localhost:${port}/graphql`,
 ));

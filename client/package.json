@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "apollo-client": "^0.10.1",
+    "apollo-client": "^1.0.0",
     "body-parser": "^1.17.1",
     "bootstrap": "^4.0.0-alpha.6",
     "bootstrap-progress-bar": "^1.1.3",
@@ -14,7 +14,7 @@
     "lodash": "^4.17.4",
     "rc-progress": "^2.0.6",
     "react": "^15.5.3",
-    "react-apollo": "^0.13.3",
+    "react-apollo": "^1.0.0",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
     "react-redux": "^5.0.4",
