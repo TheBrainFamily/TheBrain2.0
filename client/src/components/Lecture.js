@@ -6,10 +6,12 @@ import Introduction from './Introduction'
 import Content from './Content'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+
+import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams';
+import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema';
 
 class Lecture extends React.Component {
 
@@ -63,31 +65,6 @@ const query = gql`
         }
     }
 `
-
-const lessonWatchedMutationSchema = gql`
-    mutation createItemsAndMarkLessonAsWatched{
-        createItemsAndMarkLessonAsWatched{
-            _id, position, description, flashcardIds, youtubeId
-        }
-    }
-`
-
-const lessonWatchedMutationParams = {
-  props: ({ ownProps, mutate }) => ({
-    lessonWatchedMutation: () => mutate({
-      updateQueries: {
-        Lesson: (prev, { mutationResult }) => {
-          const updateResults = update(prev, {
-            Lesson: {
-              $set: mutationResult.data.createItemsAndMarkLessonAsWatched
-            }
-          })
-          return updateResults
-        }
-      }
-    }),
-  })
-}
 
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
