@@ -6,6 +6,7 @@ import {
   View,
   Animated,
 } from 'react-native';
+import TouchableImage from './TouchableImage'
 import styles from '../styles/styles';
 
 export default class FrontCard extends React.Component {
@@ -30,6 +31,7 @@ export default class FrontCard extends React.Component {
         <Text style={styles.primaryHeader}>QUESTION:</Text>
         <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
           <Text style={styles.primaryText}>{this.props.question}</Text>
+          <TouchableImage clickable={!this.props.visibleAnswer}/>
         </View>
         <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
       </Animated.View>
