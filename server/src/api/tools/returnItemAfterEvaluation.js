@@ -1,7 +1,9 @@
+// @flow
+
 import _ from 'lodash'
 import moment from 'moment'
 
-const returnItemAfterEvaluation = function (evaluation, item) {
+const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
   const currentDate = moment()
   const nextRepetitionDate = item.nextRepetition
 
@@ -43,7 +45,7 @@ const returnItemAfterEvaluation = function (evaluation, item) {
 
 export default returnItemAfterEvaluation
 
-const processEvaluation = function (evaluation, easinessFactor, timesRepeated, previousDaysChange) {
+const processEvaluation = function (evaluation: number, easinessFactor: number, timesRepeated: number, previousDaysChange: number) {
   let resetTimesRepeated = false
   const newEasinessFactor = getEasinessFactor(evaluation, easinessFactor)
 
@@ -62,8 +64,8 @@ const processEvaluation = function (evaluation, easinessFactor, timesRepeated, p
   return { daysChange, easinessFactor: newEasinessFactor, resetTimesRepeated }
 }
 
-const getEasinessFactor = function (evaluation, easinessFactor) {
-  const newEasinessFactor = (easinessFactor - 0.8 + (0.28 * evaluation) - (0.02 * evaluation * evaluation)).toFixed(2)
+const getEasinessFactor = function (evaluation: number, easinessFactor: number): number {
+  const newEasinessFactor = parseFloat((easinessFactor - 0.8 + (0.28 * evaluation) - (0.02 * evaluation * evaluation)).toFixed(2))
 
   if (newEasinessFactor <= 1.3) {
     return 1.3
