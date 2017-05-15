@@ -13,41 +13,41 @@ export default class SessionSummary extends React.Component {
 
     return (
       <div>
-        <div className="session-summary">
+        <div className='session-summary'>
           New: {newFlashcards.done} / {newFlashcards.total}
-          <Circle className="progress-bar"
-                percent={newFlashcardsProgress}
-                trailWidth="4"
-                strokeWidth="18"
-                strokeColor="#C8B600"
-                trailColor="#AA9F39"
-                strokeLinecap="square"
+          <Circle className='progress-bar'
+            percent={newFlashcardsProgress}
+            trailWidth='4'
+            strokeWidth='18'
+            strokeColor='#C8B600'
+            trailColor='#AA9F39'
+            strokeLinecap='square'
           />
         </div>
 
         { (dueFlashcards.total > 0) &&
-          <div className="session-summary">
+          <div className='session-summary'>
             Due: {dueFlashcards.done} / {dueFlashcards.total}
-            <Circle className="progress-bar"
-                    percent={dueFlashcardsProgress}
-                    trailWidth="4"
-                    strokeWidth="18"
-                    strokeColor="#FF0000"
-                    trailColor="#AA3939"
-                    strokeLinecap="square"
+            <Circle className='progress-bar'
+              percent={dueFlashcardsProgress}
+              trailWidth='4'
+              strokeWidth='18'
+              strokeColor='#FF0000'
+              trailColor='#AA3939'
+              strokeLinecap='square'
             />
           </div>
         }
 
-        <div className="session-summary">
+        <div className='session-summary'>
           Review: {reviewFlashcards.done} / {reviewFlashcards.total}
-          <Circle className="progress-bar"
-                  percent={reviewFlashcardsProgress}
-                  trailWidth="4"
-                  strokeWidth="18"
-                  strokeColor="#0388A7"
-                  trailColor="#303E73"
-                  strokeLinecap="square"
+          <Circle className='progress-bar'
+            percent={reviewFlashcardsProgress}
+            trailWidth='4'
+            strokeWidth='18'
+            strokeColor='#0388A7'
+            trailColor='#303E73'
+            strokeLinecap='square'
           />
         </div>
         <br />
