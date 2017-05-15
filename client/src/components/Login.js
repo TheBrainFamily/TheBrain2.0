@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 
 class Login extends React.Component {
   state = {
-    error: '',
+    error: ''
   }
 
   submit = (e) => {
@@ -25,25 +25,24 @@ class Login extends React.Component {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
-
   }
 
   render () {
     return (
       <form onSubmit={this.submit}>
         {this.state.error &&
-          <div className="text-error">{ this.state.error }</div>
+          <div className='text-error'>{ this.state.error }</div>
         }
         <div>
           <label>Username:</label>
-          <input ref="username" type="text" name="username" />
+          <input ref='username' type='text' name='username' />
         </div>
         <div>
           <label>Password:</label>
-          <input ref="password" type="password" name="password" />
+          <input ref='password' type='password' name='password' />
         </div>
         <div>
-          <input type="submit" value="Log In" />
+          <input type='submit' value='Log In' />
         </div>
       </form>)
   }
