@@ -36,6 +36,18 @@
     "preset": "react-native"
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "beforeAll",
+      "after",
+      "afterEach",
+      "afterAll",
+      "it",
+      "expect"
+    ]
   }
 }
