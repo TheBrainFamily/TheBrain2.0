@@ -23,25 +23,22 @@ import store, { client } from './store'
 export default class App extends Component {
   render () {
     return (
-            <ApolloProvider client={client} store={store}>
-                <NativeRouter>
-                    <View style={styles.mainPage}>
-                        <View style={styles.topContainer}/>
-                        <View>
-                            <Route exact path="/" component={Lecture}/>
-                            <Route exact path="/wellDone" component={WellDone}/>
-                            <Route exact path="/questions" component={Questions}/>
-                            <Route exact path="/signup" component={Signup}/>
+      <ApolloProvider client={client} store={store}>
+        <NativeRouter>
+          <View style={styles.mainPage}>
+            <View style={styles.topContainer} />
+            <View>
+              <Route exact path='/' component={Lecture} />
+              <Route exact path='/wellDone' component={WellDone} />
+              <Route exact path='/questions' component={Questions} />
+              <Route exact path='/signup' component={Signup} />
 
-                        </View>
-                    </View>
-                </NativeRouter>
-            </ApolloProvider>
+            </View>
+          </View>
+        </NativeRouter>
+      </ApolloProvider>
     )
   }
 };
-
-{ /* <Route exact key="lecture" path="/lecture" component={Lecture}/> */
-}
 
 AppRegistry.registerComponent('mobileClient', () => App)
