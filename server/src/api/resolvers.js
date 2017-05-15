@@ -102,6 +102,7 @@ const resolvers = {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
+        throw new Error('Wrong username or password')
       } catch (e) {
         throw e
       }
