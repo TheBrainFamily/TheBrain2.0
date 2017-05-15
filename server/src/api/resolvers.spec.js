@@ -3,7 +3,6 @@
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
-import jest from 'jest'
 
 import resolvers from './resolvers'
 import {

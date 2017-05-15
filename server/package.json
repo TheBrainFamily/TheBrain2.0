@@ -73,7 +73,8 @@
       "afterEach",
       "afterAll",
       "it",
-      "expect"
+      "expect",
+      "jest"
     ]
   }
 }
