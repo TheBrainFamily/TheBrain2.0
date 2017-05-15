@@ -12,6 +12,10 @@ import update from 'immutability-helper'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Signup extends React.Component {
+  state = {
+    error: '',
+  }
+
   componentWillReceiveProps (nextProps) {
     if (!nextProps.currentUser || nextProps.currentUser.loading) {
       return
@@ -24,9 +28,15 @@ class Signup extends React.Component {
 
   submit = (e) => {
     e.preventDefault()
+    this.setState({ error: '' })
+
     this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
       .then(() => {
         this.props.dispatch(push('/'))
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
       })
   }
   responseFacebook = (response: { accessToken: string }) => {
@@ -41,6 +51,9 @@ class Signup extends React.Component {
 
     return (
       <form onSubmit={this.submit}>
+        {this.state.error &&
+          <div className="text-error">{ this.state.error }</div>
+        }
         <div>
           <label>Username:</label>
           <input ref="username" type="text" name="username" />
