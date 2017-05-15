@@ -8,16 +8,15 @@ import update from 'immutability-helper'
 import FrontCard from './FrontCard'
 import BackCard from './BackCard'
 import EmojiWrapper from './EmojiWrapper'
-import type { Direction } from '../helpers/SwipeHelpers'
-import { DIRECTIONS } from '../helpers/SwipeHelpers'
+import {DIRECTIONS} from '../helpers/SwipeHelpers'
+import type {Direction} from '../helpers/SwipeHelpers'
 
 import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
     Animated,
-    View,
-    Text
+    View
 } from 'react-native'
 
 import styles from '../styles/styles'

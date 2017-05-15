@@ -47,7 +47,8 @@
       "afterEach",
       "afterAll",
       "it",
-      "expect"
+      "expect",
+      "$Keys"
     ]
   }
 }

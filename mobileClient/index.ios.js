@@ -1,14 +1,12 @@
 // @flow
 
 import React, {Component} from 'react'
-import {ApolloClient, ApolloProvider, createNetworkInterface} from 'react-apollo'
+import {ApolloProvider} from 'react-apollo'
 import {
     AppRegistry,
-    StyleSheet,
-    Text,
     View
 } from 'react-native'
-import {NativeRouter, Route, Link} from 'react-router-native'
+import {NativeRouter, Route} from 'react-router-native'
 
 // import Home from './components/Home';
 import WellDone from './components/WellDone'

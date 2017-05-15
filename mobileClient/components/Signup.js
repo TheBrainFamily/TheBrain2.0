@@ -26,7 +26,7 @@ class Signup extends React.Component {
         ref={(fbLogin) => {
           this.fbLogin = fbLogin
         }}
-        permissions={['email' ]}
+        permissions={['email']}
         loginBehavior={FBLoginManager.LoginBehaviors.Native}
         onLogin={(data) => {
           console.log('Logged in!')
