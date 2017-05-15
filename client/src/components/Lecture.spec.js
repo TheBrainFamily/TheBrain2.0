@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { LectureVideo } from './Lecture'
+import jest from 'jest'
 
 describe('LectureVideo component', () => {
   it('should mark a lesson as watched', () => {
