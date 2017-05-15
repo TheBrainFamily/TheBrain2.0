@@ -8,6 +8,8 @@ import update from 'immutability-helper'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
+
 class Login extends React.Component {
   state = {
     error: '',
@@ -76,7 +78,10 @@ export default compose(
               }
             })
           }
-        }
+        },
+        refetchQueries: [{
+          query: currentLessonQuery
+        }]
       })
     })
   })

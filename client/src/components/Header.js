@@ -2,11 +2,14 @@
 
 import React from 'react'
 import { graphql } from 'react-apollo'
+import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+
 import logo from './../logo_thebrain.jpg'
+
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import { Link } from 'react-router-dom'
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
@@ -27,7 +30,7 @@ const logOutQuery = gql`
     mutation logOut {
         logOut {
             _id, username, activated
-        }  
+        }
     }
 `
 
@@ -44,7 +47,10 @@ const LoginSwitcherWithGraphQl = graphql(logOutQuery, {
             }
           })
         }
-      }
+      },
+      refetchQueries: [{
+        query: currentLessonQuery
+      }]
     })
   })
 })(LoginSwitcher)
