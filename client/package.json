@@ -115,7 +115,8 @@
       "after",
       "afterEach",
       "it",
-      "expect"
+      "expect",
+      "jest"
     ]
   }
 }
