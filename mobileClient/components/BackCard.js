@@ -10,7 +10,7 @@ import {
 
 import styles from '../styles/styles';
 import {updateAnswerVisibility} from '../actions/FlashcardActions';
-import { calculateSwipeDirection, calculateDragLength, directionEvaluationValue } from '../helpers/SwipeHelpers';
+import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers';
 
 class BackCard extends React.Component {
     backInterpolate: number;
@@ -49,14 +49,14 @@ class BackCard extends React.Component {
     };
 
     isDragLongEnough = () => {
-        const dragLen = calculateDragLength(this.state.position.x, this.state.position.y);
+        const dragLen = getDragLength(this.state.position.x, this.state.position.y);
         return dragLen > 100;
     };
 
     resetPosition = (e) => {
-        const direction = calculateSwipeDirection(this.state.position.x, this.state.position.y);
+        const direction = getSwipeDirection(this.state.position.x, this.state.position.y);
         if (this.isDragLongEnough()) {
-            const evaluationValue = directionEvaluationValue(direction);
+            const evaluationValue = getDirectionEvaluationValue(direction);
             this.onSubmitEvaluation(evaluationValue);
         }
         //Reset on release
@@ -79,8 +79,8 @@ class BackCard extends React.Component {
         const x = this.state.position.x + (event.nativeEvent.pageX - this.drag.x);
         const y = this.state.position.y + (event.nativeEvent.pageY - this.drag.y);
         this.setState({position: {x, y}});
-        const dragLen = calculateDragLength(this.state.position.x, this.state.position.y);
-        const swipeDirection = calculateSwipeDirection(this.state.position.x, this.state.position.y);
+        const dragLen = getDragLength(this.state.position.x, this.state.position.y);
+        const swipeDirection = getSwipeDirection(this.state.position.x, this.state.position.y);
         this.props.updateSwipeStateCb(swipeDirection, dragLen);
 
         //Set our drag to be the new position so our delta can be calculated next time correctly
