@@ -10,13 +10,11 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams';
-import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema';
+import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
+import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 
 class Lecture extends React.Component {
-
   render () {
-
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
     }
@@ -25,7 +23,7 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
-    return <div id="video">
+    return <div id='video'>
       <Introduction />
       <Content />
       <LectureVideoWithRouter lesson={this.props.data.Lesson} />
@@ -73,4 +71,3 @@ const LectureVideoWithRouter = compose(
 )(LectureVideo)
 
 export default graphql(query)(Lecture)
-

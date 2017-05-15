@@ -45,21 +45,36 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
     "babel-jest": "^19.0.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
     "babel-preset-flow": "^6.23.0",
     "casual": "^1.5.12",
     "codecov": "^2.1.0",
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0",
     "flow-bin": "^0.40.0",
     "graphql-tools": "^0.10.1",
     "jest": "^19.0.2",
     "nodemon": "^1.11.0",
-    "standard": "^10.0.1",
+    "standard": "^10.0.2",
     "testdouble": "^2.1.2"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "flow-typed/**/*"
+    ],
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "beforeAll",
+      "after",
+      "afterEach",
+      "afterAll",
+      "it",
+      "expect",
+      "jest"
+    ]
   }
 }

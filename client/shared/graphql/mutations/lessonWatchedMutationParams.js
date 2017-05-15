@@ -5,7 +5,7 @@ export default {
     lessonWatchedMutation: () => mutate({
       updateQueries: {
         Lesson: (prev, { mutationResult }) => {
-          console.log('PINGWIN: mutationResult', mutationResult);
+          console.log('PINGWIN: mutationResult', mutationResult)
           const updateResults = update(prev, {
             Lesson: {
               $set: mutationResult.data.createItemsAndMarkLessonAsWatched
@@ -14,6 +14,6 @@ export default {
           return updateResults
         }
       }
-    }),
+    })
   })
 }

@@ -112,9 +112,9 @@ const resolvers = {
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
-      return context.Users.updateUser(context.user._id, args.username, args.password)
-    },
+    // async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+    //   return context.Users.updateUser(context.user._id, args.username, args.password)
+    // },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
       const item = await context.Items.getItemById(args.itemId, context.user._id)
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
@@ -123,7 +123,7 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
-      async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
@@ -143,7 +143,7 @@ const resolvers = {
 //
 process.on('unhandledRejection', (reason) => {
   // console.log('Reason: ' + reason)
-  throw (reason);
+  throw (reason)
 })
 
 export default resolvers
