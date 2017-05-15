@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
 
@@ -58,14 +59,6 @@ export class LectureVideo extends React.Component {
   }
 }
 
-const query = gql`
-    query Lesson {
-        Lesson {
-            _id, position, description, flashcardIds, youtubeId
-        }
-    }
-`
-
 const lessonWatchedMutationSchema = gql`
     mutation createItemsAndMarkLessonAsWatched{
         createItemsAndMarkLessonAsWatched{
@@ -100,5 +93,5 @@ const LectureVideoWithRouter = compose(
   connect()
 )(LectureVideo)
 
-export default graphql(query)(Lecture)
+export default graphql(currentLessonQuery)(Lecture)
 
