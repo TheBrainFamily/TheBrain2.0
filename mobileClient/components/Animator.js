@@ -13,43 +13,46 @@ export default class Animator {
   }
 
   updateFinalDimension(attrName, value) {
-    this.animations[attrName].final = value;
+    if(this.animations && this.animations[ attrName ]) {
+      this.animations[attrName].final = value
+    }
   }
 
   resetAnimations() {
-    this.firstPhase = true;
+    this.firstPhase = true
     _.forEach(this.animations, (animatedStyle) => {
-      animatedStyle.animatedValue.setValue(animatedStyle.initial);
+      animatedStyle.animatedValue.setValue(animatedStyle.initial)
     });
   }
 
   getStyle() {
     const style = {}
     _.forEach(this.animations, (animatedStyle, attrName) => {
-      style[attrName] = animatedStyle.animatedValue;
+      style[attrName] = animatedStyle.animatedValue
     });
-    return style;
+    return style
   }
 
-  startAnimations(twoPhase = false) {
-    let animationContainer = [];
+  startAnimations(twoPhase = true) {
+    let animationContainer = []
 
-    _.forEach(this.animations, (animatedStyle) => {
-      let initialValue = this.firstPhase? animatedStyle.initial : animatedStyle.final;
-      let finalValue = this.firstPhase? animatedStyle.final : animatedStyle.initial;
+    _.forEach(this.animations, (animatedStyle, attr) => {
+      let initialValue = this.firstPhase? animatedStyle.initial : animatedStyle.final
+      let finalValue = this.firstPhase? animatedStyle.final : animatedStyle.initial
 
-      animatedStyle.animatedValue.setValue(initialValue);
+      animatedStyle.animatedValue.setValue(initialValue)
       let animation = Animated.spring(
         animatedStyle.animatedValue,
         {
           toValue: finalValue
         }
-      );
-      animationContainer.push(animation);
-    });
+      )
+      console.log(attr, finalValue)
+      animationContainer.push(animation)
+    })
 
-    Animated.parallel(animationContainer).start();
+    Animated.parallel(animationContainer).start()
 
-    if(twoPhase) this.firstPhase = !this.firstPhase;
+    if(twoPhase) this.firstPhase = !this.firstPhase
   }
 }
