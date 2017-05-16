@@ -5,11 +5,11 @@ import {
   Animated,
   Image,
   TouchableWithoutFeedback,
-  Text,
   View,
   Dimensions,
   StyleSheet
 } from 'react-native';
+import Animator from './Animator'
 import styles from '../styles/styles';
 
 export default class TouchableImage extends React.Component {
@@ -37,56 +37,29 @@ export default class TouchableImage extends React.Component {
     const { width, height } = Dimensions.get('window');
 
     this.state = {
-      enlarged: false,
-      heightAnimation: new Animated.Value(),
-      widthAnimation: new Animated.Value(),
-      flashcardHeight: this.getFlashcardContentHeight(height),
-      flashcardWidth: width,
+      animator: new Animator({
+        width: {
+          initial: this.imageProperties.style.width,
+          final: width,
+        },
+        height: {
+          initial: this.imageProperties.style.height,
+          final: this.getFlashcardContentHeight(height),
+        },
+        right: {
+          initial: 30,
+          final: 0
+        },
+        top: {
+          initial: 30,
+          final: 0
+        }
+      })
     };
   }
 
   componentWillReceiveProps() {
-    this.setState({ enlarged: false });
-    this.state.heightAnimation.setValue(this.imageProperties.style.height);
-    this.state.widthAnimation.setValue(this.imageProperties.style.width);
-  }
-
-  changeImageSize = (event) => {
-
-    let initialHeightValue, finalHeightValue, initialWidthValue, finalWidthValue;
-
-    if (!this.state.enlarged) {
-      this.setState({ enlarged: true });
-      initialHeightValue = this.imageProperties.style.height;
-      initialWidthValue = this.imageProperties.style.width;
-      finalHeightValue = this.state.flashcardHeight;
-      finalWidthValue = this.state.flashcardWidth;
-    } else {
-      this.setState({ enlarged: false });
-      initialHeightValue = this.state.flashcardHeight;
-      initialWidthValue = this.state.flashcardWidth;
-      finalHeightValue = this.imageProperties.style.height;
-      finalWidthValue = this.imageProperties.style.width;
-    }
-
-    this.state.heightAnimation.setValue(initialHeightValue);
-    this.state.widthAnimation.setValue(initialWidthValue);
-
-    Animated.parallel([
-      Animated.spring(
-        this.state.heightAnimation,
-        {
-          toValue: finalHeightValue
-        }
-      ),
-      Animated.spring(
-        this.state.widthAnimation,
-        {
-          toValue: finalWidthValue
-        }
-      ),
-      ]
-    ).start();
+    this.state.animator.resetAnimations();
   }
 
   getFlashcardContentHeight = (height) => {
@@ -99,21 +72,15 @@ export default class TouchableImage extends React.Component {
 
   onLayout = () => {
     const { width, height } = Dimensions.get('window');
-    this.setState({
-      flashcardHeight: this.getFlashcardContentHeight(height),
-      flashcardWidth: width,
-    });
-    this.state.heightAnimation.setValue(this.imageProperties.style.height);
-    this.state.widthAnimation.setValue(this.imageProperties.style.width);
+    this.state.animator.updateFinalDimension('width', width);
+    this.state.animator.updateFinalDimension('height', this.getFlashcardContentHeight(height));
   }
 
   render = () => {
     return (
-      <View onLayout={this.onLayout}
-            style={[this.layoutStyle, {width: '100%', height: '100%'}]}
-            >
-        <Animated.View style={ [this.layoutStyle, { right: 0, width: this.state.widthAnimation, height: this.state.heightAnimation}] }>
-          <TouchableWithoutFeedback onPress={this.changeImageSize}>
+      <View onLayout={this.onLayout} style={[this.layoutStyle, {width: '100%', height: '100%'}]}>
+        <Animated.View style={ [this.layoutStyle, this.state.animator.getStyle()] }>
+          <TouchableWithoutFeedback onPress={() => { this.state.animator.startAnimations(true) }}>
             <Image
               style={{width: '100%', height: '100%'}}
               source={{uri: this.imageProperties.source}}
