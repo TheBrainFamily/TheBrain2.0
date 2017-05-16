@@ -31,7 +31,7 @@ export default class FrontCard extends React.Component {
         <Text style={styles.primaryHeader}>QUESTION:</Text>
         <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
           <Text style={styles.primaryText}>{this.props.question}</Text>
-          <TouchableImage clickable={!this.props.visibleAnswer}/>
+          <TouchableImage/>
         </View>
         <Text style={styles.primaryHeader}>SHOW ANSWER</Text>
       </Animated.View>
