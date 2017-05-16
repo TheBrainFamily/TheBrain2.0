@@ -53,6 +53,14 @@ export default class TouchableImage extends React.Component {
         top: {
           initial: 30,
           final: 0
+        },
+        shadowRadius: {
+          initial: 4,
+          final: 10
+        },
+        shadowOpacity: {
+          initial: 0.5,
+          final: 1
         }
       })
     };
@@ -62,6 +70,7 @@ export default class TouchableImage extends React.Component {
     this.state.animator.resetAnimations();
   }
 
+  //should be exported/imported, duplicate code
   getFlashcardContentHeight = (height) => {
     const heightOfOtherElements =
       StyleSheet.flatten(styles.topContainer).height +
@@ -79,7 +88,12 @@ export default class TouchableImage extends React.Component {
   render = () => {
     return (
       <View onLayout={this.onLayout} style={[this.layoutStyle, {width: '100%', height: '100%'}]}>
-        <Animated.View style={ [this.layoutStyle, this.state.animator.getStyle()] }>
+        <Animated.View style=
+                         { [
+                           this.layoutStyle,
+                           { backgroundColor: 'transparent', shadowColor: 'black', shadowOffset: {width: 4, height: 4} },
+                           this.state.animator.getStyle()]
+                         }>
           <TouchableWithoutFeedback onPress={() => { this.state.animator.startAnimations(true) }}>
             <Image
               style={{width: '100%', height: '100%'}}
