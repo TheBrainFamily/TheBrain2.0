@@ -34,11 +34,10 @@ export default class Animator {
   startAnimations(twoPhase = false) {
     let animationContainer = [];
 
-    _.forEach(this.animations, (animatedStyle, attrName) => {
+    _.forEach(this.animations, (animatedStyle) => {
       let initialValue = this.firstPhase? animatedStyle.initial : animatedStyle.final;
       let finalValue = this.firstPhase? animatedStyle.final : animatedStyle.initial;
 
-      console.log(attrName, initialValue, finalValue);
       animatedStyle.animatedValue.setValue(initialValue);
       let animation = Animated.spring(
         animatedStyle.animatedValue,
