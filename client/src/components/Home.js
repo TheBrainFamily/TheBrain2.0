@@ -2,10 +2,11 @@
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+
+import currentItemsExistQuery from '../../shared/graphql/queries/currentItemsExist'
 
 class Home extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -33,17 +34,8 @@ class Home extends React.Component {
   }
 }
 
-const query = gql`
-    query CurrentItemsExist {
-        ItemsWithFlashcard {
-            item {
-                _id
-            }
-        }
-    }
-`
 export default compose(
   connect(),
   withRouter,
-  graphql(query)
+  graphql(currentItemsExistQuery)
 )(Home)
