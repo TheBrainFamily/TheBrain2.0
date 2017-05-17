@@ -10,6 +10,7 @@ import BackCard from './BackCard';
 import EmojiWrapper from './EmojiWrapper';
 import type { Direction } from '../helpers/SwipeHelpers';
 import { DIRECTIONS } from '../helpers/SwipeHelpers';
+import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount';
 
 import {
     TouchableOpacity,
@@ -176,7 +177,10 @@ export default graphql(submitEval, {
                     });
                     return updateResults;
                 }
-            }
+            },
+            refetchQueries: [{
+                query: sessionCountQuery
+            }]
         })
     })
 })(connect(state => state)(Flashcard));
