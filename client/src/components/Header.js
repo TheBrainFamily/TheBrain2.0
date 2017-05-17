@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { withApollo, graphql } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
@@ -9,12 +9,14 @@ import update from 'immutability-helper'
 import logo from './../logo_thebrain.jpg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
     e.preventDefault()
     this.props.logout()
+      .then(() => {
+        this.props.client.resetStore()
+      })
   }
 
   render () {
@@ -34,7 +36,7 @@ const logOutQuery = gql`
     }
 `
 
-const LoginSwitcherWithGraphQl = graphql(logOutQuery, {
+const LoginSwitcherWithGraphQl = withApollo(graphql(logOutQuery, {
   props: ({ ownProps, mutate }) => ({
     logout: () => mutate({
       updateQueries: {
@@ -47,13 +49,10 @@ const LoginSwitcherWithGraphQl = graphql(logOutQuery, {
             }
           })
         }
-      },
-      refetchQueries: [{
-        query: currentLessonQuery
-      }]
+      }
     })
   })
-})(LoginSwitcher)
+})(LoginSwitcher))
 
 const AppHeader = (props) => {
   const currentUser = props.data.CurrentUser
