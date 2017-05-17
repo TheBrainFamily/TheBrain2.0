@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Animator from './Animator'
+import NetworkImage from './NetworkImage'
 
 export default class TouchableImage extends React.Component {
   layoutStyle: Object
@@ -35,11 +36,10 @@ export default class TouchableImage extends React.Component {
     return (
       <Animated.View style={[ this.layoutStyle, this.props.style, this.state.animator.getStyle() ]}>
         <TouchableWithoutFeedback onPress={() => { this.state.animator.startAnimations() }}>
-          <Image
+          <NetworkImage
             style={{ width: '100%', height: '100%' }}
             source={{ uri: this.props.imageProperties.source }}
             resizeMode={ this.props.imageProperties.resizeMode }
-            resizeMethod={'resize'}
           />
         </TouchableWithoutFeedback>
       </Animated.View>
