@@ -1,34 +1,42 @@
 // @flow
-import _ from 'lodash'
 
 export const DIRECTIONS = {
-    'left': 'left',
-    'top': 'top',
-    'right': 'right',
-    'bottom': 'bottom'
+  'left': 'left',
+  'top': 'top',
+  'right': 'right',
+  'bottom': 'bottom'
 }
 
 export type Direction = $Keys<typeof DIRECTIONS>
 
-const directionKeys = {
+const directionMap = {
   '1': 'left',
   '2': 'top',
   '3': 'right',
   '4': 'bottom'
 }
 
-const directionEvaluationValues = _.invert(directionKeys);
-
-export function calculateSwipeDirection (x: number, y: number): Direction {
-  const angleDeg = Math.atan2(y - 0, x - 0) * 180 / Math.PI;
-  const directionValue = (Math.round(angleDeg / 90) + 2) % 4 + 1;
-  return directionKeys[directionValue];
+const directionEvaluationMap = {
+  'left': 2.5,
+  'top': 6,
+  'right': 4.5,
+  'bottom': 1
 }
 
-export function calculateDragLength (x: number, y: number) {
-  return Math.sqrt((Math.pow(y, 2) + Math.pow(x, 2)));
+export function getSwipeDirection (x: number, y: number): Direction {
+  const angleInRadians = Math.atan2(y, x)
+  const angle = angleInRadians * 180 / Math.PI // angle between -180 (exclusive) to 180 (inclusive)
+  const shiftedAngle = angle + 180 // shifted angle to operate on positive values (from 0 (exclusive) to 360 (inclusive))
+
+  const directionValue = Math.round(shiftedAngle / 90) % 4 + 1 // map angle to values 1, 2, 3, 4
+
+  return directionMap[directionValue]
 }
 
-export function directionEvaluationValue (direction: Direction): number {
-  return directionEvaluationValues[direction];
+export function getDragLength (x: number, y: number) {
+  return Math.sqrt((Math.pow(y, 2) + Math.pow(x, 2)))
+}
+
+export function getDirectionEvaluationValue (direction: Direction): number {
+  return directionEvaluationMap[direction]
 }
