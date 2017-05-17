@@ -10,7 +10,7 @@ import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
 
-// import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
+import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Login extends React.Component {
   constructor (props) {
@@ -114,9 +114,9 @@ export default compose(
             })
           }
         },
-        // refetchQueries: [{
-        //   query: currentLessonQuery
-        // }]
+        refetchQueries: [{
+          query: currentLessonQuery
+        }]
       })
     })
   })
