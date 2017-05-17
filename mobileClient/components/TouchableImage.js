@@ -5,11 +5,12 @@ import {
   Animated,
   Image,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
 import Animator from './Animator'
 
 export default class TouchableImage extends React.Component {
+  layoutStyle: Object
+  state: Object
   constructor(props: Object) {
     super(props)
 
@@ -25,7 +26,7 @@ export default class TouchableImage extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Object) {
     this.setState({ animator: new Animator(nextProps.animator)});
     this.state.animator.resetAnimations()
   }
@@ -38,6 +39,7 @@ export default class TouchableImage extends React.Component {
             style={{ width: '100%', height: '100%' }}
             source={{ uri: this.props.imageProperties.source }}
             resizeMode={ this.props.imageProperties.resizeMode }
+            resizeMethod={'resize'}
           />
         </TouchableWithoutFeedback>
       </Animated.View>
