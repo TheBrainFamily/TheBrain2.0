@@ -61,7 +61,7 @@ const resolvers = {
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(4)
+      flashcardIds.splice(1)
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
       })
@@ -123,7 +123,7 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
-      async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+      async resetPassword (root: ?string, args: { username: string, password: string }, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
