@@ -44,10 +44,10 @@ export default class Animator {
       let animation = Animated.spring(
         animatedStyle.animatedValue,
         {
-          toValue: finalValue
+          toValue: finalValue,
+          friction: animatedStyle.friction,
         }
       )
-      console.log(attr, finalValue)
       animationContainer.push(animation)
     })
 

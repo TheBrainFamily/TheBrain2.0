@@ -16,6 +16,8 @@ export default class TouchableImage extends React.Component {
     this.layoutStyle = {
       position: 'absolute',
       zIndex: 9999,
+      width: '100%',
+      height: '100%'
     }
 
     this.state = {
@@ -23,24 +25,22 @@ export default class TouchableImage extends React.Component {
     }
   }
 
-  componentWillReceiveProps() {
-    this.setState({ animator: new Animator(this.props.animator)});
+  componentWillReceiveProps(nextProps) {
+    this.setState({ animator: new Animator(nextProps.animator)});
     this.state.animator.resetAnimations()
   }
 
   render = () => {
     return (
-      <View style={[ this.layoutStyle, { width: '100%', height: '100%' } ]}>
-        <Animated.View style={[ this.layoutStyle, this.props.style, this.state.animator.getStyle() ]}>
-          <TouchableWithoutFeedback onPress={() => { this.state.animator.startAnimations() }}>
-            <Image
-              style={{ width: '100%', height: '100%' }}
-              source={{ uri: this.props.imageProperties.source }}
-              resizeMode={ this.props.imageProperties.resizeMode }
-            />
-          </TouchableWithoutFeedback>
-        </Animated.View>
-      </View>
+      <Animated.View style={[ this.layoutStyle, this.props.style, this.state.animator.getStyle() ]}>
+        <TouchableWithoutFeedback onPress={() => { this.state.animator.startAnimations() }}>
+          <Image
+            style={{ width: '100%', height: '100%' }}
+            source={{ uri: this.props.imageProperties.source }}
+            resizeMode={ this.props.imageProperties.resizeMode }
+          />
+        </TouchableWithoutFeedback>
+      </Animated.View>
     )
   }
 }
