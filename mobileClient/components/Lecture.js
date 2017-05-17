@@ -40,7 +40,7 @@ class LectureVideo extends React.Component {
             <YouTube
                 ref="youtubePlayer"
                 videoId={this.props.lesson.youtubeId} // The YouTube video ID
-                play={true}           // control playback of video with true/false
+                play={false}           // control playback of video with true/false
                 hidden={false}        // control visiblity of the entire view
                 playsInline={false}    // control whether the video should play inline
                 loop={false}          // control whether the video should loop when ended
@@ -51,7 +51,7 @@ class LectureVideo extends React.Component {
 
                 onChangeState={this._onChangeState}
 
-                style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red', marginVertical: 10}}
+                style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red'}}
             />
 
         );
