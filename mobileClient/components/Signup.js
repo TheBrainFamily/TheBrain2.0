@@ -16,6 +16,7 @@ class Signup extends React.Component {
     super(props)
 
     this.state = {
+      error: '',
       username: 'test',
       password: 'test',
     }
@@ -64,11 +65,17 @@ class Signup extends React.Component {
   // }
 
   submit = () => {
+    this.setState({ error: '' })
+
     console.log('* LOG * signup this.state', this.state)
     this.props.signup({ username: this.state.username, password: this.state.password })
       .then(() => {
         console.log('* LOG * success sign up')
         this.props.history.push('/')
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
       })
   }
 
@@ -83,6 +90,12 @@ class Signup extends React.Component {
 
         <View style={{ alignItems: 'center' }}>
           <View style={[styles.form]}>
+            {this.state.error ?
+              <Text style={styles.errorText}>{ this.state.error }</Text>
+              :
+              <Text />
+            }
+
             <TextInput
               style={styles.textInput}
               autoFocus={true}
