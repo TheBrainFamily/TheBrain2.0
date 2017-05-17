@@ -28,7 +28,8 @@
     "babel-jest": "19.0.0",
     "concurrently": "^3.4.0",
     "jest": "19.0.2",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "react-test-renderer": "16.0.0-alpha.6",
+    "standard": "^10.0.2"
   },
   "jest": {
     "preset": "react-native"
