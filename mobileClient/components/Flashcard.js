@@ -18,7 +18,6 @@ import {
     Dimensions,
     Animated,
     View,
-    Text,
 } from 'react-native';
 
 import styles from '../styles/styles';
@@ -46,7 +45,10 @@ class Flashcard extends React.Component {
                 height: windowDimensions.height,
             },
             dynamicStyles: {
-                content: this.getCardDynamicContentStyle(0, 0),
+                content: this.getCardDynamicContentStyle(
+                  windowDimensions.width,
+                  windowDimensions.height
+                ),
             },
             swipeDirection: DIRECTIONS.left,
             dragLen: 0,
@@ -103,6 +105,7 @@ class Flashcard extends React.Component {
             2 * StyleSheet.flatten(styles.primaryHeader).height;
         return {
             height: height - heightOfOtherElements,
+            width,
         };
     };
 
@@ -128,7 +131,8 @@ class Flashcard extends React.Component {
                 <View>
                     <TouchableOpacity onPress={() => this.flipCard()}>
                         <FrontCard dynamicStyles={this.state.dynamicStyles}
-                                   question={this.props.question} interpolateCb={this.interpolateWrapper}/>
+                                   question={this.props.question}
+                                   interpolateCb={this.interpolateWrapper}/>
                         <BackCard dynamicStyles={this.state.dynamicStyles}
                                   interpolateCb={this.interpolateWrapper}
                                   flipCardCb={this.flipCard}
