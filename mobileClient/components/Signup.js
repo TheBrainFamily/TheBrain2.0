@@ -28,49 +28,16 @@ class Signup extends React.Component {
     }
 
     if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
-      // nextProps.dispatch(push('/'))
       console.log('going to /')
       nextProps.history.push('/')
     }
   }
 
-  // componentDidUpdate () {
-  //   if (this.props.currentUser.loading) {
-  //     return
-  //   }
-  //
-  //   if (!this.props.currentUser.CurrentUser || this.props.currentUser.CurrentUser.activated) {
-  //     // this.props.dispatch(push('/'))
-  //     console.log('going to /')
-  //     this.props.history.push('/')
-  //   }
-  // }
-
-  componentWillMount() {
-    console.log('* LOG * componentWillMount')
-  }
-
-  componentWillUnmount() {
-    console.log('* LOG * componentWillUnmount')
-  }
-
-  // componentDidUpdate = () => {
-  //   if (!this.props.currentUser.loading) {
-  //     if (this.props.currentUser.CurrentUser &&
-  //       this.props.currentUser.CurrentUser.activated) {
-  //       console.log('going to /')
-  //       this.props.history.push('/')
-  //     }
-  //   }
-  // }
-
   submit = () => {
     this.setState({ error: '' })
 
-    console.log('* LOG * signup this.state', this.state)
     this.props.signup({ username: this.state.username, password: this.state.password })
       .then(() => {
-        console.log('* LOG * success sign up')
         this.props.history.push('/')
       })
       .catch((data) => {

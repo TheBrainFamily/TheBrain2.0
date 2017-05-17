@@ -80,18 +80,18 @@ const currentItemsQuery = gql`
 
 export default withRouter(
     compose(
-        graphql(currentUserQuery, {name: "currentUser"}),
+        graphql(currentUserQuery, {name: 'currentUser'}),
         graphql(currentItemsQuery, {
-                name: "currentItems",
+                name: 'currentItems',
                 options: {
-                    fetchPolicy: "network-only",
+                    fetchPolicy: 'network-only'
                 }
             }
         ),
         graphql(sessionCountQuery, {
             name: 'sessionCount',
             options: {
-                fetchPolicy: "network-only",
+                fetchPolicy: 'network-only'
             }
         })
     )(Questions)

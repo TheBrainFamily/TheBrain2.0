@@ -26,10 +26,8 @@ class Login extends React.Component {
   submit = () => {
     this.setState({ error: '' })
 
-    console.log('* LOG * login this.state', this.state)
     this.props.login({ username: this.state.username, password: this.state.password })
       .then(() => {
-        console.log('* LOG * success log in')
         this.props.history.push('/')
       })
       .catch((data) => {

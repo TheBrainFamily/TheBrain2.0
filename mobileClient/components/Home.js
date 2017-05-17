@@ -11,15 +11,13 @@ import Lecture from './Lecture'
 import styles from '../styles/styles'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-// import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Home extends React.Component {
   logout = () => {
-    console.log('* LOG * Home logout')
     this.props.logout()
       .then(() => {
-          this.props.client.resetStore()
-        })
+        this.props.client.resetStore()
+      })
   }
 
   render () {
@@ -30,28 +28,19 @@ class Home extends React.Component {
     const currentUser = this.props.data.CurrentUser
     const activated = currentUser && currentUser.activated
 
-    console.log('* LOG * this.props', this.props)
-
     return (
       <View>
         {activated ?
           <View style={{ margin: 10 }}>
-            {/*<Link to="/logout" onClick={this.logout}>*/}
             <TouchableOpacity onPress={this.logout}>
               <Text style={styles.button}>Logout</Text>
             </TouchableOpacity>
-            {/*<Link to="/logout">*/}
-              {/*<Text style={styles.button}>Logout</Text>*/}
-            {/*</Link>*/}
           </View>
           :
           <View style={{ margin: 10 }}>
             <Link to="/login">
               <Text style={styles.button}>Login</Text>
             </Link>
-            {/*<Link to="/signup">*/}
-              {/*<Text style={styles.button}>Signup</Text>*/}
-            {/*</Link>*/}
           </View>
         }
 
@@ -85,10 +74,7 @@ export default compose(
               }
             })
           }
-        },
-        // refetchQueries: [{
-        //   query: currentLessonQuery
-        // }]
+        }
       })
     })
   }),
