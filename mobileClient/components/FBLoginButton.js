@@ -5,14 +5,6 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 class FBLoginButton extends React.Component {
-  componentWillMount() {
-    console.log('* LOG * FBLoginButton componentWillMount')
-  }
-
-  componentWillUnmount() {
-    console.log('* LOG * FBLoginButton componentWillUnmount')
-  }
-
   render () {
     return (
       <FBLogin style={{ marginVertical: 10 }}
@@ -20,7 +12,7 @@ class FBLoginButton extends React.Component {
                  this.fbLogin = fbLogin
                }}
                permissions={['email',]}
-               // loginBehavior={FBLoginManager.LoginBehaviors.Native}
+               loginBehavior={FBLoginManager.LoginBehaviors.Native}
                onLogin={(data) => {
                  console.log('Logged in!')
                  this.props.logInWithFacebook({ accessToken: data.credentials.token })
