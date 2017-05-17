@@ -33,7 +33,7 @@ export default class FrontCard extends React.Component {
           <Text style={styles.primaryText}>{this.props.question}</Text>
           <TouchableImage imageProperties={{
                             source: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Willaerts_Adam_The_Embarkation_of_the_Elector_Palantine_Oil_Canvas-huge.jpg',
-                            resizeMode: 'contain'
+                            resizeMode: 'contain',
                           }}
                           style={{
                             top: 10,
@@ -44,7 +44,9 @@ export default class FrontCard extends React.Component {
                             shadowColor: 'black',
                             shadowOffset: { width: 4, height: 4 },
                             shadowRadius: 4,
-                            shadowOpacity: 0.5
+                            shadowOpacity: 0.5,
+                            borderWidth: 1,
+                            borderRadius: 5
                           }}
                           animator={{
                             width: {
@@ -75,6 +77,11 @@ export default class FrontCard extends React.Component {
                             shadowOpacity: {
                               initial: 0.5,
                               final: 1,
+                              friction: 7,
+                            },
+                            borderRadius: {
+                              initial: 5,
+                              final: 0,
                               friction: 7,
                             }
                           }}

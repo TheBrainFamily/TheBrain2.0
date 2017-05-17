@@ -51,7 +51,6 @@ export default class NetworkImage extends Image {
                onError={(e) => this.setState({error: e.nativeEvent.error, loading: false})}
                onProgress={(e) => this.setState({progress: Math.round(100 * e.nativeEvent.loaded / e.nativeEvent.total)})}
                onLoad={() => this.setState({loading: false, error: false})}
-               resizeMethod={'scale'}
         >
           {loader}
         </Image>
