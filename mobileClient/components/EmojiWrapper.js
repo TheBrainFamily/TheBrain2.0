@@ -30,25 +30,25 @@ export default class EmojiWrapper extends React.Component {
         this.directionSettings = {
             right: {
                 emojiDescription: 'Good',
-                emoji: 'smile',
+                emoji: 'slightly_smiling_face',
                 emojiStyle: styles.rightMarker,
                 padding: -20
             },
             left: {
-                emojiDescription: 'Bad',
-                emoji: 'fearful',
+                emojiDescription: 'Wrong',
+                emoji: 'sweat',
                 emojiStyle: styles.leftMarker,
                 padding: -15
             },
             top: {
-                emojiDescription: 'Unsure',
-                emoji: 'pensive',
+                emojiDescription: 'Easy!',
+                emoji: 'sunglasses',
                 emojiStyle: styles.upMarker,
                 padding: -5
             },
             bottom: {
-                emojiDescription: 'Almost',
-                emoji: 'innocent',
+                emojiDescription: 'No clue',
+                emoji: 'scream',
                 emojiStyle: styles.downMarker,
                 padding: 90
             },

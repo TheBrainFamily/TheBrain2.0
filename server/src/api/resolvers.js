@@ -102,6 +102,7 @@ const resolvers = {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
+        throw new Error('Wrong username or password')
       } catch (e) {
         throw e
       }
@@ -113,7 +114,19 @@ const resolvers = {
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
-      return context.Users.updateUser(context.user._id, args.username, args.password)
+      try {
+        const user = await context.Users.findByUsername(args.username)
+
+        if (user) {
+          throw new Error('Username is already taken')
+        }
+
+        await context.Users.updateUser(context.user._id, args.username, args.password)
+
+        return resolvers.Mutation.logIn(root, args, context)
+      } catch (e) {
+        throw e
+      }
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
       const item = await context.Items.getItemById(args.itemId, context.user._id)
@@ -123,7 +136,7 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
-      async resetPassword (root: ?string, args: { username: string, password: string }, context: Object) {
+    async resetPassword (root: ?string, args: { username: string }, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
