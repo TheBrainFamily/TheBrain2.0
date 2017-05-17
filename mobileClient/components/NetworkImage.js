@@ -39,7 +39,7 @@ export default class NetworkImage extends Image {
 
     const error = (
       <View style={this.imageViewStyle}>
-        <Text style={this.imageTextStyle}>IMAGE COULDN'T BE LOADED</Text>
+        <Text style={this.imageTextStyle}>IMAGE COULDN`T BE LOADED</Text>
       </View>
     )
 
