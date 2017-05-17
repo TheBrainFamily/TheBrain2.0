@@ -36,7 +36,7 @@ export default class Animator {
   startAnimations(twoPhase = true) {
     let animationContainer = []
 
-    _.forEach(this.animations, (animatedStyle, attr) => {
+    _.forEach(this.animations, (animatedStyle) => {
       let initialValue = this.firstPhase? animatedStyle.initial : animatedStyle.final
       let finalValue = this.firstPhase? animatedStyle.final : animatedStyle.initial
 
