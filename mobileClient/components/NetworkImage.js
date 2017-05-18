@@ -6,6 +6,11 @@ import {
   ActivityIndicator
 } from 'react-native';
 
+// https://github.com/facebook/react-native/issues/9581
+// image caching is broken in react-native 0.30 - 0.44
+// tried to use https://github.com/wcandillon/react-native-img-cache witout success
+// clicking the image (enlarging and scaling down images causes http refetch every time)
+
 export default class NetworkImage extends Image {
   constructor(props: Object) {
     super(props)
