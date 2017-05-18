@@ -1,7 +1,5 @@
 import update from 'immutability-helper'
 
-import currentUserQuery from '../queries/currentUser'
-
 export default {
   props: ({ ownProps, mutate }) => ({
     lessonWatchedMutation: () => mutate({
@@ -14,10 +12,7 @@ export default {
           })
           return updateResults
         }
-      },
-      refetchQueries: [{
-        query: currentUserQuery
-      }]
+      }
     })
   })
 }
