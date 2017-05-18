@@ -65,5 +65,9 @@ const LectureVideoWithRouter = compose(
   connect()
 )(LectureVideo)
 
-export default graphql(currentLessonQuery)(Lecture)
+export default graphql(currentLessonQuery, {
+  options: {
+    fetchPolicy: 'network-only'
+  }
+})(Lecture)
 
