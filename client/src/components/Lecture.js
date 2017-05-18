@@ -5,13 +5,14 @@ import YouTube from 'react-youtube'
 import Introduction from './Introduction'
 import Content from './Content'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams';
-import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema';
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
+
+import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
+import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 
 class Lecture extends React.Component {
 
@@ -58,19 +59,11 @@ export class LectureVideo extends React.Component {
   }
 }
 
-const query = gql`
-    query Lesson {
-        Lesson {
-            _id, position, description, flashcardIds, youtubeId
-        }
-    }
-`
-
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   withRouter,
   connect()
 )(LectureVideo)
 
-export default graphql(query)(Lecture)
+export default graphql(currentLessonQuery)(Lecture)
 
