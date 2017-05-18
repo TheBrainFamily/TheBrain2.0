@@ -123,7 +123,7 @@ export default compose(
   graphql(currentUserQuery, {
     name: 'currentUser',
     options: {
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'network-only'
     }
   })
 )(Signup)
