@@ -13,7 +13,7 @@ export default class Animator {
   }
 
   updateFinalDimension(attrName, value) {
-    if(this.animations && this.animations[ attrName ]) {
+    if (this.animations && this.animations[attrName]) {
       this.animations[attrName].final = value
     }
   }
@@ -37,8 +37,8 @@ export default class Animator {
     let animationContainer = []
 
     _.forEach(this.animations, (animatedStyle) => {
-      let initialValue = this.firstPhase? animatedStyle.initial : animatedStyle.final
-      let finalValue = this.firstPhase? animatedStyle.final : animatedStyle.initial
+      let initialValue = this.firstPhase ? animatedStyle.initial : animatedStyle.final
+      let finalValue = this.firstPhase ? animatedStyle.final : animatedStyle.initial
 
       animatedStyle.animatedValue.setValue(initialValue)
       let animation = Animated.spring(
@@ -53,6 +53,6 @@ export default class Animator {
 
     Animated.parallel(animationContainer).start()
 
-    if(twoPhase) this.firstPhase = !this.firstPhase
+    if (twoPhase) this.firstPhase = !this.firstPhase
   }
 }
