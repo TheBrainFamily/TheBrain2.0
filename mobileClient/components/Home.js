@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { withApollo, compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { FBLoginManager } from 'react-native-facebook-login'
 
 import Lecture from './Lecture'
 
@@ -16,6 +17,11 @@ class Home extends React.Component {
   logout = () => {
     this.props.logout()
       .then(() => {
+        FBLoginManager.getCredentials((error, data) => {
+          if (!error && data && data.credentials) {
+            FBLoginManager.logout(() => {}) // any callback is required
+          }
+        })
         this.props.client.resetStore()
       })
   }
