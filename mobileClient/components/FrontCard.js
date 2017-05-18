@@ -32,7 +32,7 @@ export default class FrontCard extends React.Component {
         <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
           <Text style={styles.primaryText}>{this.props.question}</Text>
           <TouchableImage imageProperties={{
-                            source: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Willaerts_Adam_The_Embarkation_of_the_Elector_Palantine_Oil_Canvas-huge.jpg',
+                            source: 'http://team.thebrain.pro/img/logo.png',
                             resizeMode: 'contain',
                           }}
                           style={{
