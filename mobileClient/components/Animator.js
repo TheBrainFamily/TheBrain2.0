@@ -34,24 +34,24 @@ export default class Animator {
   }
 
   startAnimations(twoPhase = true) {
-    let animationContainer = []
+    const animationsContainer = []
 
     _.forEach(this.animations, (animatedStyle) => {
-      let initialValue = this.firstPhase ? animatedStyle.initial : animatedStyle.final
-      let finalValue = this.firstPhase ? animatedStyle.final : animatedStyle.initial
+      const initialValue = this.firstPhase ? animatedStyle.initial : animatedStyle.final
+      const finalValue = this.firstPhase ? animatedStyle.final : animatedStyle.initial
 
       animatedStyle.animatedValue.setValue(initialValue)
-      let animation = Animated.spring(
+      const animation = Animated.spring(
         animatedStyle.animatedValue,
         {
           toValue: finalValue,
           friction: animatedStyle.friction,
         }
       )
-      animationContainer.push(animation)
+      animationsContainer.push(animation)
     })
 
-    Animated.parallel(animationContainer).start()
+    Animated.parallel(animationsContainer).start()
 
     if (twoPhase) this.firstPhase = !this.firstPhase
   }
