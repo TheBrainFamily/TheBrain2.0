@@ -19,14 +19,14 @@ export default class NetworkImage extends Image {
       loading: false,
       progress: 0
     }
-    this.imageViewStyle = {
+    this.imageContentViewStyle = {
       width: '100%',
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'black',
     }
-    this.imageTextStyle = {
+    this.imageContentTextStyle = {
       color: 'white',
       fontWeight: 'bold',
       fontSize: 12,
@@ -37,18 +37,18 @@ export default class NetworkImage extends Image {
 
   render = () => {
     const loader = this.state.loading ?
-      <View style={this.imageViewStyle}>
-        <Text style={this.imageTextStyle}>{this.state.progress}%</Text>
+      <View style={this.imageContentViewStyle}>
+        <Text style={this.imageContentTextStyle}>{this.state.progress}%</Text>
         <ActivityIndicator size={'large'}/>
       </View> : null;
 
     const error = (
-      <View style={this.imageViewStyle}>
-        <Text style={this.imageTextStyle}>IMAGE COULDN`T BE LOADED</Text>
+      <View style={this.imageContentViewStyle}>
+        <Text style={this.imageContentTextStyle}>{'IMAGE COULDN\'T BE LOADED'}</Text>
       </View>
     )
 
-    //this.state.error should be logged on server side (e.g. catch bad urls)
+    // this.state.error should be logged on server side (e.g. catch bad urls)
     return this.state.error ? error :
       (
         <Image {...this.props}

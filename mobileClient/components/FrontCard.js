@@ -27,7 +27,7 @@ export default class FrontCard extends React.Component {
     };
 
     return (
-      <Animated.View style={[styles.flipCard, frontAnimatedStyle]} onLayout={this.onLayout} >
+      <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
         <Text style={styles.primaryHeader}>QUESTION:</Text>
         <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
           <Text style={styles.primaryText}>{this.props.question}</Text>
@@ -42,7 +42,7 @@ export default class FrontCard extends React.Component {
                             height: 100,
                             backgroundColor: 'white',
                             shadowColor: 'black',
-                            shadowOffset: { width: 4, height: 4 },
+                            shadowOffset: {width: 4, height: 4},
                             shadowRadius: 4,
                             shadowOpacity: 0.5,
                             borderWidth: 1,
