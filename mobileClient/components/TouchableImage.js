@@ -3,7 +3,6 @@
 import React from 'react';
 import {
   Animated,
-  Image,
   TouchableWithoutFeedback,
 } from 'react-native';
 import Animator from './Animator'
