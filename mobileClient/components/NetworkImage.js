@@ -57,7 +57,7 @@ export default class NetworkImage extends Image {
                onProgress={(e) => this.setState({progress: Math.round(100 * e.nativeEvent.loaded / e.nativeEvent.total)})}
                onLoad={() => this.setState({loading: false, error: false})}
         >
-          {loader}
+          {/*{loader} - loader will be nice only if issue 9581 will be fixed */}
         </Image>
       )
   }
