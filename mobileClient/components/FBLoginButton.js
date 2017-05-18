@@ -1,5 +1,6 @@
 import React from 'react'
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
+import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import gql from 'graphql-tag'
 import { withApollo, graphql } from 'react-apollo'
@@ -16,10 +17,12 @@ class FBLoginButton extends React.Component {
                onLogin={(data) => {
                  console.log('Logged in!')
                  this.props.logInWithFacebook({ accessToken: data.credentials.token })
+                 this.props.history.push('/')
                }}
                onLogout={() => {
                  console.log('Logged out.')
                  this.props.client.resetStore()
+                 this.props.history.push('/')
                }}
                onLoginFound={(data) => {
                  console.log('Existing login found.')
@@ -54,7 +57,7 @@ const logInWithFacebook = gql`
     }
 `
 
-export default withApollo(graphql(logInWithFacebook, {
+export default withRouter(withApollo(graphql(logInWithFacebook, {
   props: ({ ownProps, mutate }) => ({
     logInWithFacebook: ({ accessToken }) => mutate({
       variables: {
@@ -71,4 +74,4 @@ export default withApollo(graphql(logInWithFacebook, {
       }
     })
   })
-})(FBLoginButton))
+})(FBLoginButton)))
