@@ -7,8 +7,7 @@ import update from 'immutability-helper'
 import {Link} from 'react-router-native'
 import {
     Text,
-    View,
-    Button
+    View
 } from 'react-native'
 import styles from '../styles/styles'
 
