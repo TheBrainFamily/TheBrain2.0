@@ -17,8 +17,7 @@ import {
     StyleSheet,
     Dimensions,
     Animated,
-    View,
-    Text
+    View
 } from 'react-native'
 
 import styles from '../styles/styles'
