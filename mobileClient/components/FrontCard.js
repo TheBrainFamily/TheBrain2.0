@@ -1,21 +1,21 @@
 // @flow
 
-import React from 'react';
+import React from 'react'
 import {
   Text,
   View,
-  Animated,
-} from 'react-native';
-import styles from '../styles/styles';
+  Animated
+} from 'react-native'
+import styles from '../styles/styles'
 
 export default class FrontCard extends React.Component {
   frontInterpolate: number;
-  constructor(props: Object) {
-    super(props);
+  constructor (props: Object) {
+    super(props)
     this.frontInterpolate = props.interpolateCb({
       inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    });
+      outputRange: ['0deg', '180deg']
+    })
   }
 
   render = () => {
@@ -23,7 +23,7 @@ export default class FrontCard extends React.Component {
       transform: [
         {rotateY: this.frontInterpolate}
       ]
-    };
+    }
 
     return (
       <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
