@@ -26,21 +26,21 @@ class Flashcard extends React.Component {
 
   render () {
     return <div>
-      <div className="center flashcard">QUESTION : <br /><br /><br />{this.props.question}</div>
+      <div className='center flashcard'>QUESTION : <br /><br /><br />{this.props.question}</div>
 
       <br />
       <br />
 
-      <div>{!this.props.isAnswerVisible ?
-        <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
-          <div className="center flashcard answer">CORRECT ANSWER :<br /><br />{this.props.answer}
+      <div>{!this.props.isAnswerVisible
+        ? <button className='button-answer' onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
+          <div className='center flashcard answer'>CORRECT ANSWER :<br /><br />{this.props.answer}
           </div>
           <p>How would you describe experience answering this question?</p>
           <br />
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
-          <button className="button-answer" onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
+          <button className='button-answer' onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
+          <button className='button-answer' onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
+          <button className='button-answer' onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
+          <button className='button-answer' onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
         </div>
       }
       </div>
@@ -79,7 +79,7 @@ export default compose(
       submit: ({ itemId, evaluation }) => mutate({
         variables: {
           itemId,
-          evaluation,
+          evaluation
         },
         updateQueries: {
           CurrentItems: (prev, { mutationResult }) => {
