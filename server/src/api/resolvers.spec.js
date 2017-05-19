@@ -20,9 +20,9 @@ import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
 extendExpect()
 jest.mock('node-fetch', () => {
   return async () => ({
-    json: async () => ( {
+    json: async () => ({
       data: {
-        is_valid: true,
+        is_valid: true
       }
     })
   })
@@ -74,20 +74,18 @@ type MakeFlashcardsData = {
 }
 
 async function makeFlashcards ({ number: number = 3, flashcardsToExtend = [] }: MakeFlashcardsData = {}) {
-    const addedFlashcards = []
+  const addedFlashcards = []
   _.times(number, (index) => {
-
-      let newFlashcard = casual.flashcard
-      if (flashcardsToExtend[index]) {
-        newFlashcard = {
-          ...newFlashcard,
-          ...flashcardsToExtend[index]
-        }
+    let newFlashcard = casual.flashcard
+    if (flashcardsToExtend[index]) {
+      newFlashcard = {
+        ...newFlashcard,
+        ...flashcardsToExtend[index]
       }
-      addedFlashcards.push(newFlashcard)
-      // await mongoose.connection.db.collection('flashcards').insert(newFlashcard)
-
     }
+    addedFlashcards.push(newFlashcard)
+      // await mongoose.connection.db.collection('flashcards').insert(newFlashcard)
+  }
   )
   await mongoose.connection.db.collection('flashcards').insert(addedFlashcards)
 
@@ -139,7 +137,6 @@ describe('query.flashcard', () => {
     done()
   })
   it('returns a flashcard by id', async () => {
-
     const flashcardsToExtend = [
       {_id: mongoose.Types.ObjectId()}, {_id: mongoose.Types.ObjectId()}
     ]
@@ -299,14 +296,14 @@ describe('login with facebook', async () => {
   it('returns user if it already exists', async () => {
     const {logInWithFacebook} = resolvers.Mutation
     const args = {
-      accessToken: 'TOKEN',
+      accessToken: 'TOKEN'
     }
 
     const user = deepFreeze({username: 'test'})
 
     const context = {
       Users: {
-        findByFacebookId: async () => (user),
+        findByFacebookId: async () => (user)
       },
       req: {
         logIn: jest.fn()
