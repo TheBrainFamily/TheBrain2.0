@@ -18,7 +18,12 @@ export const typeDefs = gql`
     type Flashcard {
         _id: String,
         question: String!,
-        answer: String!
+        answer: String!,
+        image: FlashcardImage,
+    }
+    type FlashcardImage {
+        url: String,
+        hasAlpha: Boolean,
     }
     type Item {
         _id: String,

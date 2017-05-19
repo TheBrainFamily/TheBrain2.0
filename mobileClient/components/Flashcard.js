@@ -132,6 +132,7 @@ class Flashcard extends React.Component {
                     <TouchableOpacity onPress={() => this.flipCard()}>
                         <FrontCard dynamicStyles={this.state.dynamicStyles}
                                    question={this.props.question}
+                                   image={this.props.image}
                                    interpolateCb={this.interpolateWrapper}/>
                         <BackCard dynamicStyles={this.state.dynamicStyles}
                                   interpolateCb={this.interpolateWrapper}
@@ -159,7 +160,9 @@ const submitEval = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                    url hasAlpha
+                }
             }
         }
     }
