@@ -9,15 +9,17 @@
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker stop mongo_instance_001 && docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
     "startTestingDB": "docker run -d -p 27017:27017 mongo",
-    "flow": "flow"
+    "flow": "flow",
+    "standard": "./node_modules/standard/bin/cmd.js",
+    "standardCircle": "./node_modules/standard/bin/cmd.js > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.40.0",
     "babel-cli": "^6.23.0",
+    "babel-eslint": "^7.2.3",
     "babel-core": "^6.23.1",
-    "babel-eslint": "^7.1.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
     "bcrypt": "^1.0.2",
@@ -59,7 +61,26 @@
     "graphql-tools": "^0.10.1",
     "jest": "^19.0.2",
     "nodemon": "^1.11.0",
-    "standard": "^10.0.1",
+    "standard": "^10.0.2",
     "testdouble": "^2.1.2"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "flow-typed/"
+    ],
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "beforeAll",
+      "after",
+      "afterEach",
+      "afterAll",
+      "it",
+      "expect",
+      "jest"
+    ]
   }
 }
