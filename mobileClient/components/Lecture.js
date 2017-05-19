@@ -9,6 +9,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter, Link } from 'react-router-native'
 
+import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
 
@@ -39,19 +40,16 @@ class LectureVideo extends React.Component {
         return (
             <YouTube
                 ref="youtubePlayer"
-                videoId={this.props.lesson.youtubeId} // The YouTube video ID
-                play={true}           // control playback of video with true/false
-                hidden={false}        // control visiblity of the entire view
-                playsInline={false}    // control whether the video should play inline
-                loop={false}          // control whether the video should loop when ended
+                videoId={this.props.lesson.youtubeId}
+                play={false}
+                hidden={false}
+                playsInline={false}
+                loop={false}
                 showinfo={false}
                 modestbranding={false}
                 rel={false}
-
-
                 onChangeState={this._onChangeState}
-
-                style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red', marginVertical: 10}}
+                style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red'}}
             />
 
         );
@@ -67,14 +65,9 @@ class LectureVideo extends React.Component {
 
 const LectureVideoWithRouter = withRouter(LectureVideo);
 
-const query = gql`
-    query Lesson {
-        Lesson {
-            _id, position, description, flashcardIds, youtubeId
-        }
-    }
-`;
-
-
-export default graphql(query)(Lecture);
+export default graphql(currentLessonQuery, {
+  options: {
+    fetchPolicy: 'network-only'
+  }
+})(Lecture)
 
