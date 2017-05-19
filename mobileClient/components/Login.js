@@ -3,15 +3,16 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import update from 'immutability-helper'
 
 import Header from './Header'
 import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
 
-import currentUserQuery from './../queries/currentUser'
+import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
-class Signup extends React.Component {
+class Login extends React.Component {
   constructor (props) {
     super(props)
 
@@ -22,21 +23,10 @@ class Signup extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.currentUser.loading) {
-      return
-    }
-
-    if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
-      console.log('going to /')
-      nextProps.history.push('/')
-    }
-  }
-
   submit = () => {
     this.setState({ error: '' })
 
-    this.props.signup({ username: this.state.username, password: this.state.password })
+    this.props.login({ username: this.state.username, password: this.state.password })
       .then(() => {
         this.props.history.push('/')
       })
@@ -44,19 +34,16 @@ class Signup extends React.Component {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
+
   }
 
   render () {
-    if (this.props.currentUser.loading) {
-      return <Text>Loading...</Text>
-    }
-
     return (
       <View>
         <Header />
 
         <View style={{ alignItems: 'center' }}>
-          <View style={[styles.form]}>
+          <View style={styles.form}>
             {this.state.error ?
               <Text style={styles.errorText}>{ this.state.error }</Text>
               :
@@ -84,7 +71,7 @@ class Signup extends React.Component {
             />
 
             <TouchableOpacity onPress={this.submit}>
-              <Text style={[styles.button, { backgroundColor: 'steelblue' }]}>Sign up</Text>
+              <Text style={[styles.button, { backgroundColor: 'steelblue' }]}>Log in</Text>
             </TouchableOpacity>
 
             <View style={{ alignItems: 'center' }}>
@@ -97,33 +84,38 @@ class Signup extends React.Component {
   }
 }
 
-const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!) {
-        setUsernameAndPasswordForGuest(username: $username, password: $password) {
-            username
+const logIn = gql`
+    mutation logIn($username: String!, $password: String!){
+        logIn(username: $username, password: $password) {
+            _id, username, activated
         }
     }
 `
 
 export default compose(
   connect(),
-  graphql(signup, {
+  graphql(logIn, {
     props: ({ ownProps, mutate }) => ({
-      signup: ({ username, password }) => mutate({
+      login: ({ username, password }) => mutate({
         variables: {
           username,
           password
         },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logIn
+              }
+            })
+          }
+        },
         refetchQueries: [{
-          query: currentUserQuery
+          query: currentLessonQuery
         }]
       })
     })
-  }),
-  graphql(currentUserQuery, {
-    name: 'currentUser',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   })
-)(Signup)
+)(Login)
