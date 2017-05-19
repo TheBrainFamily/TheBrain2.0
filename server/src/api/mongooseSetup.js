@@ -26,7 +26,7 @@ switch (process.env.NODE_ENV) {
 
 const FlashcardSchema = new mongoose.Schema({
   question: String,
-  answer: String,
+  answer: String
 })
 
 export const Flashcards = mongoose.model('Flashcards', FlashcardSchema)
@@ -55,7 +55,7 @@ const LessonSchema = new mongoose.Schema({
   position: Number,
   description: String,
   flashcardIds: Array,
-  youtubeId: String,
+  youtubeId: String
 })
 
 export const Lessons = mongoose.model('Lessons', LessonSchema)
@@ -85,13 +85,12 @@ const ItemSchema = new mongoose.Schema({
   lastRepetition: Number,
   nextRepetition: Number,
   previousDaysChange: Number,
-  timesRepeated: Number,
+  timesRepeated: Number
 })
 
 export const Items = mongoose.model('Items', ItemSchema)
 
 export class ItemsRepository {
-
   async getItems (lessonPosition: number) {
 
   }
@@ -114,7 +113,7 @@ export class ItemsRepository {
       lastRepetition: 0,
       nextRepetition: 0,
       previousDaysChange: 0,
-      timesRepeated: 0,
+      timesRepeated: 0
     }
     const item = new Items(newItem)
     const insertedItem = await item.save()
@@ -124,9 +123,7 @@ export class ItemsRepository {
 }
 
 export class ItemsWithFlashcardRepository {
-
   async getItemsWithFlashcard (userId: string) {
-
     const currentItems = await Items.find({
       userId,
       $or: [
@@ -164,7 +161,7 @@ export class ItemsWithFlashcardRepository {
 
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
-  nextLessonPosition: Number,
+  nextLessonPosition: Number
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
@@ -193,7 +190,7 @@ const UserSchema = new mongoose.Schema({
   createdAt: Number,
   activated: Boolean,
   facebookId: String,
-  resetPasswordToken: String,
+  resetPasswordToken: String
 })
 
 // TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -269,8 +266,7 @@ export class UsersRepository {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
       await userToBeUpdated.save()
       return userToBeUpdated
-    }
-    else {
+    } else {
       return null
     }
   }
