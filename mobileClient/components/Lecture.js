@@ -2,12 +2,11 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 // import Introduction from './Introduction';
 // import Content from './Content';
 import {graphql} from 'react-apollo'
-import gql from 'graphql-tag'
-import { withRouter, Link } from 'react-router-native'
+import { withRouter } from 'react-router-native'
 
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
