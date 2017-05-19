@@ -26,14 +26,25 @@ class Flashcard extends React.Component {
 
   render () {
     return <div>
-      <div className="center flashcard">QUESTION : <br /><br /><br />{this.props.question}</div>
+      <div className="center flashcard">
+        {this.props.image &&
+         <div className="flashcardImageContainer">
+           <img className={this.props.image.hasAlpha? "flashcardAlphaImage": "flashcardImage"}
+                alt="Question"
+                src={this.props.image.url}
+           />
+           <br />
+         </div>
+        }
+        QUESTION: <br /><br /><br />{this.props.question}
+      </div>
 
       <br />
       <br />
 
       <div>{!this.props.isAnswerVisible ?
         <button className="button-answer" onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
-          <div className="center flashcard answer">CORRECT ANSWER :<br /><br />{this.props.answer}
+          <div className="center flashcard answer">CORRECT ANSWER:<br /><br />{this.props.answer}
           </div>
           <p>How would you describe experience answering this question?</p>
           <br />
@@ -59,7 +70,9 @@ const submitEval = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                  url hasAlpha
+                }
             }
         }
     }

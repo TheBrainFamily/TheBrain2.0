@@ -52,7 +52,7 @@ class Questions extends React.Component {
       return (
         <div className='questions'>
           <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
+          <Flashcard question={flashcard.question} image={flashcard.image} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
       )
     }
@@ -70,7 +70,9 @@ const currentItemsQuery = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                  url hasAlpha
+                }
             }
         }
     }

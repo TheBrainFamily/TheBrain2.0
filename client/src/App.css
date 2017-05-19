@@ -47,12 +47,24 @@ FLASHCARDS
     color: #000000;
     border: 2px solid rgb(0, 0, 0) !important;
     font-weight: normal;
-    height: 70px;
     margin-bottom: 20px;
     overflow: hidden;
     padding: 15px;
     overflow-y: auto;
     max-width: 60%;
+}
+
+.flashcardImageContainer {
+    text-align: center;
+}
+
+.flashcardImage {
+    background-color: white;
+    border: 2px solid black;
+}
+
+.flashcardAlphaImage {
+
 }
 
 .button-answer {
