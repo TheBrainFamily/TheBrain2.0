@@ -27,6 +27,7 @@ switch (process.env.NODE_ENV) {
 const FlashcardSchema = new mongoose.Schema({
   question: String,
   answer: String,
+  image: Object,
 })
 
 export const Flashcards = mongoose.model('Flashcards', FlashcardSchema)

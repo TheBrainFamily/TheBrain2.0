@@ -52,7 +52,7 @@ class Questions extends React.Component {
                                     dueFlashcards={dueFlashcards}
                                     reviewFlashcards={reviewFlashcards}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer}
+                    <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
                                evalItemId={evalItem._id}/></View>)
             } else {
                 return <Text>no flashcards left</Text>
@@ -72,7 +72,9 @@ const currentItemsQuery = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                    url hasAlpha
+                }
             }
         }
     }
