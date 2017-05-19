@@ -7,6 +7,7 @@ import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
+import FBLoginButton from './FBLoginButton'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
@@ -20,14 +21,15 @@ class Login extends React.Component {
     this.setState({ error: '' })
 
     this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
-      .then(() => {
-        this.props.dispatch(push('/'))
-      })
+      .then(this.redirectAfterLogin)
       .catch((data) => {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
+  }
 
+  redirectAfterLogin = () => {
+    this.props.dispatch(push('/'))
   }
 
   render () {
@@ -47,7 +49,10 @@ class Login extends React.Component {
         <div>
           <input type="submit" value="Log In" />
         </div>
-      </form>)
+
+        <FBLoginButton onLogin={this.redirectAfterLogin} />
+      </form>
+    )
   }
 }
 const logIn = gql`
