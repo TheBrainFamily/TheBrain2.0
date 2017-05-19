@@ -3,11 +3,10 @@
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
-import moment from 'moment'
 
 import resolvers from './resolvers'
 import {
-  Flashcards,
+  // Flashcards,
   FlashcardsRepository,
   ItemsRepository,
   ItemsWithFlashcardRepository,
@@ -37,14 +36,14 @@ afterAll(async () => {
   await mongoose.disconnect()
 })
 
-async function createFlashcard (props) {
-  const newFlashcard = new Flashcards(props)
-  await newFlashcard.save()
-}
+// async function createFlashcard (props) {
+//   const newFlashcard = new Flashcards(props)
+//   await newFlashcard.save()
+// }
 
-async function createFlashcards (flashcardsData) {
-  await Promise.all(flashcardsData.map(createFlashcard))
-}
+// async function createFlashcards (flashcardsData) {
+//   await Promise.all(flashcardsData.map(createFlashcard))
+// }
 
 casual.define('flashcard', function () {
   return {

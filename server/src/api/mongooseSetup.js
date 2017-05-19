@@ -41,7 +41,7 @@ export class FlashcardsRepository {
 
   async getFlashcard (_id: string) {
     console.log('getChannel by ', _id)
-    return await Flashcards.findOne({_id})
+    return Flashcards.findOne({_id})
   }
 
   // This API is currently not used by the app,
@@ -62,17 +62,17 @@ export const Lessons = mongoose.model('Lessons', LessonSchema)
 
 export class LessonsRepository {
   async getLessons () {
-    return await Lessons.find()
+    return Lessons.find()
   }
 
   async getLessonByPosition (position: number) {
     console.log('getChannel by ', position)
-    return await Lessons.findOne({position})
+    return Lessons.findOne({position})
   }
 
   async getLessonById (_id: string) {
     // console.log("_id ", _id);
-    return await Lessons.findOne({_id}).exec()
+    return Lessons.findOne({_id}).exec()
   }
 }
 
@@ -96,11 +96,11 @@ export class ItemsRepository {
   }
 
   async update (id: string, item: Object, userId: string) {
-    return await Items.update({_id: id, userId}, {$set: item})
+    return Items.update({_id: id, userId}, {$set: item})
   }
 
   async getItemById (_id: string, userId: string) {
-    return await Items.findOne({_id, userId})
+    return Items.findOne({_id, userId})
   }
 
   async create (flashcardId: string, userId: string) {
