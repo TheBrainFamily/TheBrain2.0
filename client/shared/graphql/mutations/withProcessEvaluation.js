@@ -13,7 +13,9 @@ const submitEval = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                    url hasAlpha
+                }
             }
         }
     }
