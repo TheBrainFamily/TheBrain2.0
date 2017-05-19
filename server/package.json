@@ -10,9 +10,8 @@
     "startLocalDB": "docker stop mongo_instance_001 && docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain",
     "startTestingDB": "docker run -d -p 27017:27017 mongo",
     "flow": "flow",
-    "standard": "./node_modules/standard/bin/cmd.js",
-    "standardFix": "./node_modules/standard/bin/cmd.js --fix",
-    "standardCircle": "./node_modules/standard/bin/cmd.js > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt"
+    "standard": "standard",
+    "standardFix": "standard --fix"
   },
   "author": "",
   "license": "ISC",

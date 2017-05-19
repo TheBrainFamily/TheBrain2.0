@@ -6,9 +6,8 @@
     "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --no-packager\"",
     "test": "jest",
     "flow": "flow",
-    "standard": "./node_modules/standard/bin/cmd.js",
-    "standardFix": "./node_modules/standard/bin/cmd.js --fix",
-    "standardCircle": "./node_modules/standard/bin/cmd.js > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt"
+    "standard": "standard",
+    "standardFix": "standard --fix"
   },
   "dependencies": {
     "events": "^1.1.1",
