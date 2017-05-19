@@ -5,7 +5,9 @@
   "scripts": {
     "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --no-packager\"",
     "test": "jest",
-    "flow": "flow"
+    "flow": "flow",
+    "standard": "standard",
+    "standardFix": "standard --fix"
   },
   "dependencies": {
     "events": "^1.1.1",
@@ -25,12 +27,35 @@
     "stream": "0.0.2"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "babel-jest": "19.0.0",
     "concurrently": "^3.4.0",
     "jest": "19.0.2",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "react-test-renderer": "16.0.0-alpha.6",
+    "standard": "^10.0.2"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "flow-typed/",
+      "ios/",
+      "android/"
+    ],
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "beforeAll",
+      "after",
+      "afterEach",
+      "afterAll",
+      "it",
+      "expect",
+      "$Keys"
+    ]
   }
 }
