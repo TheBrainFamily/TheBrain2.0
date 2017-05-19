@@ -7,6 +7,7 @@
     "test": "jest",
     "flow": "flow",
     "standard": "./node_modules/standard/bin/cmd.js",
+    "standardFix": "./node_modules/standard/bin/cmd.js --fix",
     "standardCircle": "./node_modules/standard/bin/cmd.js > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt"
   },
   "dependencies": {
