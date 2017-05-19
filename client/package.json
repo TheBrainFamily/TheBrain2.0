@@ -68,9 +68,8 @@
     "build": "NODE_PATH='src' node scripts/build.js",
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
     "flow": "flow",
-    "standard": "./node_modules/standard/bin/cmd.js",
-    "standardFix": "./node_modules/standard/bin/cmd.js --fix",
-    "standardCircle": "./node_modules/standard/bin/cmd.js > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt"
+    "standard": "standard",
+    "standardFix": "standard --fix"
   },
   "jest": {
     "collectCoverageFrom": [
