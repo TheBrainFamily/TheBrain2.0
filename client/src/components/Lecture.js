@@ -15,9 +15,7 @@ import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWa
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 
 class Lecture extends React.Component {
-
   render () {
-
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
     }
@@ -26,7 +24,7 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
-    return <div id="video">
+    return <div id='video'>
       <Introduction />
       <Content />
       <LectureVideoWithRouter lesson={this.props.data.Lesson} />
@@ -70,4 +68,3 @@ export default graphql(currentLessonQuery, {
     fetchPolicy: 'network-only'
   }
 })(Lecture)
-
