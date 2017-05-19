@@ -52,7 +52,9 @@ class Questions extends React.Component {
                                     dueFlashcards={dueFlashcards}
                                     reviewFlashcards={reviewFlashcards}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
+                    <Flashcard question={flashcard.question}
+                               answer={flashcard.answer}
+                               image={flashcard.image}
                                evalItemId={evalItem._id}/></View>)
             } else {
                 return <Text>no flashcards left</Text>
