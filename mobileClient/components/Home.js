@@ -28,7 +28,7 @@ class Home extends React.Component {
 
   render () {
     if (this.props.data.loading) {
-      return <View/>
+      return <View />
     }
 
     const currentUser = this.props.data.CurrentUser
@@ -36,15 +36,14 @@ class Home extends React.Component {
 
     return (
       <View>
-        {activated ?
-          <View style={{ margin: 10 }}>
+        {activated
+          ? <View style={{ margin: 10 }}>
             <TouchableOpacity onPress={this.logout}>
               <Text style={styles.button}>Logout</Text>
             </TouchableOpacity>
           </View>
-          :
-          <View style={{ margin: 10 }}>
-            <Link to="/login">
+          : <View style={{ margin: 10 }}>
+            <Link to='/login'>
               <Text style={styles.button}>Login</Text>
             </Link>
           </View>
