@@ -126,5 +126,10 @@ export default compose(
       })
     })
   }),
-  graphql(currentUserQuery, { name: 'currentUser' })
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  })
 )(Signup)

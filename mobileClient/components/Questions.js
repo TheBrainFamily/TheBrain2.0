@@ -14,21 +14,23 @@ import currentUserQuery from '../../client/shared/graphql/queries/currentUser';
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount';
 
 class Questions extends React.Component {
-    componentDidUpdate = () => {
-      if (!this.props.currentItems.loading && !this.props.currentUser.loading) {
-            if (this.props.currentItems.ItemsWithFlashcard &&
-                this.props.currentItems.ItemsWithFlashcard.length === 0 &&
-                this.props.currentUser.CurrentUser) {
-                if (this.props.currentUser.CurrentUser.activated) {
-                    console.log("going to /");
-                    this.props.history.push("/");
-                } else {
-                    console.log("going to signup");
-                    this.props.history.push("/signup");
-                }
-            }
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
+            return
         }
-    };
+
+        const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
+
+        if (itemsWithFlashcard.length > 0) {
+            return
+        }
+
+        if (nextProps.currentUser.activated) {
+            nextProps.history.push('/')
+        } else {
+            nextProps.history.push('/signup')
+        }
+    }
 
     render() {
         if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
@@ -78,18 +80,18 @@ const currentItemsQuery = gql`
 
 export default withRouter(
     compose(
-        graphql(currentUserQuery, {name: "currentUser"}),
+        graphql(currentUserQuery, {name: 'currentUser'}),
         graphql(currentItemsQuery, {
-                name: "currentItems",
+                name: 'currentItems',
                 options: {
-                    fetchPolicy: "network-only",
+                    fetchPolicy: 'network-only'
                 }
             }
         ),
         graphql(sessionCountQuery, {
             name: 'sessionCount',
             options: {
-                fetchPolicy: "network-only",
+                fetchPolicy: 'network-only'
             }
         })
     )(Questions)
