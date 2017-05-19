@@ -8,7 +8,7 @@ export default class Header extends React.Component {
   render () {
     return (
       <View style={styles.header}>
-        <Link to="/">
+        <Link to='/'>
           <Text style={styles.headerTitle}>The Brain</Text>
         </Link>
       </View>

@@ -1,6 +1,6 @@
 // @flow
 
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 export default gql`
     query CurrentUser {
@@ -8,4 +8,4 @@ export default gql`
             _id, username, activated
         }
     }
-`;
+`
