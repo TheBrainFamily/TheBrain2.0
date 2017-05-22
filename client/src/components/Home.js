@@ -30,7 +30,7 @@ class Home extends React.Component {
       return (<p>Error...</p>)
     }
 
-    return <div></div>
+    return <div />
   }
 }
 

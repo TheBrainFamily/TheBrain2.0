@@ -8,12 +8,12 @@ import devTools from 'remote-redux-devtools'
 const networkInterface = createNetworkInterface({
   uri: 'http://localhost:8080/graphql',
   opts: {
-    credentials: 'include',
-  },
+    credentials: 'include'
+  }
 })
 
 const client = new ApolloClient({
-  networkInterface,
+  networkInterface
 })
 
 const history = createHistory()
@@ -23,7 +23,7 @@ const store = createStore(
     // ...reducers,
     flashcard: flashcardReducer,
     router: routerReducer,
-    apollo: client.reducer(),
+    apollo: client.reducer()
   }),
   {}, // initial state
   compose(

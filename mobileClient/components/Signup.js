@@ -18,7 +18,7 @@ class Signup extends React.Component {
     this.state = {
       error: '',
       username: '',
-      password: '',
+      password: ''
     }
   }
 
@@ -57,28 +57,27 @@ class Signup extends React.Component {
 
         <View style={{ alignItems: 'center' }}>
           <View style={[styles.form]}>
-            {this.state.error ?
-              <Text style={styles.errorText}>{ this.state.error }</Text>
-              :
-              <Text />
+            {this.state.error
+              ? <Text style={styles.errorText}>{ this.state.error }</Text>
+              : <Text />
             }
 
             <TextInput
               style={styles.textInput}
-              autoFocus={true}
-              autoCapitalize="none"
+              autoFocus
+              autoCapitalize='none'
               autoCorrect={false}
-              placeholder="Username"
+              placeholder='Username'
               onChangeText={(username) => this.setState({ username })}
               value={this.state.username}
             />
 
             <TextInput
               style={styles.textInput}
-              secureTextEntry={true}
-              autoCapitalize="none"
+              secureTextEntry
+              autoCapitalize='none'
               autoCorrect={false}
-              placeholder="Password"
+              placeholder='Password'
               onChangeText={(password) => this.setState({ password })}
               value={this.state.password}
             />
