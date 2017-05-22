@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg4585" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="26.466mm" width="26.466mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26.466446 26.466446" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <defs id="defs4579">
+  <linearGradient id="linearGradient4721" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-62.486 52.284 52.284 62.486 208.79 120.26)">
+   <stop id="stop4717" stop-color="#1fa35b" offset="0"/>
+   <stop id="stop4719" stop-color="#1fd25b" offset="1"/>
+  </linearGradient>
+ </defs>
+ <metadata id="metadata4582">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(955.69 12.581)">
+  <g id="g4705" transform="matrix(.35278 0 0 -.35278 -1005.9 51.605)">
+   <g id="g4707">
+    <g id="g4713">
+     <g id="g4715">
+      <path id="path4723" fill="url(#linearGradient4721)" d="m142.38 144.44c0-20.719 16.795-37.514 37.512-37.514 20.716 0 37.511 16.795 37.511 37.514 0 20.718-16.795 37.509-37.511 37.509-20.717 0-37.512-16.791-37.512-37.509"/>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
