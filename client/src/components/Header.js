@@ -21,10 +21,9 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to="/logout" onClick={this.logout}>Logout</Link>
-
+      return <Link to='/logout' onClick={this.logout}>Logout</Link>
     }
-    return <Link to="/login">Login</Link>
+    return <Link to='/login'>Login</Link>
   }
 }
 
@@ -58,11 +57,11 @@ const AppHeader = (props) => {
   const currentUser = props.data.CurrentUser
 
   return (
-    <div className="App-header">
-      <Link to="/">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className='App-header'>
+      <Link to='/'>
+        <img src={logo} className='App-logo' alt='logo' />
       </Link>
-      <h2 className="make-it-bigger">Welcome to TheBrain.Pro</h2>
+      <h2 className='make-it-bigger'>Welcome to TheBrain.Pro</h2>
       {!props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
     </div>
   )

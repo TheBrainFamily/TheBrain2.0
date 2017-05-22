@@ -52,7 +52,7 @@ export default function getItemsWithFlashcardsByCount (items) {
   return sessionCount
 }
 
-function evaluatedIncorrectlyInCurrentSession(item) {
+function evaluatedIncorrectlyInCurrentSession (item) {
   return item.timesRepeated === 0 && item.actualTimesRepeated !== item.timesRepeated
 }
 

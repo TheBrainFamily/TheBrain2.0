@@ -67,7 +67,7 @@ describe('getItemsWithFlashcardsByCount', () => {
   it('should categorize new item as "new done" when it was evaluated as good', () => {
     const flashcards = [
       makeItem(),
-      makeItem({actualTimesRepeated: 1, timesRepeated: 1, lastRepetition: moment().subtract(2, 'hours').unix()}),
+      makeItem({actualTimesRepeated: 1, timesRepeated: 1, lastRepetition: moment().subtract(2, 'hours').unix()})
     ]
     const itemsByCount = getItemsWithFlashcardsByCount(flashcards)
     expect(itemsByCount).toEqual(getResult({newDone: 1, newTotal: 2, reviewTotal: 0}))
@@ -76,7 +76,7 @@ describe('getItemsWithFlashcardsByCount', () => {
   it('should categorize due item as "new done" when it was evaluated as good', () => {
     const flashcards = [
       makeItem(),
-      makeItem({actualTimesRepeated: 2, timesRepeated: 1, lastRepetition: moment().subtract(2, 'hours').unix()}),
+      makeItem({actualTimesRepeated: 2, timesRepeated: 1, lastRepetition: moment().subtract(2, 'hours').unix()})
     ]
     const itemsByCount = getItemsWithFlashcardsByCount(flashcards)
     expect(itemsByCount).toEqual(getResult({newTotal: 1, reviewTotal: 0, dueDone: 1, dueTotal: 1}))
@@ -85,7 +85,7 @@ describe('getItemsWithFlashcardsByCount', () => {
   it('should categorize due item as "due total" when it was not evaluated yet', () => {
     const flashcards = [
       makeItem(),
-      makeItem({actualTimesRepeated: 2, nextRepetition: moment().subtract(2, 'hours').unix()}),
+      makeItem({actualTimesRepeated: 2, nextRepetition: moment().subtract(2, 'hours').unix()})
     ]
     const itemsByCount = getItemsWithFlashcardsByCount(flashcards)
     expect(itemsByCount).toEqual(getResult({newTotal: 1, reviewTotal: 0, dueDone: 0, dueTotal: 1}))
