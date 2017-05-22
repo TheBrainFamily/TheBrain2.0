@@ -96,11 +96,10 @@ const styles = StyleSheet.create({
     width: 100
   },
   header: {
-    height: 25,
     backgroundColor: 'white',
     zIndex: 50,
     margin: 0,
-    padding: 5
+    padding: 30
   },
   headerTitle: {
     color: 'black',
