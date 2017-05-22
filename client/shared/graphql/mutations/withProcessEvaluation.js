@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
-import update from 'immutability-helper';
+import update from 'immutability-helper'
 
 const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
@@ -17,27 +17,27 @@ const submitEval = gql`
             }
         }
     }
-`;
+`
 
 export default function () {
-    return graphql(submitEval, {
-        props: ({ownProps, mutate}) => ({
-            submit: ({itemId, evaluation}) => mutate({
-                variables: {
-                    itemId,
-                    evaluation,
-                },
-                updateQueries: {
-                    CurrentItems: (prev, {mutationResult}) => {
-                        const updateResults = update(prev, {
-                            ItemsWithFlashcard: {
-                                $set: mutationResult.data.processEvaluation
-                            }
-                        });
-                        return updateResults;
-                    }
-                }
+  return graphql(submitEval, {
+    props: ({ownProps, mutate}) => ({
+      submit: ({itemId, evaluation}) => mutate({
+        variables: {
+          itemId,
+          evaluation
+        },
+        updateQueries: {
+          CurrentItems: (prev, {mutationResult}) => {
+            const updateResults = update(prev, {
+              ItemsWithFlashcard: {
+                $set: mutationResult.data.processEvaluation
+              }
             })
-        })
-    });
+            return updateResults
+          }
+        }
+      })
+    })
+  })
 }
