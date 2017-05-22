@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { FBLoginManager } from 'react-native-facebook-login'
 
+import Header from './Header'
 import Lecture from './Lecture'
 
 import styles from '../styles/styles'
@@ -36,6 +37,8 @@ class Home extends React.Component {
 
     return (
       <View>
+        <Header />
+
         {activated
           ? <View style={{ margin: 10 }}>
             <TouchableOpacity onPress={this.logout}>
