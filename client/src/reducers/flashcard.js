@@ -1,7 +1,7 @@
 import update from 'immutability-helper'
 
 const initialState = {
-  isAnswerVisible: false,
+  isAnswerVisible: false
 }
 
 const flashcard = (state = initialState, action) => {
