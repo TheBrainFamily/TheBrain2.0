@@ -1,64 +1,64 @@
 // @flow
 
-import React from 'react';
-import {graphql, compose} from 'react-apollo';
-import gql from 'graphql-tag';
-import {withRouter} from 'react-router';
+import React from 'react'
+import {graphql, compose} from 'react-apollo'
+import gql from 'graphql-tag'
+import {withRouter} from 'react-router'
 import {
     Text,
-    View,
-} from 'react-native';
-import Flashcard from './Flashcard';
-import SessionSummary from './SessionSummary';
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser';
-import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount';
+    View
+} from 'react-native'
+import Flashcard from './Flashcard'
+import SessionSummary from './SessionSummary'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
-    componentWillReceiveProps (nextProps) {
-        if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
-            return
-        }
-
-        const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
-
-        if (itemsWithFlashcard.length > 0) {
-            return
-        }
-
-        if (nextProps.currentUser.activated) {
-            nextProps.history.push('/')
-        } else {
-            nextProps.history.push('/signup')
-        }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
+      return
     }
 
-    render() {
-        if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
-            return <Text>Loading...</Text>
-        } else {
-            const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard;
-            const sessionCount = this.props.sessionCount.SessionCount
+    const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
 
-            if (itemsWithFlashcard.length > 0) {
-                const flashcard = itemsWithFlashcard[0].flashcard;
-                const evalItem = itemsWithFlashcard[0].item;
+    if (itemsWithFlashcard.length > 0) {
+      return
+    }
 
-                const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
-                const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
-                const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
+    if (nextProps.currentUser.activated) {
+      nextProps.history.push('/')
+    } else {
+      nextProps.history.push('/signup')
+    }
+  }
 
-                return (<View>
-                    <SessionSummary newFlashcards={newFlashcards}
-                                    dueFlashcards={dueFlashcards}
-                                    reviewFlashcards={reviewFlashcards}
+  render () {
+    if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
+      return <Text>Loading...</Text>
+    } else {
+      const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const sessionCount = this.props.sessionCount.SessionCount
+
+      if (itemsWithFlashcard.length > 0) {
+        const flashcard = itemsWithFlashcard[0].flashcard
+        const evalItem = itemsWithFlashcard[0].item
+
+        const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
+        const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
+        const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
+
+        return (<View>
+          <SessionSummary newFlashcards={newFlashcards}
+            dueFlashcards={dueFlashcards}
+            reviewFlashcards={reviewFlashcards}
                     />
-                    <Flashcard question={flashcard.question} answer={flashcard.answer}
-                               evalItemId={evalItem._id}/></View>)
-            } else {
-                return <Text>no flashcards left</Text>
-            }
-        }
+          <Flashcard question={flashcard.question} answer={flashcard.answer}
+            evalItemId={evalItem._id} /></View>)
+      } else {
+        return <Text>no flashcards left</Text>
+      }
     }
+  }
 }
 
 const currentItemsQuery = gql`
@@ -76,23 +76,23 @@ const currentItemsQuery = gql`
             }
         }
     }
-`;
+`
 
 export default withRouter(
     compose(
         graphql(currentUserQuery, {name: 'currentUser'}),
         graphql(currentItemsQuery, {
-                name: 'currentItems',
-                options: {
-                    fetchPolicy: 'network-only'
-                }
-            }
+          name: 'currentItems',
+          options: {
+            fetchPolicy: 'network-only'
+          }
+        }
         ),
         graphql(sessionCountQuery, {
-            name: 'sessionCount',
-            options: {
-                fetchPolicy: 'network-only'
-            }
+          name: 'sessionCount',
+          options: {
+            fetchPolicy: 'network-only'
+          }
         })
     )(Questions)
-);
+)

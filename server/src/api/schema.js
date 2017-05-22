@@ -1,11 +1,10 @@
 // @flow
 
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools'
 
-import resolvers from './resolvers';
+import resolvers from './resolvers'
 
-
-const gql = schema => schema;
+const gql = schema => schema
 
 export const typeDefs = gql`
     type Lesson {
@@ -88,11 +87,11 @@ export const typeDefs = gql`
         mutation: Mutation
         #        subscription: Subscription
     }
-`;
+`
 
 const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
-});
+  typeDefs,
+  resolvers
+})
 
-export default schema;
+export default schema

@@ -19,12 +19,12 @@ console.log('GraphQL uri:', uri)
 const networkInterface = createNetworkInterface({
   uri,
   opts: {
-    credentials: 'include',
-  },
+    credentials: 'include'
+  }
 })
 
 const client = new ApolloClient({
-  networkInterface,
+  networkInterface
 })
 
 const history = createHistory()
@@ -35,12 +35,12 @@ const store = createStore(
   combineReducers({
     ...reducers,
     router: routerReducer,
-    apollo: client.reducer(),
+    apollo: client.reducer()
   }),
   {}, // initial state
   compose(
     applyMiddleware(routerMiddleware(history), client.middleware()),
-    devToolsExtension ? devToolsExtension() : f => f,
+    devToolsExtension ? devToolsExtension() : f => f
   )
 )
 
