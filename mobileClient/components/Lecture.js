@@ -12,7 +12,6 @@ import currentLessonQuery from '../../client/shared/graphql/queries/currentLesso
 
 class Lecture extends React.Component {
   render () {
-
     if (this.props.data.loading) {
       return (<Text>Loading...</Text>)
     }
@@ -64,4 +63,3 @@ export default graphql(currentLessonQuery, {
     fetchPolicy: 'network-only'
   }
 })(Lecture)
-

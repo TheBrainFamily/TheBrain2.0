@@ -83,13 +83,13 @@ export default compose(
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
-        fetchPolicy: "network-only",
+      fetchPolicy: 'network-only'
     }
   }),
   graphql(sessionCountQuery, {
     name: 'sessionCount',
     options: {
-        fetchPolicy: "network-only",
+      fetchPolicy: 'network-only'
     }
   })
 )(Questions)
