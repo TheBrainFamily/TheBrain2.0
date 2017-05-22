@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     zIndex: 999
   },
   mainPage: {
-    backgroundColor: '#9ACAF4',
+    backgroundColor: '#662d91',
     height: '100%'
   },
   flipCard: {
