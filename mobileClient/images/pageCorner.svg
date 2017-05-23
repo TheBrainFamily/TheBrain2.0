@@ -1,3 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" height="44.318" viewBox="0 0 395.46094 44.31836" width="395.46" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata id="metadata8"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><defs id="defs6"><clipPath id="clipPath142" clipPathUnits="userSpaceOnUse"><path id="path144" d="m21.87 470.28v-177.26h288.52l27.843 27.842v149.42h-316.37z"/></clipPath><filter id="filter5532" style="color-interpolation-filters:sRGB" height="1.84" width="1.84" y="-.42002" x="-.41998"><feGaussianBlur id="feGaussianBlur5534" stdDeviation="4.872525"/></filter></defs><g id="g10" transform="matrix(1.25 0 0 -1.25 -27.338 410.59)"><g id="g5562"><path id="rect3751" d="m27.338 389.41v44.318h360.65l34.807-34.803v-9.5156h-395.46z" transform="matrix(.8 0 0 -.8 0 640)" fill="#fff"/><path id="path5352" d="m310.39 320.78v-27.842l27.844 27.842h-27.844z" filter="url(#filter5532)" fill="#b2b2b2"/><g id="g138"><g id="g140" clip-path="url(#clipPath142)"><g id="g146" transform="translate(310.39 320.86)"><path id="path148" d="m0 0v-27.842l27.844 27.842h-27.844z" fill="#fff"/></g></g></g></g></g></svg>
+<svg width="395.46094" height="44.31836" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395.46094 44.31836">
+ <metadata id="metadata8">image/svg+xml</metadata>
+ <defs>
+  <clipPath clipPathUnits="userSpaceOnUse" id="clipPath142">
+   <path d="m21.87,470.28l0,-177.26l288.52,0l27.843,27.842l0,149.42l-316.37,0l0.007,-0.002z" id="path144"/>
+  </clipPath>
+  <filter color-interpolation-filters="sRGB" x="-0.41998" y="-0.42002" width="1.84" height="1.84" id="filter5532">
+   <feGaussianBlur stdDeviation="4.872525" id="feGaussianBlur5534"/>
+  </filter>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path fill="#fff" d="m0,0l0,44.318l360.65,0l34.807,-34.803l0,-9.5156l-395.46,0l0.003,0.0006z" id="rect3751"/>
+  <path fill="#b2b2b2" filter="url(#filter5532)" d="m360.6495,9.615l0,34.8025l34.805,-34.8025l-34.805,0z" id="path5352"/>
+  <g transform="matrix(1.25,0,0,-1.25,-27.338,410.59) " id="g138">
+   <g clip-path="url(#clipPath142)" id="g140">
+    <g id="g146">
+     <path fill="#fff" d="m310.390015,320.859985l0,-27.842l27.844,27.842l-27.844,0z" id="path148"/>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
