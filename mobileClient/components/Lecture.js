@@ -2,18 +2,24 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 // import Introduction from './Introduction';
 // import Content from './Content';
 import {graphql} from 'react-apollo'
 import { withRouter } from 'react-router-native'
+
+import styles from '../styles/styles'
 
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
   render () {
     if (this.props.data.loading) {
-      return (<Text>Loading...</Text>)
+      return (
+        <View style={ styles.videoPlaceholder }>
+          <Text style={[ styles.textDefault, { display: 'flex', alignSelf: 'center' }]}>Loading...</Text>
+        </View>
+      )
     }
 
     if (this.props.data.error) {
@@ -45,9 +51,8 @@ class LectureVideo extends React.Component {
         modestbranding={false}
         rel={false}
         onChangeState={this._onChangeState}
-        style={{alignSelf: 'stretch', height: 300, backgroundColor: 'red'}}
-            />
-
+        style={{alignSelf: 'stretch', height: 300, backgroundColor: '#000'}}
+      />
     )
   }
 
