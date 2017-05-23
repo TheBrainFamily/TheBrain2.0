@@ -39,6 +39,11 @@
   "jest": {
     "preset": "react-native"
   },
+  "rnpm": {
+    "assets": [
+      "./fonts"
+    ]
+  },
   "standard": {
     "parser": "babel-eslint",
     "ignore": [

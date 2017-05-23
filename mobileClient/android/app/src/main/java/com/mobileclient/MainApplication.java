@@ -3,6 +3,7 @@ package com.mobileclient;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.magus.fblogin.FacebookLoginPackage;
 import com.horcrux.svg.SvgPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +26,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FacebookLoginPackage(),
             new SvgPackage(),
             new ReactNativeYouTube()
       );
