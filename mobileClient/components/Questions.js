@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
+import HeaderQuestion from './HeaderQuestion'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
@@ -48,6 +49,7 @@ class Questions extends React.Component {
         const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
 
         return (<View>
+          <HeaderQuestion />
           <SessionSummary newFlashcards={newFlashcards}
             dueFlashcards={dueFlashcards}
             reviewFlashcards={reviewFlashcards}
