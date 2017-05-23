@@ -37,7 +37,7 @@ class Home extends React.Component {
 
     return (
       <View>
-        <Header />
+        <Header withShadow={true} />
 
         {activated
           ? <View style={{ margin: 10 }}>

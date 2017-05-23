@@ -120,7 +120,9 @@ const styles = StyleSheet.create({
     margin: 0,
     paddingTop: 50,
     paddingBottom: 37,
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
+  },
+  headerWithShadow: {
     shadowColor: '#000',
     shadowOffset: {
       height: 5
