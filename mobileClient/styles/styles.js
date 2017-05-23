@@ -8,9 +8,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     zIndex: 999
   },
+  textDefault: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#FFF',
+    fontStyle: 'italic',
+    fontFamily: 'Chalkduster',
+    fontWeight: 'bold'
+  },
   mainPage: {
     backgroundColor: '#662d91',
     height: '100%'
+  },
+  videoPlaceholder: {
+    backgroundColor: '#000',
+    alignSelf: 'stretch',
+    height: 300,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   flipCard: {
     backfaceVisibility: 'hidden',
@@ -96,10 +112,21 @@ const styles = StyleSheet.create({
     width: 100
   },
   header: {
-    backgroundColor: 'white',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
     zIndex: 50,
     margin: 0,
-    padding: 30
+    paddingTop: 50,
+    paddingBottom: 37,
+    paddingHorizontal: 30,
+    shadowColor: '#000',
+    shadowOffset: {
+      height: 5
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 10
   },
   headerTitle: {
     color: 'white',
