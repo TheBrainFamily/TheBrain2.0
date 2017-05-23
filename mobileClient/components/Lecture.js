@@ -45,7 +45,7 @@ class LectureVideo extends React.Component {
         videoId={this.props.lesson.youtubeId}
         play={false}
         hidden={false}
-        playsInline={false}
+        fullscreen={true}
         loop={false}
         showinfo={false}
         modestbranding={false}
