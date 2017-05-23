@@ -131,23 +131,29 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 16,
-    borderLeftWidth: 2,
-    borderLeftColor: 'white'
+    fontFamily: 'Exo2-Regular'
+  },
+  headerBorder: {
+    paddingLeft: 15,
+    borderLeftWidth: 0.5,
+    borderLeftColor: 'white',
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   questionHeader: {
-    // backgroundColor: 'white',
     zIndex: 50,
     margin: 0,
     // padding: 30,
     height: 90,
+    width: '100%',
   },
   questionHeaderFluxContainer: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
-
+    justifyContent: 'space-between',
   },
   primaryHeader: {
     height: 24,
