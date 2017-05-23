@@ -25,8 +25,13 @@ class Header extends React.Component {
   }
 
   render () {
+    const headerStyle = [ styles.header ]
+    if (this.props.withShadow) {
+      headerStyle.push(styles.headerWithShadow)
+    }
+
     return (
-      <View style={styles.header}>
+      <View style={ headerStyle }>
         <TouchableOpacity onPress={this.goHome}>
           <SvgUri
             style={{
