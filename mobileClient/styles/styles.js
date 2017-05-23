@@ -106,19 +106,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 16,
-
+    borderLeftWidth: 2,
+    borderLeftColor: 'white'
   },
   questionHeader: {
     // backgroundColor: 'white',
     zIndex: 50,
     margin: 0,
-    padding: 30,
+    // padding: 30,
     height: 90,
   },
   questionHeaderFluxContainer: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
+
   },
   primaryHeader: {
     height: 24,
