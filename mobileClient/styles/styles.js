@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   form: {
-    marginVertical: 10,
+    marginTop: 20,
     width: '70%'
   },
   errorText: {
@@ -176,25 +176,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#D00',
     marginBottom: 10
   },
+  textInputWrapper: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 25
+  },
   textInput: {
-    height: 40,
-    borderColor: 'gray',
-        // borderWidth: 1,
+    height: 35,
+    fontSize: 13,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
     backgroundColor: '#FFF',
-        // marginTop: 5,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-    overflow: 'hidden'
+    padding: 8
   },
   button: {
-    fontSize: 20,
+    fontSize: 12,
     backgroundColor: '#224c8c',
     color: '#FFF',
-    padding: 10,
+    padding: 15,
     textAlign: 'center',
     fontWeight: 'bold',
-    borderRadius: 5,
+    borderRadius: 23,
     overflow: 'hidden'
   }
 })
