@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   mainPage: {
-    backgroundColor: '#662e8f',
+    backgroundColor: '#662d91',
     height: '100%'
   },
   videoPlaceholder: {
@@ -129,10 +129,23 @@ const styles = StyleSheet.create({
     shadowRadius: 10
   },
   headerTitle: {
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 12
+    fontSize: 16,
+
+  },
+  questionHeader: {
+    // backgroundColor: 'white',
+    zIndex: 50,
+    margin: 0,
+    padding: 30,
+    height: 90,
+  },
+  questionHeaderFluxContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   primaryHeader: {
     height: 24,
