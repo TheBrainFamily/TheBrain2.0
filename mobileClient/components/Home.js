@@ -52,7 +52,16 @@ class Home extends React.Component {
           </View>
         }
 
-        <Lecture />
+        <View style={{ alignItems: 'center' }}>
+          <Lecture />
+
+          <Text style={[ styles.textDefault, {
+            marginTop: 35,
+            width: 200
+          }]}>
+            Watch video and wait for the question
+          </Text>
+        </View>
       </View>
     )
   }
