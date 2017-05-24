@@ -115,15 +115,20 @@ const resolvers = {
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {
-        const user = await context.Users.findByUsername(args.username)
+        const username = args.username.trim()
+        if (!username || !args.password) {
+          throw new Error('Username and password cannot be empty')
+        }
+
+        const user = await context.Users.findByUsername(username)
 
         if (user) {
           throw new Error('Username is already taken')
         }
 
-        await context.Users.updateUser(context.user._id, args.username, args.password)
+        await context.Users.updateUser(context.user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, args, context)
+        return resolvers.Mutation.logIn(root, { username, password: args.password }, context)
       } catch (e) {
         throw e
       }
