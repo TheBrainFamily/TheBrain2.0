@@ -28,18 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  flipCard: {
-    backfaceVisibility: 'hidden',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#9ACAF4',
-    margin: 0
-  },
-  flipCardBack: {
-    position: 'absolute'
-  },
   wellDonePage: {
-    backgroundColor: 'steelblue',
+    backgroundColor: '#662d91',
     height: '100%'
   },
   wellDoneContainer: {
@@ -82,10 +72,19 @@ const styles = StyleSheet.create({
     top: '50%',
     left: 5
   },
+  flipCard: {
+    // backfaceVisibility: 'hidden',
+    width: '90%',
+    backgroundColor: '#662d91',
+    marginLeft: '5%',
+  },
+  flipCardBack: {
+    position: 'absolute'
+  },
   flipCardContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EEE'
+    backgroundColor: 'white',
   },
   summaryContainer: {
     height: 25,
@@ -145,11 +144,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   questionHeader: {
-    zIndex: 50,
+    zIndex: 9999,
     margin: 0,
     // padding: 30,
     height: 90,
     width: '100%',
+    backgroundColor: '#662d91',
   },
   questionHeaderFluxContainer: {
     flex: 1,
@@ -161,14 +161,14 @@ const styles = StyleSheet.create({
     height: 24,
     color: 'white',
     fontWeight: 'bold',
-    backgroundColor: 'steelblue',
+    backgroundColor: '#662d91',
     fontSize: 12,
     padding: 5,
     textAlign: 'center'
   },
   primaryText: {
     color: 'black',
-    backgroundColor: '#EEE',
+    backgroundColor: 'white',
     fontSize: 20,
     padding: 10,
     textAlign: 'center'

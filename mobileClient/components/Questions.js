@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react'
+import { connect } from 'react-redux'
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import {withRouter} from 'react-router'
@@ -11,6 +12,7 @@ import {
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import HeaderQuestion from './HeaderQuestion'
+import Boisko from './Boisko'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
@@ -42,6 +44,8 @@ class Questions extends React.Component {
 
       if (itemsWithFlashcard.length > 0) {
         const flashcard = itemsWithFlashcard[0].flashcard
+        console.log('PINGWIN: flashcard', flashcard)
+        console.log('PINGWIN: this', this)
         const evalItem = itemsWithFlashcard[0].item
 
         const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
@@ -55,7 +59,9 @@ class Questions extends React.Component {
             reviewFlashcards={reviewFlashcards}
                     />
           <Flashcard question={flashcard.question} answer={flashcard.answer}
-            evalItemId={evalItem._id} /></View>)
+            evalItemId={evalItem._id} />
+          {this.props.flashcard.visibleAnswer ? <Boisko></Boisko> : null}
+        </View>)
       } else {
         return <Text>no flashcards left</Text>
       }
@@ -96,5 +102,5 @@ export default withRouter(
             fetchPolicy: 'network-only'
           }
         })
-    )(Questions)
+    )(connect(state => state)(Questions))
 )
