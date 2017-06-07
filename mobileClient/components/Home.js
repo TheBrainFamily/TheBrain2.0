@@ -49,6 +49,9 @@ class Home extends React.Component {
             <Link to='/login'>
               <Text style={styles.button}>Login</Text>
             </Link>
+            <Link to='/questions'>
+              <Text style={styles.button}>Questions</Text>
+            </Link>
           </View>
         }
 
