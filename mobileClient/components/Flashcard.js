@@ -116,7 +116,7 @@ class Flashcard extends React.Component {
       StyleSheet.flatten(styles.summaryContainer).height +
       2 * StyleSheet.flatten(styles.primaryHeader).height +
       22.5
-    const elementHeight = visibleAnswer ? height - heightOfOtherElements - 200 : height - heightOfOtherElements;
+    const elementHeight = visibleAnswer ? height - heightOfOtherElements - 300 : height - heightOfOtherElements;
     return {
       height: elementHeight
     }
@@ -155,7 +155,7 @@ class Flashcard extends React.Component {
             backgroundColor: 'transparent', shadowColor: 'black',
             shadowOffset: {width: 4, height: 4},
             shadowRadius: 4,
-            shadowOpacity: 0.5, marginTop: '5%',
+            shadowOpacity: 0.5, marginVertical: '5%',
           },]}>
             <TouchableOpacity onPress={() => this.flipCard()}>
               <FrontCard dynamicStyles={this.state.dynamicStyles}

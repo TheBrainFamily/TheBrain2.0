@@ -206,6 +206,97 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderRadius: 23,
     overflow: 'hidden'
+  },
+  answerEvaluator: {
+    position: 'relative',
+    backgroundColor: 'white',
+    overflow: 'hidden',
+    width: '100%',
+    height: '48.4%'
+  },
+  answerFieldTop: {
+    position: 'absolute',
+    top: 0,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#71b9d3',
+    width: 170,
+    height: 50,
+    borderRadius: 35,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0
+  },
+  answerFieldRight: {
+    position: 'absolute',
+    top: '50%',
+    right: 0,
+    transform: [{ translateY: -75 }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ff8533',
+    width: 50,
+    height: 170,
+    borderRadius: 35,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0
+  },
+  answerFieldBottom: {
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#c1272d',
+    width: 170,
+    height: 50,
+    borderRadius: 35,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
+  },
+  answerFieldLeft: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    transform: [{ translateY: -75 }],
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#62c46c',
+    width: 50,
+    height: 170,
+    borderRadius: 35,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0
+  },
+  answerText: {
+    color: 'white',
+    fontSize: 20,
+    lineHeight: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    width: 100
+  },
+  answerCircle: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '50%',
+    transform: [{ translateY: -50 }],
+    borderWidth: 2,
+    borderColor: '#b3b3b3',
+    width: 100,
+    height: 100,
+    borderRadius: 50
+  },
+  answerSwipeBall: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '50%',
+    transform: [{ translateY: -35 }],
+    backgroundColor: '#25a45d',
+    width: 70,
+    height: 70,
+    borderRadius: 35
   }
 })
 

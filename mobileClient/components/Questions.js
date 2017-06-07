@@ -12,7 +12,7 @@ import {
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import HeaderQuestion from './HeaderQuestion'
-import Boisko from './Boisko'
+import AnswerEvaluator from './AnswerEvaluator'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
@@ -60,7 +60,7 @@ class Questions extends React.Component {
                     />
           <Flashcard question={flashcard.question} answer={flashcard.answer}
             evalItemId={evalItem._id} />
-          {this.props.flashcard.visibleAnswer ? <Boisko></Boisko> : null}
+          {this.props.flashcard.visibleAnswer ? <AnswerEvaluator evalItemId={evalItem._id} /> : null}
         </View>)
       } else {
         return <Text>no flashcards left</Text>
