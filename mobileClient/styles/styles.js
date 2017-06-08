@@ -82,9 +82,7 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   flipCardContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   summaryContainer: {
     height: 25,
@@ -165,6 +163,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     padding: 5,
     textAlign: 'center'
+  },
+  flipCardHeader: {
+    height: 24,
+    color: '#662d91',
+    fontWeight: 'bold',
+    fontSize: 12,
+    padding: 5
+  },
+  flipCardBody: {
+    height: 140,
+    justifyContent: 'center'
   },
   primaryText: {
     color: 'black',
