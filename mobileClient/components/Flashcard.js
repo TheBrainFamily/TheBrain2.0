@@ -116,7 +116,7 @@ class Flashcard extends React.Component {
       StyleSheet.flatten(styles.summaryContainer).height +
       2 * StyleSheet.flatten(styles.primaryHeader).height +
       22.5
-    const elementHeight = height - heightOfOtherElements - 300
+    const elementHeight = height - heightOfOtherElements - 278
     return {
       height: elementHeight
     }
