@@ -3704,6 +3704,10 @@ react-native-hamburger@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/react-native-hamburger/-/react-native-hamburger-0.0.2.tgz#c1ebcb8cb091287e1dcfc1364a97f3b73d20a9b5"
 
+react-native-linear-gradient@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.0.0.tgz#7442c00e1fcd9fca329119dcbaf744d12bcd1b5a"
+
 react-native-svg-uri@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-svg-uri/-/react-native-svg-uri-1.2.0.tgz#2e03023a35b044b9a65c9ddb843d5a3b2f23cb70"
