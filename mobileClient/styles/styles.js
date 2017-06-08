@@ -223,6 +223,40 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '45%'
   },
+  answerTopLine: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: 50,
+    width: 2,
+    height: 47,
+    backgroundColor: '#71b9d3'
+  },
+  answerRightLine: {
+    position: 'absolute',
+    top: '50%',
+    right: 50,
+    width: 88,
+    height: 2,
+    backgroundColor: '#ff8533',
+    transform: [{ translateY: -1 }]
+  },
+  answerBottomLine: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 50,
+    width: 2,
+    height: 47,
+    backgroundColor: '#c1272d'
+  },
+  answerLeftLine: {
+    position: 'absolute',
+    top: '50%',
+    left: 50,
+    width: 88,
+    height: 2,
+    backgroundColor: '#62c46c',
+    transform: [{ translateY: -1 }]
+  },
   answerFieldTop: {
     position: 'absolute',
     top: 0,
