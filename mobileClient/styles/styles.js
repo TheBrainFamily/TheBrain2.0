@@ -167,7 +167,8 @@ const styles = StyleSheet.create({
   flipCardHeader: {
     height: 24,
     color: '#662d91',
-    fontWeight: 'bold',
+    fontWeight: '900',
+    letterSpacing: -1,
     fontSize: 12,
     padding: 5
   },
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   infoText: {
     textAlign: 'center',
     fontWeight: '600',
-    fontSize: 17
+    fontSize: 16
   }
 })
 
