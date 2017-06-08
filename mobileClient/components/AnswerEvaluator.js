@@ -23,6 +23,7 @@ class AnswerEvaluator extends React.Component {
         </View>
         <View style={styles.answerCircle} />
         <SwipeBall evalItemId={this.props.evalItemId} />
+        {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
       </View>
     )
   }
