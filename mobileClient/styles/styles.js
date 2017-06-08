@@ -297,6 +297,13 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35
+  },
+  answerEvaluatorOverlay: {
+    position: 'absolute',
+    backgroundColor: '#fffa',
+    top: 0,
+    bottom: 0,
+    width: '100%'
   }
 })
 
