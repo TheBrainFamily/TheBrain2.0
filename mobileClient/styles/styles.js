@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
     width: '100%',
-    height: '48.4%'
+    height: '45%'
   },
   answerFieldTop: {
     position: 'absolute',
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     top: '50%',
     transform: [{ translateY: -35 }],
-    backgroundColor: '#25a45d',
+    backgroundColor: '#662d91',
     width: 70,
     height: 70,
     borderRadius: 35
