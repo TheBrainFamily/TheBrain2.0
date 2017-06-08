@@ -343,10 +343,20 @@ const styles = StyleSheet.create({
   },
   answerEvaluatorOverlay: {
     position: 'absolute',
-    backgroundColor: '#fffa',
+    backgroundColor: '#fffd',
     top: 0,
     bottom: 0,
-    width: '100%'
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignContent: 'center',
+    textAlign: 'center',
+    padding: 40
+  },
+  infoText: {
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 17
   }
 })
 
