@@ -60,7 +60,7 @@ class Questions extends React.Component {
                     />
           <Flashcard question={flashcard.question} answer={flashcard.answer}
             evalItemId={evalItem._id} />
-          {this.props.flashcard.visibleAnswer ? <AnswerEvaluator evalItemId={evalItem._id} /> : null}
+          <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
         </View>)
       } else {
         return <Text>no flashcards left</Text>
