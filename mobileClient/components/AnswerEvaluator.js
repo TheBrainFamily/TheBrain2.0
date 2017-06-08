@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
 
 import SwipeBall from './SwipeBall'
 
@@ -9,6 +10,30 @@ class AnswerEvaluator extends React.Component {
   render () {
     return (
       <View style={styles.answerEvaluator}>
+        <LinearGradient
+          style={styles.answerTopLine}
+          colors={['#71b9d3', '#b3b3b3']}
+          start={{x: 0, y: 0}}
+          end={{x: 0, y: 1}}
+        />
+        <LinearGradient
+          style={styles.answerRightLine}
+          colors={['#ff8533', '#b3b3b3']}
+          start={{x: 1, y: 0}}
+          end={{x: 0, y: 0}}
+        />
+        <LinearGradient
+          style={styles.answerBottomLine}
+          colors={['#c1272d', '#b3b3b3']}
+          start={{x: 0, y: 1}}
+          end={{x: 0, y: 0}}
+        />
+        <LinearGradient
+          style={styles.answerLeftLine}
+          colors={['#62c46c', '#b3b3b3']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
         <View style={styles.answerFieldTop}>
           <Text style={styles.answerText}>Easy</Text>
         </View>
