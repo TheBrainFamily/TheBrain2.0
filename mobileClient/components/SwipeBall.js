@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import LinearGradient from 'react-native-linear-gradient'
 
 import styles from '../styles/styles'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
@@ -77,7 +78,8 @@ class SwipeBall extends React.Component {
 
   render () {
     return (
-      <View
+      <LinearGradient
+        colors={['#7c45d2', '#672f92']}
         style={[ styles.answerSwipeBall, this.getCardTransformation() ]}
         onResponderMove={this.setPosition}
         onResponderRelease={this.resetPosition}
