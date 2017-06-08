@@ -9,6 +9,18 @@ import styles from '../styles/styles'
 console.disableYellowBox = true
 
 class AnswerEvaluator extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showTutorial: true
+    }
+  }
+
+  hideTutorial = () => {
+    this.setState({ showTutorial: false })
+  }
+
   render () {
     return (
       <View style={styles.answerEvaluator}>
@@ -50,16 +62,23 @@ class AnswerEvaluator extends React.Component {
         </View>
         <View style={styles.answerCircle} />
         <SwipeBall evalItemId={this.props.evalItemId} />
-        {!this.props.enabled &&
+        {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
+        {this.props.enabled && this.state.showTutorial &&
           <View style={styles.answerEvaluatorOverlay}>
             <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
             <Text style={styles.infoText}>
-              Rate using one of the four answers.{`\n`}
+              Rate using one of the four answers.{'\n'}
               Just slide your finger from the center circle to correct button.
             </Text>
             <View style={{ flexDirection: 'row', justifyItems: 'center' }}>
-              <Text style={[styles.button, { backgroundColor: '#62c46c' }]}>OK, go on.</Text>
-              <Text style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}>OK, go on. Don't show it again</Text>
+              <Text
+                onPress={this.hideTutorial}
+                style={[styles.button, { backgroundColor: '#62c46c', fontSize: 14, fontWeight: '500' }]}
+              >OK, go on</Text>
+              <Text
+                onPress={this.hideTutorial}
+                style={[styles.button, { backgroundColor: '#662d91', fontSize: 14, fontWeight: '500', marginLeft: 5 }]}
+              >OK, go on. Don't show it again</Text>
             </View>
           </View>
         }
