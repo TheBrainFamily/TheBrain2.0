@@ -65,6 +65,10 @@ export class LessonsRepository {
     return Lessons.find()
   }
 
+  async getLessonCount () {
+    return { count: Lessons.count().exec() }
+  }
+
   async getLessonByPosition (position: number) {
     console.log('getChannel by ', position)
     return Lessons.findOne({position})
