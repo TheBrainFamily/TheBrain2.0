@@ -1,10 +1,9 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import Header from './Header'
+import ProgressBar from './ProgressBar'
 import Lecture from './Lecture'
-
-import styles from '../styles/styles'
 
 export default class Home extends React.Component {
   render () {
@@ -13,12 +12,7 @@ export default class Home extends React.Component {
         <Header withShadow />
 
         <View style={{ alignItems: 'center' }}>
-          <Text style={[ styles.textDefault, {
-            margin: 30,
-            width: 200
-          }]}>
-            Watch video and wait for the question
-          </Text>
+          <ProgressBar />
 
           <Lecture />
         </View>

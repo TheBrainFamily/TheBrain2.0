@@ -26,7 +26,23 @@ class Lecture extends React.Component {
       return (<Text>Error... Check if server is running.</Text>)
     }
 
-    return <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+    if (!this.props.data.Lesson) {
+      return (<Text style={[ styles.textDefault, { margin: 35 } ]}>No more lessons</Text>)
+    }
+
+    return (
+      <View style={{ width: '100%' }}>
+        <Text
+          style={[ styles.textDefault, {
+            margin: 30,
+            width: 200,
+            alignSelf: 'center'
+          }]}>
+          Watch video and wait for the question
+        </Text>
+        <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+      </View>
+    )
   }
 }
 
