@@ -14,6 +14,9 @@ export const typeDefs = gql`
         flashcardIds: [String]!,
         youtubeId: String,
     }
+    type LessonCount {
+        count: Int
+    }
     type Flashcard {
         _id: String,
         question: String!,
@@ -64,6 +67,7 @@ export const typeDefs = gql`
         Item: Item,
         ItemsWithFlashcard: [ItemWithFlashcard]!
         SessionCount: SessionCount
+        LessonCount: LessonCount
         CurrentUser: User
     }
     
