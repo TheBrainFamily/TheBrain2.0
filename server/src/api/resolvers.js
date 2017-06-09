@@ -25,6 +25,9 @@ const resolvers = {
     Lessons (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessons()
     },
+    LessonCount (root: ?string, args: ?Object, context: Object) {
+      return context.Lessons.getLessonCount()
+    },
     Item (root: ?string, args: { _id: string }, context: Object) {
       return context.Items.getItemById(args._id, context.user._id)
     },
