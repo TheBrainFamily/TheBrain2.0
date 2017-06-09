@@ -245,6 +245,28 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     overflow: 'hidden'
   },
+  progressBarTrack: {
+    position: 'relative',
+    width: '90%',
+    height: 3,
+    margin: 20,
+    borderRadius: 1.5,
+    backgroundColor: '#0007'
+  },
+  progressBarProgressLine: {
+    position: 'absolute',
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: '#fff'
+  },
+  progressBarProgressCircle: {
+    position: 'absolute',
+    transform: [{ translateX: -7.5 }, { translateY: -6 }],
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: '#fff'
+  },
   answerEvaluator: {
     position: 'relative',
     backgroundColor: 'white',
