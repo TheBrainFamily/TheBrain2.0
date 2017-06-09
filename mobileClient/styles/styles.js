@@ -108,6 +108,22 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: 100
   },
+  menuOverlay: {
+    top: 122,
+    width: '100%',
+    position: 'absolute',
+    backgroundColor: '#68b888ee'
+  },
+  menuButton: {
+    borderColor: '#fff5',
+    borderBottomWidth: 1
+  },
+  menuButtonText: {
+    textAlign: 'center',
+    padding: 15,
+    color: 'white',
+    fontWeight: 'bold'
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',
@@ -132,6 +148,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontFamily: 'Exo2-Regular'
+  },
+  headerLogo: {
+    padding: 0,
+    marginLeft: -10,
+    marginTop: -25,
+    marginBottom: 0,
+    width: 250,
+    height: 65,
+    flex: 1,
+    transform: [
+      { scale: 0.83 }
+    ]
   },
   headerBorder: {
     paddingLeft: 15,
