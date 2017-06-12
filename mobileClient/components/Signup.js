@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import Header from './Header'
 import FBLoginButton from './FBLoginButton'
+import Loading from './Loading'
 
 import styles from '../styles/styles'
 
@@ -48,7 +49,7 @@ class Signup extends React.Component {
 
   render () {
     if (this.props.currentUser.loading) {
-      return <Text>Loading...</Text>
+      return <Loading />
     }
 
     return (

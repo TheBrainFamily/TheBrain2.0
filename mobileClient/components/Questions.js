@@ -13,10 +13,9 @@ import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import HeaderQuestion from './HeaderQuestion'
 import AnswerEvaluator from './AnswerEvaluator'
+import Loading from './Loading'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
-
-import styles from '../styles/styles'
 
 class Questions extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -39,11 +38,7 @@ class Questions extends React.Component {
 
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
-      return (
-        <View style={{ alignContent: 'center', justifyContent: 'center', height: '100%' }}>
-          <Text style={ styles.textDefault }>Loading...</Text>
-        </View>
-      )
+      return <Loading />
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
       const sessionCount = this.props.sessionCount.SessionCount
