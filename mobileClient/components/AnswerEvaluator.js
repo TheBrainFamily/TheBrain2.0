@@ -70,7 +70,7 @@ class AnswerEvaluator extends React.Component {
               Rate using one of the four answers.{'\n'}
               Just slide your finger from the center circle to correct button.
             </Text>
-            <View style={{ flexDirection: 'row', justifyItems: 'center' }}>
+            <View style={{ flexDirection: 'row' }}>
               <Text
                 onPress={this.hideTutorial}
                 style={[styles.button, { backgroundColor: '#62c46c', fontSize: 14, fontWeight: '500' }]}
