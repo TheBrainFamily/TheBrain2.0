@@ -34,6 +34,10 @@ class Header extends React.Component {
     this.props.history.push('/questions')
   }
 
+  goSignup = () => {
+    this.props.history.push('/signup')
+  }
+
   logout = () => {
     this.props.logout()
       .then(() => {
@@ -112,6 +116,14 @@ class Header extends React.Component {
               style={ styles.menuButton }
             >
               <Text style={ styles.menuButtonText }>Questions</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              onPress={this.goSignup}
+              activeOpacity={1}
+              underlayColor="#62c46caa"
+              style={ styles.menuButton }
+            >
+              <Text style={ styles.menuButtonText }>Sign up</Text>
             </TouchableHighlight>
           </View>
         }
