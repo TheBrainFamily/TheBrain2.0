@@ -5,6 +5,7 @@ import YouTube from 'react-native-youtube'
 import { Text, View } from 'react-native'
 // import Introduction from './Introduction';
 // import Content from './Content';
+import Loading from './Loading'
 import {graphql} from 'react-apollo'
 import { withRouter } from 'react-router-native'
 
@@ -17,7 +18,7 @@ class Lecture extends React.Component {
     if (this.props.data.loading) {
       return (
         <View style={ styles.videoPlaceholder }>
-          <Text style={[ styles.textDefault, { display: 'flex', alignSelf: 'center' }]}>Loading...</Text>
+          <Loading />
         </View>
       )
     }
