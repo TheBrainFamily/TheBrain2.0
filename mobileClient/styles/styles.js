@@ -401,7 +401,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
-    textAlign: 'center',
     padding: 40
   },
   infoText: {
