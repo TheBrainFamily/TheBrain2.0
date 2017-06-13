@@ -3,11 +3,12 @@ import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
-import { FBLoginManager } from 'react-native-facebook-login'
 
 import Hamburger from 'react-native-hamburger'
+
+import MainMenu from './MainMenu'
 
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
@@ -24,30 +25,6 @@ class Header extends React.Component {
 
   goHome = () => {
     this.props.history.push('/')
-  }
-
-  goLogin = () => {
-    this.props.history.push('/login')
-  }
-
-  goQuestions = () => {
-    this.props.history.push('/questions')
-  }
-
-  goSignup = () => {
-    this.props.history.push('/signup')
-  }
-
-  logout = () => {
-    this.props.logout()
-      .then(() => {
-        FBLoginManager.getCredentials((error, data) => {
-          if (!error && data && data.credentials) {
-            FBLoginManager.logout(() => {}) // any callback is required
-          }
-        })
-        this.props.client.resetStore()
-      })
   }
 
   hideMenu = () => {
@@ -89,43 +66,7 @@ class Header extends React.Component {
         </View>
 
         {this.state.active &&
-          <View style={[styles.headerWithShadow, styles.menuOverlay]}>
-            {activated ?
-              <TouchableHighlight
-                onPress={this.logout}
-                activeOpacity={1}
-                underlayColor="#62c46caa"
-                style={ styles.menuButton }
-              >
-                <Text style={ styles.menuButtonText }>Logout</Text>
-              </TouchableHighlight>
-              :
-              <TouchableHighlight
-                onPress={this.goLogin}
-                activeOpacity={1}
-                underlayColor="#62c46caa"
-                style={ styles.menuButton }
-              >
-                <Text style={ styles.menuButtonText }>Login</Text>
-              </TouchableHighlight>
-            }
-            <TouchableHighlight
-              onPress={this.goQuestions}
-              activeOpacity={1}
-              underlayColor="#62c46caa"
-              style={ styles.menuButton }
-            >
-              <Text style={ styles.menuButtonText }>Questions</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={this.goSignup}
-              activeOpacity={1}
-              underlayColor="#62c46caa"
-              style={ styles.menuButton }
-            >
-              <Text style={ styles.menuButtonText }>Sign up</Text>
-            </TouchableHighlight>
-          </View>
+          <MainMenu activated={activated} />
         }
       </View>
     )
