@@ -1,5 +1,8 @@
 import React from 'react'
-import { Button, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { connect } from 'react-redux'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import LinearGradient from 'react-native-linear-gradient'
 
 import SwipeBall from './SwipeBall'
@@ -21,7 +24,17 @@ class AnswerEvaluator extends React.Component {
     this.setState({ showTutorial: false })
   }
 
+  hideTutorialPermanently = () => {
+    this.props.hideTutorial()
+  }
+
   render () {
+    if (this.props.userDetails.loading) {
+      return <View />
+    }
+
+    const { hasDisabledTutorial } = this.props.userDetails.UserDetails
+
     return (
       <View style={styles.answerEvaluator}>
         <LinearGradient
@@ -62,8 +75,10 @@ class AnswerEvaluator extends React.Component {
         </View>
         <View style={styles.answerCircle} />
         <SwipeBall evalItemId={this.props.evalItemId} />
+
         {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
-        {this.props.enabled && this.state.showTutorial &&
+
+        {this.props.enabled && !hasDisabledTutorial && this.state.showTutorial &&
           <View style={styles.answerEvaluatorOverlay}>
             <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
             <Text style={styles.infoText}>
@@ -76,7 +91,7 @@ class AnswerEvaluator extends React.Component {
                 style={[styles.button, { backgroundColor: '#62c46c', fontSize: 14, fontWeight: '500' }]}
               >OK, go on</Text>
               <Text
-                onPress={this.hideTutorial}
+                onPress={this.hideTutorialPermanently}
                 style={[styles.button, { backgroundColor: '#662d91', fontSize: 14, fontWeight: '500', marginLeft: 5 }]}
               >OK, go on. Don't show it again</Text>
             </View>
@@ -87,4 +102,34 @@ class AnswerEvaluator extends React.Component {
   }
 }
 
-export default AnswerEvaluator
+const hideTutorialQuery = gql`
+    mutation hideTutorial {
+        hideTutorial {
+            _id
+        }
+    }
+`
+
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            hasDisabledTutorial
+        }
+    }
+`
+
+export default compose(
+  connect(),
+  graphql(hideTutorialQuery, {
+    props: ({ ownProps, mutate }) => ({
+      hideTutorial: () => mutate({
+        refetchQueries: [{
+          query: userDetailsQuery
+        }],
+      })
+    })
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+  })
+)(AnswerEvaluator)
