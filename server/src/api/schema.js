@@ -40,7 +40,7 @@ export const typeDefs = gql`
     }
 
     type UserDetails {
-        watchedLessonsIds: [String!]!
+        hasDisabledTutorial: Boolean
     }
     
     type User {
@@ -68,7 +68,8 @@ export const typeDefs = gql`
         ItemsWithFlashcard: [ItemWithFlashcard]!
         SessionCount: SessionCount
         LessonCount: LessonCount
-        CurrentUser: User
+        CurrentUser: User,
+        UserDetails: UserDetails
     }
     
     type Status {
@@ -83,6 +84,7 @@ export const typeDefs = gql`
         logIn(username: String!, password: String!): User
         logInWithFacebook(accessToken: String!): User
         logOut: User
+        hideTutorial: UserDetails
         resetPassword(username: String!): Status
     }
     
