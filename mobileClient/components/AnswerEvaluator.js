@@ -105,7 +105,7 @@ class AnswerEvaluator extends React.Component {
 const hideTutorialQuery = gql`
     mutation hideTutorial {
         hideTutorial {
-            _id
+            hasDisabledTutorial
         }
     }
 `
