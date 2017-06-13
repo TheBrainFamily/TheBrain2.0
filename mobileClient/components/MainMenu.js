@@ -1,11 +1,25 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { View, Text, TouchableHighlight } from 'react-native'
+import { Animated, Text, TouchableHighlight } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import styles from '../styles/styles'
 
 class MainMenu extends React.Component {
+  state = {
+    fadeAnim: new Animated.Value(0)
+  }
+
+  componentDidMount() {
+    Animated.timing(
+      this.state.fadeAnim,
+      {
+        toValue: 1,
+        duration: 200
+      }
+    ).start()
+  }
+
   logout = () => {
     this.props.logout()
       .then(() => {
@@ -31,8 +45,10 @@ class MainMenu extends React.Component {
   }
 
   render () {
+    let { fadeAnim } = this.state
+
     return (
-      <View style={[styles.headerWithShadow, styles.menuOverlay]}>
+      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim }]}>
         {this.props.activated ?
           <TouchableHighlight
             onPress={this.logout}
@@ -68,7 +84,7 @@ class MainMenu extends React.Component {
         >
           <Text style={styles.menuButtonText}>Sign up</Text>
         </TouchableHighlight>
-      </View>
+      </Animated.View>
     )
   }
 }
