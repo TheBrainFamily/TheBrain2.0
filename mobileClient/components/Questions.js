@@ -45,8 +45,6 @@ class Questions extends React.Component {
 
       if (itemsWithFlashcard.length > 0) {
         const flashcard = itemsWithFlashcard[0].flashcard
-        console.log('PINGWIN: flashcard', flashcard)
-        console.log('PINGWIN: this', this)
         const evalItem = itemsWithFlashcard[0].item
 
         const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
