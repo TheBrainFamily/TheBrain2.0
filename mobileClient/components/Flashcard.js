@@ -123,7 +123,6 @@ class Flashcard extends React.Component {
   }
 
   onLayout = () => {
-    console.log('PINGWIN: in on Layout ', this.props.flashcard.visibleAnswer )
     const {width, height} = Dimensions.get('window')
     this.setState({
       windowDimensions: {
