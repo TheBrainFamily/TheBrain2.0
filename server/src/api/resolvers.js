@@ -47,6 +47,10 @@ const resolvers = {
     },
     CurrentUser (root: ?string, args: ?Object, context: Object) {
       return context.user
+    },
+    async UserDetails (root: ?string, args: ?Object, context: Object) {
+      const hasDisabledTutorial = await context.UserDetails.hasDisabledTutorial(context.user._id)
+      return { hasDisabledTutorial }
     }
   },
   Mutation: {
@@ -115,6 +119,9 @@ const resolvers = {
         context.req.logOut()
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
+    },
+    async hideTutorial (root: ?string, args: ?Object, context: Object) {
+      return context.UserDetails.disableTutorial(context.user._id)
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {
