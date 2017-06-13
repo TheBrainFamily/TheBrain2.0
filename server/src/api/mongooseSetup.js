@@ -195,7 +195,6 @@ export class UserDetailsRepository {
     const user = await UserDetails.findOne({userId})
     user.hasDisabledTutorial = true
     await user.save()
-    return user
   }
 }
 
