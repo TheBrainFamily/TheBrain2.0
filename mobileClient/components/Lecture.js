@@ -70,8 +70,13 @@ class LectureVideo extends React.Component {
   _onChangeState = (event) => {
     console.log('Gozdecki: event', event)
     if (event.state === 'ended') {
-      this.props.lessonWatchedMutation()
-      this.props.history.push('/wellDone')
+      this.props.lessonWatchedMutation().then((abc) => {
+        let url = '/questions'
+        if (this.props.lesson.position <= 1) {
+          url = '/wellDone'
+        }
+        this.props.history.push(url)
+      })
     }
   }
 }
