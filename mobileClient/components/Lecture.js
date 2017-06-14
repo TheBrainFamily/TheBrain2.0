@@ -3,21 +3,22 @@
 import React from 'react'
 import YouTube from 'react-native-youtube'
 import { Text, View } from 'react-native'
-// import Introduction from './Introduction';
-// import Content from './Content';
-import Loading from './Loading'
-import {graphql} from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
+
+import Loading from './Loading'
 
 import styles from '../styles/styles'
 
+import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
+import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
   render () {
     if (this.props.data.loading) {
       return (
-        <View style={ styles.videoPlaceholder }>
+        <View style={styles.videoPlaceholder}>
           <Loading />
         </View>
       )
@@ -28,13 +29,13 @@ class Lecture extends React.Component {
     }
 
     if (!this.props.data.Lesson) {
-      return (<Text style={[ styles.textDefault, { margin: 35 } ]}>No more lessons</Text>)
+      return (<Text style={[styles.textDefault, { margin: 35 }]}>No more lessons</Text>)
     }
 
     return (
       <View style={{ width: '100%' }}>
         <Text
-          style={[ styles.textDefault, {
+          style={[styles.textDefault, {
             margin: 30,
             width: 200,
             alignSelf: 'center'
@@ -48,17 +49,10 @@ class Lecture extends React.Component {
 }
 
 class LectureVideo extends React.Component {
-  state: Object;
-  constructor (props: Object) {
-    super(props)
-    this.state = {
-      isReady: false
-    }
-  }
   render () {
     return (
       <YouTube
-        ref='youtubePlayer'
+        ref="youtubePlayer"
         videoId={this.props.lesson.youtubeId}
         play={false}
         hidden={false}
@@ -68,7 +62,7 @@ class LectureVideo extends React.Component {
         modestbranding={false}
         rel={false}
         onChangeState={this._onChangeState}
-        style={{alignSelf: 'stretch', height: 300, backgroundColor: '#000'}}
+        style={{ alignSelf: 'stretch', height: 300, backgroundColor: '#000' }}
       />
     )
   }
@@ -76,12 +70,16 @@ class LectureVideo extends React.Component {
   _onChangeState = (event) => {
     console.log('Gozdecki: event', event)
     if (event.state === 'ended') {
+      this.props.lessonWatchedMutation()
       this.props.history.push('/wellDone')
     }
   }
 }
 
-const LectureVideoWithRouter = withRouter(LectureVideo)
+const LectureVideoWithRouter = compose(
+  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  withRouter
+)(LectureVideo)
 
 export default graphql(currentLessonQuery, {
   options: {
