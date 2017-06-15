@@ -58,7 +58,7 @@ class Header extends React.Component {
 
           <Hamburger
             active={this.state.active}
-            color="#662e8f"
+            color="#62c46c"
             type="spinCross"
             onPress={this.hideMenu}
             style={{ marginTop: 30, flex: 1 }}

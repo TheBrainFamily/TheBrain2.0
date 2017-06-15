@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     zIndex: 50,
     margin: 0,
-    paddingTop: 50,
-    paddingBottom: 37,
+    paddingTop: 40,
+    paddingBottom: 27,
     paddingHorizontal: 30
   },
   headerWithShadow: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     // padding: 30,
     height: 90,
     width: '100%',
-    backgroundColor: '#662d91',
+    backgroundColor: '#662d91'
   },
   questionHeaderFluxContainer: {
     flex: 1,
