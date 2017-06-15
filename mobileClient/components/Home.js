@@ -1,13 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 
 import Header from './Header'
+import CircleButton from './CircleButton'
 
 import styles from '../styles/styles'
 
 class Home extends React.Component {
-  openCourse = () => {
+  openCourse = (courseName) => () => {
     this.props.history.push('/course')
   }
 
@@ -30,49 +31,23 @@ class Home extends React.Component {
             Choose a course:
           </Text>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableWithoutFeedback onPress={this.openCourse}>
-              <View style={{
-                marginHorizontal: 20
-              }}>
-                <View style={{
-                  position: 'relative',
-                  backgroundColor: '#662d91',
-                  width: 120,
-                  height: 120,
-                  borderRadius: 60,
-                  borderWidth: 2,
-                  borderColor: 'white'
-                }}>
-                  <View style={[style.smallCircle]}/>
-                  <View style={[style.smallCircle, { left: 116, top: 58 }]}/>
-                  <View style={[style.smallCircle, { top: 116 }]}/>
-                  <View style={[style.smallCircle, { left: 0, top: 58 }]}/>
-                </View>
-                <Text style={{
-                  color: 'white',
-                  marginTop: 15,
-                  textAlign: 'center',
-                  fontWeight: '500'
-                }}>Chemistry</Text>
-              </View>
-            </TouchableWithoutFeedback>
             <View style={{
               marginHorizontal: 20
             }}>
-              <View style={{
-                backgroundColor: '#53bd25',
-                width: 120,
-                height: 120,
-                borderRadius: 60,
-                borderWidth: 2,
-                borderColor: 'white'
-              }} />
-              <Text style={{
-                color: 'white',
-                marginTop: 15,
-                textAlign: 'center',
-                fontWeight: '500'
-              }}>Biology</Text>
+              <CircleButton
+                color="#662d91"
+                onPress={this.openCourse('Chemistry')}
+              />
+              <Text style={ style.courseTitle }>Chemistry</Text>
+            </View>
+            <View style={{
+              marginHorizontal: 20
+            }}>
+              <CircleButton
+                color="#62c46c"
+                onPress={this.openCourse('Biology')}
+              />
+              <Text style={ style.courseTitle }>Biology</Text>
             </View>
           </View>
         </View>
@@ -84,6 +59,12 @@ class Home extends React.Component {
 export default withRouter(Home)
 
 const style = StyleSheet.create({
+  courseTitle: {
+    color: 'white',
+    marginTop: 15,
+    textAlign: 'center',
+    fontWeight: '500'
+  },
   smallCircle: {
     position: 'absolute',
     top: 0,
