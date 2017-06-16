@@ -8,7 +8,7 @@ export default class Course extends React.Component {
   render () {
     return (
       <View style={{ height: '100%', position: 'relative' }}>
-        <CourseHeader />
+        <CourseHeader onLogoPress={this.props.onCloseCurse} />
 
         <View style={{ alignItems: 'center' }}>
           <Lecture />
