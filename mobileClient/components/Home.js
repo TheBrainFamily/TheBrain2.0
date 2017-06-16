@@ -20,6 +20,10 @@ class Home extends React.Component {
     this.setState({ isCourseSelected: true })
   }
 
+  closeCourse = () => {
+    this.setState({ isCourseSelected: false })
+  }
+
   render () {
     const { isCourseSelected } = this.state
 
@@ -64,7 +68,7 @@ class Home extends React.Component {
             </View>
           </View>
           :
-          <Course />
+          <Course onCloseCurse={this.closeCourse} />
         }
       </View>
     )
