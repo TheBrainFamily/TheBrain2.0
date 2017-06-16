@@ -20,16 +20,12 @@ class CourseHeader extends React.Component {
     this.setState({ active: !this.state.active })
   }
 
-  goHome = () => {
-    this.props.history.push('/')
-  }
-
   render () {
     return (
       <View style={styles.courseHeader}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity onPress={this.goHome}>
+            <TouchableOpacity onPress={this.props.onLogoPress}>
               <SvgUri width="100" height="49" source={require('../images/logo.svg')} />
             </TouchableOpacity>
             <View style={styles.headerBorder}><Text style={styles.headerTitle}>Chemistry</Text></View>

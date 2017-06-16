@@ -41,8 +41,9 @@ class Header extends React.Component {
     if (this.props.withShadow) {
       headerStyle.push(styles.headerWithShadow)
     }
+
+    this.state.topPosition.setValue(0)
     if (this.props.hide) {
-      this.state.topPosition.setValue(0)
       Animated.timing(this.state.topPosition, {
         toValue: -150,
         duration: 1000
