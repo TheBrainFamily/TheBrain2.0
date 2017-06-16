@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import { TouchableOpacity, View } from 'react-native'
+import { Animated, TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 
 import Hamburger from 'react-native-hamburger'
@@ -19,7 +19,8 @@ class Header extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      active: false
+      active: false,
+      topPosition: new Animated.Value(0)
     }
   }
 
@@ -40,16 +41,23 @@ class Header extends React.Component {
     if (this.props.withShadow) {
       headerStyle.push(styles.headerWithShadow)
     }
+    if (this.props.hide) {
+      this.state.topPosition.setValue(0)
+      Animated.timing(this.state.topPosition, {
+        toValue: -150,
+        duration: 1000
+      }).start()
+    }
 
     const currentUser = this.props.data.CurrentUser
     const activated = currentUser && currentUser.activated
 
     return (
-      <View style={{ position: 'relative', zIndex: 1000 }}>
+      <Animated.View style={{ position: 'relative', zIndex: 1000, top: this.state.topPosition }}>
         <View style={headerStyle}>
           <TouchableOpacity onPress={this.goHome}>
             <SvgUri
-              style={ styles.headerLogo }
+              style={styles.headerLogo}
               width="250"
               height="65"
               source={logoBig}
@@ -66,9 +74,9 @@ class Header extends React.Component {
         </View>
 
         {this.state.active &&
-          <MainMenu activated={activated} />
+        <MainMenu activated={activated} />
         }
-      </View>
+      </Animated.View>
     )
   }
 }

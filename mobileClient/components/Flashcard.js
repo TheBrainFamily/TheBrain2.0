@@ -112,7 +112,7 @@ class Flashcard extends React.Component {
   getCardDynamicContentStyle = (height: number, visibleAnswer = false) => {
     const heightOfOtherElements =
       StyleSheet.flatten(styles.topContainer).height +
-      StyleSheet.flatten(styles.questionHeader).height +
+      StyleSheet.flatten(styles.courseHeader).height +
       StyleSheet.flatten(styles.summaryContainer).height +
       2 * StyleSheet.flatten(styles.primaryHeader).height +
       22.5

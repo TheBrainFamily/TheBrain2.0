@@ -167,21 +167,25 @@ const styles = StyleSheet.create({
     borderLeftColor: 'white',
     height: 36,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  questionHeader: {
+  courseHeader: {
+    position: 'absolute',
+    top: -90,
     zIndex: 9999,
     margin: 0,
-    // padding: 30,
-    height: 90,
+    height: 102,
     width: '100%',
-    backgroundColor: '#662d91'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   questionHeaderFluxContainer: {
     flex: 1,
+    width: '100%',
+    paddingHorizontal: 10,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   primaryHeader: {
     height: 24,
@@ -247,9 +251,10 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     position: 'relative',
-    width: '90%',
+    width: '85%',
     height: 3,
-    margin: 20,
+    marginTop: 15,
+    marginBottom: 30,
     borderRadius: 1.5,
     backgroundColor: '#0007'
   },
