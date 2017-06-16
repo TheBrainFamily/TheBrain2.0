@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableWithoutFeedback, View, Animated, Easing } from 'react-native'
+import { Animated, Easing, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class CircleButton extends React.Component {
   constructor (props) {
@@ -11,6 +11,9 @@ export default class CircleButton extends React.Component {
   }
 
   onPress = () => {
+    this.state.rotation.setValue(0)
+    this.state.radius.setValue(0)
+
     Animated.parallel([
       Animated.timing(this.state.rotation, {
         toValue: 1,
@@ -21,10 +24,10 @@ export default class CircleButton extends React.Component {
         toValue: 20,
         duration: 2000
       })
-    ]).start()
+    ]).start(this.props.onPress)
   }
 
-  getSmallCircleDynamicStyle(radius) {
+  getSmallCircleDynamicStyle (radius) {
     return {
       width: radius,
       height: radius,
@@ -50,11 +53,17 @@ export default class CircleButton extends React.Component {
             borderWidth: 2,
             borderColor: 'white'
           }}>
-            <Animated.View style={[ style.animationCircle, { transform: [{rotate: rotation}] } ]}>
+            <Animated.View style={[style.animationCircle, { transform: [{ rotate: rotation }] }]}>
               <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius)]} />
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), { left: 116, top: 58 }]} />
+              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), {
+                left: 116,
+                top: 58
+              }]} />
               <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), { top: 116 }]} />
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), { left: 0, top: 58 }]} />
+              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), {
+                left: 0,
+                top: 58
+              }]} />
             </Animated.View>
           </View>
         </View>
@@ -65,7 +74,8 @@ export default class CircleButton extends React.Component {
 
 CircleButton.defaultProps = {
   color: 'transparent',
-  radius: 60
+  radius: 60,
+  onPress: () => {}
 }
 
 const style = StyleSheet.create({
