@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Animated } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 
 import Header from './Header'
