@@ -1,19 +1,16 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import Header from './Header'
-import ProgressBar from './ProgressBar'
+import CourseHeader from './CourseHeader'
 import Lecture from './Lecture'
 
 export default class Course extends React.Component {
   render () {
     return (
-      <View>
-        <Header withShadow />
+      <View style={{ height: '100%', position: 'relative' }}>
+        <CourseHeader />
 
         <View style={{ alignItems: 'center' }}>
-          <ProgressBar />
-
           <Lecture />
         </View>
       </View>

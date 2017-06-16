@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
-import HeaderQuestion from './HeaderQuestion'
+import HeaderQuestion from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
 import Loading from './Loading'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
