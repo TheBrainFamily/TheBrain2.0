@@ -2,7 +2,7 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Text, View } from 'react-native'
+import { Text, View, Animated, Easing } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
 
@@ -15,6 +15,18 @@ import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/les
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
+  componentWillMount () {
+    this.infoScale = new Animated.Value(0)
+  }
+
+  componentDidMount() {
+    Animated.timing(this.infoScale, {
+      toValue: 1,
+      duration: 2000,
+      easing: Easing.elastic(1)
+    }).start()
+  }
+
   render () {
     if (this.props.data.loading) {
       return (
@@ -34,14 +46,16 @@ class Lecture extends React.Component {
 
     return (
       <View style={{ width: '100%' }}>
-        <Text
-          style={[styles.textDefault, {
-            margin: 30,
-            width: 200,
-            alignSelf: 'center'
-          }]}>
-          Watch video and wait for the question
-        </Text>
+        <Animated.View style={{ transform: [{ scale: this.infoScale }]}}>
+          <Text
+            style={[styles.textDefault, {
+              margin: 30,
+              width: 200,
+              alignSelf: 'center'
+            }]}>
+            Watch video and wait for the question
+          </Text>
+        </Animated.View>
         <LectureVideoWithRouter lesson={this.props.data.Lesson} />
       </View>
     )
