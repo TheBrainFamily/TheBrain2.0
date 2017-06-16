@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     width: 100
   },
   menuOverlay: {
-    top: 122,
+    top: 102,
     width: '100%',
     position: 'absolute',
     backgroundColor: '#68b888ee'
