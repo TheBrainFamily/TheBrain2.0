@@ -27,11 +27,16 @@ export default class CircleButton extends React.Component {
     ]).start(this.props.onPress)
   }
 
-  getSmallCircleDynamicStyle (radius) {
+  getSize (radius) {
     return {
       width: radius,
       height: radius,
-      transform: [{ translateX: -10 }, { translateY: -10 }],
+    }
+  }
+
+  getTranslation(translateDiff) {
+    return {
+      transform: [{ translateX: translateDiff }, { translateY: translateDiff }],
     }
   }
 
@@ -39,6 +44,11 @@ export default class CircleButton extends React.Component {
     const rotation = this.state.rotation.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '-90deg']
+    })
+
+    const translateDiff = this.state.radius.interpolate({
+      inputRange: [0, 20],
+      outputRange: [0, -10]
     })
 
     return (
@@ -54,13 +64,13 @@ export default class CircleButton extends React.Component {
             borderColor: 'white'
           }}>
             <Animated.View style={[style.animationCircle, { transform: [{ rotate: rotation }] }]}>
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius)]} />
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), {
+              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff)]} />
+              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), {
                 left: 116,
                 top: 58
               }]} />
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), { top: 116 }]} />
-              <Animated.View style={[style.smallCircle, this.getSmallCircleDynamicStyle(this.state.radius), {
+              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), { top: 116 }]} />
+              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), {
                 left: 0,
                 top: 58
               }]} />
