@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   courseHeader: {
     zIndex: 500,
     margin: 0,
-    height: 102,
+    height: 107,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
