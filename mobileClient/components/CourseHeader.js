@@ -33,7 +33,6 @@ class CourseHeader extends React.Component {
           <View style={{ marginRight: 15 }}>
             <Hamburger active={this.state.active} color="#ffffff" type="spinCross" onPress={this.hideMenu} />
           </View>
-
         </View>
 
         <ProgressBar />
