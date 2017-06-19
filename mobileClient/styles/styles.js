@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     width: 100
   },
   menuOverlay: {
-    top: 102,
+    top: 107,
     width: '100%',
     position: 'absolute',
     backgroundColor: '#68b888ee'
@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   courseHeader: {
-    position: 'absolute',
     zIndex: 500,
     margin: 0,
     height: 102,

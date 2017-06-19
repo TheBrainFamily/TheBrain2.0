@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
-import HeaderQuestion from './CourseHeader'
+import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
 import Loading from './Loading'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
@@ -36,6 +36,10 @@ class Questions extends React.Component {
     }
   }
 
+  goHome = () => {
+    this.props.history.push('/')
+  }
+
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <Loading />
@@ -51,16 +55,18 @@ class Questions extends React.Component {
         const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
         const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
 
-        return (<View>
-          <HeaderQuestion />
-          <SessionSummary newFlashcards={newFlashcards}
-            dueFlashcards={dueFlashcards}
-            reviewFlashcards={reviewFlashcards}
-                    />
-          <Flashcard question={flashcard.question} answer={flashcard.answer}
-            evalItemId={evalItem._id} />
-          <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
-        </View>)
+        return (
+          <View>
+            <CourseHeader onLogoPress={this.goHome} />
+            <SessionSummary newFlashcards={newFlashcards}
+              dueFlashcards={dueFlashcards}
+              reviewFlashcards={reviewFlashcards}
+                      />
+            <Flashcard question={flashcard.question} answer={flashcard.answer}
+              evalItemId={evalItem._id} />
+            <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
+          </View>
+        )
       } else {
         return <Text>no flashcards left</Text>
       }

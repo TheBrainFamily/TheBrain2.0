@@ -36,13 +36,13 @@ class Header extends React.Component {
     this.state.topPosition.setValue(0)
     if (this.props.hide) {
       Animated.timing(this.state.topPosition, {
-        toValue: -150,
+        toValue: -120,
         duration: 1000
       }).start()
     }
 
     return (
-      <Animated.View style={{ position: 'relative', zIndex: 1000, top: this.state.topPosition }}>
+      <Animated.View style={{ position: 'absolute', width: '100%', zIndex: 1000, top: this.state.topPosition }}>
         <View style={headerStyle}>
           <TouchableOpacity onPress={this.goHome}>
             <SvgUri
