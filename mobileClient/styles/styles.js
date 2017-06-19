@@ -171,8 +171,7 @@ const styles = StyleSheet.create({
   },
   courseHeader: {
     position: 'absolute',
-    top: -90,
-    zIndex: 9999,
+    zIndex: 500,
     margin: 0,
     height: 102,
     width: '100%',
@@ -182,6 +181,7 @@ const styles = StyleSheet.create({
   questionHeaderFluxContainer: {
     flex: 1,
     width: '100%',
+    paddingTop: 20,
     paddingHorizontal: 10,
     alignItems: 'center',
     flexDirection: 'row',
@@ -253,8 +253,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '85%',
     height: 3,
-    marginTop: 15,
-    marginBottom: 30,
+    marginVertical: 15,
     borderRadius: 1.5,
     backgroundColor: '#0007'
   },

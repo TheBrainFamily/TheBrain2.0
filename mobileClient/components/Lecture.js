@@ -2,7 +2,7 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Text, View, Animated, Easing } from 'react-native'
+import { Animated, Easing, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
 
@@ -15,27 +15,23 @@ import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/les
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
+  state = {
+    showLecture: false
+  }
+
   componentWillMount () {
     this.infoScale = new Animated.Value(0)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     Animated.timing(this.infoScale, {
       toValue: 1,
       duration: 2000,
       easing: Easing.elastic(1)
-    }).start()
+    }).start(() => this.setState({ showLecture: true }))
   }
 
   render () {
-    if (this.props.data.loading) {
-      return (
-        <View style={styles.videoPlaceholder}>
-          <Loading />
-        </View>
-      )
-    }
-
     if (this.props.data.error) {
       return (<Text>Error... Check if server is running.</Text>)
     }
@@ -46,7 +42,7 @@ class Lecture extends React.Component {
 
     return (
       <View style={{ width: '100%' }}>
-        <Animated.View style={{ transform: [{ scale: this.infoScale }]}}>
+        <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
           <Text
             style={[styles.textDefault, {
               margin: 30,
@@ -56,7 +52,18 @@ class Lecture extends React.Component {
             Watch video and wait for the question
           </Text>
         </Animated.View>
-        <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+
+        {this.state.showLecture &&
+          <View>
+            {this.props.data.loading ?
+              <View style={styles.videoPlaceholder}>
+                <Loading />
+              </View>
+              :
+              <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+            }
+          </View>
+        }
       </View>
     )
   }
