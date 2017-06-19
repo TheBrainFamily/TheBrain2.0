@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import LinearGradient from 'react-native-linear-gradient'
+import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
 
@@ -36,7 +37,7 @@ class AnswerEvaluator extends React.Component {
     const { hasDisabledTutorial } = this.props.userDetails.UserDetails
 
     return (
-      <View style={styles.answerEvaluator}>
+      <Animatable.View style={styles.answerEvaluator} animation="slideInUp">
         <LinearGradient
           style={styles.answerTopLine}
           colors={['#71b9d3', '#b3b3b3']}
@@ -97,7 +98,7 @@ class AnswerEvaluator extends React.Component {
             </View>
           </View>
         }
-      </View>
+      </Animatable.View>
     )
   }
 }
