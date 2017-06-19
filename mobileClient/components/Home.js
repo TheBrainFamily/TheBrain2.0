@@ -32,9 +32,9 @@ class Home extends React.Component {
     const { isCourseSelected, isExitAnimationFinished } = this.state
 
     return (
-      <View style={{ width: '100%', height: '100%' }}>
+      <View style={{ position: 'relative', width: '100%', height: '100%' }}>
         {!isExitAnimationFinished && <Header withShadow hide={isCourseSelected} />}
-        {isCourseSelected && <CourseHeader onLogoPress={this.closeCourse} />}
+        {isCourseSelected && <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse} />}
 
         {!isExitAnimationFinished && <Animatable.View style={{
           flexGrow: 1,
