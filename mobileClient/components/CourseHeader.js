@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 import Hamburger from 'react-native-hamburger'
 
+import MainMenu from './MainMenu'
 import ProgressBar from './ProgressBar'
 
 import styles from '../styles/styles'
@@ -16,7 +17,7 @@ class CourseHeader extends React.Component {
     }
   }
 
-  hideMenu = () => {
+  toggleMenu = () => {
     this.setState({ active: !this.state.active })
   }
 
@@ -31,11 +32,13 @@ class CourseHeader extends React.Component {
             <View style={styles.headerBorder}><Text style={styles.headerTitle}>Chemistry</Text></View>
           </View>
           <View style={{ marginRight: 15 }}>
-            <Hamburger active={this.state.active} color="#ffffff" type="spinCross" onPress={this.hideMenu} />
+            <Hamburger active={this.state.active} color="#ffffff" type="spinCross" onPress={this.toggleMenu} />
           </View>
         </View>
 
         <ProgressBar />
+
+        {this.state.active && <MainMenu />}
       </View>
     )
   }
