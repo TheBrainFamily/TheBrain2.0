@@ -33,7 +33,7 @@ class Home extends React.Component {
 
     return (
       <View style={{ position: 'relative', width: '100%', height: '100%' }}>
-        {!isExitAnimationFinished && <Header withShadow hide={isCourseSelected} />}
+        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} />}
         {isCourseSelected && <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse} />}
 
         {!isExitAnimationFinished && <Animatable.View style={{

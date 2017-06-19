@@ -33,6 +33,10 @@ class Header extends React.Component {
       headerStyle.push(styles.headerWithShadow)
     }
 
+    if (this.props.dynamic) {
+      headerStyle.push({ position: 'absolute', width: '100%' })
+    }
+
     this.state.topPosition.setValue(0)
     if (this.props.hide) {
       Animated.timing(this.state.topPosition, {
@@ -42,7 +46,7 @@ class Header extends React.Component {
     }
 
     return (
-      <Animated.View style={{ position: 'absolute', width: '100%', zIndex: 1000, top: this.state.topPosition }}>
+      <Animated.View style={{ zIndex: 1000, top: this.state.topPosition }}>
         <View style={headerStyle}>
           <TouchableOpacity onPress={this.goHome}>
             <SvgUri
