@@ -6,6 +6,8 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import SvgUri from 'react-native-svg-uri'
+import * as Animatable from 'react-native-animatable'
+
 import FrontCard from './FrontCard'
 import EmojiWrapper from './EmojiWrapper'
 import type { Direction } from '../helpers/SwipeHelpers'
@@ -145,7 +147,7 @@ class Flashcard extends React.Component {
     // const backStyle = this.props.flashcard.visibleAnswer ? {height: 200} : {};
 
     return (
-      <View onLayout={this.onLayout}>
+      <Animatable.View onLayout={this.onLayout} animation="zoomInLeft">
         <EmojiWrapper windowDimensions={this.state.windowDimensions}
                       dragLen={this.state.dragLen}
                       swipeDirection={this.state.swipeDirection}/>
@@ -170,7 +172,7 @@ class Flashcard extends React.Component {
             </TouchableOpacity>
           </View>
         </Animated.View>
-      </View>
+      </Animatable.View>
     )
   }
 }
