@@ -1,9 +1,15 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Animated, Text, TouchableHighlight } from 'react-native'
+import { compose, graphql, withApollo } from 'react-apollo'
+import gql from 'graphql-tag'
+import update from 'immutability-helper'
+
+import { Animated, Text, View, TouchableHighlight } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import styles from '../styles/styles'
+
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class MainMenu extends React.Component {
   state = {
@@ -45,11 +51,17 @@ class MainMenu extends React.Component {
   }
 
   render () {
+    if (this.props.data.loading) {
+      return <View />
+    }
     let { fadeAnim } = this.state
+
+    const currentUser = this.props.data.CurrentUser
+    const activated = currentUser && currentUser.activated
 
     return (
       <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim }]}>
-        {this.props.activated ?
+        {activated ?
           <TouchableHighlight
             onPress={this.logout}
             activeOpacity={1}
@@ -89,4 +101,33 @@ class MainMenu extends React.Component {
   }
 }
 
-export default withRouter(MainMenu)
+const logOutQuery = gql`
+    mutation logOut {
+        logOut {
+            _id, username, activated
+        }
+    }
+`
+
+export default compose(
+  withApollo,
+  withRouter,
+  graphql(logOutQuery, {
+    props: ({ ownProps, mutate }) => ({
+      logout: () => mutate({
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logOut
+              }
+            })
+          }
+        }
+      })
+    })
+  }),
+  graphql(currentUserQuery)
+)(MainMenu)

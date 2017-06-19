@@ -1,8 +1,5 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { compose, graphql, withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import { Animated, TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 
@@ -12,8 +9,6 @@ import MainMenu from './MainMenu'
 
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
-
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class Header extends React.Component {
   constructor (props) {
@@ -28,15 +23,11 @@ class Header extends React.Component {
     this.props.history.push('/')
   }
 
-  hideMenu = () => {
+  toggleMenu = () => {
     this.setState({ active: !this.state.active })
   }
 
   render () {
-    if (this.props.data.loading) {
-      return <View />
-    }
-
     const headerStyle = [styles.header]
     if (this.props.withShadow) {
       headerStyle.push(styles.headerWithShadow)
@@ -49,9 +40,6 @@ class Header extends React.Component {
         duration: 1000
       }).start()
     }
-
-    const currentUser = this.props.data.CurrentUser
-    const activated = currentUser && currentUser.activated
 
     return (
       <Animated.View style={{ position: 'relative', zIndex: 1000, top: this.state.topPosition }}>
@@ -69,46 +57,16 @@ class Header extends React.Component {
             active={this.state.active}
             color="#62c46c"
             type="spinCross"
-            onPress={this.hideMenu}
+            onPress={this.toggleMenu}
             style={{ marginTop: 30, flex: 1 }}
           />
         </View>
 
-        {this.state.active &&
-        <MainMenu activated={activated} />
-        }
+        {this.state.active && <MainMenu />}
       </Animated.View>
     )
   }
 }
 
-const logOutQuery = gql`
-    mutation logOut {
-        logOut {
-            _id, username, activated
-        }
-    }
-`
+export default withRouter(Header)
 
-export default compose(
-  withApollo,
-  withRouter,
-  graphql(logOutQuery, {
-    props: ({ ownProps, mutate }) => ({
-      logout: () => mutate({
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logOut
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
-  graphql(currentUserQuery)
-)(Header)
