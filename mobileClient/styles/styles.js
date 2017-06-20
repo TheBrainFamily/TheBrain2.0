@@ -385,11 +385,15 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50
   },
+  draggableContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -35 }, { translateY: -35 }]
+  },
   answerSwipeBall: {
     position: 'absolute',
     alignSelf: 'center',
-    top: '50%',
-    transform: [{ translateY: -35 }],
     backgroundColor: '#662d91',
     width: 70,
     height: 70,
