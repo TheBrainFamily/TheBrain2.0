@@ -9,15 +9,24 @@ import {
     Text,
     View
 } from 'react-native'
+
 import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
 import Loading from './Loading'
+
+import { updateAnswerVisibility } from '../actions/FlashcardActions'
+
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
+  constructor (props) {
+    super(props)
+    props.dispatch(updateAnswerVisibility(false))
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
