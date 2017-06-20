@@ -46,10 +46,10 @@ class Lecture extends React.Component {
           <Text
             style={[styles.textDefault, {
               margin: 30,
-              width: 200,
+              width: 220,
               alignSelf: 'center'
             }]}>
-            Watch video and wait for the question
+            Watch the video and answer some questions
           </Text>
         </Animated.View>
 
