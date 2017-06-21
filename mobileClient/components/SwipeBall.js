@@ -67,8 +67,6 @@ class SwipeBall extends React.Component {
   }
 
   submitEvaluation = () => {
-    console.log('* LOG * submitEvaluation')
-    // this.setState({ ballColors: alternativeBallColors })
     const direction = getSwipeDirection(this.state.pan.x._value, this.state.pan.y._value)
     const evaluationValue = getDirectionEvaluationValue(direction)
     this.onSubmitEvaluation(evaluationValue)
@@ -128,12 +126,11 @@ export default graphql(submitEval, {
       },
       updateQueries: {
         CurrentItems: (prev, {mutationResult}) => {
-          const updateResults = update(prev, {
+          return update(prev, {
             ItemsWithFlashcard: {
               $set: mutationResult.data.processEvaluation
             }
           })
-          return updateResults
         }
       },
       refetchQueries: [{
