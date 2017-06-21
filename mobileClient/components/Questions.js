@@ -65,10 +65,14 @@ class Questions extends React.Component {
         const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
         const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
 
+        const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
+        const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
+        const progress = done / total
+
         return (
           <View>
             <CourseHeader onLogoPress={this.goHome}>
-              <ProgressBar progress="0" />
+              <ProgressBar progress={progress} />
             </CourseHeader>
 
             <SessionSummary newFlashcards={newFlashcards}
