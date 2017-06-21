@@ -4,13 +4,17 @@ import { Animated, Easing, Image, StyleSheet, TouchableWithoutFeedback, View } f
 export default class CircleButton extends React.Component {
   constructor (props) {
     super(props)
+    const radius = props.withStaticCircles ? 12 : 0
     this.state = {
       rotation: new Animated.Value(0),
-      radius: new Animated.Value(0)
+      radius: new Animated.Value(radius)
     }
   }
 
   onPress = () => {
+    if (this.props.withStaticCircles) {
+      return
+    }
     this.state.rotation.setValue(0)
     this.state.radius.setValue(0)
 
@@ -51,6 +55,13 @@ export default class CircleButton extends React.Component {
       outputRange: [0, -10]
     })
 
+    const innerRadius = this.props.radius - 2
+
+    const animationCircleStyle = {
+      width: innerRadius * 2,
+      height: innerRadius * 2,
+    }
+
     return (
       <TouchableWithoutFeedback onPress={this.onPress} style={{ marginTop: 20 }}>
         <View>
@@ -66,16 +77,30 @@ export default class CircleButton extends React.Component {
             <View style={{ width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
               {this.props.children}
             </View>
-            <Animated.View style={[style.animationCircle, { transform: [{ rotate: rotation }] }]}>
-              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff)]} />
-              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), {
-                left: 116,
-                top: 58
-              }]} />
-              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), { top: 116 }]} />
-              <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), {
-                left: 0,
-                top: 58
+            <Animated.View style={[animationCircleStyle, { transform: [{ rotate: rotation }] }]}>
+              <Animated.View style={[
+                style.smallCircle,
+                this.getSize(this.state.radius),
+                this.getTranslation(translateDiff),
+                { left: innerRadius }
+              ]} />
+              <Animated.View style={[
+                style.smallCircle,
+                this.getSize(this.state.radius),
+                this.getTranslation(translateDiff),
+                { left: innerRadius * 2, top: innerRadius }
+              ]} />
+              <Animated.View style={[
+                style.smallCircle,
+                this.getSize(this.state.radius),
+                this.getTranslation(translateDiff),
+                { left: innerRadius, top: innerRadius * 2 }
+              ]} />
+              <Animated.View style={[
+                style.smallCircle,
+                this.getSize(this.state.radius),
+                this.getTranslation(translateDiff),
+                { left: 0, top: innerRadius
               }]} />
             </Animated.View>
           </View>
