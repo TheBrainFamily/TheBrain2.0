@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 
 import Flashcard from './Flashcard'
-import SessionSummary from './SessionSummary'
 import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
 import ProgressBar from './ProgressBar'
@@ -61,10 +60,6 @@ class Questions extends React.Component {
         const flashcard = itemsWithFlashcard[0].flashcard
         const evalItem = itemsWithFlashcard[0].item
 
-        const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
-        const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
-        const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
-
         const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
         const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
         const progress = done / total
@@ -75,10 +70,6 @@ class Questions extends React.Component {
               <ProgressBar progress={progress} />
             </CourseHeader>
 
-            <SessionSummary newFlashcards={newFlashcards}
-              dueFlashcards={dueFlashcards}
-              reviewFlashcards={reviewFlashcards}
-                      />
             <Flashcard question={flashcard.question} answer={flashcard.answer}
               evalItemId={evalItem._id} />
             <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
