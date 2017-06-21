@@ -14,6 +14,7 @@ import Flashcard from './Flashcard'
 import SessionSummary from './SessionSummary'
 import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
+import ProgressBar from './ProgressBar'
 import Loading from './Loading'
 
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
@@ -66,7 +67,10 @@ class Questions extends React.Component {
 
         return (
           <View>
-            <CourseHeader onLogoPress={this.goHome} />
+            <CourseHeader onLogoPress={this.goHome}>
+              <ProgressBar progress="0" />
+            </CourseHeader>
+
             <SessionSummary newFlashcards={newFlashcards}
               dueFlashcards={dueFlashcards}
               reviewFlashcards={reviewFlashcards}

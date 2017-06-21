@@ -5,7 +5,6 @@ import SvgUri from 'react-native-svg-uri'
 import Hamburger from 'react-native-hamburger'
 
 import MainMenu from './MainMenu'
-import ProgressBar from './ProgressBar'
 
 import styles from '../styles/styles'
 
@@ -36,7 +35,7 @@ class CourseHeader extends React.Component {
           </View>
         </View>
 
-        <ProgressBar />
+        {this.props.children}
 
         {this.state.active && <MainMenu />}
       </View>
