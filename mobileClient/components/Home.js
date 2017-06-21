@@ -45,8 +45,8 @@ class Home extends React.Component {
           <Text
             style={[styles.textDefault, {
               marginBottom: 30,
-              fontSize: 20,
-              fontFamily: 'Exo2-Bold'
+              fontSize: 24,
+              fontFamily: 'Kalam-Regular'
             }]}>
             Choose a course:
           </Text>
