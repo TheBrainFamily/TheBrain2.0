@@ -67,7 +67,7 @@ class Lecture extends React.Component {
         }
 
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
-          <CircleButton color='#662d91' radius={45}>
+          <CircleButton color='#662d91' radius={45} withStaticCircles>
             <Image
               style={{ width: 50, height: 50, alignSelf: 'center' }}
               source={require('../images/chemistry.png')}
