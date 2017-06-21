@@ -2,11 +2,12 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Animated, Easing, Text, View } from 'react-native'
+import { Animated, Easing, Image, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
 
 import Loading from './Loading'
+import CircleButton from './CircleButton'
 
 import styles from '../styles/styles'
 
@@ -45,7 +46,7 @@ class Lecture extends React.Component {
         <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
           <Text
             style={[styles.textDefault, {
-              margin: 30,
+              margin: 20,
               width: 220,
               alignSelf: 'center'
             }]}>
@@ -64,6 +65,15 @@ class Lecture extends React.Component {
             }
           </View>
         }
+
+        <View style={{ marginTop: 20, alignSelf: 'center' }}>
+          <CircleButton color='#662d91' radius={45}>
+            <Image
+              style={{ width: 50, height: 50, alignSelf: 'center' }}
+              source={require('../images/chemistry.png')}
+            />
+          </CircleButton>
+        </View>
       </View>
     )
   }
