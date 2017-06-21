@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 import * as Animatable from 'react-native-animatable'
 
@@ -57,7 +57,12 @@ class Home extends React.Component {
               <CircleButton
                 color="#662d91"
                 onPress={this.openCourse('Chemistry')}
-              />
+              >
+                <Image
+                  style={{ width: 70, height: 70, alignSelf: 'center' }}
+                  source={require('../images/chemistry.png')}
+                />
+              </CircleButton>
               <Text style={style.courseTitle}>Chemistry</Text>
             </View>
             <View style={{
@@ -66,7 +71,12 @@ class Home extends React.Component {
               <CircleButton
                 color="#62c46c"
                 onPress={this.openCourse('Biology')}
-              />
+              >
+                <Image
+                  style={{ width: 70, height: 70, alignSelf: 'center' }}
+                  source={require('../images/biology.png')}
+                />
+              </CircleButton>
               <Text style={style.courseTitle}>Biology</Text>
             </View>
           </View>
