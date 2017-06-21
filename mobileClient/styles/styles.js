@@ -9,12 +9,11 @@ const styles = StyleSheet.create({
     zIndex: 999
   },
   textDefault: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     color: '#FFF',
     fontStyle: 'italic',
-    fontFamily: 'Chalkduster',
-    fontWeight: 'bold'
+    fontFamily: 'Kalam-Bold'
   },
   mainPage: {
     backgroundColor: '#662d91',
