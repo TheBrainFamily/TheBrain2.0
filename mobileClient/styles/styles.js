@@ -274,14 +274,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
     width: '100%',
-    height: '45%'
+    height: '48.8%'
   },
   answerTopLine: {
     position: 'absolute',
     alignSelf: 'center',
     top: 50,
     width: 2,
-    height: 47,
+    height: 60,
     backgroundColor: '#71b9d3'
   },
   answerRightLine: {
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 50,
     width: 2,
-    height: 47,
+    height: 60,
     backgroundColor: '#c1272d'
   },
   answerLeftLine: {
