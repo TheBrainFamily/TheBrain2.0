@@ -6,6 +6,7 @@ import * as Animatable from 'react-native-animatable'
 import Header from './Header'
 import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
+import CourseProgressBar from './CourseProgressBar'
 import Course from './Course'
 
 import styles from '../styles/styles'
@@ -34,7 +35,11 @@ class Home extends React.Component {
     return (
       <View style={{ position: 'relative', width: '100%', height: '100%' }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} />}
-        {isCourseSelected && <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse} />}
+        {isCourseSelected &&
+          <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse}>
+            <CourseProgressBar />
+          </CourseHeader>
+        }
 
         {!isExitAnimationFinished && <Animatable.View style={{
           flexGrow: 1,

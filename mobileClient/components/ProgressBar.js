@@ -2,22 +2,12 @@
 
 import React from 'react'
 import { View } from 'react-native'
-import { graphql, compose } from 'react-apollo'
 
-import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
-import lessonCountQuery from '../../client/shared/graphql/queries/lessonCount'
 import styles from '../styles/styles'
 
-class ProgressBar extends React.Component {
+export default class ProgressBar extends React.Component {
   render () {
-    if (this.props.currentLesson.loading || this.props.lessonCount.loading) {
-      return <View />
-    }
-
-    const lessonsTotal = this.props.lessonCount.LessonCount.count
-    const lesson = this.props.currentLesson.Lesson
-    const currentLesson = lesson ? lesson.position - 1 : lessonsTotal
-    const progressInPercent = currentLesson / lessonsTotal * 100
+    const progressInPercent = this.props.progress * 100
     const progressInPercentText = `${progressInPercent}%`
 
     return (
@@ -28,13 +18,3 @@ class ProgressBar extends React.Component {
     )
   }
 }
-
-export default compose(
-  graphql(currentLessonQuery, {
-    name: 'currentLesson',
-    options: {
-      fetchPolicy: 'network-only'
-    }
-  }),
-  graphql(lessonCountQuery, { name: 'lessonCount' })
-)(ProgressBar)
