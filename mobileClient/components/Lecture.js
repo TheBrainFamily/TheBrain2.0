@@ -5,6 +5,7 @@ import YouTube from 'react-native-youtube'
 import { Animated, Easing, Image, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
+import * as Animatable from 'react-native-animatable'
 
 import Loading from './Loading'
 import CircleButton from './CircleButton'
@@ -55,7 +56,7 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-          <View>
+          <Animatable.View animation="bounceIn">
             {this.props.data.loading ?
               <View style={styles.videoPlaceholder}>
                 <Loading />
@@ -63,7 +64,7 @@ class Lecture extends React.Component {
               :
               <LectureVideoWithRouter lesson={this.props.data.Lesson} />
             }
-          </View>
+          </Animatable.View>
         }
 
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
