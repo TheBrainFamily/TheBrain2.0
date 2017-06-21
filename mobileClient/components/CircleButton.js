@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, Easing, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import { Animated, Easing, Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class CircleButton extends React.Component {
   constructor (props) {
@@ -52,7 +52,7 @@ export default class CircleButton extends React.Component {
     })
 
     return (
-      <TouchableWithoutFeedback onPress={this.onPress}>
+      <TouchableWithoutFeedback onPress={this.onPress} style={{ marginTop: 20 }}>
         <View>
           <View style={{
             position: 'relative',
@@ -63,6 +63,9 @@ export default class CircleButton extends React.Component {
             borderWidth: 2,
             borderColor: 'white'
           }}>
+            <View style={{ width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
+              {this.props.children}
+            </View>
             <Animated.View style={[style.animationCircle, { transform: [{ rotate: rotation }] }]}>
               <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff)]} />
               <Animated.View style={[style.smallCircle, this.getSize(this.state.radius), this.getTranslation(translateDiff), {
