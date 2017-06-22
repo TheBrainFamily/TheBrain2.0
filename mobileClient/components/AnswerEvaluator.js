@@ -89,11 +89,11 @@ class AnswerEvaluator extends React.Component {
             <View style={{ flexDirection: 'row' }}>
               <Text
                 onPress={this.hideTutorial}
-                style={[styles.button, { backgroundColor: '#62c46c', fontSize: 14, fontWeight: '500' }]}
+                style={[styles.button, { backgroundColor: '#62c46c' }]}
               >OK, go on</Text>
               <Text
                 onPress={this.hideTutorialPermanently}
-                style={[styles.button, { backgroundColor: '#662d91', fontSize: 14, fontWeight: '500', marginLeft: 5 }]}
+                style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}
               >OK, go on. Don't show it again</Text>
             </View>
           </View>

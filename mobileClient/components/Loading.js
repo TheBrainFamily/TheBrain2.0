@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   loading: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Exo2-Bold',
     marginTop: 10
   }
 })

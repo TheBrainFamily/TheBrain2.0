@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 15,
     color: 'white',
-    fontWeight: 'bold'
+    fontFamily: 'Exo2-Bold'
   },
   header: {
     display: 'flex',
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Exo2-Regular'
+    fontFamily: 'Exo2-Bold'
   },
   headerLogo: {
     padding: 0,
@@ -197,9 +197,8 @@ const styles = StyleSheet.create({
   flipCardHeader: {
     height: 24,
     color: '#662d91',
-    fontWeight: '900',
-    letterSpacing: -1,
     fontSize: 12,
+    fontFamily: 'Exo2-Bold',
     padding: 5
   },
   flipCardBody: {
@@ -209,7 +208,9 @@ const styles = StyleSheet.create({
   primaryText: {
     color: 'black',
     backgroundColor: 'white',
-    fontSize: 20,
+    fontStyle: 'italic',
+    fontFamily: 'Kalam-Regular',
+    fontSize: 16,
     padding: 10,
     textAlign: 'center'
   },
@@ -232,18 +233,20 @@ const styles = StyleSheet.create({
   textInput: {
     height: 35,
     fontSize: 13,
+    fontFamily: 'Exo2-Regular',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
     backgroundColor: '#FFF',
     padding: 8
   },
   button: {
-    fontSize: 12,
+    fontSize: 14,
     backgroundColor: '#224c8c',
     color: '#FFF',
     padding: 15,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontFamily: 'Exo2-Regular',
     borderRadius: 23,
     overflow: 'hidden'
   },
@@ -368,8 +371,7 @@ const styles = StyleSheet.create({
   answerText: {
     color: 'white',
     fontSize: 20,
-    lineHeight: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Kalam-Bold',
     textAlign: 'center',
     width: 100
   },
@@ -411,8 +413,8 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    fontWeight: '600',
-    fontSize: 16
+    fontFamily: 'Exo2-Regular',
+    fontSize: 17
   }
 })
 
