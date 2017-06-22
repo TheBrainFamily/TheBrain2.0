@@ -1,7 +1,8 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 import * as Animatable from 'react-native-animatable'
+import SvgUri from 'react-native-svg-uri'
 
 import Header from './Header'
 import CircleButton from './CircleButton'
@@ -63,9 +64,11 @@ class Home extends React.Component {
                 color="#662d91"
                 onPress={this.openCourse('Chemistry')}
               >
-                <Image
-                  style={{ width: 70, height: 70, alignSelf: 'center' }}
-                  source={require('../images/chemistry.png')}
+                <SvgUri
+                  width="80"
+                  height="80"
+                  source={require('../images/chemistry.svg')}
+                  style={{ width: 80, height: 80, alignSelf: 'center' }}
                 />
               </CircleButton>
               <Text style={style.courseTitle}>Chemistry</Text>
@@ -77,9 +80,11 @@ class Home extends React.Component {
                 color="#62c46c"
                 onPress={this.openCourse('Biology')}
               >
-                <Image
-                  style={{ width: 70, height: 70, alignSelf: 'center' }}
-                  source={require('../images/biology.png')}
+                <SvgUri
+                  width="60"
+                  height="60"
+                  source={require('../images/biology.svg')}
+                  style={{ width: 60, height: 60, alignSelf: 'center' }}
                 />
               </CircleButton>
               <Text style={style.courseTitle}>Biology</Text>
