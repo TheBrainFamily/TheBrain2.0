@@ -57,13 +57,13 @@ class Signup extends React.Component {
         <Header />
 
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 20, marginVertical: 30 }}>Sign up and stay educated</Text>
+          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign up and stay educated</Text>
 
           <View style={{ alignItems: 'center' }}>
             <FBLoginButton />
           </View>
 
-          <Text style={{ color: '#ccc', fontSize: 12, marginTop: 30 }}>OR</Text>
+          <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 30 }]}>OR</Text>
 
           <View style={[styles.form]}>
             {this.state.error
