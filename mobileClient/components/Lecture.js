@@ -6,6 +6,7 @@ import { Animated, Easing, Image, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
+import SvgUri from 'react-native-svg-uri'
 
 import Loading from './Loading'
 import CircleButton from './CircleButton'
@@ -69,9 +70,11 @@ class Lecture extends React.Component {
 
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
           <CircleButton color='#662d91' radius={45} withStaticCircles>
-            <Image
-              style={{ width: 50, height: 50, alignSelf: 'center' }}
-              source={require('../images/chemistry.png')}
+            <SvgUri
+              width="60"
+              height="60"
+              source={require('../images/chemistry.svg')}
+              style={{ width: 60, height: 60, alignSelf: 'center' }}
             />
           </CircleButton>
         </View>
