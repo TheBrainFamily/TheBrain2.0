@@ -29,7 +29,7 @@ class Lecture extends React.Component {
   componentDidMount () {
     Animated.timing(this.infoScale, {
       toValue: 1,
-      duration: 2000,
+      duration: 500,
       easing: Easing.elastic(1)
     }).start(() => this.setState({ showLecture: true }))
   }
