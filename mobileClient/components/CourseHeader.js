@@ -7,6 +7,7 @@ import Hamburger from 'react-native-hamburger'
 import MainMenu from './MainMenu'
 
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 
 class CourseHeader extends React.Component {
   constructor (props) {
@@ -22,7 +23,7 @@ class CourseHeader extends React.Component {
 
   render () {
     return (
-      <View style={styles.courseHeader}>
+      <View style={[style.courseHeader, { backgroundColor: this.props.backgroundColor }]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={this.props.onLogoPress}>
@@ -41,6 +42,21 @@ class CourseHeader extends React.Component {
       </View>
     )
   }
+}
+
+const style = {
+  courseHeader: {
+    zIndex: 500,
+    margin: 0,
+    height: appStyle.header.height,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+}
+
+CourseHeader.defaultProps = {
+  backgroundColor: 'transparent'
 }
 
 export default withRouter(CourseHeader)
