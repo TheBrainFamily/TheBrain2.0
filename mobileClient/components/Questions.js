@@ -1,5 +1,6 @@
 // @flow
 
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import {graphql, compose} from 'react-apollo'
@@ -64,8 +65,10 @@ class Questions extends React.Component {
         const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
         const progress = done / total
 
+        const courseColor = _.get(this.props.course, 'selectedCourse.color')
+
         return (
-          <View>
+          <View style={{ backgroundColor: courseColor }}>
             <CourseHeader onLogoPress={this.goHome}>
               <ProgressBar progress={progress} />
             </CourseHeader>
