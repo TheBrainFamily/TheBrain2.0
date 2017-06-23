@@ -2,25 +2,27 @@
 
 import { StyleSheet } from 'react-native'
 
+import appStyle from './appStyle'
+
 const styles = StyleSheet.create({
   topContainer: {
-    height: 20,
-    backgroundColor: 'white',
+    height: appStyle.header.offset,
+    backgroundColor: appStyle.colors.bgAlt,
     zIndex: 999
   },
   textDefault: {
     fontSize: 18,
     textAlign: 'center',
-    color: '#FFF',
+    color: appStyle.colors.text,
     fontStyle: 'italic',
     fontFamily: 'Kalam-Bold'
   },
   mainPage: {
-    backgroundColor: '#662d91',
+    backgroundColor: appStyle.colors.bg,
     height: '100%'
   },
   videoPlaceholder: {
-    backgroundColor: '#000',
+    backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
     height: 300,
     display: 'flex',
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     width: 100
   },
   menuOverlay: {
-    top: 107,
+    top: appStyle.header.height,
     width: '100%',
     position: 'absolute',
     backgroundColor: '#68b888ee'
@@ -167,14 +169,6 @@ const styles = StyleSheet.create({
     height: 36,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  courseHeader: {
-    zIndex: 500,
-    margin: 0,
-    height: 107,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   questionHeaderFluxContainer: {
     flex: 1,

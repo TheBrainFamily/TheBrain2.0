@@ -24,6 +24,7 @@ import {
 } from 'react-native'
 
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 class Flashcard extends React.Component {
@@ -114,7 +115,7 @@ class Flashcard extends React.Component {
   getCardDynamicContentStyle = (height: number, visibleAnswer = false) => {
     const heightOfOtherElements =
       StyleSheet.flatten(styles.topContainer).height +
-      StyleSheet.flatten(styles.courseHeader).height +
+      appStyle.header.height +
       StyleSheet.flatten(styles.summaryContainer).height +
       2 * StyleSheet.flatten(styles.primaryHeader).height +
       22.5
