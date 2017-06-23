@@ -18,9 +18,10 @@ import styles from '../styles/styles'
 class Home extends React.Component {
   constructor (props) {
     super(props)
+    const isCourseSelected = !!props.course.selectedCourse || false
     this.state = {
-      isCourseSelected: false,
-      isExitAnimationFinished: false
+      isCourseSelected,
+      isExitAnimationFinished: isCourseSelected
     }
   }
 
