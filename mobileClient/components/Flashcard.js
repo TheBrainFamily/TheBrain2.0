@@ -9,7 +9,6 @@ import SvgUri from 'react-native-svg-uri'
 import * as Animatable from 'react-native-animatable'
 
 import FrontCard from './FrontCard'
-import EmojiWrapper from './EmojiWrapper'
 import type { Direction } from '../helpers/SwipeHelpers'
 import { DIRECTIONS } from '../helpers/SwipeHelpers'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
@@ -149,9 +148,6 @@ class Flashcard extends React.Component {
 
     return (
       <Animatable.View onLayout={this.onLayout} animation="zoomInLeft">
-        <EmojiWrapper windowDimensions={this.state.windowDimensions}
-                      dragLen={this.state.dragLen}
-                      swipeDirection={this.state.swipeDirection}/>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
           <View style={[{
             backgroundColor: 'transparent', shadowColor: 'black',
