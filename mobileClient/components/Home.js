@@ -1,4 +1,6 @@
+import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 import * as Animatable from 'react-native-animatable'
@@ -8,6 +10,8 @@ import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
 import CourseProgressBar from './CourseProgressBar'
 import Course from './Course'
+
+import * as courseActions from '../actions/CourseActions'
 
 import styles from '../styles/styles'
 
@@ -21,24 +25,27 @@ class Home extends React.Component {
   }
 
   openCourse = (courseName) => () => {
-
+    this.props.dispatch(courseActions.open(courseName))
     this.setState({ isCourseSelected: true })
     this.refs.courseSelector.fadeOut(1000).then(() => this.setState({ isExitAnimationFinished: true }))
   }
 
   closeCourse = () => {
+    this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false })
   }
 
   render () {
     const { isCourseSelected, isExitAnimationFinished } = this.state
+    const { course } = this.props
+    const courseColor = _.get(course, 'selectedCourse.color')
 
     return (
       <View style={{
         position: 'relative',
         width: '100%',
         height: '100%',
-        backgroundColor: this.state.isCourseSelected ? '#662d91' : 'transparent'
+        backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} />}
         {isCourseSelected &&
@@ -51,7 +58,6 @@ class Home extends React.Component {
           flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          // backgroundColor: this.state.isCourseSelected ? '#662d91' : 'transparent'
         }} ref="courseSelector">
           <Text
             style={[styles.textDefault, {
@@ -103,7 +109,7 @@ class Home extends React.Component {
   }
 }
 
-export default withRouter(Home)
+export default connect(state => state)(Home)
 
 const style = StyleSheet.create({
   courseTitle: {
