@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import {NativeRouter, Route} from 'react-router-native'
 
+import Page from './components/Page'
 import Home from './components/Home'
 import WellDone from './components/WellDone'
 import Course from './components/Course'
@@ -26,7 +27,7 @@ export default class App extends Component {
         <NativeRouter>
           <View style={styles.mainPage}>
             <View style={styles.topContainer} />
-            <View>
+            <Page>
               <Route exact path='/' component={Home} />
               <Route exact path='/course' component={Course} />
               <Route exact path='/lecture' component={Lecture} />
@@ -34,7 +35,7 @@ export default class App extends Component {
               <Route exact path='/questions' component={Questions} />
               <Route exact path='/login' component={Login} />
               <Route exact path='/signup' component={Signup} />
-            </View>
+            </Page>
           </View>
         </NativeRouter>
       </ApolloProvider>
