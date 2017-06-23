@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, createStore, compose } from 'redux'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import createHistory from 'history/createMemoryHistory'
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
-import flashcardReducer from './reducers/FlashcardReducer'
+import reducers from './reducers'
 import devTools from 'remote-redux-devtools'
 
 const networkInterface = createNetworkInterface({
@@ -20,8 +20,7 @@ const history = createHistory()
 
 const store = createStore(
   combineReducers({
-    // ...reducers,
-    flashcard: flashcardReducer,
+    ...reducers,
     router: routerReducer,
     apollo: client.reducer()
   }),
