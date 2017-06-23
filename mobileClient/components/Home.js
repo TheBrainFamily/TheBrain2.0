@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import { withRouter } from 'react-router'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
-
 import Header from './Header'
 import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
@@ -22,6 +21,7 @@ class Home extends React.Component {
   }
 
   openCourse = (courseName) => () => {
+
     this.setState({ isCourseSelected: true })
     this.refs.courseSelector.fadeOut(1000).then(() => this.setState({ isExitAnimationFinished: true }))
   }
@@ -34,7 +34,12 @@ class Home extends React.Component {
     const { isCourseSelected, isExitAnimationFinished } = this.state
 
     return (
-      <View style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <View style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        backgroundColor: this.state.isCourseSelected ? '#662d91' : 'transparent'
+      }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} />}
         {isCourseSelected &&
           <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse}>
@@ -46,7 +51,7 @@ class Home extends React.Component {
           flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: !this.state.isCourseSelected ? '#9050ba' : 'transparent'
+          // backgroundColor: this.state.isCourseSelected ? '#662d91' : 'transparent'
         }} ref="courseSelector">
           <Text
             style={[styles.textDefault, {
