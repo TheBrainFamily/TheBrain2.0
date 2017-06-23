@@ -69,7 +69,7 @@ class Lecture extends React.Component {
         }
 
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
-          <CircleButton color='#662d91' radius={45} withStaticCircles>
+          <CircleButton radius={45} withStaticCircles>
             <SvgUri
               width="60"
               height="60"
