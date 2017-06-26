@@ -1,6 +1,8 @@
 // @flow
 
+import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import {withRouter} from 'react-router'
@@ -8,12 +10,24 @@ import {
     Text,
     View
 } from 'react-native'
+
 import Flashcard from './Flashcard'
-import SessionSummary from './SessionSummary'
+import CourseHeader from './CourseHeader'
+import AnswerEvaluator from './AnswerEvaluator'
+import ProgressBar from './ProgressBar'
+import Loading from './Loading'
+
+import { updateAnswerVisibility } from '../actions/FlashcardActions'
+
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
+  constructor (props) {
+    super(props)
+    props.dispatch(updateAnswerVisibility(false))
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
@@ -32,9 +46,13 @@ class Questions extends React.Component {
     }
   }
 
+  goHome = () => {
+    this.props.history.push('/')
+  }
+
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
-      return <Text>Loading...</Text>
+      return <Loading />
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
       const sessionCount = this.props.sessionCount.SessionCount
@@ -43,17 +61,23 @@ class Questions extends React.Component {
         const flashcard = itemsWithFlashcard[0].flashcard
         const evalItem = itemsWithFlashcard[0].item
 
-        const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
-        const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
-        const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
+        const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
+        const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
+        const progress = done / total
 
-        return (<View>
-          <SessionSummary newFlashcards={newFlashcards}
-            dueFlashcards={dueFlashcards}
-            reviewFlashcards={reviewFlashcards}
-                    />
-          <Flashcard question={flashcard.question} answer={flashcard.answer}
-            evalItemId={evalItem._id} /></View>)
+        const courseColor = _.get(this.props.course, 'selectedCourse.color')
+
+        return (
+          <View style={{ backgroundColor: courseColor }}>
+            <CourseHeader onLogoPress={this.goHome}>
+              <ProgressBar progress={progress} />
+            </CourseHeader>
+
+            <Flashcard question={flashcard.question} answer={flashcard.answer}
+              evalItemId={evalItem._id} />
+            <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
+          </View>
+        )
       } else {
         return <Text>no flashcards left</Text>
       }
@@ -94,5 +118,5 @@ export default withRouter(
             fetchPolicy: 'network-only'
           }
         })
-    )(Questions)
+    )(connect(state => state)(Questions))
 )
