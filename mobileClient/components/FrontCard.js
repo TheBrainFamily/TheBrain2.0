@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import styles from '../styles/styles'
 
-export default class FrontCard extends React.Component {
+export default class Card extends React.Component {
   constructor (props: Object) {
     super(props)
   }
