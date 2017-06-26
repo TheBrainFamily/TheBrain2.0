@@ -26,7 +26,7 @@ switch (process.env.NODE_ENV) {
 
 const FlashcardSchema = new mongoose.Schema({
   question: String,
-  answer: String,
+  answer: String
 })
 
 export const Flashcards = mongoose.model('Flashcards', FlashcardSchema)
@@ -41,7 +41,7 @@ export class FlashcardsRepository {
 
   async getFlashcard (_id: string) {
     console.log('getChannel by ', _id)
-    return await Flashcards.findOne({_id})
+    return Flashcards.findOne({_id})
   }
 
   // This API is currently not used by the app,
@@ -55,24 +55,28 @@ const LessonSchema = new mongoose.Schema({
   position: Number,
   description: String,
   flashcardIds: Array,
-  youtubeId: String,
+  youtubeId: String
 })
 
 export const Lessons = mongoose.model('Lessons', LessonSchema)
 
 export class LessonsRepository {
   async getLessons () {
-    return await Lessons.find()
+    return Lessons.find()
+  }
+
+  async getLessonCount () {
+    return { count: Lessons.count().exec() }
   }
 
   async getLessonByPosition (position: number) {
     console.log('getChannel by ', position)
-    return await Lessons.findOne({position})
+    return Lessons.findOne({position})
   }
 
   async getLessonById (_id: string) {
     // console.log("_id ", _id);
-    return await Lessons.findOne({_id}).exec()
+    return Lessons.findOne({_id}).exec()
   }
 }
 
@@ -85,23 +89,22 @@ const ItemSchema = new mongoose.Schema({
   lastRepetition: Number,
   nextRepetition: Number,
   previousDaysChange: Number,
-  timesRepeated: Number,
+  timesRepeated: Number
 })
 
 export const Items = mongoose.model('Items', ItemSchema)
 
 export class ItemsRepository {
-
   async getItems (lessonPosition: number) {
 
   }
 
   async update (id: string, item: Object, userId: string) {
-    return await Items.update({_id: id, userId}, {$set: item})
+    return Items.update({_id: id, userId}, {$set: item})
   }
 
   async getItemById (_id: string, userId: string) {
-    return await Items.findOne({_id, userId})
+    return Items.findOne({_id, userId})
   }
 
   async create (flashcardId: string, userId: string) {
@@ -114,7 +117,7 @@ export class ItemsRepository {
       lastRepetition: 0,
       nextRepetition: 0,
       previousDaysChange: 0,
-      timesRepeated: 0,
+      timesRepeated: 0
     }
     const item = new Items(newItem)
     const insertedItem = await item.save()
@@ -124,9 +127,7 @@ export class ItemsRepository {
 }
 
 export class ItemsWithFlashcardRepository {
-
   async getItemsWithFlashcard (userId: string) {
-
     const currentItems = await Items.find({
       userId,
       $or: [
@@ -165,6 +166,7 @@ export class ItemsWithFlashcardRepository {
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   nextLessonPosition: Number,
+  hasDisabledTutorial: Boolean
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
@@ -183,6 +185,17 @@ export class UserDetailsRepository {
   async updateNextLessonPosition (userId: string) {
     await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}})
   }
+
+  async hasDisabledTutorial (userId: string) {
+    const userDetails = await UserDetails.findOne({userId})
+    return userDetails.hasDisabledTutorial
+  }
+
+  async disableTutorial (userId: string) {
+    const user = await UserDetails.findOne({userId})
+    user.hasDisabledTutorial = true
+    await user.save()
+  }
 }
 
 const UserSchema = new mongoose.Schema({
@@ -193,7 +206,7 @@ const UserSchema = new mongoose.Schema({
   createdAt: Number,
   activated: Boolean,
   facebookId: String,
-  resetPasswordToken: String,
+  resetPasswordToken: String
 })
 
 // TODO THIS SHOULD BE TAKEN FROM THE ENV
@@ -269,8 +282,7 @@ export class UsersRepository {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
       await userToBeUpdated.save()
       return userToBeUpdated
-    }
-    else {
+    } else {
       return null
     }
   }

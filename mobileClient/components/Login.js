@@ -19,7 +19,7 @@ class Login extends React.Component {
     this.state = {
       error: '',
       username: '',
-      password: '',
+      password: ''
     }
   }
 
@@ -34,49 +34,56 @@ class Login extends React.Component {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
-
   }
 
   render () {
     return (
-      <View>
+      <View style={{ backgroundColor: 'white', height: '100%' }}>
         <Header />
 
         <View style={{ alignItems: 'center' }}>
+          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign in and stay educated</Text>
+
+          <View style={{ alignItems: 'center' }}>
+            <FBLoginButton />
+          </View>
+
+          <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 30 }]}>OR</Text>
+
           <View style={styles.form}>
-            {this.state.error ?
-              <Text style={styles.errorText}>{ this.state.error }</Text>
-              :
-              <Text />
+            {this.state.error
+              ? <Text style={styles.errorText}>{ this.state.error }</Text>
+              : <Text />
             }
 
-            <TextInput
-              style={styles.textInput}
-              autoFocus={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Username"
-              onChangeText={(username) => this.setState({ username })}
-              value={this.state.username}
-            />
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                style={styles.textInput}
+                autoFocus
+                autoCapitalize='none'
+                autoCorrect={false}
+                placeholder='Username'
+                onChangeText={(username) => this.setState({ username })}
+                value={this.state.username}
+              />
+            </View>
 
-            <TextInput
-              style={styles.textInput}
-              secureTextEntry={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Password"
-              onChangeText={(password) => this.setState({ password })}
-              value={this.state.password}
-            />
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                style={styles.textInput}
+                secureTextEntry
+                autoCapitalize='none'
+                autoCorrect={false}
+                placeholder='Password'
+                onChangeText={(password) => this.setState({ password })}
+                value={this.state.password}
+              />
+            </View>
 
             <TouchableOpacity onPress={this.submit}>
-              <Text style={[styles.button, { backgroundColor: 'steelblue' }]}>Log in</Text>
+              <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 5 }]}>LOGIN</Text>
             </TouchableOpacity>
 
-            <View style={{ alignItems: 'center' }}>
-              <FBLoginButton />
-            </View>
           </View>
         </View>
       </View>

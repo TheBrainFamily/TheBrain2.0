@@ -5,18 +5,25 @@
   "scripts": {
     "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --no-packager\"",
     "test": "jest",
-    "flow": "flow"
+    "flow": "flow",
+    "standard": "standard",
+    "standardFix": "standard --fix"
   },
   "dependencies": {
     "events": "^1.1.1",
     "flow-bin": "^0.40.0",
     "graphql-tag": "^2.0.0",
     "immutability-helper": "^2.1.2",
+    "lodash": "^4.17.4",
     "react": "16.0.0-alpha.6",
     "react-apollo": "^1.0.0",
     "react-native": "0.43.2",
+    "react-native-animatable": "^1.2.2",
     "react-native-emoji": "^1.2.0",
     "react-native-facebook-login": "^1.5.0",
+    "react-native-hamburger": "^0.0.2",
+    "react-native-linear-gradient": "^2.0.0",
+    "react-native-svg-uri": "^1.2.0",
     "react-native-youtube": "github:inprogress-team/react-native-youtube",
     "react-redux": "^5.0.4",
     "react-router-native": "^4.0.0",
@@ -25,12 +32,40 @@
     "stream": "0.0.2"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "babel-jest": "19.0.0",
     "concurrently": "^3.4.0",
     "jest": "19.0.2",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "react-test-renderer": "16.0.0-alpha.6",
+    "standard": "^10.0.2"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./fonts"
+    ]
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "flow-typed/",
+      "ios/",
+      "android/"
+    ],
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "beforeAll",
+      "after",
+      "afterEach",
+      "afterAll",
+      "it",
+      "expect",
+      "$Keys"
+    ]
   }
 }
