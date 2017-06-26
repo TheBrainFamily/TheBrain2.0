@@ -2,7 +2,7 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Animated, Easing, Image, Text, View } from 'react-native'
+import { Animated, Easing, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
@@ -57,13 +57,12 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-          <Animatable.View animation="bounceIn">
-            {this.props.data.loading ?
-              <View style={styles.videoPlaceholder}>
+          <Animatable.View animation='bounceIn'>
+            {this.props.data.loading
+              ? <View style={styles.videoPlaceholder}>
                 <Loading />
               </View>
-              :
-              <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+              : <LectureVideoWithRouter lesson={this.props.data.Lesson} />
             }
           </Animatable.View>
         }
@@ -71,8 +70,8 @@ class Lecture extends React.Component {
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
           <CircleButton radius={45} withStaticCircles>
             <SvgUri
-              width="60"
-              height="60"
+              width='60'
+              height='60'
               source={require('../images/chemistry.svg')}
               style={{ width: 60, height: 60, alignSelf: 'center' }}
             />
@@ -87,11 +86,11 @@ class LectureVideo extends React.Component {
   render () {
     return (
       <YouTube
-        ref="youtubePlayer"
+        ref='youtubePlayer'
         videoId={this.props.lesson.youtubeId}
         play={false}
         hidden={false}
-        fullscreen={true}
+        fullscreen
         loop={false}
         showinfo={false}
         modestbranding={false}

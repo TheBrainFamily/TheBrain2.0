@@ -16,7 +16,7 @@ const defaultBallColors = ['#7c45d2', '#672f92']
 const alternativeBallColors = ['#62c46c', '#3f873f']
 
 class SwipeBall extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -30,9 +30,9 @@ class SwipeBall extends React.Component {
         const delta = { dx: 0, dy: 0 }
         const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
         if (isHorizontalMove) {
-          delta.dx =  this.state.pan.x
+          delta.dx = this.state.pan.x
         } else {
-          delta.dy =  this.state.pan.y
+          delta.dy = this.state.pan.y
         }
         Animated.event([null, delta])(e, gesture)
       },

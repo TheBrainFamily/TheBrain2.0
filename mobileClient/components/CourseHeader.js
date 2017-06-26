@@ -27,12 +27,12 @@ class CourseHeader extends React.Component {
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={this.props.onLogoPress}>
-              <SvgUri width="100" height="49" source={require('../images/logo.svg')} />
+              <SvgUri width='100' height='49' source={require('../images/logo.svg')} />
             </TouchableOpacity>
             <View style={styles.headerBorder}><Text style={styles.headerTitle}>Chemistry</Text></View>
           </View>
           <View style={{ marginRight: 15 }}>
-            <Hamburger active={this.state.active} color="#ffffff" type="spinCross" onPress={this.toggleMenu} />
+            <Hamburger active={this.state.active} color='#ffffff' type='spinCross' onPress={this.toggleMenu} />
           </View>
         </View>
 

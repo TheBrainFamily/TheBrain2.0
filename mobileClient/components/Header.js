@@ -51,16 +51,16 @@ class Header extends React.Component {
           <TouchableOpacity onPress={this.goHome}>
             <SvgUri
               style={styles.headerLogo}
-              width="250"
-              height="65"
+              width='250'
+              height='65'
               source={logoBig}
             />
           </TouchableOpacity>
 
           <Hamburger
             active={this.state.active}
-            color="#62c46c"
-            type="spinCross"
+            color='#62c46c'
+            type='spinCross'
             onPress={this.toggleMenu}
             style={{ marginTop: 30, flex: 1 }}
           />
@@ -73,4 +73,3 @@ class Header extends React.Component {
 }
 
 export default withRouter(Header)
-

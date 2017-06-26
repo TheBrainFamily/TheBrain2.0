@@ -16,7 +16,7 @@ class MainMenu extends React.Component {
     fadeAnim: new Animated.Value(0)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     Animated.timing(
       this.state.fadeAnim,
       {
@@ -61,8 +61,8 @@ class MainMenu extends React.Component {
 
     return (
       <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim }]}>
-        {activated ?
-          <TouchableHighlight
+        {activated
+          ? <TouchableHighlight
             onPress={this.logout}
             activeOpacity={1}
             underlayColor='#62c46caa'
@@ -70,8 +70,7 @@ class MainMenu extends React.Component {
             >
             <Text style={styles.menuButtonText}>Logout</Text>
           </TouchableHighlight>
-          :
-          <TouchableHighlight
+          : <TouchableHighlight
             onPress={this.goLogin}
             activeOpacity={1}
             underlayColor='#62c46caa'

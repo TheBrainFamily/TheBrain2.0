@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
-import { withRouter } from 'react-router'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 import Header from './Header'
@@ -58,8 +57,8 @@ class Home extends React.Component {
         {!isExitAnimationFinished && <Animatable.View style={{
           flexGrow: 1,
           justifyContent: 'center',
-          alignItems: 'center',
-        }} ref="courseSelector">
+          alignItems: 'center'
+        }} ref='courseSelector'>
           <Text
             style={[styles.textDefault, {
               marginBottom: 30,
@@ -73,12 +72,12 @@ class Home extends React.Component {
               marginHorizontal: 20
             }}>
               <CircleButton
-                color="#662d91"
+                color='#662d91'
                 onPress={this.openCourse('Chemistry')}
               >
                 <SvgUri
-                  width="80"
-                  height="80"
+                  width='80'
+                  height='80'
                   source={require('../images/chemistry.svg')}
                   style={{ width: 80, height: 80, alignSelf: 'center' }}
                 />
@@ -89,12 +88,12 @@ class Home extends React.Component {
               marginHorizontal: 20
             }}>
               <CircleButton
-                color="#62c46c"
+                color='#62c46c'
                 onPress={this.openCourse('Biology')}
               >
                 <SvgUri
-                  width="60"
-                  height="60"
+                  width='60'
+                  height='60'
                   source={require('../images/biology.svg')}
                   style={{ width: 60, height: 60, alignSelf: 'center' }}
                 />

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     // backfaceVisibility: 'hidden',
     width: '90%',
     // backgroundColor: '#662d91',
-    marginLeft: '5%',
+    marginLeft: '5%'
   },
   flipCardBack: {
     position: 'absolute'
