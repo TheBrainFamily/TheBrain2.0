@@ -8,7 +8,7 @@ import update from 'immutability-helper'
 import SvgUri from 'react-native-svg-uri'
 import * as Animatable from 'react-native-animatable'
 
-import FrontCard from './FrontCard'
+import Card from './Card'
 import type { Direction } from '../helpers/SwipeHelpers'
 import { DIRECTIONS } from '../helpers/SwipeHelpers'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
@@ -156,7 +156,7 @@ class Flashcard extends React.Component {
             shadowOpacity: 0.5, marginVertical: '5%',
           },]}>
             <TouchableOpacity onPress={() => this.flipCard()}>
-              <FrontCard dynamicStyles={this.state.dynamicStyles}
+              <Card dynamicStyles={this.state.dynamicStyles}
                          question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer}/>
               <View style={{width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row',}}>
                 <View style={{
