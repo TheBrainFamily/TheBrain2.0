@@ -16,10 +16,10 @@ class ResetPassword extends React.Component {
       <form onSubmit={this.submit}>
         <div>
           <label>Username:</label>
-          <input ref="username" type="text" name="username" />
+          <input ref='username' type='text' name='username' />
         </div>
         <div>
-          <input type="submit" value="Reset Password" />
+          <input type='submit' value='Reset Password' />
         </div>
       </form>)
   }

@@ -25,6 +25,9 @@ const resolvers = {
     Lessons (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessons()
     },
+    LessonCount (root: ?string, args: ?Object, context: Object) {
+      return context.Lessons.getLessonCount()
+    },
     Item (root: ?string, args: { _id: string }, context: Object) {
       return context.Items.getItemById(args._id, context.user._id)
     },
@@ -44,6 +47,10 @@ const resolvers = {
     },
     CurrentUser (root: ?string, args: ?Object, context: Object) {
       return context.user
+    },
+    async UserDetails (root: ?string, args: ?Object, context: Object) {
+      const hasDisabledTutorial = await context.UserDetails.hasDisabledTutorial(context.user._id)
+      return { hasDisabledTutorial }
     }
   },
   Mutation: {
@@ -113,17 +120,25 @@ const resolvers = {
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
+    async hideTutorial (root: ?string, args: ?Object, context: Object) {
+      context.UserDetails.disableTutorial(context.user._id)
+    },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {
-        const user = await context.Users.findByUsername(args.username)
+        const username = args.username.trim()
+        if (!username || !args.password) {
+          throw new Error('Username and password cannot be empty')
+        }
+
+        const user = await context.Users.findByUsername(username)
 
         if (user) {
           throw new Error('Username is already taken')
         }
 
-        await context.Users.updateUser(context.user._id, args.username, args.password)
+        await context.Users.updateUser(context.user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, args, context)
+        return resolvers.Mutation.logIn(root, { username, password: args.password }, context)
       } catch (e) {
         throw e
       }
@@ -156,7 +171,7 @@ const resolvers = {
 //
 process.on('unhandledRejection', (reason) => {
   // console.log('Reason: ' + reason)
-  throw (reason);
+  throw (reason)
 })
 
 export default resolvers
