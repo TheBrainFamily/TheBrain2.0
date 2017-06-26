@@ -12,8 +12,8 @@ export default class ProgressBar extends React.Component {
 
     return (
       <View style={styles.progressBarTrack}>
-        <View style={[ styles.progressBarProgressLine, { width: progressInPercentText }]} />
-        <View style={[ styles.progressBarProgressCircle, { left: progressInPercentText }]} />
+        <View style={[styles.progressBarProgressLine, { width: progressInPercentText }]} />
+        <View style={[styles.progressBarProgressCircle, { left: progressInPercentText }]} />
       </View>
     )
   }

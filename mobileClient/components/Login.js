@@ -56,7 +56,7 @@ class Login extends React.Component {
               : <Text />
             }
 
-            <View style={ styles.textInputWrapper }>
+            <View style={styles.textInputWrapper}>
               <TextInput
                 style={styles.textInput}
                 autoFocus
@@ -68,7 +68,7 @@ class Login extends React.Component {
               />
             </View>
 
-            <View style={ styles.textInputWrapper }>
+            <View style={styles.textInputWrapper}>
               <TextInput
                 style={styles.textInput}
                 secureTextEntry

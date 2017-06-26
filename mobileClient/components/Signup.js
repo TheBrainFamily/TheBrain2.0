@@ -71,7 +71,7 @@ class Signup extends React.Component {
               : <Text />
             }
 
-            <View style={ styles.textInputWrapper }>
+            <View style={styles.textInputWrapper}>
               <TextInput
                 style={styles.textInput}
                 autoFocus
@@ -83,7 +83,7 @@ class Signup extends React.Component {
               />
             </View>
 
-            <View style={ styles.textInputWrapper }>
+            <View style={styles.textInputWrapper}>
               <TextInput
                 style={styles.textInput}
                 secureTextEntry
