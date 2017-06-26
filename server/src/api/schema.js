@@ -14,6 +14,9 @@ export const typeDefs = gql`
         flashcardIds: [String]!,
         youtubeId: String,
     }
+    type LessonCount {
+        count: Int
+    }
     type Flashcard {
         _id: String,
         question: String!,
@@ -37,7 +40,7 @@ export const typeDefs = gql`
     }
 
     type UserDetails {
-        watchedLessonsIds: [String!]!
+        hasDisabledTutorial: Boolean
     }
     
     type User {
@@ -64,7 +67,9 @@ export const typeDefs = gql`
         Item: Item,
         ItemsWithFlashcard: [ItemWithFlashcard]!
         SessionCount: SessionCount
-        CurrentUser: User
+        LessonCount: LessonCount
+        CurrentUser: User,
+        UserDetails: UserDetails
     }
     
     type Status {
@@ -79,6 +84,7 @@ export const typeDefs = gql`
         logIn(username: String!, password: String!): User
         logInWithFacebook(accessToken: String!): User
         logOut: User
+        hideTutorial: UserDetails
         resetPassword(username: String!): Status
     }
     

@@ -1,41 +1,44 @@
 // @flow
 
 import React from 'react'
-import {connect} from 'react-redux'
-import {graphql} from 'react-apollo'
+import { connect } from 'react-redux'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import FrontCard from './FrontCard'
-import BackCard from './BackCard'
-import EmojiWrapper from './EmojiWrapper'
+import SvgUri from 'react-native-svg-uri'
+import * as Animatable from 'react-native-animatable'
+
+import Card from './Card'
 import type { Direction } from '../helpers/SwipeHelpers'
 import { DIRECTIONS } from '../helpers/SwipeHelpers'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 import {
-    TouchableOpacity,
-    StyleSheet,
-    Dimensions,
-    Animated,
-    View
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  View,
+  Text
 } from 'react-native'
 
 import styles from '../styles/styles'
-import {updateAnswerVisibility} from '../actions/FlashcardActions'
+import appStyle from '../styles/appStyle'
+import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 class Flashcard extends React.Component {
-  animatedValue: Animated.Value;
   state: {
-        windowDimensions: {
-            width: number,
-            height: number,
-        },
-        dynamicStyles: {
-            content: Object,
-        },
-        swipeDirection: Direction,
-        dragLen: number,
-    };
+    windowDimensions: {
+      width: number,
+      height: number,
+    },
+    dynamicStyles: {
+      content: Object,
+    },
+    swipeDirection: Direction,
+    dragLen: number,
+  }
+
   constructor (props: Object) {
     super(props)
     const windowDimensions = Dimensions.get('window')
@@ -50,6 +53,11 @@ class Flashcard extends React.Component {
       swipeDirection: DIRECTIONS.left,
       dragLen: 0
     }
+    this.animatedValue = new Animated.Value(0)
+    this.frontInterpolate = this.interpolateWrapper({
+      inputRange: [0, 180],
+      outputRange: ['0deg', '180deg']
+    })
   }
 
   interpolateWrapper = ({inputRange, outputRange}) => {
@@ -57,11 +65,11 @@ class Flashcard extends React.Component {
       inputRange,
       outputRange
     })
-  };
+  }
 
-  componentWillMount = () => {
-    this.animatedValue = new Animated.Value(0)
-  };
+  // componentWillMount = () => {
+  //   this.animatedValue = new Animated.Value(0)
+  // };
 
   animate = () => {
     const toAnswerSide = 180
@@ -72,38 +80,49 @@ class Flashcard extends React.Component {
       friction: 8,
       tension: 10
     }).start()
-  };
+  }
 
   flipCard = () => {
+    let answerWillBeVisible = false
     if (this.props.flashcard.visibleAnswer) {
-      this.props.dispatch(updateAnswerVisibility(false))
+      answerWillBeVisible = false
+      this.props.dispatch(updateAnswerVisibility(answerWillBeVisible))
     } else {
-      this.props.dispatch(updateAnswerVisibility(true))
+      answerWillBeVisible = true
+      this.props.dispatch(updateAnswerVisibility(answerWillBeVisible))
     }
-  };
+    this.setState({
+      dynamicStyles: {
+        content: this.getCardDynamicContentStyle(this.state.windowDimensions.height, answerWillBeVisible)
+      }
+    })
+  }
 
   updateSwipeState = (swipeDirection, dragLen) => {
     this.setState({
       swipeDirection,
       dragLen
     })
-  };
+  }
 
   componentWillUpdate = (nextProps) => {
     if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
       this.animate()
     }
-  };
+  }
 
-  getCardDynamicContentStyle = (width: number, height: number) => {
+  getCardDynamicContentStyle = (height: number, visibleAnswer = false) => {
     const heightOfOtherElements =
-            StyleSheet.flatten(styles.topContainer).height +
-            StyleSheet.flatten(styles.summaryContainer).height +
-            2 * StyleSheet.flatten(styles.primaryHeader).height
+      StyleSheet.flatten(styles.topContainer).height +
+      appStyle.header.height +
+      StyleSheet.flatten(styles.summaryContainer).height +
+      2 * StyleSheet.flatten(styles.primaryHeader).height +
+      22.5
+    const elementHeight = height - heightOfOtherElements - 278
     return {
-      height: height - heightOfOtherElements
+      height: elementHeight
     }
-  };
+  }
 
   onLayout = () => {
     const {width, height} = Dimensions.get('window')
@@ -113,32 +132,46 @@ class Flashcard extends React.Component {
         height
       },
       dynamicStyles: {
-        content: this.getCardDynamicContentStyle(width, height)
+        content: this.getCardDynamicContentStyle(height, this.props.flashcard.visibleAnswer)
       }
     })
-  };
+  }
 
   render = () => {
+    const frontAnimatedStyle = {
+      transform: [
+        {rotateY: this.frontInterpolate}
+      ]
+    }
+
+    // const backStyle = this.props.flashcard.visibleAnswer ? {height: 200} : {};
+
     return (
-      <View onLayout={this.onLayout}>
-        <EmojiWrapper windowDimensions={this.state.windowDimensions}
-          dragLen={this.state.dragLen}
-          swipeDirection={this.state.swipeDirection} />
-        <View>
-          <TouchableOpacity onPress={() => this.flipCard()}>
-            <FrontCard dynamicStyles={this.state.dynamicStyles}
-              question={this.props.question} interpolateCb={this.interpolateWrapper} />
-            <BackCard dynamicStyles={this.state.dynamicStyles}
-              interpolateCb={this.interpolateWrapper}
-              flipCardCb={this.flipCard}
-              submitCb={this.props.submit}
-              updateSwipeStateCb={this.updateSwipeState}
-              answer={this.props.answer}
-              evalItemId={this.props.evalItemId}
-                        />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
+        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+          <View style={[{
+            backgroundColor: 'transparent',
+            shadowColor: 'black',
+            shadowOffset: {width: 4, height: 4},
+            shadowRadius: 4,
+            shadowOpacity: 0.5,
+            marginVertical: '5%'
+          }]}>
+            <TouchableOpacity onPress={() => this.flipCard()}>
+              <Card dynamicStyles={this.state.dynamicStyles}
+                question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer} />
+              <View style={{width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row'}}>
+                <View style={{
+                  width: (this.state.windowDimensions.width * 0.9) - 200,
+                  height: '100%',
+                  backgroundColor: 'white'
+                }}><Text /></View>
+                <SvgUri width='200' height='22.5' source={require('../images/pageCorner.svg')} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </Animatable.View>
     )
   }
 }
@@ -183,3 +216,12 @@ export default graphql(submitEval, {
     })
   })
 })(connect(state => state)(Flashcard))
+
+// <BackCard dynamicStyles={this.state.dynamicStyles}
+// interpolateCb={this.interpolateWrapper}
+// flipCardCb={this.flipCard}
+// submitCb={this.props.submit}
+// updateSwipeStateCb={this.updateSwipeState}
+// answer={this.props.answer}
+// evalItemId={this.props.evalItemId}
+// />
