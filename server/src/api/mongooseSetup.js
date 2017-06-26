@@ -65,6 +65,10 @@ export class LessonsRepository {
     return Lessons.find()
   }
 
+  async getLessonCount () {
+    return { count: Lessons.count().exec() }
+  }
+
   async getLessonByPosition (position: number) {
     console.log('getChannel by ', position)
     return Lessons.findOne({position})
@@ -161,7 +165,8 @@ export class ItemsWithFlashcardRepository {
 
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
-  nextLessonPosition: Number
+  nextLessonPosition: Number,
+  hasDisabledTutorial: Boolean
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
@@ -179,6 +184,17 @@ export class UserDetailsRepository {
 
   async updateNextLessonPosition (userId: string) {
     await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}})
+  }
+
+  async hasDisabledTutorial (userId: string) {
+    const userDetails = await UserDetails.findOne({userId})
+    return userDetails.hasDisabledTutorial
+  }
+
+  async disableTutorial (userId: string) {
+    const user = await UserDetails.findOne({userId})
+    user.hasDisabledTutorial = true
+    await user.save()
   }
 }
 

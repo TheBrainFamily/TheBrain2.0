@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg4585" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="73.805mm" width="98.766mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 98.765778 73.805344" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <defs id="defs4579">
+  <linearGradient id="linearGradient4615" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-.0000021 -47.333 -47.333 .0000021 179.89 242.59)">
+   <stop id="stop4609" stop-color="#71b9d3" offset="0"/>
+   <stop id="stop4611" stop-color="#ccc" offset=".52978"/>
+   <stop id="stop4613" stop-color="#ccc" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient4637" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-.0000021 48.042 48.042 .0000021 179.89 45.923)">
+   <stop id="stop4631" stop-color="#c1272d" offset="0"/>
+   <stop id="stop4633" stop-color="#ccc" offset=".52978"/>
+   <stop id="stop4635" stop-color="#ccc" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient4659" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-44 -.0000038 -.0000038 44 307.02 144.44)">
+   <stop id="stop4653" stop-color="#ff8533" offset="0"/>
+   <stop id="stop4655" stop-color="#ccc" offset=".52978"/>
+   <stop id="stop4657" stop-color="#ccc" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient4681" gradientUnits="userSpaceOnUse" gradientTransform="matrix(92.854 0 0 -92.854 39.909 144.44)">
+   <stop id="stop4675" stop-color="#62c46c" offset="0"/>
+   <stop id="stop4677" stop-color="#ccc" offset=".52978"/>
+   <stop id="stop4679" stop-color="#ccc" offset="1"/>
+  </linearGradient>
+ </defs>
+ <metadata id="metadata4582">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(866.76 32.537)">
+  <g id="g4597" transform="matrix(.35278 0 0 -.35278 -880.84 55.347)">
+   <g id="g4599">
+    <g id="g4605">
+     <g id="g4607">
+      <path id="path4617" fill="url(#linearGradient4615)" d="m178.89 248.12v-55.476c0-0.552 0.447-1 1-1 0.552 0 1 0.448 1 1v55.476c0 0.553-0.448 1-1 1-0.553 0-1-0.447-1-1"/>
+     </g>
+    </g>
+   </g>
+  </g>
+  <g id="g4619" transform="matrix(.35278 0 0 -.35278 -880.84 55.347)">
+   <g id="g4621">
+    <g id="g4627">
+     <g id="g4629">
+      <path id="path4639" fill="url(#linearGradient4637)" d="m178.89 96.384v-55.477c0-0.553 0.447-1 1-1 0.552 0 1 0.447 1 1v55.477c0 0.552-0.448 1-1 1-0.553 0-1-0.448-1-1"/>
+     </g>
+    </g>
+   </g>
+  </g>
+  <g id="g4641" transform="matrix(.35278 0 0 -.35278 -880.84 55.347)">
+   <g id="g4643">
+    <g id="g4649">
+     <g id="g4651">
+      <path id="path4661" fill="url(#linearGradient4659)" d="m228.02 145.44c-0.552 0-1-0.447-1-0.999 0-0.553 0.448-1 1-1h90.856c0.553 0 1 0.447 1 1 0 0.552-0.447 0.999-1 0.999z"/>
+     </g>
+    </g>
+   </g>
+  </g>
+  <g id="g4663" transform="matrix(.35278 0 0 -.35278 -880.84 55.347)">
+   <g id="g4665">
+    <g id="g4671">
+     <g id="g4673">
+      <path id="path4683" fill="url(#linearGradient4681)" d="m40.91 145.44c-0.554 0-1-0.447-1-0.999 0-0.553 0.446-1 1-1h90.853c0.552 0 1 0.447 1 1 0 0.552-0.448 0.999-1 0.999z"/>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
