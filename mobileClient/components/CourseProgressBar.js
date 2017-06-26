@@ -17,6 +17,7 @@ class CourseProgressBar extends React.Component {
 
     const lessonsTotal = this.props.lessonCount.LessonCount.count
     const lesson = this.props.currentLesson.Lesson
+    // set to lessonsTotal e.g. in case you finished the course and the next lesson position is higher than the total lesson number
     const currentLesson = lesson ? lesson.position - 1 : lessonsTotal
     const progress = currentLesson / lessonsTotal
 
