@@ -17,9 +17,9 @@ class FBLoginButton extends React.Component {
   render () {
     return (
       <FacebookLogin
-        appId="***REMOVED***"
+        appId='***REMOVED***'
         autoLoad={false}
-        fields="name,email,picture"
+        fields='name,email,picture'
         callback={this.responseFacebook}
       />
     )
@@ -35,21 +35,21 @@ const logInWithFacebook = gql`
 `
 
 export default graphql(logInWithFacebook, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessToken }) => mutate({
-        variables: {
-          accessToken
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
-              }
-            })
-          }
+  props: ({ ownProps, mutate }) => ({
+    logInWithFacebook: ({ accessToken }) => mutate({
+      variables: {
+        accessToken
+      },
+      updateQueries: {
+        CurrentUser: (prev, { mutationResult }) => {
+          return update(prev, {
+            CurrentUser: {
+              $set: mutationResult.data.logInWithFacebook
+            }
+          })
         }
-      })
+      }
     })
-  }
+  })
+}
 )(FBLoginButton)
