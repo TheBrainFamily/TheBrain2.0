@@ -141,30 +141,32 @@ class Flashcard extends React.Component {
     const frontAnimatedStyle = {
       transform: [
         {rotateY: this.frontInterpolate}
-      ],
+      ]
     }
 
     // const backStyle = this.props.flashcard.visibleAnswer ? {height: 200} : {};
 
     return (
-      <Animatable.View onLayout={this.onLayout} animation="zoomInLeft">
+      <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
           <View style={[{
-            backgroundColor: 'transparent', shadowColor: 'black',
+            backgroundColor: 'transparent',
+            shadowColor: 'black',
             shadowOffset: {width: 4, height: 4},
             shadowRadius: 4,
-            shadowOpacity: 0.5, marginVertical: '5%',
-          },]}>
+            shadowOpacity: 0.5,
+            marginVertical: '5%'
+          }]}>
             <TouchableOpacity onPress={() => this.flipCard()}>
               <Card dynamicStyles={this.state.dynamicStyles}
-                         question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer}/>
-              <View style={{width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row',}}>
+                question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer} />
+              <View style={{width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row'}}>
                 <View style={{
                   width: (this.state.windowDimensions.width * 0.9) - 200,
                   height: '100%',
                   backgroundColor: 'white'
-                }}><Text/></View>
-                <SvgUri width="200" height="22.5" source={require('../images/pageCorner.svg')}/>
+                }}><Text /></View>
+                <SvgUri width='200' height='22.5' source={require('../images/pageCorner.svg')} />
               </View>
             </TouchableOpacity>
           </View>

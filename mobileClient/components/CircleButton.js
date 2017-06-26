@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, Easing, Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import { Animated, Easing, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class CircleButton extends React.Component {
   constructor (props) {
@@ -34,13 +34,13 @@ export default class CircleButton extends React.Component {
   getSize (radius) {
     return {
       width: radius,
-      height: radius,
+      height: radius
     }
   }
 
-  getTranslation(translateDiff) {
+  getTranslation (translateDiff) {
     return {
-      transform: [{ translateX: translateDiff }, { translateY: translateDiff }],
+      transform: [{ translateX: translateDiff }, { translateY: translateDiff }]
     }
   }
 
@@ -59,7 +59,7 @@ export default class CircleButton extends React.Component {
 
     const animationCircleStyle = {
       width: innerRadius * 2,
-      height: innerRadius * 2,
+      height: innerRadius * 2
     }
 
     return (
@@ -101,7 +101,7 @@ export default class CircleButton extends React.Component {
                 this.getSize(this.state.radius),
                 this.getTranslation(translateDiff),
                 { left: 0, top: innerRadius
-              }]} />
+                }]} />
             </Animated.View>
           </View>
         </View>
@@ -119,7 +119,7 @@ CircleButton.defaultProps = {
 const style = StyleSheet.create({
   animationCircle: {
     width: 116,
-    height: 116,
+    height: 116
   },
   smallCircle: {
     position: 'absolute',
