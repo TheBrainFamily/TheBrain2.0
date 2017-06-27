@@ -7,6 +7,7 @@ import { ApolloProvider } from 'react-apollo'
 import store, { client, history } from './store'
 import './App.css'
 import Home from './components/Home'
+import Course from './components/Course'
 import WellDone from './components/WellDone'
 import Lecture from './components/Lecture'
 import Questions from './components/Questions'
@@ -24,7 +25,8 @@ class App extends Component {
           <div className='App'>
             <Header />
             <div className='App-intro styleIntroduction'>
-              <Route exact key='tutorial' path='/' component={Home} />
+              <Route exact key='Home' path='/' component={Home} />
+              <Route key='Course' path='/course' component={Course} />
               <Route exact key='Lecture' path='/lecture' component={Lecture} />
               <Route exact key='wellDone' path='/wellDone' component={WellDone} />
               <Route exact key='questions' path='/questions' component={Questions} />
