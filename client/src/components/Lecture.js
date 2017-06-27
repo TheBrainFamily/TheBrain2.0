@@ -2,8 +2,6 @@
 
 import React from 'react'
 import YouTube from 'react-youtube'
-import Introduction from './Introduction'
-import Content from './Content'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
@@ -24,11 +22,11 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
-    return <div id='video'>
-      <Introduction />
-      <Content />
-      <LectureVideoWithRouter lesson={this.props.data.Lesson} />
-    </div>
+    return (
+      <div id='video'>
+        <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+      </div>
+    )
   }
 }
 
