@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
-import logo from './../logo_thebrain.jpg'
+import logo from './../logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
