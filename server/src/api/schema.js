@@ -7,6 +7,11 @@ import resolvers from './resolvers'
 const gql = schema => schema
 
 export const typeDefs = gql`
+    type Course {
+        _id: String,
+        name: String,
+        color: String
+    }
     type Lesson {
         _id: String,
         position: Int,
@@ -60,6 +65,7 @@ export const typeDefs = gql`
     }
 
     type Query {
+        Courses: [Course]!,
         Lessons: [Lesson]!,
         Lesson: Lesson,
         Flashcards: [Flashcard],        
@@ -77,6 +83,7 @@ export const typeDefs = gql`
     }
     
     type Mutation {
+        selectCourse: Status,
         createItemsAndMarkLessonAsWatched: Lesson!,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
