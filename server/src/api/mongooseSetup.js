@@ -51,6 +51,19 @@ export class FlashcardsRepository {
   }
 }
 
+const CourseSchema = new mongoose.Schema({
+  name: String,
+  color: String
+})
+
+export const Courses = mongoose.model('Courses', CourseSchema)
+
+export class CoursesRepository {
+  async getCourses () {
+    return Courses.find()
+  }
+}
+
 const LessonSchema = new mongoose.Schema({
   position: Number,
   description: String,
@@ -194,6 +207,12 @@ export class UserDetailsRepository {
   async disableTutorial (userId: string) {
     const user = await UserDetails.findOne({userId})
     user.hasDisabledTutorial = true
+    await user.save()
+  }
+
+  async selectCourse (userId: string, courseId: string) {
+    const user = await UserDetails.findOne({userId})
+    user.selectedCourse = courseId
     await user.save()
   }
 }
