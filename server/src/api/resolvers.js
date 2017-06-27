@@ -7,6 +7,9 @@ import facebookIds from '../configuration/facebook'
 
 const resolvers = {
   Query: {
+    Courses (root: ?string, args: ?Object, context: Object) {
+      return context.Courses.getCourses()
+    },
     Flashcards (root: ?string, args: ?Object, context: Object) {
       return context.Flashcards.getFlashcards()
     },
@@ -54,6 +57,9 @@ const resolvers = {
     }
   },
   Mutation: {
+    async selectCourse (root: ?string, args: { courseId: string }, context: Object) {
+      return context.UserDetails.selectCourse(context.user._id, args.courseId)
+    },
     async createItemsAndMarkLessonAsWatched (root: ?string, args: ?Object, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
