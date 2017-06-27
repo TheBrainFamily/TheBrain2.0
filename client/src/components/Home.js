@@ -2,25 +2,15 @@
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import { withRouter } from 'react-router'
+import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 
-import currentItemsExistQuery from '../../shared/graphql/queries/currentItemsExist'
+import Introduction from './Introduction'
+import Content from './Content'
+
+import coursesQuery from '../../shared/graphql/queries/courses'
 
 class Home extends React.Component {
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
-      return
-    }
-
-    if (nextProps.data.ItemsWithFlashcard.length > 0) {
-      nextProps.dispatch(push('/questions'))
-    } else {
-      nextProps.dispatch(push('/lecture'))
-    }
-  }
-
   render () {
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
@@ -30,12 +20,41 @@ class Home extends React.Component {
       return (<p>Error...</p>)
     }
 
-    return <div />
+    return (
+      <div>
+        <Introduction />
+        <Content />
+
+        <h2>Choose a course:</h2>
+        <ul className='course-selector'>
+          {this.props.data.Courses.map(course => {
+            return <li key={course._id}><a className='course-button' href={`/course/${course._id}`}>{course.name}</a>
+            </li>
+          })}
+        </ul>
+      </div>
+    )
   }
 }
 
+const selectCourseMutation = gql`    
+    mutation selectCourse($courseId: String!) {
+        selectCourse(courseId: $courseId) {
+            status
+        }
+    }
+`
+
 export default compose(
   connect(),
-  withRouter,
-  graphql(currentItemsExistQuery)
+  graphql(selectCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      selectCourse: ({ courseId }) => mutate({
+        variables: {
+          courseId
+        }
+      })
+    })
+  }),
+  graphql(coursesQuery)
 )(Home)
