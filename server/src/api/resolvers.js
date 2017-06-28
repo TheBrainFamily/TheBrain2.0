@@ -16,14 +16,15 @@ const resolvers = {
     Flashcard (root: ?string, args: { _id: string }, context: Object) {
       return context.Flashcards.getFlashcard(args._id)
     },
-    async Lesson (root: ?string, args: ?Object, context: Object) {
-      let nextLessonPosition
+    async Lesson (root: ?string, args: { courseId: string }, context: Object) {
+      let lessonPosition
       if (context.user) {
-        nextLessonPosition = await context.UserDetails.getNextLessonPosition(context.user._id)
+        lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
       } else {
-        nextLessonPosition = 1
+        lessonPosition = 1
       }
-      return context.Lessons.getLessonByPosition(nextLessonPosition)
+      const lesson = await context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
+      return lesson
     },
     Lessons (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessons()
@@ -52,25 +53,39 @@ const resolvers = {
       return context.user
     },
     async UserDetails (root: ?string, args: ?Object, context: Object) {
-      const hasDisabledTutorial = await context.UserDetails.hasDisabledTutorial(context.user._id)
-      return { hasDisabledTutorial }
+      let userId = context.user && context.user._id
+      if (!userId) {
+        return {}
+      }
+      return context.UserDetails.getById(context.user._id)
     }
   },
   Mutation: {
     async selectCourse (root: ?string, args: { courseId: string }, context: Object) {
-      return context.UserDetails.selectCourse(context.user._id, args.courseId)
-    },
-    async createItemsAndMarkLessonAsWatched (root: ?string, args: ?Object, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
-        const guestUser = await context.Users.createGuest()
+        const guestUser = await context.Users.createGuest(args.courseId)
         console.log('Gozdecki: guestUser', guestUser)
         userId = guestUser._id
         context.req.logIn(guestUser, (err) => { if (err) throw err })
       }
-      const currentLessonPosition = await context.UserDetails.getNextLessonPosition(userId)
+      return context.UserDetails.selectCourse(userId, args.courseId)
+    },
+    async closeCourse (root: ?string, args: ?Object, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        console.log('Gozdecki: guestUser')
+      }
+      return context.UserDetails.closeCourse(userId)
+    },
+    async createItemsAndMarkLessonAsWatched (root: ?string, args: { courseId: string }, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        console.log('Gozdecki: guestUser')
+      }
+      const currentLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       console.log('JMOZGAWA: currentLessonPosition', currentLessonPosition)
-      const lesson = await context.Lessons.getLessonByPosition(currentLessonPosition)
+      const lesson = await context.Lessons.getCourseLessonByPosition(args.courseId, currentLessonPosition)
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
@@ -78,9 +93,9 @@ const resolvers = {
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
       })
-      await context.UserDetails.updateNextLessonPosition(userId)
-      const nextLessonPosition = await context.UserDetails.getNextLessonPosition(userId)
-      return context.Lessons.getLessonByPosition(nextLessonPosition)
+      await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
+      const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
+      return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
     },
     async logInWithFacebook (root: ?string, args: { accessToken: string }, context: Object) {
       const {accessToken: userToken} = args
