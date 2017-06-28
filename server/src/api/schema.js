@@ -45,7 +45,8 @@ export const typeDefs = gql`
     }
 
     type UserDetails {
-        hasDisabledTutorial: Boolean
+        hasDisabledTutorial: Boolean,
+        selectedCourse: String
     }
     
     type User {
@@ -67,7 +68,7 @@ export const typeDefs = gql`
     type Query {
         Courses: [Course]!,
         Lessons: [Lesson]!,
-        Lesson: Lesson,
+        Lesson(courseId: String!): Lesson,
         Flashcards: [Flashcard],        
         Flashcard(_id: String!): Flashcard
         Item: Item,
@@ -83,8 +84,9 @@ export const typeDefs = gql`
     }
     
     type Mutation {
-        selectCourse: Status,
-        createItemsAndMarkLessonAsWatched: Lesson!,
+        selectCourse(courseId: String!): Status,
+        closeCourse: Status,
+        createItemsAndMarkLessonAsWatched(courseId: String!): Lesson!,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
