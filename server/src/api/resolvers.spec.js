@@ -151,27 +151,33 @@ describe('query.flashcard', () => {
 })
 
 describe('query.Lesson', () => {
+  // let courseId
   beforeAll(async () => {
     // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await mongoose.connection.db.collection('lessons').insert({position: 2})
-    await mongoose.connection.db.collection('lessons').insert({position: 1})
-    await mongoose.connection.db.collection('lessons').insert({position: 3})
+    await mongoose.connection.db.collection('lessons').insert({position: 2, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('lessons').insert({position: 1, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('lessons').insert({position: 3, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('courses').insert({_id: "testCourseId", name: 'testCourseName'})
   })
   afterAll(async (done) => {
     await mongoose.connection.db.dropDatabase()
     done()
   })
   it('returns first lesson for a new user', async () => {
-    const lesson = await resolvers.Query.Lesson(undefined, undefined, {Lessons: new LessonsRepository()})
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({userId, progress: [{courseId: 'testCourseId', lesson: 1}]})
+
+    const context = {Lessons: new LessonsRepository(), user: {_id: userId}, UserDetails: new UserDetailsRepository()}
+    const lesson = await resolvers.Query.Lesson(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lesson).toEqual(expect.objectContaining({position: 1}))
   })
   it('returns third lesson for a logged in user that already watched two lessons', async () => {
     const userId = mongoose.Types.ObjectId()
-    await mongoose.connection.db.collection('userdetails').insert({userId, nextLessonPosition: 3})
+    await mongoose.connection.db.collection('userdetails').insert({userId, progress: [{courseId: 'testCourseId', lesson: 3}]})
 
     const context = {Lessons: new LessonsRepository(), user: {_id: userId}, UserDetails: new UserDetailsRepository()}
-    const lesson = await resolvers.Query.Lesson(undefined, undefined, context)
+    const lesson = await resolvers.Query.Lesson(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lesson).toEqual(expect.objectContaining({position: 3}))
   })
@@ -221,8 +227,9 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   let context
   beforeAll(async () => {
     // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await mongoose.connection.db.collection('lessons').insert({position: 2})
-    await mongoose.connection.db.collection('lessons').insert({position: 1})
+    await mongoose.connection.db.collection('lessons').insert({position: 2, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('lessons').insert({position: 1, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('courses').insert({ _id: 'testCourseId'})
 
     context = {
       user: {},
@@ -239,17 +246,12 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     await mongoose.connection.db.dropDatabase()
     done()
   })
-  it('returns the second lesson after watching the first one if you are a guest', async () => {
-    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, undefined, context)
-
-    expect(lesson.position).toBe(2)
-  })
   it('returns the second lesson after watching the first one if you are a logged in user', async () => {
     const userId = mongoose.Types.ObjectId()
-    await mongoose.connection.db.collection('userdetails').insert({userId, nextLessonPosition: 1})
+    await mongoose.connection.db.collection('userdetails').insert({userId, progress: [{courseId: 'testCourseId', lesson: 1}]})
     context.user = { _id: userId }
 
-    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, undefined, context)
+    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lesson.position).toBe(2)
   })
