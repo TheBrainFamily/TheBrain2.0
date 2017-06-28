@@ -1,5 +1,6 @@
 // @flow
 
+import _ from 'lodash'
 import mongoose from 'mongoose'
 import moment from 'moment'
 import bcrypt from 'bcrypt'
@@ -78,13 +79,12 @@ export class LessonsRepository {
     return Lessons.find()
   }
 
-  async getLessonCount () {
-    return { count: Lessons.count().exec() }
+  async getLessonCount (courseId: string) {
+    return { count: Lessons.count({ courseId }).exec() }
   }
 
-  async getLessonByPosition (position: number) {
-    console.log('getChannel by ', position)
-    return Lessons.findOne({position})
+  async getCourseLessonByPosition (courseId: string, position: number) {
+    return Lessons.findOne({ courseId, position })
   }
 
   async getLessonById (_id: string) {
@@ -178,30 +178,36 @@ export class ItemsWithFlashcardRepository {
 
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
-  nextLessonPosition: Number,
-  hasDisabledTutorial: Boolean
+  hasDisabledTutorial: Boolean,
+  selectedCourse: String,
+  progress: [{
+    courseId: String,
+    lesson: Number
+  }]
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
 
 export class UserDetailsRepository {
-  async create (userId: string) {
-    const newUserDetails = new UserDetails({userId, nextLessonPosition: 1})
+  async create (userId: string, courseId: string) {
+    const newUserDetails = new UserDetails({userId})
+    newUserDetails.progress = [{courseId, lesson: 1}]
     await newUserDetails.save()
   }
 
-  async getNextLessonPosition (userId: string) {
-    const userDetails = await UserDetails.findOne({userId})
-    return userDetails.nextLessonPosition
+  async getById (userId: string) {
+    return UserDetails.findOne({userId})
   }
 
-  async updateNextLessonPosition (userId: string) {
-    await UserDetails.update({userId}, {$inc: {nextLessonPosition: 1}})
+  async getNextLessonPosition (courseId: string, userId: string) {
+    const userDetails = await UserDetails.findOne({userId})
+    const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
+
+    return course.lesson
   }
 
-  async hasDisabledTutorial (userId: string) {
-    const userDetails = await UserDetails.findOne({userId})
-    return userDetails.hasDisabledTutorial
+  async updateNextLessonPosition (courseId: string, userId: string) {
+    await UserDetails.update({ userId, 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
   }
 
   async disableTutorial (userId: string) {
@@ -213,7 +219,19 @@ export class UserDetailsRepository {
   async selectCourse (userId: string, courseId: string) {
     const user = await UserDetails.findOne({userId})
     user.selectedCourse = courseId
+    const course = _.find(user.progress, doc => doc.courseId === courseId)
+    if (!course) {
+      user.progress.push({courseId, lesson: 1})
+    }
     await user.save()
+    return { success: true }
+  }
+
+  async closeCourse (userId: string) {
+    const user = await UserDetails.findOne({userId})
+    user.selectedCourse = null
+    await user.save()
+    return { success: true }
   }
 }
 
@@ -262,10 +280,10 @@ const generateResetPasswordToken = async (userId) => {
 export const Users = mongoose.model('users', UserSchema)
 
 export class UsersRepository {
-  async createGuest () {
+  async createGuest (courseId: string) {
     const newUser = new Users({username: 'guest', password: 'notSet', activated: false, createdAt: moment().unix()})
     const insertedUser = await newUser.save()
-    await new UserDetailsRepository().create(insertedUser._id)
+    await new UserDetailsRepository().create(insertedUser._id, courseId)
     return insertedUser
   }
 
