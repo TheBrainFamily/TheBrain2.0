@@ -148,6 +148,24 @@ describe('query.Lessons', () => {
   })
 })
 
+describe('query.LessonCount', () => {
+  beforeAll(async () => {
+    await mongoose.connection.db.collection('lessons').insert({position: 2, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('lessons').insert({position: 1, courseId: 'testCourseId'})
+    await mongoose.connection.db.collection('lessons').insert({position: 1, courseId: 'testCourse2Id'})
+  })
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns all lessons', async () => {
+    const context = {Lessons: new LessonsRepository()}
+    const lessonCount = await resolvers.Query.LessonCount(undefined, undefined, context)
+
+    expect(lessonCount).toEqual({ count: 3 })
+  })
+})
+
 describe('query.flashcards', () => {
   afterEach(async (done) => {
     await mongoose.connection.db.dropDatabase()
