@@ -7,6 +7,7 @@ import _ from 'lodash'
 import resolvers from './resolvers'
 import {
   // Flashcards,
+  CoursesRepository,
   FlashcardsRepository,
   ItemsRepository,
   ItemsWithFlashcardRepository,
@@ -113,6 +114,23 @@ async function makeItems ({ number: number = 2, itemsToExtend = [] }: MakeItemsD
   return addedItems
 }
 
+describe('query.Courses', () => {
+  beforeAll(async () => {
+    await mongoose.connection.db.collection('courses').insert({_id: "testCourseId", name: 'testCourseName'})
+    await mongoose.connection.db.collection('courses').insert({_id: "testCourse2Id", name: 'testCourseName2'})
+  })
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns all courses', async () => {
+    const context = {Courses: new CoursesRepository()}
+    const courses = await resolvers.Query.Courses(undefined, undefined, context)
+
+    expect(courses.length).toBe(2)
+  })
+})
+
 describe('query.flashcards', () => {
   afterEach(async (done) => {
     await mongoose.connection.db.dropDatabase()
@@ -151,7 +169,6 @@ describe('query.flashcard', () => {
 })
 
 describe('query.Lesson', () => {
-  // let courseId
   beforeAll(async () => {
     // we have those in different order to make sure the query doesn't return the first inserted lesson.
     await mongoose.connection.db.collection('lessons').insert({position: 2, courseId: 'testCourseId'})
