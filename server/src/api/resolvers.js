@@ -17,14 +17,9 @@ const resolvers = {
       return context.Flashcards.getFlashcard(args._id)
     },
     async Lesson (root: ?string, args: { courseId: string }, context: Object) {
-      let lessonPosition
-      if (context.user) {
-        lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
-      } else {
-        lessonPosition = 1
-      }
-      const lesson = await context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
-      return lesson
+      const lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
+
+      return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
     },
     Lessons (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessons()
