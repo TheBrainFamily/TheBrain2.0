@@ -79,8 +79,8 @@ export class LessonsRepository {
     return Lessons.find()
   }
 
-  async getLessonCount (courseId: string) {
-    return { count: Lessons.count({ courseId }).exec() }
+  async getLessonCount () {
+    return { count: await Lessons.count().exec() }
   }
 
   async getCourseLessonByPosition (courseId: string, position: number) {
