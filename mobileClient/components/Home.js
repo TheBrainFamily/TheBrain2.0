@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import * as Animatable from 'react-native-animatable'
@@ -13,6 +15,13 @@ import Course from './Course'
 import * as courseActions from '../actions/CourseActions'
 
 import styles from '../styles/styles'
+
+import coursesQuery from '../../client/shared/graphql/queries/courses'
+
+const courseLogos = {
+  Chemistry: { file: require(`../images/chemistry.svg`), size: 80 },
+  Biology: { file: require(`../images/biology.svg`), size: 60 }
+}
 
 class Home extends React.Component {
   constructor (props) {
@@ -67,40 +76,31 @@ class Home extends React.Component {
             }]}>
             Choose a course:
           </Text>
+          {!this.props.courses.loading &&
           <View style={{ flexDirection: 'row' }}>
-            <View style={{
-              marginHorizontal: 20
-            }}>
-              <CircleButton
-                color='#662d91'
-                onPress={this.openCourse('Chemistry')}
-              >
-                <SvgUri
-                  width='80'
-                  height='80'
-                  source={require('../images/chemistry.svg')}
-                  style={{ width: 80, height: 80, alignSelf: 'center' }}
-                />
-              </CircleButton>
-              <Text style={style.courseTitle}>Chemistry</Text>
-            </View>
-            <View style={{
-              marginHorizontal: 20
-            }}>
-              <CircleButton
-                color='#62c46c'
-                onPress={this.openCourse('Biology')}
-              >
-                <SvgUri
-                  width='60'
-                  height='60'
-                  source={require('../images/biology.svg')}
-                  style={{ width: 60, height: 60, alignSelf: 'center' }}
-                />
-              </CircleButton>
-              <Text style={style.courseTitle}>Biology</Text>
-            </View>
+            {this.props.courses.Courses.map(course => {
+              const courseLogo = courseLogos[course.name]
+              return (
+                <View key={course._id} style={{
+                  marginHorizontal: 20
+                }}>
+                  <CircleButton
+                    color={course.color}
+                    onPress={this.openCourse(course.name)}
+                  >
+                    <SvgUri
+                      width={courseLogo.size}
+                      height={courseLogo.size}
+                      source={courseLogo.file}
+                      style={{ width: courseLogo.size, height: courseLogo.size, alignSelf: 'center' }}
+                    />
+                  </CircleButton>
+                  <Text style={style.courseTitle}>{course.name}</Text>
+                </View>
+              )
+            })}
           </View>
+          }
         </Animatable.View>}
 
         {isExitAnimationFinished && <Course />}
@@ -109,7 +109,10 @@ class Home extends React.Component {
   }
 }
 
-export default connect(state => state)(Home)
+export default compose(
+  connect(state => state),
+  graphql(coursesQuery, { name: 'courses' })
+)(Home)
 
 const style = StyleSheet.create({
   courseTitle: {
