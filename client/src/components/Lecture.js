@@ -14,6 +14,17 @@ import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatc
 
 class Lecture extends React.Component {
   render () {
+    if (!this.props.data.Lesson) {
+      return (
+        <div>
+          <h2>Congratulations!</h2>
+            <p>
+              You have watched all available lectures in this course.
+            </p>
+        </div>
+      )
+    }
+
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
     }
@@ -22,9 +33,11 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
+    const selectedCourse = this.props.selectedCourse || this.props.match.params.courseId
+
     return (
       <div id='video'>
-        <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+        <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
       </div>
     )
   }
@@ -50,7 +63,7 @@ export class LectureVideo extends React.Component {
   }
 
   _onEnd = () => {
-    this.props.lessonWatchedMutation()
+    this.props.lessonWatchedMutation(this.props.courseId)
     this.props.dispatch(push('/wellDone'))
   }
 }
@@ -61,8 +74,21 @@ const LectureVideoWithRouter = compose(
   connect()
 )(LectureVideo)
 
-export default graphql(currentLessonQuery, {
-  options: {
-    fetchPolicy: 'network-only'
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
   }
-})(Lecture)
+}
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(currentLessonQuery, {
+    options: (ownProps) => {
+      const selectedCourse = ownProps.selectedCourse || ownProps.match.params.courseId
+      return ({
+        variables: { courseId: selectedCourse },
+        fetchPolicy: 'network-only'
+      })
+    }
+  })
+)(Lecture)

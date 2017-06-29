@@ -1,10 +1,12 @@
 // @flow
 
 import React from 'react'
-import { withApollo, graphql } from 'react-apollo'
+import { compose, withApollo, graphql } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import logo from './../logo.svg'
 
@@ -53,18 +55,42 @@ const LoginSwitcherWithGraphQl = withApollo(graphql(logOutQuery, {
   })
 })(LoginSwitcher))
 
-const AppHeader = (props) => {
-  const currentUser = props.data.CurrentUser
+class AppHeader extends React.Component {
+  closeCourse = () => async () => {
+    await this.props.closeCourse()
+    this.props.dispatch(push('/'))
+  }
 
-  return (
-    <div className='App-header'>
-      <Link to='/'>
-        <img src={logo} className='App-logo' alt='logo' />
-      </Link>
-      <h2 className='make-it-bigger'>Welcome to TheBrain.Pro</h2>
-      {!props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
-    </div>
-  )
+  render() {
+    const currentUser = this.props.data.CurrentUser
+
+    return (
+      <div className='App-header'>
+        <Link to='/'>
+          <img src={logo} className='App-logo' alt='logo' />
+        </Link>
+        <br />
+        {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
+        | <a onClick={this.closeCourse()}>Close Course</a>
+      </div>
+    )
+  }
 }
 
-export default graphql(currentUserQuery)(AppHeader)
+const closeCourseMutation = gql`
+    mutation closeCourse {
+        closeCourse {
+            success
+        }
+    }
+`
+
+export default compose(
+  connect(),
+  graphql(closeCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      closeCourse: () => mutate({})
+    })
+  }),
+  graphql(currentUserQuery)
+)(AppHeader)
