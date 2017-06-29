@@ -41,6 +41,11 @@ a {
 
 }
 
+.course-selector {
+    margin: 0;
+    padding: 0;
+}
+
 .course-selector li {
     list-style: none;
     display: inline-block;
@@ -48,6 +53,7 @@ a {
 }
 
 .course-button {
+    cursor: pointer;
     display: inline-block;
     width: 100px;
     height: 100px;
@@ -58,7 +64,7 @@ a {
 }
 
 .course-button:hover {
-    border-color: #385a90;
+    border-color: #5ebf8e;
 }
 
 /***********************
