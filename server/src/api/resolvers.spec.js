@@ -252,9 +252,12 @@ describe('query.ItemsWithFlashcard', () => {
 
   it('returns all available items for a new user after watching the first lesson', async () => {
     const userId = mongoose.Types.ObjectId()
+    const flashcard = await mongoose.connection.db.collection('flashcards').insert({ quesstion: '?', answer: '!'})
+    const flashcardId = flashcard.insertedIds[0].toString()
+
     const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
     const itemsToExtend = [
-      { userId }, { userId }
+      { userId, flashcardId }, { userId }
     ]
     await makeItems({itemsToExtend})
 
