@@ -3,8 +3,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-    query Lesson {
-        Lesson {
+    query Lesson($courseId: String!) {
+        Lesson(courseId: $courseId) {
             _id, position, description, flashcardIds, youtubeId
         }
     }
