@@ -63,6 +63,10 @@ export class CoursesRepository {
   async getCourses () {
     return Courses.find()
   }
+
+  async getCourse (_id: string) {
+    return Courses.findOne({_id})
+  }
 }
 
 const LessonSchema = new mongoose.Schema({
