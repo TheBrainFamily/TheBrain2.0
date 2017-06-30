@@ -203,6 +203,10 @@ export class UserDetailsRepository {
     const userDetails = await UserDetails.findOne({userId})
     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
 
+    if (!course) {
+      return 1
+    }
+
     return course.lesson
   }
 
