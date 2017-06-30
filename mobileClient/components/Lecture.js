@@ -42,7 +42,12 @@ class Lecture extends React.Component {
     }
 
     if (!this.props.data.Lesson) {
-      return (<Text style={[styles.textDefault, { margin: 35 }]}>No more lessons</Text>)
+      return (
+        <View>
+          <Text style={[styles.textDefault, { marginTop: 35 }]}>Congratulations!</Text>
+          <Text style={[styles.menuButtonText, { paddingHorizontal: 50 }]}>You have watched all available lectures in this course.</Text>
+        </View>
+      )
     }
 
     const courseLogo = courseLogos[this.props.selectedCourse.name]
