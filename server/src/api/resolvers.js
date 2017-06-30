@@ -81,6 +81,9 @@ const resolvers = {
       const currentLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       console.log('JMOZGAWA: currentLessonPosition', currentLessonPosition)
       const lesson = await context.Lessons.getCourseLessonByPosition(args.courseId, currentLessonPosition)
+      if (!lesson) {
+        return {}
+      }
       console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
