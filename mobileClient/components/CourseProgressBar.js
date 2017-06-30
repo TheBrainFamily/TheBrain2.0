@@ -3,6 +3,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
+import { connect } from 'react-redux'
 
 import ProgressBar from './ProgressBar'
 
@@ -27,11 +28,23 @@ class CourseProgressBar extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
+  connect(mapStateToProps),
   graphql(currentLessonQuery, {
     name: 'currentLesson',
-    options: {
-      fetchPolicy: 'network-only'
+    options: (ownProps) => {
+      const selectedCourse = ownProps.selectedCourse._id
+      console.log('* LOG * selectedCourse', selectedCourse)
+      return ({
+        variables: { courseId: selectedCourse },
+        fetchPolicy: 'network-only'
+      })
     }
   }),
   graphql(lessonCountQuery, { name: 'lessonCount' })
