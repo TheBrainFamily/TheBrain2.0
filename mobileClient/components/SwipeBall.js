@@ -26,12 +26,15 @@ class SwipeBall extends React.Component {
 
     this.state = {
       pan: new Animated.ValueXY(),
-      ballColors: defaultBallColors
+      ballColors: defaultBallColors,
+      isEvaluated: false
     }
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (e, gesture) => {
+        if (this.state.isEvaluated) return
+
         const delta = { dx: 0, dy: 0 }
         const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
         if (isHorizontalMove) {
@@ -42,6 +45,8 @@ class SwipeBall extends React.Component {
         Animated.event([null, delta])(e, gesture)
       },
       onPanResponderRelease: (e, gesture) => {
+        if (this.state.isEvaluated) return
+
         const dragLen = getDragLength(gesture.dx, gesture.dy)
         if (dragLen > 40) {
           const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
@@ -53,10 +58,11 @@ class SwipeBall extends React.Component {
           }
 
           const direction = getSwipeDirection(this.state.pan.x._value, this.state.pan.y._value)
-          this.setState({ ballColors: ballColors[direction] })
+          this.setState({ ballColors: ballColors[direction], isEvaluated: true })
 
           Animated.spring(this.state.pan, {
-            toValue: targetPosition
+            toValue: targetPosition,
+            tension: 80
           }).start(this.submitEvaluation)
         } else {
           this.resetPosition()
@@ -67,7 +73,8 @@ class SwipeBall extends React.Component {
 
   resetPosition = (cb = () => {}) => {
     Animated.spring(this.state.pan, {
-      toValue: { x: 0, y: 0 }
+      toValue: { x: 0, y: 0 },
+      tension: 80
     }).start(cb)
   }
 
@@ -84,7 +91,7 @@ class SwipeBall extends React.Component {
         evaluation: value
       })
       this.props.dispatch(updateAnswerVisibility(false))
-      this.setState({ ballColors: defaultBallColors })
+      this.setState({ ballColors: defaultBallColors, isEvaluated: false })
     })
   }
 
