@@ -48,6 +48,8 @@ class Lecture extends React.Component {
     const courseLogo = courseLogos[this.props.selectedCourse.name]
     const logoSize = courseLogo.scale * 60
 
+    const selectedCourse = this.props.selectedCourse
+
     return (
       <View style={{ width: '100%' }}>
         <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
@@ -67,7 +69,7 @@ class Lecture extends React.Component {
               ? <View style={styles.videoPlaceholder}>
                 <Loading />
               </View>
-              : <LectureVideoWithRouter lesson={this.props.data.Lesson} />
+              : <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse._id} />
             }
           </Animatable.View>
         }
@@ -109,9 +111,9 @@ class LectureVideo extends React.Component {
   _onChangeState = (event) => {
     console.log('Gozdecki: event', event)
     if (event.state === 'ended') {
-      this.props.lessonWatchedMutation().then(() => {
+      this.props.lessonWatchedMutation(this.props.courseId).then(() => {
         let url = '/questions'
-        if (this.props.lesson.position <= 2) {
+        if (this.props.lesson && this.props.lesson.position <= 2) {
           url = '/wellDone'
         }
         this.props.history.push(url)
