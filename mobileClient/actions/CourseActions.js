@@ -1,9 +1,9 @@
 // @flow
 
-export const open = (name: String) => {
+export const select = (value: Object) => {
   return {
-    type: 'OPEN_COURSE',
-    name
+    type: 'SELECT_COURSE',
+    value
   }
 }
 
