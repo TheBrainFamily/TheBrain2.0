@@ -4,6 +4,7 @@ import React from 'react'
 import YouTube from 'react-native-youtube'
 import { Animated, Easing, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
@@ -12,6 +13,7 @@ import Loading from './Loading'
 import CircleButton from './CircleButton'
 
 import styles from '../styles/styles'
+import courseLogos from '../helpers/courseLogos'
 
 import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
@@ -43,6 +45,9 @@ class Lecture extends React.Component {
       return (<Text style={[styles.textDefault, { margin: 35 }]}>No more lessons</Text>)
     }
 
+    const courseLogo = courseLogos[this.props.selectedCourse.name]
+    const logoSize = courseLogo.scale * 60
+
     return (
       <View style={{ width: '100%' }}>
         <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
@@ -70,10 +75,10 @@ class Lecture extends React.Component {
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
           <CircleButton radius={45} withStaticCircles>
             <SvgUri
-              width='60'
-              height='60'
-              source={require('../images/chemistry.svg')}
-              style={{ width: 60, height: 60, alignSelf: 'center' }}
+              width={logoSize}
+              height={logoSize}
+              source={courseLogo.file}
+              style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
             />
           </CircleButton>
         </View>
@@ -120,8 +125,21 @@ const LectureVideoWithRouter = compose(
   withRouter
 )(LectureVideo)
 
-export default graphql(currentLessonQuery, {
-  options: {
-    fetchPolicy: 'network-only'
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
   }
-})(Lecture)
+}
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(currentLessonQuery, {
+    options: (ownProps) => {
+      const selectedCourse = ownProps.selectedCourse._id
+      return ({
+        variables: { courseId: selectedCourse },
+        fetchPolicy: 'network-only'
+      })
+    }
+  })
+)(Lecture)
