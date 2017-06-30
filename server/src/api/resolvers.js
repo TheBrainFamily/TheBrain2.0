@@ -10,6 +10,9 @@ const resolvers = {
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
+    Course (root: ?string, args: { _id: string }, context: Object) {
+      return context.Courses.getCourse(args._id)
+    },
     Flashcards (root: ?string, args: ?Object, context: Object) {
       return context.Flashcards.getFlashcards()
     },
