@@ -13,7 +13,12 @@ import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '.
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
-const alternativeBallColors = ['#62c46c', '#3f873f']
+const ballColors = {
+  top: ['#71b9d3', '#5a9ab4'],
+  right: ['#ff8533', '#e17132'],
+  bottom: ['#c1272d', '#972326'],
+  left: ['#62c46c', '#3f873f']
+}
 
 class SwipeBall extends React.Component {
   constructor (props) {
@@ -47,9 +52,9 @@ class SwipeBall extends React.Component {
             targetPosition.y = 110 * Math.sign(gesture.dy)
           }
 
-          setTimeout(() => {
-            this.setState({ ballColors: alternativeBallColors })
-          }, 200)
+          const direction = getSwipeDirection(this.state.pan.x._value, this.state.pan.y._value)
+          this.setState({ ballColors: ballColors[direction] })
+
           Animated.spring(this.state.pan, {
             toValue: targetPosition
           }).start(this.submitEvaluation)
