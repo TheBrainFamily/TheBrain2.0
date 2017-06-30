@@ -1,23 +1,21 @@
 // @flow
 
-const courses = {
-  Chemistry: {
-    color: '#662d91'
-  },
-  Biology: {
-    color: '#62c46c'
-  }
+import update from 'immutability-helper'
+
+const initialState = {
+  selectedCourse: null
 }
 
-const defaultState = { selectedCourse: null }
-
-const reducer = (state: Object = defaultState, action: Object) => {
+const reducer = (state: Object = initialState, action: Object) => {
   switch (action.type) {
-    case 'OPEN_COURSE':
-      const selectedCourse = courses[action.name]
-      return { ...state, selectedCourse }
+    case 'SELECT_COURSE':
+      return update(state, {
+        selectedCourse: { $set: action.value }
+      })
     case 'CLOSE_COURSE':
-      return { ...state, selectedCourse: null }
+      return update(state, {
+        selectedCourse: { $set: null }
+      })
     default:
       return state
   }
