@@ -15,13 +15,9 @@ import Course from './Course'
 import * as courseActions from '../actions/CourseActions'
 
 import styles from '../styles/styles'
+import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
-
-const courseLogos = {
-  Chemistry: { file: require(`../images/chemistry.svg`), size: 80 },
-  Biology: { file: require(`../images/biology.svg`), size: 60 }
-}
 
 class Home extends React.Component {
   constructor (props) {
@@ -33,8 +29,9 @@ class Home extends React.Component {
     }
   }
 
-  openCourse = (courseName) => () => {
-    this.props.dispatch(courseActions.open(courseName))
+  selectCourse = (course) => async () => {
+    this.props.dispatch(courseActions.select(course))
+    await this.props.selectCourse({ courseId: course._id })
     this.setState({ isCourseSelected: true })
     this.refs.courseSelector.fadeOut(1000).then(() => this.setState({ isExitAnimationFinished: true }))
   }
@@ -80,19 +77,20 @@ class Home extends React.Component {
           <View style={{ flexDirection: 'row' }}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
+              const logoSize = courseLogo.scale * 80
               return (
                 <View key={course._id} style={{
                   marginHorizontal: 20
                 }}>
                   <CircleButton
                     color={course.color}
-                    onPress={this.openCourse(course.name)}
+                    onPress={this.selectCourse(course)}
                   >
                     <SvgUri
-                      width={courseLogo.size}
-                      height={courseLogo.size}
+                      width={logoSize}
+                      height={logoSize}
                       source={courseLogo.file}
-                      style={{ width: courseLogo.size, height: courseLogo.size, alignSelf: 'center' }}
+                      style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
                     />
                   </CircleButton>
                   <Text style={style.courseTitle}>{course.name}</Text>
@@ -109,8 +107,25 @@ class Home extends React.Component {
   }
 }
 
+const selectCourseMutation = gql`
+    mutation selectCourse($courseId: String!) {
+        selectCourse(courseId: $courseId) {
+            success
+        }
+    }
+`
+
 export default compose(
   connect(state => state),
+  graphql(selectCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      selectCourse: ({ courseId }) => mutate({
+        variables: {
+          courseId
+        }
+      })
+    })
+  }),
   graphql(coursesQuery, { name: 'courses' })
 )(Home)
 
