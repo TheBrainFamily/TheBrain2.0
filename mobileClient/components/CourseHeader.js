@@ -1,5 +1,6 @@
 import React from 'react'
-import { withRouter } from 'react-router'
+import { compose } from 'react-apollo'
+import { connect } from 'react-redux'
 import { Text, TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 import Hamburger from 'react-native-hamburger'
@@ -29,7 +30,7 @@ class CourseHeader extends React.Component {
             <TouchableOpacity onPress={this.props.onLogoPress}>
               <SvgUri width='100' height='49' source={require('../images/logo.svg')} />
             </TouchableOpacity>
-            <View style={styles.headerBorder}><Text style={styles.headerTitle}>Chemistry</Text></View>
+            <View style={styles.headerBorder}><Text style={styles.headerTitle}>{this.props.selectedCourse.name}</Text></View>
           </View>
           <View style={{ marginRight: 15 }}>
             <Hamburger active={this.state.active} color='#ffffff' type='spinCross' onPress={this.toggleMenu} />
@@ -59,4 +60,12 @@ CourseHeader.defaultProps = {
   backgroundColor: 'transparent'
 }
 
-export default withRouter(CourseHeader)
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
+export default compose(
+  connect(mapStateToProps)
+)(CourseHeader)
