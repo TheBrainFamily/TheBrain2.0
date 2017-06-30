@@ -40,7 +40,6 @@ export default compose(
     name: 'currentLesson',
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse._id
-      console.log('* LOG * selectedCourse', selectedCourse)
       return ({
         variables: { courseId: selectedCourse },
         fetchPolicy: 'network-only'
