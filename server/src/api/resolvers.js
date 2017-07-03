@@ -143,7 +143,7 @@ const resolvers = {
       return {_id: 'loggedOut', username: 'loggedOut', activated: false}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
-      context.UserDetails.disableTutorial(context.user._id)
+      return context.UserDetails.disableTutorial(context.user._id)
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {

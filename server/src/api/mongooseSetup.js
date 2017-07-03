@@ -219,9 +219,7 @@ export class UserDetailsRepository {
   }
 
   async disableTutorial (userId: string) {
-    const user = await UserDetails.findOne({userId})
-    user.hasDisabledTutorial = true
-    await user.save()
+    return UserDetails.findOneAndUpdate({ userId }, { hasDisabledTutorial: true }, { new: true })
   }
 
   async selectCourse (userId: string, courseId: string) {
