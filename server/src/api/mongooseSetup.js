@@ -197,8 +197,11 @@ export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
 export class UserDetailsRepository {
   async create (userId: string, courseId: string) {
     const newUserDetails = new UserDetails({userId})
-    newUserDetails.progress = [{courseId, lesson: 1}]
+    newUserDetails.progress.create({courseId, lesson: 1})
+
     await newUserDetails.save()
+
+    return newUserDetails
   }
 
   async getById (userId: string) {
@@ -231,7 +234,7 @@ export class UserDetailsRepository {
     if (!course) {
       user.progress.push({courseId, lesson: 1})
     }
-    await user.save()
+    await UserDetails.update({userId}, user)
     return { success: true }
   }
 
@@ -289,10 +292,11 @@ export const Users = mongoose.model('users', UserSchema)
 
 export class UsersRepository {
   async createGuest (courseId: string) {
-    const newUser = new Users({username: 'guest', password: 'notSet', activated: false, createdAt: moment().unix()})
-    const insertedUser = await newUser.save()
-    await new UserDetailsRepository().create(insertedUser._id, courseId)
-    return insertedUser
+    const newUser = await Users.create({username: 'guest', password: 'notSet', activated: false, createdAt: moment().unix()})
+    const newUserId = newUser._id.toString()
+    await new UserDetailsRepository().create(newUserId, courseId)
+
+    return newUser
   }
 
   async updateUser (userId: string, username: string, password: string) {
