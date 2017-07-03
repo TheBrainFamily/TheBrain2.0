@@ -323,6 +323,36 @@ describe('query.ItemsWithFlashcard', () => {
   })
 })
 
+describe('query.SessionCount', () => {
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns an empty object if no user exists', async () => {
+    const context = { ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+
+    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
+
+    expect(sessionCount).toEqual({})
+  })
+  it('returns a session count', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('items').insertOne({ userId, actualTimesRepeated: 0 })
+    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+
+    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
+
+    expect(sessionCount).toEqual(expect.objectContaining({
+      newDone: 0,
+      newTotal: 1,
+      dueDone: 0,
+      dueTotal: 0,
+      reviewDone: 0,
+      reviewTotal: 0
+    }))
+  })
+})
+
 describe('query.CurrentUser', () => {
   it('returns unchanged user from a context', () => {
     const context = deepFreeze({
