@@ -364,6 +364,35 @@ describe('query.CurrentUser', () => {
   })
 })
 
+describe('query.UserDetails', () => {
+  it('returns an empty object if no user exists', async () => {
+    const context = {
+      user: {},
+      UserDetails: new UserDetailsRepository()
+    }
+
+    const userDetails = resolvers.Query.UserDetails(undefined, undefined, context)
+
+    expect(userDetails).toEqual(Promise.resolve({}))
+  })
+  it('returns user details by user id', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({
+      userId,
+      progress: [{ courseId: 'testCourseId', lesson: 1 }]
+    })
+
+    const context = {
+      user: { _id: userId },
+      UserDetails: new UserDetailsRepository()
+    }
+
+    const userDetails = await resolvers.Query.UserDetails(undefined, undefined, context)
+
+    expect(userDetails.progress[0].lesson).toEqual(1)
+  })
+})
+
 describe('mutation.selectCourse', () => {
   let context
   beforeAll(async () => {
