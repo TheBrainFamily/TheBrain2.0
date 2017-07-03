@@ -131,6 +131,23 @@ describe('query.Courses', () => {
   })
 })
 
+describe('query.Course', () => {
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns a specific course', async () => {
+    await mongoose.connection.db.collection('courses').insert({ name: 'testCourseName' })
+    const newCourse = await mongoose.connection.db.collection('courses').insertOne({ name: 'testCourseName2' })
+    const newCourseId = newCourse.insertedId
+
+    const context = {Courses: new CoursesRepository()}
+    const course = await resolvers.Query.Course(undefined, { _id: newCourseId }, context)
+
+    expect(course.name).toEqual('testCourseName2')
+  })
+})
+
 describe('query.Lessons', () => {
   beforeAll(async () => {
     await mongoose.connection.db.collection('lessons').insert({position: 2, courseId: 'testCourseId'})
