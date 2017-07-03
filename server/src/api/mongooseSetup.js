@@ -180,14 +180,16 @@ export class ItemsWithFlashcardRepository {
   }
 }
 
+const ProgressSchema = new mongoose.Schema({
+  courseId: String,
+  lesson: Number
+})
+
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   hasDisabledTutorial: Boolean,
   selectedCourse: String,
-  progress: [{
-    courseId: String,
-    lesson: Number
-  }]
+  progress: [ProgressSchema]
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
