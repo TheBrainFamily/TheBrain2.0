@@ -278,6 +278,40 @@ describe('query.CurrentUser', () => {
   })
 })
 
+describe('mutation.selectCourse', () => {
+  let context
+  beforeAll(async () => {
+    await mongoose.connection.db.collection('courses').insert({ _id: 'testCourseId'})
+
+    context = {
+      user: {},
+      Users: new UsersRepository(),
+      UserDetails: new UserDetailsRepository(),
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('saves info about a course selected if no user exists', async () => {
+    const result = await resolvers.Mutation.selectCourse(undefined, { courseId: 'testCourseId' }, context)
+
+    expect(result.success).toBe(true)
+  })
+  it('saves info about a course selected by a user', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({userId, progress: [{courseId: 'testCourseId', lesson: 1}]})
+    context.user = { _id: userId }
+
+    const result = await resolvers.Mutation.selectCourse(undefined, { courseId: 'testCourseId' }, context)
+
+    expect(result.success).toBe(true)
+  })
+})
+
 describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   let context
   beforeAll(async () => {
