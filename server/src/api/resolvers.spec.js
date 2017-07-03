@@ -312,6 +312,33 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   })
 })
 
+describe('mutation.hideTutorial', () => {
+  let context
+  beforeAll(async () => {
+    context = {
+      user: {},
+      Users: new UsersRepository(),
+      UserDetails: new UserDetailsRepository(),
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('saves info that a tutorial should be disabled for a specific user', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({userId, progress: [{courseId: 'testCourseId', lesson: 1}]})
+    context.user = { _id: userId }
+
+    const user = await resolvers.Mutation.hideTutorial(undefined, { courseId: 'testCourseId' }, context)
+
+    expect(user.hasDisabledTutorial).toBe(true)
+  })
+})
+
 describe('mutation.processEvaluation', () => {
   let context
   beforeAll(async () => {
