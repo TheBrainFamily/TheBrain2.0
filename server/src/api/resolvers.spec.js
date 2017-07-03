@@ -289,6 +289,14 @@ describe('query.ItemsWithFlashcard', () => {
     done()
   })
 
+  it('returns 0 items if no user exists', async () => {
+    const context = { ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+
+    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
+
+    expect(items.length).toBe(0)
+  })
+
   it('returns 0 items for a new user without any lessons watched', async () => {
     const userId = mongoose.Types.ObjectId()
     const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
