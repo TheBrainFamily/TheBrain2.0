@@ -265,6 +265,24 @@ describe('query.Lesson', () => {
   })
 })
 
+describe('query.Item', () => {
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+  it('returns a specific item', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('items').insert({ userId, extraRepeatToday: true })
+    const newItem = await mongoose.connection.db.collection('items').insertOne({ userId, extraRepeatToday: false })
+    const newItemId = newItem.insertedId
+    const context = { Items: new ItemsRepository(), user: { _id: userId } }
+
+    const course = await resolvers.Query.Item(undefined, { _id: newItemId }, context)
+
+    expect(course.extraRepeatToday).toEqual(false)
+  })
+})
+
 describe('query.ItemsWithFlashcard', () => {
   afterAll(async (done) => {
     await mongoose.connection.db.dropDatabase()
