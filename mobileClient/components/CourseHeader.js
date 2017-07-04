@@ -44,7 +44,7 @@ class CourseHeader extends React.Component {
 
         {this.props.children}
 
-        {this.state.active && <MainMenu />}
+        {this.state.active && <MainMenu topMargin={this.props.height} />}
       </View>
     )
   }
