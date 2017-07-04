@@ -11,6 +11,7 @@ import {NativeRouter, Route} from 'react-router-native'
 import Page from './components/Page'
 import Home from './components/Home'
 import Intro from './components/Intro'
+import Congratulations from './components/Congratulations'
 import WellDone from './components/WellDone'
 import Course from './components/Course'
 import Lecture from './components/Lecture'
@@ -31,6 +32,7 @@ export default class App extends Component {
             <Page>
               <Route exact path='/' component={Home} />
               <Route exact path='/intro' component={Intro} />
+              <Route exact path='/congratulations' component={Congratulations} />
               <Route exact path='/course' component={Course} />
               <Route exact path='/lecture' component={Lecture} />
               <Route exact path='/wellDone' component={WellDone} />
