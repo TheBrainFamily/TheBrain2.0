@@ -8,6 +8,7 @@ import { Animated, Text, View, TouchableHighlight } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
@@ -64,7 +65,7 @@ class MainMenu extends React.Component {
     const activated = currentUser && currentUser.activated
 
     return (
-      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim }]}>
+      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim, top: this.props.topMargin }]}>
         {activated
           ? <TouchableHighlight
             onPress={this.logout}
@@ -110,6 +111,10 @@ class MainMenu extends React.Component {
       </Animated.View>
     )
   }
+}
+
+MainMenu.defaultProps = {
+  topMargin: appStyle.header.height
 }
 
 const logOutQuery = gql`

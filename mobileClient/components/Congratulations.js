@@ -20,7 +20,7 @@ class Congratulations extends React.Component {
         height: '100%',
         backgroundColor: '#6905ea'
       }}>
-        <CourseHeader height={60} />
+        <CourseHeader height={80} />
 
         <View style={{
           flexGrow: 1,

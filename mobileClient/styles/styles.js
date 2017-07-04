@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   questionHeaderFluxContainer: {
     flex: 1,
     width: '100%',
-    paddingTop: 20,
+    paddingTop: 0,
     paddingHorizontal: 10,
     alignItems: 'center',
     flexDirection: 'row',
