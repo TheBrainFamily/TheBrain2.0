@@ -25,7 +25,7 @@ class CourseHeader extends React.Component {
 
   render () {
     return (
-      <View style={[style.courseHeader, { backgroundColor: this.props.backgroundColor }]}>
+      <View style={[style.courseHeader, { backgroundColor: this.props.backgroundColor }, { height: this.props.height }]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={this.props.onLogoPress}>
@@ -62,7 +62,8 @@ const style = {
 }
 
 CourseHeader.defaultProps = {
-  backgroundColor: 'transparent'
+  backgroundColor: 'transparent',
+  height: appStyle.header.height
 }
 
 const currentCourseQuery = gql`
