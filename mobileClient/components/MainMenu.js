@@ -46,6 +46,10 @@ class MainMenu extends React.Component {
     this.props.history.push('/questions')
   }
 
+  goCongratulations = () => {
+    this.props.history.push('/congratulations')
+  }
+
   goSignup = () => {
     this.props.history.push('/signup')
   }
@@ -86,6 +90,14 @@ class MainMenu extends React.Component {
           style={styles.menuButton}
         >
           <Text style={styles.menuButtonText}>Questions</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={this.goCongratulations}
+          activeOpacity={1}
+          underlayColor='#62c46caa'
+          style={styles.menuButton}
+        >
+          <Text style={styles.menuButtonText}>Congratulations</Text>
         </TouchableHighlight>
         <TouchableHighlight
           onPress={this.goSignup}
