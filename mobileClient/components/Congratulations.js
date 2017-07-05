@@ -17,6 +17,7 @@ class Congratulations extends React.Component {
   render () {
     return (
       <View style={{
+        position: 'relative',
         height: '100%',
         backgroundColor: '#6905ea'
       }}>
