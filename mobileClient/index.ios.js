@@ -19,6 +19,11 @@ import Questions from './components/Questions'
 import styles from './styles/styles'
 // import Footer from './components/Footer';
 import Login from './components/Login'
+import Lectures from './components/Lectures'
+import Calendar from './components/Calendar'
+import Achievements from './components/Achievements'
+import Profile from './components/Profile'
+import Contact from './components/Contact'
 import Signup from './components/Signup'
 import store, { client } from './store'
 
@@ -38,6 +43,11 @@ export default class App extends Component {
               <Route exact path='/wellDone' component={WellDone} />
               <Route exact path='/questions' component={Questions} />
               <Route exact path='/login' component={Login} />
+              <Route exact path='/lectures' component={Lectures} />
+              <Route exact path='/calendar' component={Calendar} />
+              <Route exact path='/achievements' component={Achievements} />
+              <Route exact path='/profile' component={Profile} />
+              <Route exact path='/contact' component={Contact} />
               <Route exact path='/signup' component={Signup} />
             </Page>
           </View>
