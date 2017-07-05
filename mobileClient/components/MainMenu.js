@@ -86,6 +86,22 @@ class MainMenu extends React.Component {
             <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
               Michał
             </Text>
+            <View style={{ width: '100%', marginTop: 20, flexDirection: 'row' }}>
+              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                <Text style={style.text}>DUE</Text>
+                <Text style={style.textBold}>3/10</Text>
+                <View style={[style.card, { backgroundColor: '#4ba695' }]} />
+              </View>
+              <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
+                <View style={{ position: 'absolute', top: -4, left: -4, width: 8, height: 8, borderRadius: 8, backgroundColor: '#999' }} />
+                <View style={{ position: 'absolute', bottom: -4, left: -4, width: 8, height: 8, borderRadius: 8, backgroundColor: '#999' }} />
+              </View>
+              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                <Text style={style.text}>REVIEW</Text>
+                <Text style={style.textBold}>1/10</Text>
+                <View style={[style.card, { backgroundColor: '#c64f34' }]} />
+              </View>
+            </View>
           </View>
         </View>
         <View style={{ backgroundColor: '#eee', paddingHorizontal: 20, paddingVertical: 5 }}>
@@ -114,6 +130,23 @@ class MainMenu extends React.Component {
         </View>
       </Animated.View>
     )
+  }
+}
+
+const style = {
+  text: {
+    color: '#999',
+    fontFamily: 'Exo2-Regular'
+  },
+  textBold: {
+    color: '#999',
+    fontFamily: 'Exo2-Bold',
+    fontSize: 18
+  },
+  card: {
+    width: 20,
+    height: 14,
+    marginTop: 8
   }
 }
 
