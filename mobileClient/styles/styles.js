@@ -113,16 +113,17 @@ const styles = StyleSheet.create({
     top: appStyle.header.height,
     width: '100%',
     position: 'absolute',
-    backgroundColor: '#68b888ee'
+    backgroundColor: 'white'
   },
   menuButton: {
     borderColor: '#fff5',
     borderBottomWidth: 1
   },
   menuButtonText: {
-    textAlign: 'center',
-    padding: 15,
-    color: 'white',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    color: '#999',
+    fontSize: 18,
     fontFamily: 'Exo2-Bold'
   },
   header: {
