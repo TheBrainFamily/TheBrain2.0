@@ -108,7 +108,7 @@ class LectureVideo extends React.Component {
         modestbranding={false}
         rel={false}
         onChangeState={this._onChangeState}
-        style={{ alignSelf: 'stretch', height: 300, backgroundColor: '#000' }}
+        style={{ alignSelf: 'stretch', height: this.props.height, backgroundColor: '#000' }}
       />
     )
   }
@@ -127,6 +127,10 @@ class LectureVideo extends React.Component {
   }
 }
 
+LectureVideo.defaultProps = {
+  height: 300
+}
+
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   withRouter
@@ -137,6 +141,8 @@ const mapStateToProps = (state) => {
     selectedCourse: state.course.selectedCourse
   }
 }
+
+export { LectureVideoWithRouter }
 
 export default compose(
   connect(mapStateToProps),
