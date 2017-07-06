@@ -13,6 +13,7 @@ import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 const MenuButton = (props) => (
   <TouchableHighlight
@@ -57,13 +58,14 @@ class MainMenu extends React.Component {
   }
 
   render () {
-    if (this.props.data.loading) {
+    if (this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <View />
     }
     let { fadeAnim } = this.state
 
-    const currentUser = this.props.data.CurrentUser
+    const currentUser = this.props.currentUser.CurrentUser
     const activated = currentUser && currentUser.activated
+    const sessionCount = this.props.sessionCount.SessionCount
 
     const height = Dimensions.get('window').height - this.props.topMargin
 
@@ -89,7 +91,7 @@ class MainMenu extends React.Component {
             <View style={{ width: '100%', marginTop: 20, flexDirection: 'row' }}>
               <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
                 <Text style={style.text}>DUE</Text>
-                <Text style={style.textBold}>3/10</Text>
+                <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
                 <View style={[style.card, { backgroundColor: '#4ba695' }]} />
               </View>
               <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
@@ -98,7 +100,7 @@ class MainMenu extends React.Component {
               </View>
               <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
                 <Text style={style.text}>REVIEW</Text>
-                <Text style={style.textBold}>1/10</Text>
+                <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
                 <View style={[style.card, { backgroundColor: '#c64f34' }]} />
               </View>
             </View>
@@ -182,5 +184,11 @@ export default compose(
       })
     })
   }),
-  graphql(currentUserQuery)
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(currentUserQuery, {name: 'currentUser'})
 )(MainMenu)
