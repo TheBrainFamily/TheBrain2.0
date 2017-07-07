@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react'
-import YouTube from 'react-native-youtube'
 import { Animated, Easing, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
@@ -11,6 +10,7 @@ import SvgUri from 'react-native-svg-uri'
 
 import Loading from './Loading'
 import CircleButton from './CircleButton'
+import Video from './Video'
 
 import styles from '../styles/styles'
 import courseLogos from '../helpers/courseLogos'
@@ -36,6 +36,19 @@ class Lecture extends React.Component {
     }).start(() => this.setState({ showLecture: true }))
   }
 
+  onChangeState = (event) => {
+    console.log('Gozdecki: event', event)
+    if (event.state === 'ended' && !this.props.noCallback) {
+      this.props.lessonWatchedMutation(this.props.courseId).then(() => {
+        let url = '/questions'
+        if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
+          url = '/wellDone'
+        }
+        this.props.history.push(url)
+      })
+    }
+  }
+
   render () {
     if (this.props.data.error) {
       return (<Text>Error... Check if server is running.</Text>)
@@ -53,8 +66,6 @@ class Lecture extends React.Component {
     const courseLogo = courseLogos[this.props.selectedCourse.name]
     const logoSize = courseLogo.scale * 60
 
-    const selectedCourse = this.props.selectedCourse
-
     return (
       <View style={{ width: '100%' }}>
         <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
@@ -69,14 +80,14 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-          <Animatable.View animation='bounceIn'>
-            {this.props.data.loading
-              ? <View style={styles.videoPlaceholder}>
-                <Loading />
-              </View>
-              : <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse._id} />
-            }
-          </Animatable.View>
+        <Animatable.View animation='bounceIn'>
+          {this.props.data.loading
+            ? <View style={styles.videoPlaceholder}>
+              <Loading />
+            </View>
+            : <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
+          }
+        </Animatable.View>
         }
 
         <View style={{ marginTop: 20, alignSelf: 'center' }}>
@@ -94,55 +105,11 @@ class Lecture extends React.Component {
   }
 }
 
-class LectureVideo extends React.Component {
-  render () {
-    return (
-      <YouTube
-        ref='youtubePlayer'
-        videoId={this.props.lesson.youtubeId}
-        play={false}
-        hidden={false}
-        fullscreen
-        loop={false}
-        showinfo={false}
-        modestbranding={false}
-        rel={false}
-        onChangeState={this._onChangeState}
-        style={{ alignSelf: 'stretch', height: this.props.height, backgroundColor: '#000' }}
-      />
-    )
-  }
-
-  _onChangeState = (event) => {
-    console.log('Gozdecki: event', event)
-    if (event.state === 'ended') {
-      this.props.lessonWatchedMutation(this.props.courseId).then(() => {
-        let url = '/questions'
-        if (this.props.lesson && this.props.lesson.position <= 2) {
-          url = '/wellDone'
-        }
-        this.props.history.push(url)
-      })
-    }
-  }
-}
-
-LectureVideo.defaultProps = {
-  height: 300
-}
-
-const LectureVideoWithRouter = compose(
-  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
-  withRouter
-)(LectureVideo)
-
 const mapStateToProps = (state) => {
   return {
     selectedCourse: state.course.selectedCourse
   }
 }
-
-export { LectureVideoWithRouter }
 
 export default compose(
   connect(mapStateToProps),
@@ -154,5 +121,6 @@ export default compose(
         fetchPolicy: 'network-only'
       })
     }
-  })
+  }),
+  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams)
 )(Lecture)
