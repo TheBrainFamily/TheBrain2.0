@@ -1,8 +1,9 @@
 import React from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 
 import Header from './Header'
+import Video from './Video'
 
 import styles from '../styles/styles'
 
@@ -23,7 +24,7 @@ class Intro extends React.Component {
         height: '100%',
         backgroundColor: '#662d91'
       }}>
-        <Header withShadow dynamic />
+        <Header withShadow dynamic/>
 
         <View style={{
           flexGrow: 1,
@@ -37,10 +38,9 @@ class Intro extends React.Component {
             Learn smart and save your time.
           </Text>
 
-          <Image
-            style={{ width: '100%', height: '30%', alignSelf: 'center', marginVertical: 30 }}
-            source={require('../images/intro.png')}
-          />
+          <View style={{ marginVertical: 30, width: '100%' }}>
+            <Video height={200} videoId={'vvYTsbp2CRw'}/>
+          </View>
 
           <TouchableOpacity onPress={this.skipIntro}>
             <Text style={[styles.button, { backgroundColor: '#68b888', paddingHorizontal: 50 }]}>
