@@ -24,8 +24,8 @@ const resolvers = {
 
       return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
     },
-    Lessons (root: ?string, args: ?Object, context: Object) {
-      return context.Lessons.getLessons()
+    Lessons (root: ?string, args: { courseId: string }, context: Object) {
+      return context.Lessons.getLessons(args.courseId);
     },
     LessonCount (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessonCount()
