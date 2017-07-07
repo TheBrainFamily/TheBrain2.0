@@ -151,16 +151,23 @@ describe('query.Lessons', () => {
   beforeAll(async () => {
     await mongoose.connection.db.collection('lessons').insert({ position: 2, courseId: 'testCourseId' })
     await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourseId' })
+    await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourse2Id' })
   })
   afterAll(async (done) => {
     await mongoose.connection.db.dropDatabase()
     done()
   })
-  it('returns all lessons', async () => {
+  it('returns all lessons for a specified course', async () => {
     const context = { Lessons: new LessonsRepository() }
-    const lessons = await resolvers.Query.Lessons(undefined, undefined, context)
+    const lessons = await resolvers.Query.Lessons(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lessons.length).toBe(2)
+  })
+  it('returns all lessons for a specified course sorted by its position', async () => {
+    const context = { Lessons: new LessonsRepository() }
+    const lessons = await resolvers.Query.Lessons(undefined, { courseId: 'testCourseId' }, context)
+
+    expect(lessons[0].position).toBe(1);
   })
 })
 
