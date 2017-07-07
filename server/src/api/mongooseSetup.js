@@ -79,8 +79,8 @@ const LessonSchema = new mongoose.Schema({
 export const Lessons = mongoose.model('Lessons', LessonSchema)
 
 export class LessonsRepository {
-  async getLessons () {
-    return Lessons.find()
+  async getLessons (courseId: string) {
+    return Lessons.find({courseId}).sort({position: 1});
   }
 
   async getLessonCount () {

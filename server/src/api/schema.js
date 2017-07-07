@@ -68,7 +68,7 @@ export const typeDefs = gql`
     type Query {
         Courses: [Course]!,
         Course(_id: String!): Course,
-        Lessons: [Lesson]!,
+        Lessons(courseId: String!): [Lesson]!,
         Lesson(courseId: String!): Lesson,
         Flashcards: [Flashcard],        
         Flashcard(_id: String!): Flashcard
