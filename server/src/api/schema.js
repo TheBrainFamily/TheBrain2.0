@@ -7,6 +7,14 @@ import resolvers from './resolvers'
 const gql = schema => schema
 
 export const typeDefs = gql`
+    type Achievement {
+        _id: String,
+        name: String,
+        description: String,
+        sortOrder: Int,
+        targetValue: Float,
+        value: Float
+    }
     type Course {
         _id: String,
         name: String,
@@ -66,6 +74,7 @@ export const typeDefs = gql`
     }
 
     type Query {
+        Achievements: [Achievement]!,
         Courses: [Course]!,
         Course(_id: String!): Course,
         Lessons(courseId: String!): [Lesson]!,

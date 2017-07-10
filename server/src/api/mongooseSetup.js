@@ -185,11 +185,53 @@ const ProgressSchema = new mongoose.Schema({
   lesson: Number
 })
 
+const AchievementDefSchema = new mongoose.Schema({
+  // achievementId: mongoose.Schema.Types.ObjectId,
+  name: String,
+  description: String,
+  targetValue: Number,
+  formula: Object,          // {simple:'watchedMovies'} || TODO: {complex: {}}
+  active: Boolean,
+  sortOrder: Number,
+})
+
+export const Achievements = mongoose.model('achievementDefinitions', AchievementDefSchema)
+export class AchievementsRepository {
+  async getUserAchievements (userDetails) {
+    const achievementDefinitions = await Achievements.find()
+
+    console.log("JMOZGAWA: achievementDefinitions",achievementDefinitions);
+    const userAchievements = []
+
+    achievementDefinitions.forEach(achievementDef => {
+      let value = 0
+
+      if(achievementDef.formula.simple) {
+        value = userDetails.achievementStats[achievementDef.formula.simple]
+      }
+
+      userAchievements.push({
+        name: achievementDef.name,
+        description: achievementDef.description,
+        sortOrder: achievementDef.sortOrder,
+        targetValue: achievementDef.targetValue,
+        value
+      })
+    })
+
+    return userAchievements
+  }
+}
+
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   hasDisabledTutorial: Boolean,
   selectedCourse: String,
-  progress: [ProgressSchema]
+  progress: [ProgressSchema],
+  achievementStats: {
+    watchedMovies: Number,
+    answeredQuestions: Number,
+  }
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
