@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, View, FlatList } from 'react-native'
-import { graphql, compose } from 'react-apollo'
+import { FlatList, Text, View } from 'react-native'
+import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
 import Header from './Header'
@@ -8,19 +8,23 @@ import PageTitle from './PageTitle'
 import Video from './Video'
 
 import lessonsQuery from '../../client/shared/graphql/queries/lessons'
+import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
     return (
       <View style={{ width: '50%', padding: 10 }} key={item._id}>
-        <Video videoId={item.youtubeId} height={100}/>
+        <View>
+          <Video videoId={item.youtubeId} height={100} />
+          <View pointerEvents="none" style={item.position >= this.props.currentLesson.Lesson.position ? style.overlay : {}} />
+        </View>
         <Text style={style.title}>{item.description}</Text>
       </View>
     )
   }
 
   render () {
-    if (this.props.lessons.loading) {
+    if (this.props.lessons.loading || this.props.currentLesson.loading) {
       return <View />
     }
     return (
@@ -30,7 +34,7 @@ class Lectures extends React.Component {
       }}>
         <Header />
 
-        <PageTitle text='LECTURES LIST'/>
+        <PageTitle text='LECTURES LIST' />
         <FlatList
           data={this.props.lessons.Lessons}
           renderItem={this.renderLecture}
@@ -50,6 +54,14 @@ const style = {
     fontSize: 12,
     fontFamily: 'Exo2-Regular',
     textAlign: 'center'
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: '#fffc',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0
   }
 }
 
@@ -61,6 +73,15 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(currentLessonQuery, {
+    name: 'currentLesson',
+    options: (ownProps) => {
+      const courseId = ownProps.selectedCourse._id
+      return ({
+        variables: { courseId }
+      })
+    }
+  }),
   graphql(lessonsQuery, {
     name: 'lessons',
     options: (ownProps) => {
