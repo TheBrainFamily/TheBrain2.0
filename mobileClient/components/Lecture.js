@@ -38,8 +38,8 @@ class Lecture extends React.Component {
 
   onChangeState = (event) => {
     console.log('Gozdecki: event', event)
-    if (event.state === 'ended' && !this.props.noCallback) {
-      this.props.lessonWatchedMutation(this.props.courseId).then(() => {
+    if (event.state === 'ended') {
+      this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
         let url = '/questions'
         if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
           url = '/wellDone'
@@ -113,11 +113,12 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  withRouter,
   graphql(currentLessonQuery, {
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id
+      const courseId = ownProps.selectedCourse._id
       return ({
-        variables: { courseId: selectedCourse },
+        variables: { courseId },
         fetchPolicy: 'network-only'
       })
     }
