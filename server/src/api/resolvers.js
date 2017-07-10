@@ -7,6 +7,14 @@ import facebookIds from '../configuration/facebook'
 
 const resolvers = {
   Query: {
+    async Achievements (root: ?string, args: ?Object, context: Object) {
+      let userId = '59638d6087b453252b1debee'//context.user && context.user._id
+      if (!userId) {
+        return []
+      }
+      const userDetails = await context.UserDetails.getById(userId)
+      return context.Achievements.getUserAchievements(userDetails)
+    },
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
@@ -25,7 +33,7 @@ const resolvers = {
       return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
     },
     Lessons (root: ?string, args: { courseId: string }, context: Object) {
-      return context.Lessons.getLessons(args.courseId);
+      return context.Lessons.getLessons(args.courseId)
     },
     LessonCount (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessonCount()
@@ -160,7 +168,7 @@ const resolvers = {
 
         await context.Users.updateUser(context.user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, { username, password: args.password }, context)
+        return resolvers.Mutation.logIn(root, {username, password: args.password}, context)
       } catch (e) {
         throw e
       }
