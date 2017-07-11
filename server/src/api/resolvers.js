@@ -184,6 +184,8 @@ const resolvers = {
       }
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
+      await context.UserDetails.updateUserXp(context.user._id, 5) // TODO get xp gain values from config or something...
+
       const item = await context.Items.getItemById(args.itemId, context.user._id)
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       // TODO move this to repository
