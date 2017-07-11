@@ -8,12 +8,22 @@ import facebookIds from '../configuration/facebook'
 const resolvers = {
   Query: {
     async Achievements (root: ?string, args: ?Object, context: Object) {
-      let userId = '59638d6087b453252b1debee'//context.user && context.user._id
+      let userId = context.user && context.user._id
       if (!userId) {
-        return []
+        throw Error(`Invalid userId: ${userId}`)
       }
       const userDetails = await context.UserDetails.getById(userId)
-      return context.Achievements.getUserAchievements(userDetails)
+
+      if (!userDetails) {
+        throw Error(`Cannot fetch userDetials for userId: ${userId}`)
+      }
+
+      const userAchievements = await context.Achievements.getUserAchievements(userDetails)
+
+      const collectedAchievementIds = userAchievements.filter(achievement => achievement.isCollected).map(achievement => achievement._id)
+      await context.UserDetails.updateCollectedAchievements(userId, collectedAchievementIds)
+
+      return userAchievements
     },
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
