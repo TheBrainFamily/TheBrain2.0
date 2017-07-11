@@ -234,6 +234,10 @@ const UserDetailsSchema = new mongoose.Schema({
   achievementStats: {
     watchedMovies: Number,
     answeredQuestions: Number,
+  },
+  experience: {
+    value: Number,
+    level: Number
   }
 })
 
@@ -262,6 +266,19 @@ export class UserDetailsRepository {
     }
 
     return course.lesson
+  }
+
+  calculateUserLevel (xp: Number) {
+    return Math.floor(0.25 * Math.sqrt(xp)) + 1
+  }
+
+  async updateUserXp (userId: string, xpGained: Number) {
+    const userDetails = (await UserDetails.findOneAndUpdate({userId}, {$inc: {'experience.value': xpGained}}, {
+      upsert: true,
+      new: true
+    }))
+    const newLevel = this.calculateUserLevel(userDetails.experience.value)
+    await UserDetails.update({userId}, {$set: {'experience.level': newLevel}})
   }
 
   async updateNextLessonPosition (courseId: string, userId: string) {
