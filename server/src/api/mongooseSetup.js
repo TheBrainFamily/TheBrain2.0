@@ -186,7 +186,7 @@ const ProgressSchema = new mongoose.Schema({
 })
 
 const AchievementDefSchema = new mongoose.Schema({
-  // achievementId: mongoose.Schema.Types.ObjectId,
+  _id: mongoose.Schema.Types.ObjectId,
   name: String,
   description: String,
   targetValue: Number,
@@ -199,23 +199,25 @@ export const Achievements = mongoose.model('achievementDefinitions', Achievement
 export class AchievementsRepository {
   async getUserAchievements (userDetails) {
     const achievementDefinitions = await Achievements.find()
-
-    console.log("JMOZGAWA: achievementDefinitions",achievementDefinitions);
+    const previousAchievementIds = new Set((userDetails.collectedAchievements || []).map(achievementId => achievementId.toString()))
     const userAchievements = []
 
     achievementDefinitions.forEach(achievementDef => {
       let value = 0
 
-      if(achievementDef.formula.simple) {
+      if (achievementDef.formula.simple && userDetails.achievementStats[achievementDef.formula.simple]) {
         value = userDetails.achievementStats[achievementDef.formula.simple]
       }
+      const isCollected = previousAchievementIds.has(achievementDef._id.toString()) || achievementDef.targetValue <= value
 
       userAchievements.push({
+        _id: achievementDef._id,
         name: achievementDef.name,
         description: achievementDef.description,
         sortOrder: achievementDef.sortOrder,
         targetValue: achievementDef.targetValue,
-        value
+        value,
+        isCollected
       })
     })
 
@@ -228,6 +230,7 @@ const UserDetailsSchema = new mongoose.Schema({
   hasDisabledTutorial: Boolean,
   selectedCourse: String,
   progress: [ProgressSchema],
+  collectedAchievements: [mongoose.Schema.Types.ObjectId],
   achievementStats: {
     watchedMovies: Number,
     answeredQuestions: Number,
@@ -265,7 +268,11 @@ export class UserDetailsRepository {
     await UserDetails.update({ userId, 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
   }
 
-  async disableTutorial (userId: string) {
+  async updateCollectedAchievements (userId: string, collectedAchievementIds) {
+    await UserDetails.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
+  }
+
+    async disableTutorial (userId: string) {
     return UserDetails.findOneAndUpdate({ userId }, { hasDisabledTutorial: true }, { new: true })
   }
 

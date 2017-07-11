@@ -13,7 +13,8 @@ export const typeDefs = gql`
         description: String,
         sortOrder: Int,
         targetValue: Float,
-        value: Float
+        value: Float,
+        isCollected: Boolean
     }
     type Course {
         _id: String,
