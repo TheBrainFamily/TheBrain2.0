@@ -39,7 +39,7 @@ export default compose(
   graphql(currentLessonQuery, {
     name: 'currentLesson',
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id
+      const selectedCourse = ownProps.selectedCourse ? ownProps.selectedCourse._id : '59662dde7a5e5ebbc9dbccdb'
       return ({
         variables: { courseId: selectedCourse },
         fetchPolicy: 'network-only'
