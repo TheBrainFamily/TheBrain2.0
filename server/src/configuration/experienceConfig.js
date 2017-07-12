@@ -1,10 +1,10 @@
 const experienceGained = {
-  processEvaluation: 5,
+  processEvaluation: 5
 }
 
-export getExperienceForAction = (action) => {
+export function getExperienceForAction(action) {
   let exp = 0
-  if(experienceGained[action]) {
+  if (experienceGained[action]) {
     exp = experienceGained[action]
   } else {
     throw Error(`could not find experience value for action: ${action}`)
@@ -12,6 +12,6 @@ export getExperienceForAction = (action) => {
   return exp
 }
 
-export calculateUserLevel = (xp: Number) => {
+export function calculateUserLevel(xp: Number) {
   return Math.floor(0.25 * Math.sqrt(xp)) + 1
 }
