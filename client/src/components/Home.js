@@ -8,7 +8,6 @@ import { push } from 'react-router-redux'
 import { course } from '../actions'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
-import airplane from '../img/bg-airplane.png'
 
 class Home extends React.Component {
   selectCourse = (courseId) => async () => {
