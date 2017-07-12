@@ -8,7 +8,7 @@ import update from 'immutability-helper'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import logo from './../logo.svg'
+import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
@@ -65,13 +65,18 @@ class AppHeader extends React.Component {
     const currentUser = this.props.data.CurrentUser
 
     return (
-      <div className='App-header'>
-        <Link to='/'>
-          <img src={logo} className='App-logo' alt='logo' />
-        </Link>
-        <br />
-        {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
-        | <a onClick={this.closeCourse()}>Close Course</a>
+      <div className='App-header-shadow'>
+        <div className='App-header-container'>
+          <div className='App-header'>
+            <Link to='/'>
+              <img src={logo} className='App-logo' alt='logo' />
+            </Link>
+            <div className='App-header-right'>
+              {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
+              | <a onClick={this.closeCourse()}>Close Course</a>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
