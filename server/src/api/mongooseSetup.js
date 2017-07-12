@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import moment from 'moment'
 import bcrypt from 'bcrypt'
 import urlencode from 'urlencode'
-import { calculateUserLevel, experienceGained } from '../configuration/experienceConfig'
+import { calculateUserLevel, getExperienceForAction } from '../configuration/experienceConfig'
 
 import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
 
