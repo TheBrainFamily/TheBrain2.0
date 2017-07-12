@@ -3,7 +3,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, InteractionManager, Dimensions } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 import Header from './Header'
@@ -22,18 +22,65 @@ import coursesQuery from '../../client/shared/graphql/queries/courses'
 class Home extends React.Component {
   constructor (props) {
     super(props)
+    const {height, width} = Dimensions.get('window')
+    this.height = height
+    this.width = width
     const isCourseSelected = !!props.course.selectedCourse || false
     this.state = {
       isCourseSelected,
-      isExitAnimationFinished: isCourseSelected
+      isExitAnimationFinished: isCourseSelected,
     }
+  }
+
+  getCoursesIds = () => {
+    return this.props.courses.Courses.map(course => course._id)
+  }
+
+  getOtherCoursesIds = (selectedCourseId) => {
+    return this.getCoursesIds().filter(courseId => courseId !== selectedCourseId)
+  }
+
+  animateCourseSelectorsFadeOut = (selectedCourseId) => {
+    this.refs.courseSelectorTitle.fadeOut(500)
+
+    this.getOtherCoursesIds(selectedCourseId).forEach((courseId) => {
+      this.refs[`${courseId}courseSelector`].fadeOut(500)
+    })
+
+    this.getCoursesIds().forEach((courseId) => {
+      this.refs[`${courseId}courseSelectorText`].fadeOut(500)
+    })
+
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({isExitAnimationFinished: true})
+    })
+  }
+
+  animateCourseSelector = (selectedCourseId) => {
+    this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
+      const scale = 0.75
+      const desiredBottomYOffset = 25
+      const newSizeY = height * scale
+      const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
+      const elementHeightChangeAfterScaling = (height - newSizeY) / 2
+      const translateYValue = this.height - pageYOffset - desiredElementTopYOffset - elementHeightChangeAfterScaling
+
+      const newSizeX = width * scale
+      const centeredLeftXOffset = (this.width - newSizeX) / 2
+      const elementWidthChangeAfterScaling = (width - newSizeX) / 2
+      const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
+
+      this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
+      this.animateCourseSelectorsFadeOut(selectedCourseId)
+    })
   }
 
   selectCourse = (course) => async () => {
     this.props.dispatch(courseActions.select(course))
     await this.props.selectCourse({courseId: course._id})
     this.setState({isCourseSelected: true})
-    this.refs.courseSelector.fadeOut(1000).then(() => this.setState({isExitAnimationFinished: true}))
+
+    this.animateCourseSelector(course._id)
   }
 
   closeCourse = () => {
@@ -58,19 +105,21 @@ class Home extends React.Component {
           <CourseProgressBar />
         </CourseHeader>
 
-        {!isExitAnimationFinished && <Animatable.View style={{
+        {!isExitAnimationFinished && <View style={{
           flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center'
-        }} ref='courseSelector'>
-          <Text
-            style={[styles.textDefault, {
-              marginBottom: 30,
-              fontSize: 24,
-              fontFamily: 'Kalam-Regular'
-            }]}>
-            Choose a course:
-          </Text>
+        }}>
+          <Animatable.View ref='courseSelectorTitle'>
+            <Text
+              style={[styles.textDefault, {
+                marginBottom: 30,
+                fontSize: 24,
+                fontFamily: 'Kalam-Regular'
+              }]}>
+              Choose a course:
+            </Text>
+          </Animatable.View>
           {!this.props.courses.loading &&
           <View style={{flexDirection: 'row'}}>
             {this.props.courses.Courses.map(course => {
@@ -80,24 +129,34 @@ class Home extends React.Component {
                 <View key={course._id} style={{
                   marginHorizontal: 20
                 }}>
-                  <CircleButton
-                    color={course.color}
-                    onPress={this.selectCourse(course)}
-                  >
-                    <SvgUri
-                      width={logoSize}
-                      height={logoSize}
-                      source={courseLogo.file}
-                      style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-                    />
-                  </CircleButton>
-                  <Text style={style.courseTitle}>{course.name}</Text>
+                  <View ref={`${course._id}courseSelectorContainer`}>
+                    <Animatable.View style={{zIndex: 100}}
+                                     ref={`${course._id}courseSelector`}>
+                      <CircleButton
+                        color={course.color}
+                        onPress={this.selectCourse(course)}
+                      >
+                        <SvgUri
+                          width={logoSize}
+                          height={logoSize}
+                          source={courseLogo.file}
+                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+                        />
+                      </CircleButton>
+                    </Animatable.View>
+                  </View>
+                  <Animatable.View style={{
+                    marginHorizontal: 20
+                  }} ref={`${course._id}courseSelectorText`}>
+                    <Text style={style.courseTitle}>{course.name}</Text>
+                  </Animatable.View>
                 </View>
               )
             })}
           </View>
           }
-        </Animatable.View>}
+
+        </View>}
 
         {isExitAnimationFinished && <Course />}
       </View>
