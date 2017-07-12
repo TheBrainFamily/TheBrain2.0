@@ -5,13 +5,10 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-
-import Introduction from './Introduction'
-import Content from './Content'
-
 import { course } from '../actions'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
+import airplane from '../img/bg-airplane.png'
 
 class Home extends React.Component {
   selectCourse = (courseId) => async () => {
@@ -37,18 +34,13 @@ class Home extends React.Component {
     }
 
     return (
-      <div>
-        <Introduction />
-        <Content />
-
-        <h2>Choose a course:</h2>
         <ul className='course-selector'>
+          <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <li key={course._id}><a className='course-button' onClick={this.selectCourse(course._id)}>{course.name}</a>
             </li>
           })}
         </ul>
-      </div>
     )
   }
 }
