@@ -18,6 +18,7 @@ body {
     background-color: #6922a8;
     min-width: 1024px;
     height: 100%;
+    min-height: 768px;
     margin: 0;
     padding: 0;
     background-image: url('img/bg-airplane.png');
@@ -42,6 +43,8 @@ body {
     width: 1024px;
     background-color: white;
     padding: 20px;
+    padding-left: 0;
+    padding-right: 0;
     color: white;
     margin: auto;
 }
@@ -54,6 +57,7 @@ body {
 }
 
 .App-header-right {
+    padding-right: 20px;
     float: right;
 }
 
