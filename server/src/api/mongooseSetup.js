@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import moment from 'moment'
 import bcrypt from 'bcrypt'
 import urlencode from 'urlencode'
+import { calculateUserLevel, experienceGained } from '../configuration/experienceConfig'
 
 import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
 
@@ -268,16 +269,13 @@ export class UserDetailsRepository {
     return course.lesson
   }
 
-  calculateUserLevel (xp: Number) {
-    return Math.floor(0.25 * Math.sqrt(xp)) + 1
-  }
-
-  async updateUserXp (userId: string, xpGained: Number) {
+  async updateUserXp (userId: string, action: string) {
+    let xpGained = getExperienceForAction(action)
     const userDetails = (await UserDetails.findOneAndUpdate({userId}, {$inc: {'experience.value': xpGained}}, {
       upsert: true,
       new: true
     }))
-    const newLevel = this.calculateUserLevel(userDetails.experience.value)
+    const newLevel = calculateUserLevel(userDetails.experience.value)
     await UserDetails.update({userId}, {$set: {'experience.level': newLevel}})
   }
 
