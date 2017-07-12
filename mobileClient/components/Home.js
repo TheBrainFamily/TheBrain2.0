@@ -31,19 +31,19 @@ class Home extends React.Component {
 
   selectCourse = (course) => async () => {
     this.props.dispatch(courseActions.select(course))
-    await this.props.selectCourse({ courseId: course._id })
-    this.setState({ isCourseSelected: true })
-    this.refs.courseSelector.fadeOut(1000).then(() => this.setState({ isExitAnimationFinished: true }))
+    await this.props.selectCourse({courseId: course._id})
+    this.setState({isCourseSelected: true})
+    this.refs.courseSelector.fadeOut(1000).then(() => this.setState({isExitAnimationFinished: true}))
   }
 
   closeCourse = () => {
     this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false })
+    this.setState({isCourseSelected: false, isExitAnimationFinished: false})
   }
 
   render () {
-    const { isCourseSelected, isExitAnimationFinished } = this.state
-    const { course } = this.props
+    const {isCourseSelected, isExitAnimationFinished} = this.state
+    const {course} = this.props
     const courseColor = _.get(course, 'selectedCourse.color')
 
     return (
@@ -53,12 +53,10 @@ class Home extends React.Component {
         height: '100%',
         backgroundColor: courseColor
       }}>
-        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} />}
-        {isCourseSelected &&
-          <CourseHeader style={{ position: 'absolute' }} onLogoPress={this.closeCourse}>
-            <CourseProgressBar />
-          </CourseHeader>
-        }
+        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
+        <CourseHeader style={{position: 'absolute'}} onLogoPress={this.closeCourse}>
+          <CourseProgressBar />
+        </CourseHeader>
 
         {!isExitAnimationFinished && <Animatable.View style={{
           flexGrow: 1,
@@ -74,7 +72,7 @@ class Home extends React.Component {
             Choose a course:
           </Text>
           {!this.props.courses.loading &&
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
               const logoSize = courseLogo.scale * 80
@@ -90,7 +88,7 @@ class Home extends React.Component {
                       width={logoSize}
                       height={logoSize}
                       source={courseLogo.file}
-                      style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
+                      style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
                     />
                   </CircleButton>
                   <Text style={style.courseTitle}>{course.name}</Text>
@@ -118,15 +116,15 @@ const selectCourseMutation = gql`
 export default compose(
   connect(state => state),
   graphql(selectCourseMutation, {
-    props: ({ ownProps, mutate }) => ({
-      selectCourse: ({ courseId }) => mutate({
+    props: ({ownProps, mutate}) => ({
+      selectCourse: ({courseId}) => mutate({
         variables: {
           courseId
         }
       })
     })
   }),
-  graphql(coursesQuery, { name: 'courses' })
+  graphql(coursesQuery, {name: 'courses'})
 )(Home)
 
 const style = StyleSheet.create({
@@ -142,7 +140,7 @@ const style = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 58,
-    transform: [{ translateX: -10 }, { translateY: -10 }],
+    transform: [{translateX: -10}, {translateY: -10}],
     backgroundColor: 'white',
     width: 20,
     height: 20,
