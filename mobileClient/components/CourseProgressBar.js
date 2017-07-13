@@ -23,7 +23,7 @@ class CourseProgressBar extends React.Component {
     const progress = currentLesson / lessonsTotal
 
     return (
-      <ProgressBar progress={progress} />
+      <ProgressBar progress={progress}/>
     )
   }
 }
@@ -41,10 +41,10 @@ export default compose(
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse._id
       return ({
-        variables: { courseId: selectedCourse },
+        variables: {courseId: selectedCourse},
         fetchPolicy: 'network-only'
       })
     }
   }),
-  graphql(lessonCountQuery, { name: 'lessonCount' })
+  graphql(lessonCountQuery, {name: 'lessonCount'})
 )(CourseProgressBar)
