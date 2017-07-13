@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     top: 50,
     width: 2,
-    height: 60,
+    height: 59,
     backgroundColor: '#71b9d3'
   },
   answerRightLine: {
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 50,
     width: 2,
-    height: 60,
+    height: 59,
     backgroundColor: '#c1272d'
   },
   answerLeftLine: {
@@ -410,6 +410,54 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Exo2-Regular',
     fontSize: 17
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 4,
+    borderRightWidth: 4,
+    borderBottomWidth: 12,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#b3b3b3',
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  triangleTop: {
+    top: 98,
+  },
+  triangleBottom: {
+    borderBottomWidth: 0,
+    borderTopWidth: 12,
+    borderBottomColor: 'transparent',
+    borderTopColor: '#b3b3b3',
+    top: 206,
+  },
+  triangleRight: {
+    borderBottomWidth: 4,
+    borderTopWidth: 4,
+    borderRightWidth: 0,
+    borderLeftWidth: 12,
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: '#b3b3b3',
+    top: 153.5,
+    left: 236,
+  },
+  triangleLeft: {
+    borderBottomWidth: 4,
+    borderTopWidth: 4,
+    borderRightWidth: 12,
+    borderLeftWidth: 0,
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderRightColor: '#b3b3b3',
+    borderLeftColor: 'transparent',
+    top: 153.5,
+    left: 126,
   }
 })
 
