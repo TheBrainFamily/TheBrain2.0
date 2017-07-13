@@ -142,6 +142,20 @@ export class ItemsRepository {
     console.log('insertedItem', insertedItem)
     return newItem
   }
+
+  async getReviews (userId: string) {
+    const nextDayTimestamp = moment().add(1, 'day').startOf('day').unix()
+
+    const items = await Items.find({ userId, nextRepetition: {'$gte': nextDayTimestamp } }, { nextRepetition: 1 })
+    const itemsByDay = _.countBy(items, (item) => {
+      const date = item.nextRepetition - item.nextRepetition % (24 * 60 * 60)
+      return date
+    })
+
+    return _.map(itemsByDay, (count, ts) => ({
+      ts, count
+    }))
+  }
 }
 
 export class ItemsWithFlashcardRepository {
