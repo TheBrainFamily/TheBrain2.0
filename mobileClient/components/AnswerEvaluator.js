@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
+import Triangle from './Triangle'
 
 import styles from '../styles/styles'
 
@@ -38,24 +39,28 @@ class AnswerEvaluator extends React.Component {
 
     return (
       <Animatable.View style={styles.answerEvaluator} animation='slideInUp'>
+        <Triangle animated={this.props.enabled} line="top" style={styles.triangleTop}/>
         <LinearGradient
           style={styles.answerTopLine}
           colors={['#71b9d3', '#b3b3b3']}
           start={{x: 0, y: 0}}
           end={{x: 0, y: 1}}
         />
+        <Triangle animated={this.props.enabled} line="right" style={styles.triangleRight}/>
         <LinearGradient
           style={styles.answerRightLine}
           colors={['#ff8533', '#b3b3b3']}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 0}}
         />
+        <Triangle animated={this.props.enabled} line="bottom" style={styles.triangleBottom}/>
         <LinearGradient
           style={styles.answerBottomLine}
           colors={['#c1272d', '#b3b3b3']}
           start={{x: 0, y: 1}}
           end={{x: 0, y: 0}}
         />
+        <Triangle animated={this.props.enabled} line="left" style={styles.triangleLeft}/>
         <LinearGradient
           style={styles.answerLeftLine}
           colors={['#62c46c', '#b3b3b3']}
@@ -80,23 +85,23 @@ class AnswerEvaluator extends React.Component {
         {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
 
         {this.props.enabled && !hasDisabledTutorial && this.state.showTutorial &&
-          <View style={styles.answerEvaluatorOverlay}>
-            <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
-            <Text style={styles.infoText}>
-              Rate using one of the four answers.{'\n'}
-              Just slide your finger from the center circle to correct button.
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text
-                onPress={this.hideTutorial}
-                style={[styles.button, { backgroundColor: '#62c46c' }]}
-              >OK, go on</Text>
-              <Text
-                onPress={this.hideTutorialPermanently}
-                style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}
-              >OK, go on. Don't show it again</Text>
-            </View>
+        <View style={styles.answerEvaluatorOverlay}>
+          <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
+          <Text style={styles.infoText}>
+            Rate using one of the four answers.{'\n'}
+            Just slide your finger from the center circle to correct button.
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text
+              onPress={this.hideTutorial}
+              style={[styles.button, { backgroundColor: '#62c46c' }]}
+            >OK, go on</Text>
+            <Text
+              onPress={this.hideTutorialPermanently}
+              style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}
+            >OK, go on. Don't show it again</Text>
           </View>
+        </View>
         }
       </Animatable.View>
     )
