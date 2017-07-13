@@ -31,34 +31,34 @@ class Flashcard extends React.Component {
   render () {
     if (!this.props.isAnswerVisible) {
       return (
-        <div>
+        <div className='questions-content'>
           <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
-            <div className="flashcard-title">Question: title</div>
-            <div className="flashcard-content">
-              <div className="flashcard-content-text">
-                <div className="scrollable-text">{this.props.question}</div>
+            <div className='flashcard-title'>Question: title</div>
+            <div className='flashcard-content'>
+              <div className='flashcard-content-text'>
+                <div className='scrollable-text'>{this.props.question}</div>
               </div>
             </div>
-            <div className="flashcard-footer">Click the card to see the answer!</div>
+            <div className='flashcard-footer'>Click the card to see the answer!</div>
           </div>
         </div>)
     }
     return (
-      <div>
+      <div className='questions-content'>
         <div className='flashcard'>
-          <div className="flashcard-title">Question: title</div>
-          <div className="flashcard-content">
-            <div className="flashcard-content-text center-text">
-              <div className="scrollable-text">{this.props.answer}</div>
+          <div className='flashcard-title'>Question: title</div>
+          <div className='flashcard-content'>
+            <div className='flashcard-content-text center-text'>
+              <div className='scrollable-text'>{this.props.answer}</div>
             </div>
           </div>
-          <div className="flashcard-footer">How would you describe experience answering this question?</div>
+          <div className='flashcard-footer'>How would you describe experience answering this question?</div>
         </div>
         <div className="answer-buttons-container">
-          <img src={answerButtonImage1} className="answer-button" onClick={() => this.onSubmitEvaluation(1)}/>
-          <img src={answerButtonImage2} className="answer-button" onClick={() => this.onSubmitEvaluation(2.5)}/>
-          <img src={answerButtonImage3} className="answer-button" onClick={() => this.onSubmitEvaluation(4.5)}/>
-          <img src={answerButtonImage4} className="answer-button" onClick={() => this.onSubmitEvaluation(6)}/>
+          <img src={answerButtonImage1} className='answer-button' onClick={() => this.onSubmitEvaluation(1)}/>
+          <img src={answerButtonImage2} className='answer-button' onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img src={answerButtonImage3} className='answer-button' onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img src={answerButtonImage4} className='answer-button' onClick={() => this.onSubmitEvaluation(6)}/>
         </div>
       </div>)
   }
