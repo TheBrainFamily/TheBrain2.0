@@ -11,8 +11,8 @@ import session from 'express-session'
 import mongoose from 'mongoose'
 
 import {
-  FlashcardsRepository, CoursesRepository, LessonsRepository, ItemsRepository,
-  ItemsWithFlashcardRepository, UserDetailsRepository, UsersRepository, AchievementsRepository
+  CoursesRepository, LessonsRepository, ItemsRepository,
+  UserDetailsRepository, UsersRepository, AchievementsRepository
 } from './api/mongooseSetup'
 
 import cors from 'cors'
@@ -20,6 +20,14 @@ import cors from 'cors'
 import schema from './api/schema'
 
 import facebookConfig from './configuration/facebook'
+import { flashcardRepository, FlashcardsRepository } from './api/repositories/FlashcardsRepository'
+import {
+  ItemsWithFlashcardRepository,
+  itemsWithFlashcardRepository
+} from './api/repositories/ItemsWithFlashcardRepository'
+import { itemsRepository } from './api/repositories/ItemsRepository'
+import { coursesRepository } from './api/repositories/CoursesRepository'
+import { lessonsRepository } from './api/repositories/LessonsRepository'
 
 const MongoStore = require('connect-mongo')(session)
 
@@ -70,9 +78,9 @@ const whitelist = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log('Gozdecki: origin', origin)
+    // console.log('Gozdecki: origin', origin)
     var originIsWhitelisted = whitelist.indexOf(origin) !== -1 || !origin
-    console.log('Gozdecki: originIsWhitelisted', originIsWhitelisted)
+    // console.log('Gozdecki: originIsWhitelisted', originIsWhitelisted)
     callback(null, originIsWhitelisted)
   },
   credentials: true
@@ -108,7 +116,7 @@ app.use('/graphql', graphqlExpress((req) => {
         // Probably indicates someone trying to send an overly expensive query
     throw new Error('Query too large.')
   }
-  console.log('Gozdecki: req.user in graphql', req.user)
+  // console.log('Gozdecki: req.user in graphql', req.user)
     // let user;
     // if (req.user) {
     //     // We get req.user from passport-github with some pretty oddly named fields,
@@ -132,11 +140,11 @@ app.use('/graphql', graphqlExpress((req) => {
       opticsContext,
       user: req.user,
       req,
-      Flashcards: new FlashcardsRepository(),
-      Courses: new CoursesRepository(),
-      Lessons: new LessonsRepository(),
-      Items: new ItemsRepository(),
-      ItemsWithFlashcard: new ItemsWithFlashcardRepository(),
+      Flashcards: flashcardRepository,
+      Courses: coursesRepository,
+      Lessons: lessonsRepository,
+      Items: itemsRepository,
+      ItemsWithFlashcard: itemsWithFlashcardRepository,
       UserDetails: new UserDetailsRepository(),
       Users: new UsersRepository(),
       Achievements: new AchievementsRepository(),
