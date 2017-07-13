@@ -50,7 +50,7 @@ class Flashcard extends React.Component {
           </div>
           <div className="flashcard-footer">How would you describe experience answering this question?</div>
         </div>
-        <div>
+        <div className="answer-buttons-container">
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
