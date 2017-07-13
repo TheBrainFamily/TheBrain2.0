@@ -63,7 +63,8 @@ export class LectureVideo extends React.Component {
   }
 
   _onEnd = () => {
-    this.props.lessonWatchedMutation(this.props.courseId)
+    console.log('onYTend props:', this.props)
+    this.props.lessonWatchedMutation({courseId: this.props.courseId})
     this.props.dispatch(push('/wellDone'))
   }
 }

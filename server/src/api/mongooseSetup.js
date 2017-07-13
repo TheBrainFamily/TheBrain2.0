@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import moment from 'moment'
 import bcrypt from 'bcrypt'
 import urlencode from 'urlencode'
+import { calculateUserLevel, getExperienceForAction } from '../configuration/experienceConfig'
 
 import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
 
@@ -185,11 +186,60 @@ const ProgressSchema = new mongoose.Schema({
   lesson: Number
 })
 
+const AchievementDefSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  name: String,
+  description: String,
+  targetValue: Number,
+  formula: Object,          // {simple:'watchedMovies'} || TODO: {complex: {}}
+  active: Boolean,
+  sortOrder: Number,
+})
+
+export const Achievements = mongoose.model('achievementDefinitions', AchievementDefSchema)
+export class AchievementsRepository {
+  async getUserAchievements (userDetails) {
+    const achievementDefinitions = await Achievements.find()
+    const previousAchievementIds = new Set((userDetails.collectedAchievements || []).map(achievementId => achievementId.toString()))
+    const userAchievements = []
+
+    achievementDefinitions.forEach(achievementDef => {
+      let value = 0
+
+      if (achievementDef.formula.simple && userDetails.achievementStats[achievementDef.formula.simple]) {
+        value = userDetails.achievementStats[achievementDef.formula.simple]
+      }
+      const isCollected = previousAchievementIds.has(achievementDef._id.toString()) || achievementDef.targetValue <= value
+
+      userAchievements.push({
+        _id: achievementDef._id,
+        name: achievementDef.name,
+        description: achievementDef.description,
+        sortOrder: achievementDef.sortOrder,
+        targetValue: achievementDef.targetValue,
+        value,
+        isCollected
+      })
+    })
+
+    return userAchievements
+  }
+}
+
 const UserDetailsSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   hasDisabledTutorial: Boolean,
   selectedCourse: String,
-  progress: [ProgressSchema]
+  progress: [ProgressSchema],
+  collectedAchievements: [mongoose.Schema.Types.ObjectId],
+  achievementStats: {
+    watchedMovies: Number,
+    answeredQuestions: Number,
+  },
+  experience: {
+    value: Number,
+    level: Number
+  }
 })
 
 export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
@@ -219,11 +269,25 @@ export class UserDetailsRepository {
     return course.lesson
   }
 
+  async updateUserXp (userId: string, action: string) {
+    let xpGained = getExperienceForAction(action)
+    const userDetails = (await UserDetails.findOneAndUpdate({userId}, {$inc: {'experience.value': xpGained}}, {
+      upsert: true,
+      new: true
+    }))
+    const newLevel = calculateUserLevel(userDetails.experience.value)
+    await UserDetails.update({userId}, {$set: {'experience.level': newLevel}})
+  }
+
   async updateNextLessonPosition (courseId: string, userId: string) {
     await UserDetails.update({ userId, 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
   }
 
-  async disableTutorial (userId: string) {
+  async updateCollectedAchievements (userId: string, collectedAchievementIds) {
+    await UserDetails.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
+  }
+
+    async disableTutorial (userId: string) {
     return UserDetails.findOneAndUpdate({ userId }, { hasDisabledTutorial: true }, { new: true })
   }
 

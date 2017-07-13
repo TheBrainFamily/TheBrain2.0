@@ -7,6 +7,24 @@ import facebookIds from '../configuration/facebook'
 
 const resolvers = {
   Query: {
+    async Achievements (root: ?string, args: ?Object, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        throw Error(`Invalid userId: ${userId}`)
+      }
+      const userDetails = await context.UserDetails.getById(userId)
+
+      if (!userDetails) {
+        throw Error(`Cannot fetch userDetials for userId: ${userId}`)
+      }
+
+      const userAchievements = await context.Achievements.getUserAchievements(userDetails)
+
+      const collectedAchievementIds = userAchievements.filter(achievement => achievement.isCollected).map(achievement => achievement._id)
+      await context.UserDetails.updateCollectedAchievements(userId, collectedAchievementIds)
+
+      return userAchievements
+    },
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
@@ -25,7 +43,7 @@ const resolvers = {
       return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
     },
     Lessons (root: ?string, args: { courseId: string }, context: Object) {
-      return context.Lessons.getLessons(args.courseId);
+      return context.Lessons.getLessons(args.courseId)
     },
     LessonCount (root: ?string, args: ?Object, context: Object) {
       return context.Lessons.getLessonCount()
@@ -160,12 +178,14 @@ const resolvers = {
 
         await context.Users.updateUser(context.user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, { username, password: args.password }, context)
+        return resolvers.Mutation.logIn(root, {username, password: args.password}, context)
       } catch (e) {
         throw e
       }
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
+      await context.UserDetails.updateUserXp(context.user._id, 5) // TODO get xp gain values from config or something...
+
       const item = await context.Items.getItemById(args.itemId, context.user._id)
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       // TODO move this to repository
