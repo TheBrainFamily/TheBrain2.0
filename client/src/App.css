@@ -164,8 +164,7 @@ FLASHCARDS
 .answer-buttons-container {
     position: absolute;
     width: 100%;
-    min-height: 200px;
-    height: 20%;
+    height: 180px;
     bottom: 0;
     background-color: white;
     background-image: url('img/bg-shadow-bottom.png');
@@ -230,8 +229,11 @@ TUTORIAL
     margin: 180px 0;
 }
 
-.questions {
-    margin: 145px 0;
+.questions-container {
+    width: 100%;
+}
+
+.questions-content {
 }
 
 button {
