@@ -6,10 +6,14 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
-
 import { flashcard } from '../actions'
 
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+
+import answerButtonImage1 from '../img/button-easy.png'
+import answerButtonImage2 from '../img/button-medium.png'
+import answerButtonImage3 from '../img/button-hard.png'
+import answerButtonImage4 from '../img/button-veryhard.png'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
@@ -51,10 +55,10 @@ class Flashcard extends React.Component {
           <div className="flashcard-footer">How would you describe experience answering this question?</div>
         </div>
         <div className="answer-buttons-container">
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
+          <img src={answerButtonImage1} className="answer-button" onClick={() => this.onSubmitEvaluation(1)}/>
+          <img src={answerButtonImage2} className="answer-button" onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img src={answerButtonImage3} className="answer-button" onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img src={answerButtonImage4} className="answer-button" onClick={() => this.onSubmitEvaluation(6)}/>
         </div>
       </div>)
   }

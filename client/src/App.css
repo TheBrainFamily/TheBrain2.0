@@ -173,13 +173,12 @@ FLASHCARDS
     background-position: top;
 }
 
-.button-answer {
-    text-align: center;
-    background: #f2f2f2;
-    color: #000000;
-    border: 2px solid rgb(0, 0, 0) !important;
-    font-weight: normal;
-    padding: 15px 40px;
+.answer-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 120px;
+    height: 120px;
 }
 
 .scrollable-text {
