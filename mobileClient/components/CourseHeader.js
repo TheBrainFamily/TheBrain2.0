@@ -20,31 +20,34 @@ class CourseHeader extends React.Component {
   }
 
   toggleMenu = () => {
-    this.setState({ active: !this.state.active })
+    this.setState({active: !this.state.active})
   }
 
   render () {
+    if (!this.props.currentCourse) {
+      return <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]} />
+    }
     return (
-      <View style={[style.courseHeader, { backgroundColor: this.props.backgroundColor }, { height: this.props.height }]}>
+      <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={this.props.onLogoPress}>
-              <SvgUri width='100' height='49' source={require('../images/logo.svg')} />
+              <SvgUri width='100' height='49' source={require('../images/logo.svg')}/>
             </TouchableOpacity>
             <View style={styles.headerBorder}>
               {!this.props.currentCourse.loading &&
-                <Text style={styles.headerTitle}>{this.props.currentCourse.Course.name}</Text>
+              <Text style={styles.headerTitle}>{this.props.currentCourse.Course.name}</Text>
               }
             </View>
           </View>
-          <View style={{ marginRight: 15 }}>
-            <Hamburger active={this.state.active} color='#ffffff' type='spinCross' onPress={this.toggleMenu} />
+          <View style={{marginRight: 15}}>
+            <Hamburger active={this.state.active} color='#ffffff' type='spinCross' onPress={this.toggleMenu}/>
           </View>
         </View>
 
         {this.props.children}
 
-        {this.state.active && <MainMenu topMargin={this.props.height} />}
+        {this.state.active && <MainMenu topMargin={this.props.height}/>}
       </View>
     )
   }
@@ -80,15 +83,15 @@ const mapStateToProps = (state) => {
   }
 }
 
-
 export default compose(
   connect(mapStateToProps),
   graphql(currentCourseQuery, {
     name: 'currentCourse',
+    skip: props => !props.selectedCourse,
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse._id
       return {
-        variables: { _id: selectedCourse },
+        variables: {_id: selectedCourse},
       }
     }
   }),
