@@ -10,8 +10,10 @@ import { Strategy as FacebookStrategy } from 'passport-facebook'
 import session from 'express-session'
 import mongoose from 'mongoose'
 
-import { FlashcardsRepository, CoursesRepository, LessonsRepository, ItemsRepository,
-    ItemsWithFlashcardRepository, UserDetailsRepository, UsersRepository } from './api/mongooseSetup'
+import {
+  FlashcardsRepository, CoursesRepository, LessonsRepository, ItemsRepository,
+  ItemsWithFlashcardRepository, UserDetailsRepository, UsersRepository, AchievementsRepository
+} from './api/mongooseSetup'
 
 import cors from 'cors'
 
@@ -136,7 +138,8 @@ app.use('/graphql', graphqlExpress((req) => {
       Items: new ItemsRepository(),
       ItemsWithFlashcard: new ItemsWithFlashcardRepository(),
       UserDetails: new UserDetailsRepository(),
-      Users: new UsersRepository()
+      Users: new UsersRepository(),
+      Achievements: new AchievementsRepository(),
     }
   }
 }))

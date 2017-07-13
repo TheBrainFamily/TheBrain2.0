@@ -11,7 +11,6 @@ import Course from './components/Course'
 import WellDone from './components/WellDone'
 import Lecture from './components/Lecture'
 import Questions from './components/Questions'
-import Footer from './components/Footer'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import Header from './components/Header'
@@ -23,8 +22,7 @@ class App extends Component {
       <ApolloProvider client={client} store={store}>
         <Router history={history}>
           <div className='App'>
-            <Header />
-            <div className='App-intro styleIntroduction'>
+              <Header />
               <Route exact key='Home' path='/' component={Home} />
               <Route key='Course' path='/course/:courseId' component={Course} />
               <Route key='Lecture' path='/lecture/:courseId' component={Lecture} />
@@ -33,9 +31,7 @@ class App extends Component {
               <Route exact key='login' path='/login' component={Login} />
               <Route exact key='signup' path='/signup' component={Signup} />
               <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
-              <Footer />
             </div>
-          </div>
         </Router>
       </ApolloProvider>
     )
