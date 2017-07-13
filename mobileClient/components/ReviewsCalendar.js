@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import React from 'react'
 import { Text, View } from 'react-native'
+import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import gql from 'graphql-tag'
 
 function getDaysInMonth (month, year = new Date().getFullYear()) {
   return new Date(year, month, 0).getDate()
@@ -15,6 +17,11 @@ function isSameDayOfWeek (dayNumber, currentDay = new Date().getDay()) {
   return dayNumber === currentDay
 }
 
+function generateDays (start, end, month) {
+  return _.range(start, end + 1).map(day => {
+    return { day, month }
+  })
+}
 const CalendarHeader = (props) => (
   <View style={{
     flexDirection: 'row',
@@ -27,8 +34,8 @@ const CalendarHeader = (props) => (
       return (
         <Text key={`dayHeader-${index}`} style={[
           style.text,
-          isSunday ? {color: '#a00'} : {},
-          isSameDayOfWeek(dayNumber) ? {color: '#662d91'} : {}
+          isSunday ? { color: '#a00' } : {},
+          isSameDayOfWeek(dayNumber) ? { color: '#662d91' } : {}
         ]}>{day}</Text>
       )
     })}
@@ -42,19 +49,28 @@ CalendarHeader.defaultProps = {
 
 class ReviewsCalendar extends React.Component {
   render () {
+    if (this.props.data.loading) {
+      return <View />
+    }
+
     const currentDate = new Date()
     const currentMonth = currentDate.getMonth() + 1
     const daysInPreviousMonth = getDaysInMonth(currentMonth - 1)
     const daysInCurrentMonth = getDaysInMonth(currentMonth)
     const firstDayOfMonth = getFirstDayOfMonth(currentMonth - 1)
     const numberOfDaysFromPreviousMonth = (firstDayOfMonth + 6) % 7
-    const days = [
-      ..._.range(daysInPreviousMonth + 1 - numberOfDaysFromPreviousMonth, daysInPreviousMonth + 1),
-      ..._.range(1, daysInCurrentMonth + 1)
+    const dates = [
+      ...generateDays(daysInPreviousMonth + 1 - numberOfDaysFromPreviousMonth, daysInPreviousMonth, currentMonth - 1),
+      ...generateDays(1, daysInCurrentMonth, currentMonth)
     ]
     const totalNumberOfCalendarDays = 42
-    const numberOfDaysFromNextMonth = totalNumberOfCalendarDays - days.length
-    days.push(..._.range(1, numberOfDaysFromNextMonth + 1))
+    const numberOfDaysFromNextMonth = totalNumberOfCalendarDays - dates.length
+    dates.push(...generateDays(1, numberOfDaysFromNextMonth, currentMonth + 1))
+
+    const reviewsByTimestamp = {}
+    this.props.data.Reviews.forEach(review => {
+      reviewsByTimestamp[review.ts] = review.count
+    })
 
     return (
       <View style={{
@@ -69,15 +85,19 @@ class ReviewsCalendar extends React.Component {
           alignContent: 'stretch',
           height: '100%'
         }}>
-          {days.map((day, index) => {
+          {dates.map((date, index) => {
             const isSunday = index % 7 === 6
-            const dayNumber = (index + 1) % 7
-            const isToday = isSameDayOfWeek(dayNumber) && day === new Date().getDate()
+            const today = new Date()
+            const isCurrentMonth = date.month === today.getMonth() + 1
+            const isCurrentDay = date.day === today.getDate()
+            const isToday = isCurrentMonth && isCurrentDay
+            const timestamp = new Date(Date.UTC(today.getFullYear(), date.month - 1, date.day)).valueOf() / 1000
+            const count = _.get(reviewsByTimestamp, timestamp, 0)
 
             return (
               <View key={`day-${index}`} style={[
                 style.calendarDay,
-                {zIndex: index - (isToday ? 2 : 0)},
+                { zIndex: index - (isToday ? 2 : 0) },
                 isToday ? { backgroundColor: '#662d91' } : {}
               ]}>
                 {!isSunday &&
@@ -85,13 +105,13 @@ class ReviewsCalendar extends React.Component {
                 }
                 <Text style={[
                   style.smallText,
-                  isSunday ? {color: '#a00'} : {},
-                  isToday ? {color: '#fff'} : {}
-                ]}>{day}</Text>
+                  isSunday ? { color: '#a00' } : {},
+                  isToday ? { color: '#fff' } : {}
+                ]}>{date.day}</Text>
                 <Text style={[
                   style.reviewText,
-                  isToday ? {color: '#fff'} : {}
-                ]}>99 r.</Text>
+                  isToday ? { color: '#fff' } : {}
+                ]}>{count ? `${count} r.` : ''}</Text>
               </View>
             )
           })}
@@ -139,4 +159,15 @@ const style = {
   }
 }
 
-export default connect()(ReviewsCalendar)
+const reviewsQuery = gql`
+    query Reviews {
+        Reviews {
+          ts, count
+        }
+    }
+`
+
+export default compose(
+  connect(),
+  graphql(reviewsQuery)
+)(ReviewsCalendar)
