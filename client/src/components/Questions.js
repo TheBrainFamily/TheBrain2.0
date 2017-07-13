@@ -36,7 +36,6 @@ class Questions extends React.Component {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
-      const sessionCount = this.props.sessionCount.SessionCount
 
       if (!itemsWithFlashcard.length > 0) {
         return <div />
@@ -45,13 +44,8 @@ class Questions extends React.Component {
       const flashcard = itemsWithFlashcard[0].flashcard
       const evalItem = itemsWithFlashcard[0].item
 
-      const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
-      const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
-      const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
-
       return (
         <div className='questions'>
-          <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
           <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
       )

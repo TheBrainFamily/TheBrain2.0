@@ -25,26 +25,38 @@ class Flashcard extends React.Component {
   }
 
   render () {
-    return <div>
-      <div className='center flashcard'>QUESTION : <br /><br /><br />{this.props.question}</div>
-
-      <br />
-      <br />
-
-      <div>{!this.props.isAnswerVisible
-        ? <button className='button-answer' onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
-          <div className='center flashcard answer'>CORRECT ANSWER :<br /><br />{this.props.answer}
+    if (!this.props.isAnswerVisible) {
+      return (
+        <div>
+          <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
+            <div className="flashcard-title">Question: title</div>
+            <div className="flashcard-content">
+              <div className="flashcard-content-text">
+                <div className="scrollable-text">{this.props.question}</div>
+              </div>
+            </div>
+            <div className="flashcard-footer">Click the card to see the answer!</div>
           </div>
-          <p>How would you describe experience answering this question?</p>
-          <br />
+        </div>)
+    }
+    return (
+      <div>
+        <div className='flashcard'>
+          <div className="flashcard-title">Question: title</div>
+          <div className="flashcard-content">
+            <div className="flashcard-content-text center-text">
+              <div className="scrollable-text">{this.props.answer}</div>
+            </div>
+          </div>
+          <div className="flashcard-footer">How would you describe experience answering this question?</div>
+        </div>
+        <div>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
           <button className='button-answer' onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
         </div>
-      }
-      </div>
-    </div>
+      </div>)
   }
 }
 
