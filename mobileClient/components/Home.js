@@ -15,6 +15,7 @@ import Course from './Course'
 import * as courseActions from '../actions/CourseActions'
 
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
@@ -101,9 +102,9 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
-        <CourseHeader style={{position: 'absolute'}} onLogoPress={this.closeCourse}>
+        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} onLogoPress={this.closeCourse}>
           <CourseProgressBar />
-        </CourseHeader>
+        </CourseHeader> : <View style={style.courseHeader}/>}
 
         {!isExitAnimationFinished && <View style={{
           flexGrow: 1,
@@ -204,5 +205,11 @@ const style = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10
+  },
+  courseHeader: {
+    zIndex: 500,
+    margin: 0,
+    height: appStyle.header.height,
+    width: '100%',
   }
 })
