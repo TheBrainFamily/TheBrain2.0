@@ -4,7 +4,7 @@ import { Animated, Easing, StyleSheet, TouchableWithoutFeedback, View } from 're
 export default class CircleButton extends React.Component {
   constructor (props) {
     super(props)
-    const radius = props.withStaticCircles ? 12 : 0
+    const radius = props.withStaticCircles ? props.radius / 3 : 0
     this.state = {
       rotation: new Animated.Value(0),
       radius: new Animated.Value(radius)
@@ -21,12 +21,12 @@ export default class CircleButton extends React.Component {
     Animated.parallel([
       Animated.timing(this.state.rotation, {
         toValue: 1,
-        duration: 2000,
+        duration: 1000,
         easing: Easing.elastic(1)
       }),
       Animated.timing(this.state.radius, {
         toValue: 20,
-        duration: 2000
+        duration: 1000
       })
     ]).start(this.props.onPress)
   }
@@ -40,7 +40,7 @@ export default class CircleButton extends React.Component {
 
   getTranslation (translateDiff) {
     return {
-      transform: [{ translateX: translateDiff }, { translateY: translateDiff }]
+      transform: [{translateX: translateDiff}, {translateY: translateDiff}]
     }
   }
 
@@ -55,7 +55,8 @@ export default class CircleButton extends React.Component {
       outputRange: [0, -10]
     })
 
-    const innerRadius = this.props.radius - 2
+    const borderWidth = this.props.radius / 30
+    const innerRadius = this.props.radius - borderWidth
 
     const animationCircleStyle = {
       width: innerRadius * 2,
@@ -63,7 +64,7 @@ export default class CircleButton extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={this.onPress} style={{ marginTop: 20 }}>
+      <TouchableWithoutFeedback onPress={this.onPress} style={{marginTop: 20}}>
         <View>
           <View style={{
             position: 'relative',
@@ -71,37 +72,38 @@ export default class CircleButton extends React.Component {
             width: this.props.radius * 2,
             height: this.props.radius * 2,
             borderRadius: this.props.radius,
-            borderWidth: 2,
+            borderWidth,
             borderColor: 'white'
           }}>
-            <View style={{ width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
+            <View style={{width: '100%', height: '100%', position: 'absolute', justifyContent: 'center'}}>
               {this.props.children}
             </View>
-            <Animated.View style={[animationCircleStyle, { transform: [{ rotate: rotation }] }]}>
+            <Animated.View style={[animationCircleStyle, {transform: [{rotate: rotation}]}]}>
               <Animated.View style={[
                 style.smallCircle,
                 this.getSize(this.state.radius),
                 this.getTranslation(translateDiff),
-                { left: innerRadius }
-              ]} />
+                {left: innerRadius}
+              ]}/>
               <Animated.View style={[
                 style.smallCircle,
                 this.getSize(this.state.radius),
                 this.getTranslation(translateDiff),
-                { left: innerRadius * 2, top: innerRadius }
-              ]} />
+                {left: innerRadius * 2, top: innerRadius}
+              ]}/>
               <Animated.View style={[
                 style.smallCircle,
                 this.getSize(this.state.radius),
                 this.getTranslation(translateDiff),
-                { left: innerRadius, top: innerRadius * 2 }
-              ]} />
+                {left: innerRadius, top: innerRadius * 2}
+              ]}/>
               <Animated.View style={[
                 style.smallCircle,
                 this.getSize(this.state.radius),
                 this.getTranslation(translateDiff),
-                { left: 0, top: innerRadius
-                }]} />
+                {
+                  left: 0, top: innerRadius
+                }]}/>
             </Animated.View>
           </View>
         </View>
@@ -125,7 +127,7 @@ const style = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 58,
-    transform: [{ translateX: -10 }, { translateY: -10 }],
+    transform: [{translateX: -10}, {translateY: -10}],
     backgroundColor: 'white',
     width: 20,
     height: 20,
