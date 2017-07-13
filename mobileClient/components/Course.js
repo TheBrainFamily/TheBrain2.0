@@ -1,14 +1,36 @@
 import React from 'react'
 import { View } from 'react-native'
+import { compose } from 'react-apollo'
+import { connect } from 'react-redux'
+import SvgUri from 'react-native-svg-uri'
 
+import courseLogos from '../helpers/courseLogos'
+
+import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
-export default class Course extends React.Component {
+class Course extends React.Component {
   render () {
+
+    const courseLogo = courseLogos[this.props.selectedCourse.name]
+    const logoSize = courseLogo.scale * 60
+
     return (
-      <View style={{ height: '100%', backgroundColor: this.props.backgroundColor }}>
-        <View style={{ alignItems: 'center' }}>
-          <Lecture />
+      <View style={{
+        flex: 1,
+        backgroundColor: this.props.backgroundColor,
+        alignItems: 'center'
+      }}>
+        <Lecture />
+        <View style={{position: 'absolute', bottom: 25, alignSelf: 'center'}}>
+          <CircleButton radius={45} withStaticCircles>
+            <SvgUri
+              width={logoSize}
+              height={logoSize}
+              source={courseLogo.file}
+              style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+            />
+          </CircleButton>
         </View>
       </View>
     )
@@ -18,3 +40,13 @@ export default class Course extends React.Component {
 Course.defaultProps = {
   backgroundColor: 'transparent'
 }
+
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
+export default compose(
+  connect(mapStateToProps),
+)(Course)
