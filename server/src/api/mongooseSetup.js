@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt'
 import urlencode from 'urlencode'
 import { calculateUserLevel, getExperienceForAction } from '../configuration/experienceConfig'
 
-import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
+// import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
 
 const dbURI = 'mongodb://localhost/thebrain'
 const productionDBURI = 'mongodb://localhost/thebrain'
@@ -26,32 +26,32 @@ switch (process.env.NODE_ENV) {
     break
 }
 
-const FlashcardSchema = new mongoose.Schema({
-  question: String,
-  answer: String
-})
-
-export const Flashcards = mongoose.model('Flashcards', FlashcardSchema)
-
-export class FlashcardsRepository {
-  async getFlashcards () {
-    console.log('inside code')
-    const flashcards = await Flashcards.find().exec()
-    console.log('Gozdecki: flashcards', flashcards.length)
-    return flashcards
-  }
-
-  async getFlashcard (_id: string) {
-    console.log('getChannel by ', _id)
-    return Flashcards.findOne({_id})
-  }
-
-  // This API is currently not used by the app,
-  // but it's required for setting up tests
-  async insertFlashcard () {
-
-  }
-}
+// const FlashcardSchema = new mongoose.Schema({
+//   question: String,
+//   answer: String
+// })
+//
+// export const Flashcards = mongoose.model('Flashcards', FlashcardSchema)
+//
+// export class FlashcardsRepository {
+//   async getFlashcards () {
+//     console.log('inside code')
+//     const flashcards = await Flashcards.find().exec()
+//     console.log('Gozdecki: flashcards', flashcards.length)
+//     return flashcards
+//   }
+//
+//   async getFlashcard (_id: string) {
+//     console.log('getChannel by ', _id)
+//     return Flashcards.findOne({_id})
+//   }
+//
+//   // This API is currently not used by the app,
+//   // but it's required for setting up tests
+//   async insertFlashcard () {
+//
+//   }
+// }
 
 const CourseSchema = new mongoose.Schema({
   name: String,
@@ -60,15 +60,15 @@ const CourseSchema = new mongoose.Schema({
 
 export const Courses = mongoose.model('Courses', CourseSchema)
 
-export class CoursesRepository {
-  async getCourses () {
-    return Courses.find()
-  }
-
-  async getCourse (_id: string) {
-    return Courses.findOne({_id})
-  }
-}
+// export class CoursesRepository {
+//   async getCourses () {
+//     return Courses.find()
+//   }
+//
+//   async getCourse (_id: string) {
+//     return Courses.findOne({_id})
+//   }
+// }
 
 const LessonSchema = new mongoose.Schema({
   position: Number,
@@ -79,24 +79,24 @@ const LessonSchema = new mongoose.Schema({
 
 export const Lessons = mongoose.model('Lessons', LessonSchema)
 
-export class LessonsRepository {
-  async getLessons (courseId: string) {
-    return Lessons.find({courseId}).sort({position: 1});
-  }
-
-  async getLessonCount () {
-    return { count: await Lessons.count().exec() }
-  }
-
-  async getCourseLessonByPosition (courseId: string, position: number) {
-    return Lessons.findOne({ courseId, position })
-  }
-
-  async getLessonById (_id: string) {
-    // console.log("_id ", _id);
-    return Lessons.findOne({_id}).exec()
-  }
-}
+// export class LessonsRepository {
+//   async getLessons (courseId: string) {
+//     return Lessons.find({courseId}).sort({position: 1});
+//   }
+//
+//   async getLessonCount () {
+//     return { count: await Lessons.count().exec() }
+//   }
+//
+//   async getCourseLessonByPosition (courseId: string, position: number) {
+//     return Lessons.findOne({ courseId, position })
+//   }
+//
+//   async getLessonById (_id: string) {
+//     // console.log("_id ", _id);
+//     return Lessons.findOne({_id}).exec()
+//   }
+// }
 
 const ItemSchema = new mongoose.Schema({
   flashcardId: mongoose.Schema.Types.ObjectId,
@@ -110,76 +110,76 @@ const ItemSchema = new mongoose.Schema({
   timesRepeated: Number
 })
 
-export const Items = mongoose.model('Items', ItemSchema)
+// export const Items = mongoose.model('Items', ItemSchema)
+//
+// export class ItemsRepository {
+//   async getItems (lessonPosition: number) {
+//
+//   }
+//
+//   async update (id: string, item: Object, userId: string) {
+//     return Items.update({_id: id, userId}, {$set: item})
+//   }
+//
+//   async getItemById (_id: string, userId: string) {
+//     return Items.findOne({_id, userId})
+//   }
+//
+//   async create (flashcardId: string, userId: string) {
+//     const newItem = {
+//       flashcardId,
+//       userId,
+//       actualTimesRepeated: 0,
+//       easinessFactor: 2.5,
+//       extraRepeatToday: false,
+//       lastRepetition: 0,
+//       nextRepetition: 0,
+//       previousDaysChange: 0,
+//       timesRepeated: 0
+//     }
+//     const item = new Items(newItem)
+//     const insertedItem = await item.save()
+//     console.log('insertedItem', insertedItem)
+//     return newItem
+//   }
+// }
 
-export class ItemsRepository {
-  async getItems (lessonPosition: number) {
-
-  }
-
-  async update (id: string, item: Object, userId: string) {
-    return Items.update({_id: id, userId}, {$set: item})
-  }
-
-  async getItemById (_id: string, userId: string) {
-    return Items.findOne({_id, userId})
-  }
-
-  async create (flashcardId: string, userId: string) {
-    const newItem = {
-      flashcardId,
-      userId,
-      actualTimesRepeated: 0,
-      easinessFactor: 2.5,
-      extraRepeatToday: false,
-      lastRepetition: 0,
-      nextRepetition: 0,
-      previousDaysChange: 0,
-      timesRepeated: 0
-    }
-    const item = new Items(newItem)
-    const insertedItem = await item.save()
-    console.log('insertedItem', insertedItem)
-    return newItem
-  }
-}
-
-export class ItemsWithFlashcardRepository {
-  async getItemsWithFlashcard (userId: string) {
-    const currentItems = await Items.find({
-      userId,
-      $or: [
-        { actualTimesRepeated: 0 },
-        { extraRepeatToday: true },
-        { nextRepetition: { $lte: moment().unix() } }
-      ]
-    })
-
-    const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}})
-
-    return currentItems.map(item => {
-      return {
-        item,
-        flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
-      }
-    }).sort((a, b) => {
-      return a.item.lastRepetition - b.item.lastRepetition
-    })
-  }
-
-  async getSessionCount (userId: string) {
-    const items = await Items.find({
-      userId,
-      $or: [
-        { actualTimesRepeated: 0 },
-        { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
-        { nextRepetition: { $lte: moment().unix() } }
-      ]
-    })
-
-    return getItemsWithFlashcardsByCount(items)
-  }
-}
+// export class ItemsWithFlashcardRepository {
+//   async getItemsWithFlashcard (userId: string) {
+//     const currentItems = await Items.find({
+//       userId,
+//       $or: [
+//         { actualTimesRepeated: 0 },
+//         { extraRepeatToday: true },
+//         { nextRepetition: { $lte: moment().unix() } }
+//       ]
+//     })
+//
+//     const flashcards = await Flashcards.find({_id: {$in: currentItems.map(item => item.flashcardId)}})
+//
+//     return currentItems.map(item => {
+//       return {
+//         item,
+//         flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
+//       }
+//     }).sort((a, b) => {
+//       return a.item.lastRepetition - b.item.lastRepetition
+//     })
+//   }
+//
+//   async getSessionCount (userId: string) {
+//     const items = await Items.find({
+//       userId,
+//       $or: [
+//         { actualTimesRepeated: 0 },
+//         { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
+//         { nextRepetition: { $lte: moment().unix() } }
+//       ]
+//     })
+//
+//     return getItemsWithFlashcardsByCount(items)
+//   }
+// }
 
 const ProgressSchema = new mongoose.Schema({
   courseId: String,
