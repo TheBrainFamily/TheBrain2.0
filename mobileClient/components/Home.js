@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, Text, View, InteractionManager, Dimensions } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
+
 import Header from './Header'
 import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
@@ -31,6 +32,22 @@ class Home extends React.Component {
       isCourseSelected,
       isExitAnimationFinished: isCourseSelected,
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses) {
+      return
+    }
+
+    const courseId = nextProps.userDetails.UserDetails.selectedCourse
+
+    if (!courseId) {
+      return
+    }
+
+    const course = nextProps.courses.Courses.find((course) => course._id === courseId)
+    this.props.dispatch(courseActions.select(course))
+    this.setState({ isCourseSelected: true, isExitAnimationFinished: true })
   }
 
   getCoursesIds = () => {
@@ -173,18 +190,27 @@ const selectCourseMutation = gql`
     }
 `
 
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            selectedCourse
+        }
+    }
+`
+
 export default compose(
   connect(state => state),
   graphql(selectCourseMutation, {
-    props: ({ownProps, mutate}) => ({
-      selectCourse: ({courseId}) => mutate({
+    props: ({ ownProps, mutate }) => ({
+      selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
         }
       })
     })
   }),
-  graphql(coursesQuery, {name: 'courses'})
+  graphql(coursesQuery, { name: 'courses' }),
+  graphql(userDetailsQuery, { name: 'userDetails' })
 )(Home)
 
 const style = StyleSheet.create({
