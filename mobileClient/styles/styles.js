@@ -79,6 +79,14 @@ const styles = StyleSheet.create({
     // backgroundColor: '#662d91',
     marginLeft: '5%'
   },
+  flipCardContainer: {
+    backgroundColor: 'transparent',
+    shadowColor: 'black',
+    shadowOffset: {width: 4, height: 4},
+    shadowRadius: 4,
+    shadowOpacity: 0.5,
+    marginBottom: 18
+  },
   flipCardBack: {
     position: 'absolute'
   },
@@ -272,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
     width: '100%',
-    height: '48.8%'
+    height: 200,
   },
   answerTopLine: {
     position: 'absolute',
@@ -404,7 +412,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
-    padding: 40
+    padding: "5%"
   },
   infoText: {
     textAlign: 'center',
