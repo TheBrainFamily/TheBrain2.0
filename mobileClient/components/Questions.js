@@ -46,10 +46,6 @@ class Questions extends React.Component {
     }
   }
 
-  goHome = () => {
-    this.props.history.push('/')
-  }
-
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <Loading />
@@ -69,7 +65,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader onLogoPress={this.goHome}>
+            <CourseHeader>
               <ProgressBar progress={progress} />
             </CourseHeader>
 
