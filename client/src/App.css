@@ -58,18 +58,24 @@ body {
 }
 
 .App-header-right {
+    color: black;
+    padding-right: 20px;
+    float: right;
+}
+
+.App-header-right a {
+    color: black;
     padding-right: 20px;
     float: right;
 }
 
 h2 {
     font-family: 'Kalam', cursive;
-    color: black;
 }
 
 a {
+    color: white;
     text-decoration: underline;
-    color: black;
 }
 
 .line-separator {
@@ -221,9 +227,9 @@ TUTORIAL
 ***********************/
 
 #video {
+    color: white;
     margin: 0;
     padding: 0;
-    margin-top: 8%;
 }
 
 .welldone {
@@ -231,10 +237,14 @@ TUTORIAL
 }
 
 .questions-container {
+    margin-top: 20px;
+    display: table;
     width: 100%;
 }
 
 .questions-content {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 button {
@@ -263,6 +273,11 @@ CONTENT
 .progress-bar {
     height: 40px;
     width: 70px;
+}
+
+.youTube-player {
+    background-color: black;
+    border: 1px solid black;
 }
 
 /***********************
