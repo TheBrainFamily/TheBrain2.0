@@ -169,5 +169,9 @@ const reviewsQuery = gql`
 
 export default compose(
   connect(),
-  graphql(reviewsQuery)
+  graphql(reviewsQuery, {
+    options: {
+      fetchPolicy: 'cache-and-network'
+    }
+  })
 )(ReviewsCalendar)
