@@ -38,8 +38,8 @@ class Lecture extends React.Component {
 
     return (
       <div id='video'>
-        <p>Watch the video<br/>
-          and wait for the questions.</p>
+        <h2>Watch the video<br/>
+          and wait for the questions.</h2>
         <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
         <br/>
         <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
@@ -60,6 +60,7 @@ export class LectureVideo extends React.Component {
 
     return (
       <YouTube
+        className={'youTube-player'}
         videoId={this.props.lesson.youtubeId}
         opts={opts}
         onEnd={this._onEnd}
