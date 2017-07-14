@@ -28,6 +28,9 @@ import {
 import { itemsRepository } from './api/repositories/ItemsRepository'
 import { coursesRepository } from './api/repositories/CoursesRepository'
 import { lessonsRepository } from './api/repositories/LessonsRepository'
+import { achievementsRepository } from './api/repositories/AchievementsRepository'
+import { userDetailsRepository } from './api/repositories/UserDetailsRepository'
+import { usersRepository } from './api/repositories/UsersRepository'
 
 const MongoStore = require('connect-mongo')(session)
 
@@ -145,9 +148,9 @@ app.use('/graphql', graphqlExpress((req) => {
       Lessons: lessonsRepository,
       Items: itemsRepository,
       ItemsWithFlashcard: itemsWithFlashcardRepository,
-      UserDetails: new UserDetailsRepository(),
-      Users: new UsersRepository(),
-      Achievements: new AchievementsRepository(),
+      UserDetails: userDetailsRepository,
+      Users: usersRepository,
+      Achievements: achievementsRepository,
     }
   }
 }))

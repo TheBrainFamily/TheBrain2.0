@@ -8,23 +8,23 @@ import urlencode from 'urlencode'
 import { calculateUserLevel, getExperienceForAction } from '../configuration/experienceConfig'
 
 // import getItemsWithFlashcardsByCount from './tools/getItemsWithFlashcardsByCount'
-
-const dbURI = 'mongodb://localhost/thebrain'
-const productionDBURI = 'mongodb://localhost/thebrain'
-const testingDBURI = 'mongodb://localhost/testing'
-
-switch (process.env.NODE_ENV) {
-  case 'TESTING':
-    mongoose.connect(testingDBURI)
-    break
-  case 'PRODUCTION':
-    mongoose.connect(productionDBURI)
-    break
-  case 'DEVELOPMENT':
-  default:
-    mongoose.connect(dbURI)
-    break
-}
+//
+// const dbURI = 'mongodb://localhost/thebrain'
+// const productionDBURI = 'mongodb://localhost/thebrain'
+// const testingDBURI = 'mongodb://localhost/testing'
+//
+// switch (process.env.NODE_ENV) {
+//   case 'TESTING':
+//     mongoose.connect(testingDBURI)
+//     break
+//   case 'PRODUCTION':
+//     mongoose.connect(productionDBURI)
+//     break
+//   case 'DEVELOPMENT':
+//   default:
+//     mongoose.connect(dbURI)
+//     break
+// }
 
 // const FlashcardSchema = new mongoose.Schema({
 //   question: String,
@@ -53,12 +53,12 @@ switch (process.env.NODE_ENV) {
 //   }
 // }
 
-const CourseSchema = new mongoose.Schema({
-  name: String,
-  color: String
-})
-
-export const Courses = mongoose.model('Courses', CourseSchema)
+// const CourseSchema = new mongoose.Schema({
+//   name: String,
+//   color: String
+// })
+//
+// export const Courses = mongoose.model('Courses', CourseSchema)
 
 // export class CoursesRepository {
 //   async getCourses () {
@@ -70,14 +70,14 @@ export const Courses = mongoose.model('Courses', CourseSchema)
 //   }
 // }
 
-const LessonSchema = new mongoose.Schema({
-  position: Number,
-  description: String,
-  flashcardIds: Array,
-  youtubeId: String
-})
-
-export const Lessons = mongoose.model('Lessons', LessonSchema)
+// const LessonSchema = new mongoose.Schema({
+//   position: Number,
+//   description: String,
+//   flashcardIds: Array,
+//   youtubeId: String
+// })
+//
+// export const Lessons = mongoose.model('Lessons', LessonSchema)
 
 // export class LessonsRepository {
 //   async getLessons (courseId: string) {
@@ -98,17 +98,17 @@ export const Lessons = mongoose.model('Lessons', LessonSchema)
 //   }
 // }
 
-const ItemSchema = new mongoose.Schema({
-  flashcardId: mongoose.Schema.Types.ObjectId,
-  userId: mongoose.Schema.Types.ObjectId,
-  actualTimesRepeated: Number,
-  easinessFactor: Number,
-  extraRepeatToday: Boolean,
-  lastRepetition: Number,
-  nextRepetition: Number,
-  previousDaysChange: Number,
-  timesRepeated: Number
-})
+// const ItemSchema = new mongoose.Schema({
+//   flashcardId: mongoose.Schema.Types.ObjectId,
+//   userId: mongoose.Schema.Types.ObjectId,
+//   actualTimesRepeated: Number,
+//   easinessFactor: Number,
+//   extraRepeatToday: Boolean,
+//   lastRepetition: Number,
+//   nextRepetition: Number,
+//   previousDaysChange: Number,
+//   timesRepeated: Number
+// })
 
 // export const Items = mongoose.model('Items', ItemSchema)
 //
@@ -180,135 +180,135 @@ const ItemSchema = new mongoose.Schema({
 //     return getItemsWithFlashcardsByCount(items)
 //   }
 // }
+//
+// const ProgressSchema = new mongoose.Schema({
+//   courseId: String,
+//   lesson: Number
+// })
+//
+// const AchievementDefSchema = new mongoose.Schema({
+//   _id: mongoose.Schema.Types.ObjectId,
+//   name: String,
+//   description: String,
+//   targetValue: Number,
+//   formula: Object,          // {simple:'watchedMovies'} || TODO: {complex: {}}
+//   active: Boolean,
+//   sortOrder: Number,
+// })
 
-const ProgressSchema = new mongoose.Schema({
-  courseId: String,
-  lesson: Number
-})
+// export const Achievements = mongoose.model('achievementDefinitions', AchievementDefSchema)
+// export class AchievementsRepository {
+//   async getUserAchievements (userDetails) {
+//     const achievementDefinitions = await Achievements.find()
+//     const previousAchievementIds = new Set((userDetails.collectedAchievements || []).map(achievementId => achievementId.toString()))
+//     const userAchievements = []
+//
+//     achievementDefinitions.forEach(achievementDef => {
+//       let value = 0
+//
+//       if (achievementDef.formula.simple && userDetails.achievementStats[achievementDef.formula.simple]) {
+//         value = userDetails.achievementStats[achievementDef.formula.simple]
+//       }
+//       const isCollected = previousAchievementIds.has(achievementDef._id.toString()) || achievementDef.targetValue <= value
+//
+//       userAchievements.push({
+//         _id: achievementDef._id,
+//         name: achievementDef.name,
+//         description: achievementDef.description,
+//         sortOrder: achievementDef.sortOrder,
+//         targetValue: achievementDef.targetValue,
+//         value,
+//         isCollected
+//       })
+//     })
+//
+//     return userAchievements
+//   }
+// }
 
-const AchievementDefSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  name: String,
-  description: String,
-  targetValue: Number,
-  formula: Object,          // {simple:'watchedMovies'} || TODO: {complex: {}}
-  active: Boolean,
-  sortOrder: Number,
-})
+// const UserDetailsSchema = new mongoose.Schema({
+//   userId: mongoose.Schema.Types.ObjectId,
+//   hasDisabledTutorial: Boolean,
+//   selectedCourse: String,
+//   progress: [ProgressSchema],
+//   collectedAchievements: [mongoose.Schema.Types.ObjectId],
+//   achievementStats: {
+//     watchedMovies: Number,
+//     answeredQuestions: Number,
+//   },
+//   experience: {
+//     value: Number,
+//     level: Number
+//   }
+// })
+//
+// export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
 
-export const Achievements = mongoose.model('achievementDefinitions', AchievementDefSchema)
-export class AchievementsRepository {
-  async getUserAchievements (userDetails) {
-    const achievementDefinitions = await Achievements.find()
-    const previousAchievementIds = new Set((userDetails.collectedAchievements || []).map(achievementId => achievementId.toString()))
-    const userAchievements = []
-
-    achievementDefinitions.forEach(achievementDef => {
-      let value = 0
-
-      if (achievementDef.formula.simple && userDetails.achievementStats[achievementDef.formula.simple]) {
-        value = userDetails.achievementStats[achievementDef.formula.simple]
-      }
-      const isCollected = previousAchievementIds.has(achievementDef._id.toString()) || achievementDef.targetValue <= value
-
-      userAchievements.push({
-        _id: achievementDef._id,
-        name: achievementDef.name,
-        description: achievementDef.description,
-        sortOrder: achievementDef.sortOrder,
-        targetValue: achievementDef.targetValue,
-        value,
-        isCollected
-      })
-    })
-
-    return userAchievements
-  }
-}
-
-const UserDetailsSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
-  hasDisabledTutorial: Boolean,
-  selectedCourse: String,
-  progress: [ProgressSchema],
-  collectedAchievements: [mongoose.Schema.Types.ObjectId],
-  achievementStats: {
-    watchedMovies: Number,
-    answeredQuestions: Number,
-  },
-  experience: {
-    value: Number,
-    level: Number
-  }
-})
-
-export const UserDetails = mongoose.model('userDetails', UserDetailsSchema)
-
-export class UserDetailsRepository {
-  async create (userId: string, courseId: string) {
-    const newUserDetails = new UserDetails({userId})
-    newUserDetails.progress.create({courseId, lesson: 1})
-
-    await newUserDetails.save()
-
-    return newUserDetails
-  }
-
-  async getById (userId: string) {
-    return UserDetails.findOne({userId})
-  }
-
-  async getNextLessonPosition (courseId: string, userId: string) {
-    const userDetails = await UserDetails.findOne({userId})
-    const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
-
-    if (!course) {
-      return 1
-    }
-
-    return course.lesson
-  }
-
-  async updateUserXp (userId: string, action: string) {
-    let xpGained = getExperienceForAction(action)
-    const userDetails = (await UserDetails.findOneAndUpdate({userId}, {$inc: {'experience.value': xpGained}}, {
-      upsert: true,
-      new: true
-    }))
-    const newLevel = calculateUserLevel(userDetails.experience.value)
-    await UserDetails.update({userId}, {$set: {'experience.level': newLevel}})
-  }
-
-  async updateNextLessonPosition (courseId: string, userId: string) {
-    await UserDetails.update({ userId, 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
-  }
-
-  async updateCollectedAchievements (userId: string, collectedAchievementIds) {
-    await UserDetails.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
-  }
-
-    async disableTutorial (userId: string) {
-    return UserDetails.findOneAndUpdate({ userId }, { hasDisabledTutorial: true }, { new: true })
-  }
-
-  async selectCourse (userId: string, courseId: string) {
-    const user = await UserDetails.findOne({userId})
-    user.selectedCourse = courseId
-    const course = _.find(user.progress, doc => doc.courseId === courseId)
-    if (!course) {
-      user.progress.push({courseId, lesson: 1})
-    }
-    await UserDetails.update({userId}, user)
-    return { success: true }
-  }
-
-  async closeCourse (userId: string) {
-    const user = await UserDetails.findOne({userId})
-    user.selectedCourse = null
-    await user.save()
-    return { success: true }
-  }
-}
+// export class UserDetailsRepository {
+//   async create (userId: string, courseId: string) {
+//     const newUserDetails = new UserDetails({userId})
+//     newUserDetails.progress.create({courseId, lesson: 1})
+//
+//     await newUserDetails.save()
+//
+//     return newUserDetails
+//   }
+//
+//   async getById (userId: string) {
+//     return UserDetails.findOne({userId})
+//   }
+//
+//   async getNextLessonPosition (courseId: string, userId: string) {
+//     const userDetails = await UserDetails.findOne({userId})
+//     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
+//
+//     if (!course) {
+//       return 1
+//     }
+//
+//     return course.lesson
+//   }
+//
+//   async updateUserXp (userId: string, action: string) {
+//     let xpGained = getExperienceForAction(action)
+//     const userDetails = (await UserDetails.findOneAndUpdate({userId}, {$inc: {'experience.value': xpGained}}, {
+//       upsert: true,
+//       new: true
+//     }))
+//     const newLevel = calculateUserLevel(userDetails.experience.value)
+//     await UserDetails.update({userId}, {$set: {'experience.level': newLevel}})
+//   }
+//
+//   async updateNextLessonPosition (courseId: string, userId: string) {
+//     await UserDetails.update({ userId, 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
+//   }
+//
+//   async updateCollectedAchievements (userId: string, collectedAchievementIds) {
+//     await UserDetails.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
+//   }
+//
+//     async disableTutorial (userId: string) {
+//     return UserDetails.findOneAndUpdate({ userId }, { hasDisabledTutorial: true }, { new: true })
+//   }
+//
+//   async selectCourse (userId: string, courseId: string) {
+//     const user = await UserDetails.findOne({userId})
+//     user.selectedCourse = courseId
+//     const course = _.find(user.progress, doc => doc.courseId === courseId)
+//     if (!course) {
+//       user.progress.push({courseId, lesson: 1})
+//     }
+//     await UserDetails.update({userId}, user)
+//     return { success: true }
+//   }
+//
+//   async closeCourse (userId: string) {
+//     const user = await UserDetails.findOne({userId})
+//     user.selectedCourse = null
+//     await user.save()
+//     return { success: true }
+//   }
+// }
 
 const UserSchema = new mongoose.Schema({
   oauthID: Number,
@@ -354,49 +354,54 @@ const generateResetPasswordToken = async (userId) => {
 
 export const Users = mongoose.model('users', UserSchema)
 
-export class UsersRepository {
-  async createGuest (courseId: string) {
-    const newUser = await Users.create({username: 'guest', password: 'notSet', activated: false, createdAt: moment().unix()})
-    const newUserId = newUser._id.toString()
-    await new UserDetailsRepository().create(newUserId, courseId)
-
-    return newUser
-  }
-
-  async updateUser (userId: string, username: string, password: string) {
-    const userToBeUpdated = await Users.findOne({_id: userId})
-    userToBeUpdated.username = username
-    userToBeUpdated.password = password
-    userToBeUpdated.activated = true
-    await userToBeUpdated.save()
-    // TODO this didn't return anything, need investigation
-    return userToBeUpdated
-  }
-
-  async updateFacebookUser (userId: string, facebookId: string) {
-    const userToBeUpdated = await Users.findOne({_id: userId})
-    userToBeUpdated.facebookId = facebookId
-    userToBeUpdated.activated = true
-    await userToBeUpdated.save()
-    return userToBeUpdated
-  }
-
-  async findByUsername (username: string) {
-    return Users.findOne({username})
-  }
-
-  async findByFacebookId (facebookId: string) {
-    return Users.findOne({facebookId})
-  }
-
-  async resetUserPassword (username: string) {
-    const userToBeUpdated = await this.findByUsername(username)
-    if (userToBeUpdated) {
-      userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
-      await userToBeUpdated.save()
-      return userToBeUpdated
-    } else {
-      return null
-    }
-  }
-}
+// export class UsersRepository {
+//   async createGuest (courseId: string) {
+//     const newUser = await Users.create({
+//       username: 'guest',
+//       password: 'notSet',
+//       activated: false,
+//       createdAt: moment().unix()
+//     })
+//     const newUserId = newUser._id.toString()
+//     await new UserDetailsRepository().create(newUserId, courseId)
+//
+//     return newUser
+//   }
+//
+//   async updateUser (userId: string, username: string, password: string) {
+//     const userToBeUpdated = await Users.findOne({_id: userId})
+//     userToBeUpdated.username = username
+//     userToBeUpdated.password = password
+//     userToBeUpdated.activated = true
+//     await userToBeUpdated.save()
+//     // TODO this didn't return anything, need investigation
+//     return userToBeUpdated
+//   }
+//
+//   async updateFacebookUser (userId: string, facebookId: string) {
+//     const userToBeUpdated = await Users.findOne({_id: userId})
+//     userToBeUpdated.facebookId = facebookId
+//     userToBeUpdated.activated = true
+//     await userToBeUpdated.save()
+//     return userToBeUpdated
+//   }
+//
+//   async findByUsername (username: string) {
+//     return Users.findOne({username})
+//   }
+//
+//   async findByFacebookId (facebookId: string) {
+//     return Users.findOne({facebookId})
+//   }
+//
+//   async resetUserPassword (username: string) {
+//     const userToBeUpdated = await this.findByUsername(username)
+//     if (userToBeUpdated) {
+//       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
+//       await userToBeUpdated.save()
+//       return userToBeUpdated
+//     } else {
+//       return null
+//     }
+//   }
+// }
