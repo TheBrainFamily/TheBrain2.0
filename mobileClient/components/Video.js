@@ -24,6 +24,6 @@ export default class Video extends React.Component {
 }
 
 Video.defaultProps = {
-  height: 300,
+  height: "70%",
   onChangeState: () => {}
 }
