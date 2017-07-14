@@ -97,21 +97,22 @@ a {
     margin: 0 20px;
 }
 
-.course-button {
-    color: white;
-    cursor: pointer;
+.course-icon {
     display: inline-block;
-    width: 100px;
-    height: 100px;
-    border: 2px solid #ccc;
-    border-radius: 50px;
-    line-height: 100px;
-    text-decoration: none;
+    margin: 20px;
 }
 
-.course-button:hover {
-    border-color: #5ebf8e;
+.course-icon img {
+    display: inline-block;
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+    transition:         transform .8s ease-in-out;
 }
+
+.course-icon img:hover {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
 
 /***********************
 FLASHCARDS
