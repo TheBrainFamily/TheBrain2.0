@@ -8,6 +8,7 @@ import { push } from 'react-router-redux'
 import { course } from '../actions'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
+import CourseIcon from './CourseIcon'
 
 class Home extends React.Component {
   selectCourse = (courseId) => async () => {
@@ -36,8 +37,7 @@ class Home extends React.Component {
         <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
-            return <li key={course._id}><a className='course-button' onClick={this.selectCourse(course._id)}>{course.name}</a>
-            </li>
+            return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse} onClickArgument={course._id}/>
           })}
         </ul>
     )

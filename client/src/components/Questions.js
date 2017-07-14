@@ -8,7 +8,6 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
-import SessionSummary from './SessionSummary'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 

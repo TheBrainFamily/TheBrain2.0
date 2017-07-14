@@ -8,9 +8,10 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
-
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
+import CourseIcon from './CourseIcon'
+import courseById from '../../shared/graphql/queries/courseById'
 
 class Lecture extends React.Component {
   render () {
@@ -37,7 +38,11 @@ class Lecture extends React.Component {
 
     return (
       <div id='video'>
+        <p>Watch the video<br/>
+          and wait for the questions.</p>
         <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
+        <br/>
+        <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
       </div>
     )
   }
@@ -91,5 +96,15 @@ export default compose(
         fetchPolicy: 'network-only'
       })
     }
-  })
+  }),
+  graphql(courseById, {
+    options: (ownProps) => {
+      const selectedCourse = ownProps.selectedCourse || ownProps.match.params.courseId
+      return ({
+        variables: {_id: selectedCourse},
+        fetchPolicy: 'network-only'
+      })
+    },
+    name: 'courseData'
+  }),
 )(Lecture)

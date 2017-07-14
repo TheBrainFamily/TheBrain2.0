@@ -55,10 +55,10 @@ class Flashcard extends React.Component {
           <div className='flashcard-footer'>How would you describe experience answering this question?</div>
         </div>
         <div className="answer-buttons-container">
-          <img src={answerButtonImage1} className='answer-button' onClick={() => this.onSubmitEvaluation(1)}/>
-          <img src={answerButtonImage2} className='answer-button' onClick={() => this.onSubmitEvaluation(2.5)}/>
-          <img src={answerButtonImage3} className='answer-button' onClick={() => this.onSubmitEvaluation(4.5)}/>
-          <img src={answerButtonImage4} className='answer-button' onClick={() => this.onSubmitEvaluation(6)}/>
+          <img alt={"Easy"} src={answerButtonImage1} className='answer-button' onClick={() => this.onSubmitEvaluation(1)}/>
+          <img alt={"Medium"} src={answerButtonImage2} className='answer-button' onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img alt={"Hard"} src={answerButtonImage3} className='answer-button' onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img alt={"Very hard"} src={answerButtonImage4} className='answer-button' onClick={() => this.onSubmitEvaluation(6)}/>
         </div>
       </div>)
   }
