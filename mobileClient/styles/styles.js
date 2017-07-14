@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   videoPlaceholder: {
     backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
-    height: 300,
+    height: '70%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
