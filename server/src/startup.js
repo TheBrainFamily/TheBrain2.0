@@ -8,21 +8,14 @@ import { createServer } from 'http'
 import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import session from 'express-session'
-import mongoose from 'mongoose'
-
-import {
-  CoursesRepository, LessonsRepository, ItemsRepository,
-  UserDetailsRepository, UsersRepository, AchievementsRepository
-} from './api/mongooseSetup'
 
 import cors from 'cors'
 
 import schema from './api/schema'
 
 import facebookConfig from './configuration/facebook'
-import { flashcardRepository, FlashcardsRepository } from './api/repositories/FlashcardsRepository'
+import { flashcardRepository } from './api/repositories/FlashcardsRepository'
 import {
-  ItemsWithFlashcardRepository,
   itemsWithFlashcardRepository
 } from './api/repositories/ItemsWithFlashcardRepository'
 import { itemsRepository } from './api/repositories/ItemsRepository'
@@ -31,8 +24,6 @@ import { lessonsRepository } from './api/repositories/LessonsRepository'
 import { achievementsRepository } from './api/repositories/AchievementsRepository'
 import { userDetailsRepository } from './api/repositories/UserDetailsRepository'
 import { usersRepository } from './api/repositories/UsersRepository'
-
-const MongoStore = require('connect-mongo')(session)
 
 const app = express()
 const port = 8080
@@ -58,7 +49,6 @@ app.use(session({
   secret: '***REMOVED***',
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
 
 app.use(passport.initialize())
