@@ -6,10 +6,14 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
-
 import { flashcard } from '../actions'
 
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+
+import answerButtonImage1 from '../img/button-easy.png'
+import answerButtonImage2 from '../img/button-medium.png'
+import answerButtonImage3 from '../img/button-hard.png'
+import answerButtonImage4 from '../img/button-veryhard.png'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
@@ -25,26 +29,38 @@ class Flashcard extends React.Component {
   }
 
   render () {
-    return <div>
-      <div className='center flashcard'>QUESTION : <br /><br /><br />{this.props.question}</div>
-
-      <br />
-      <br />
-
-      <div>{!this.props.isAnswerVisible
-        ? <button className='button-answer' onClick={this.answeredQuestion}>SHOW ANSWER</button> : <div>
-          <div className='center flashcard answer'>CORRECT ANSWER :<br /><br />{this.props.answer}
+    if (!this.props.isAnswerVisible) {
+      return (
+        <div className='questions-content'>
+          <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
+            <div className='flashcard-title'>Question: title</div>
+            <div className='flashcard-content'>
+              <div className='flashcard-content-text'>
+                <div className='scrollable-text'>{this.props.question}</div>
+              </div>
+            </div>
+            <div className='flashcard-footer'>Click the card to see the answer!</div>
           </div>
-          <p>How would you describe experience answering this question?</p>
-          <br />
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(1)}>No Clue</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(2.5)}>Wrong</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(4.5)}>Good</button>
-          <button className='button-answer' onClick={() => this.onSubmitEvaluation(6)}>Easy</button>
+        </div>)
+    }
+    return (
+      <div className='questions-content'>
+        <div className='flashcard'>
+          <div className='flashcard-title'>Question: title</div>
+          <div className='flashcard-content'>
+            <div className='flashcard-content-text center-text'>
+              <div className='scrollable-text'>{this.props.answer}</div>
+            </div>
+          </div>
+          <div className='flashcard-footer'>How would you describe experience answering this question?</div>
         </div>
-      }
-      </div>
-    </div>
+        <div className="answer-buttons-container">
+          <img alt={"Easy"} src={answerButtonImage1} className='answer-button' onClick={() => this.onSubmitEvaluation(1)}/>
+          <img alt={"Medium"} src={answerButtonImage2} className='answer-button' onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img alt={"Hard"} src={answerButtonImage3} className='answer-button' onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img alt={"Very hard"} src={answerButtonImage4} className='answer-button' onClick={() => this.onSubmitEvaluation(6)}/>
+        </div>
+      </div>)
   }
 }
 
