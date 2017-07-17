@@ -3,12 +3,14 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import {graphql, compose} from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-import {withRouter} from 'react-router'
+import { withRouter } from 'react-router'
 import {
-    Text,
-    View
+  Text,
+  View,
+  StyleSheet,
+  Dimensions
 } from 'react-native'
 
 import Flashcard from './Flashcard'
@@ -16,6 +18,9 @@ import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
 import ProgressBar from './ProgressBar'
 import Loading from './Loading'
+
+import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
@@ -46,6 +51,27 @@ class Questions extends React.Component {
     }
   }
 
+  goHome = () => {
+    this.props.history.push('/')
+  }
+
+  getHeaderHeight = () => {
+    return appStyle.header.offset +
+      appStyle.header.height + 22.5
+  }
+
+  getFlashcardHeight = () => {
+    const windowDimensions = Dimensions.get('window')
+    const elementHeight = (windowDimensions.height - this.getHeaderHeight()) * 0.39
+    console.log('PINGWIN: elementHeight', elementHeight)
+    return elementHeight
+  }
+
+  getAnswerEvaluatorHeight = () => {
+    const windowDimensions = Dimensions.get('window')
+    return windowDimensions.height - this.getHeaderHeight() - this.getFlashcardHeight() - StyleSheet.flatten(styles.flipCardContainer).marginBottom
+  }
+
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <Loading />
@@ -64,14 +90,15 @@ class Questions extends React.Component {
         const courseColor = _.get(this.props.course, 'selectedCourse.color')
 
         return (
-          <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader>
-              <ProgressBar progress={progress} />
+          <View style={{backgroundColor: courseColor}}>
+            <CourseHeader onLogoPress={this.goHome}>
+              <ProgressBar progress={progress}/>
             </CourseHeader>
 
             <Flashcard question={flashcard.question} answer={flashcard.answer}
-              evalItemId={evalItem._id} />
-            <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id} />
+                       evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}/>
+            <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
+                             getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
           </View>
         )
       } else {
@@ -99,20 +126,20 @@ const currentItemsQuery = gql`
 `
 
 export default withRouter(
-    compose(
-        graphql(currentUserQuery, {name: 'currentUser'}),
-        graphql(currentItemsQuery, {
-          name: 'currentItems',
-          options: {
-            fetchPolicy: 'network-only'
-          }
+  compose(
+    graphql(currentUserQuery, {name: 'currentUser'}),
+    graphql(currentItemsQuery, {
+        name: 'currentItems',
+        options: {
+          fetchPolicy: 'network-only'
         }
-        ),
-        graphql(sessionCountQuery, {
-          name: 'sessionCount',
-          options: {
-            fetchPolicy: 'network-only'
-          }
-        })
-    )(connect(state => state)(Questions))
+      }
+    ),
+    graphql(sessionCountQuery, {
+      name: 'sessionCount',
+      options: {
+        fetchPolicy: 'network-only'
+      }
+    })
+  )(connect(state => state)(Questions))
 )

@@ -3,7 +3,7 @@ import { Platform } from 'react-native'
 export const appStyle = {
   header: {
     offset: Platform.OS === 'ios' ? 20 : 0,
-    height: 107
+    height: 116
   },
   colors: {
     text: '#fff',

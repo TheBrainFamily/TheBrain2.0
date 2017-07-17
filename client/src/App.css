@@ -19,6 +19,7 @@ body {
     min-width: 1024px;
     height: 100%;
     min-height: 768px;
+    position: relative;
     margin: 0;
     padding: 0;
     background-image: url('img/bg-airplane.png');
@@ -57,18 +58,24 @@ body {
 }
 
 .App-header-right {
+    color: black;
+    padding-right: 20px;
+    float: right;
+}
+
+.App-header-right a {
+    color: black;
     padding-right: 20px;
     float: right;
 }
 
 h2 {
     font-family: 'Kalam', cursive;
-    color: black;
 }
 
 a {
+    color: white;
     text-decoration: underline;
-    color: black;
 }
 
 .line-separator {
@@ -96,53 +103,97 @@ a {
     margin: 0 20px;
 }
 
-.course-button {
-    color: white;
-    cursor: pointer;
+.course-icon {
     display: inline-block;
-    width: 100px;
-    height: 100px;
-    border: 2px solid #ccc;
-    border-radius: 50px;
-    line-height: 100px;
-    text-decoration: none;
+    margin: 20px;
 }
 
-.course-button:hover {
-    border-color: #5ebf8e;
+.course-icon img {
+    display: inline-block;
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+    transition:         transform .8s ease-in-out;
 }
+
+.course-icon img:hover {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
 
 /***********************
 FLASHCARDS
 ***********************/
 
 .flashcard {
-    position: relative;
-    text-align: left;
-    background: #f2f2f2;
-    color: #000000;
-    border: 2px solid rgb(0, 0, 0) !important;
-    font-weight: normal;
-    height: 70px;
-    margin-bottom: 20px;
-    overflow: hidden;
+    position:relative;
+    margin: auto;
+    color: black;
     padding: 15px;
-    overflow-y: auto;
-    max-width: 60%;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    width: 366px;
+    height: 366px;
+    text-align: left;
+    background-image: url('./img/bg-question.png');
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.button-answer {
-    position: relative;
+.flashcard-title {
+    color: gray;
+}
+
+.flashcard-content {
+    display: table;
+    width: 100%;
+    height: 90%;
+}
+
+.flashcard-content-text {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 40px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.flashcard-footer {
+    position: absolute;
+    bottom: 28px;
+    font-size: 10px;
+    color: gray;
+}
+
+.answer-buttons-container {
+    position: absolute;
+    width: 100%;
+    height: 180px;
+    bottom: 0;
+    background-color: white;
+    background-image: url('img/bg-shadow-bottom.png');
+    background-repeat: repeat-x;
+    background-position: top;
+}
+
+.answer-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 120px;
+    height: 120px;
+}
+
+.scrollable-text {
+    max-height: 100%;
+    overflow: scroll;
+}
+
+.center-text {
     text-align: center;
-    background: #f2f2f2;
-    color: #000000;
-    border: 2px solid rgb(0, 0, 0) !important;
-    font-weight: normal;
-    padding: 15px 40px;
-}
-
-.center {
-    left: 20%;
 }
 
 .input-answer {
@@ -176,6 +227,7 @@ TUTORIAL
 ***********************/
 
 #video {
+    color: white;
     margin: 0;
     padding: 0;
 }
@@ -184,8 +236,15 @@ TUTORIAL
     margin: 180px 0;
 }
 
-.questions {
-    margin: 145px 0;
+.questions-container {
+    margin-top: 20px;
+    display: table;
+    width: 100%;
+}
+
+.questions-content {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 button {
@@ -214,6 +273,11 @@ CONTENT
 .progress-bar {
     height: 40px;
     width: 70px;
+}
+
+.youTube-player {
+    background-color: black;
+    border: 1px solid black;
 }
 
 /***********************
