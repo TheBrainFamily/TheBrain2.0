@@ -51,10 +51,6 @@ class Questions extends React.Component {
     }
   }
 
-  goHome = () => {
-    this.props.history.push('/')
-  }
-
   getHeaderHeight = () => {
     return appStyle.header.offset +
       appStyle.header.height + 22.5
@@ -91,7 +87,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{backgroundColor: courseColor}}>
-            <CourseHeader onLogoPress={this.goHome}>
+            <CourseHeader>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
