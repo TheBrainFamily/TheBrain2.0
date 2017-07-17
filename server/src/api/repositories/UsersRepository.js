@@ -6,7 +6,9 @@ import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 import { userDetailsRepository } from './UserDetailsRepository'
 
-class UsersRepository extends MongoRepository {
+const SALT_WORK_FACTOR = 1034
+
+export class UsersRepository extends MongoRepository {
   userCollection: Collection
 
   init () {
@@ -23,7 +25,6 @@ class UsersRepository extends MongoRepository {
 
     const addedUser = (await this.userCollection.insertOne(newUser)).ops[0]
 
-    console.log("JMOZGAWA: addedUser",addedUser);
     const newUserId = addedUser._id.toString()
     await new userDetailsRepository.create(newUserId, courseId)
 
@@ -32,25 +33,24 @@ class UsersRepository extends MongoRepository {
 
   async updateUser (userId: string, username: string, password: string) {
     const userToBeUpdated = await this.userCollection.findOne({_id: new ObjectId(userId)})
+
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    const hash = await bcrypt.hash(password, salt)
+
     userToBeUpdated.username = username
-    userToBeUpdated.password = password
+    userToBeUpdated.password = hash
     userToBeUpdated.activated = true
 
-    const _id = userToBeUpdated._id
-    delete userToBeUpdated._id
-    const updatedUser = (await this.userCollection.findOneAndUpdate({_id}, {$set: {...userToBeUpdated}}, {
-      upsert: true,
-      returnNewDocument: true
-    })).value
-
-    return updatedUser
+    await this.userCollection.save(userToBeUpdated)
+    return userToBeUpdated
   }
 
   async updateFacebookUser (userId: string, facebookId: string) {
     const userToBeUpdated = await this.userCollection.findOne({_id: new ObjectId(userId)})
     userToBeUpdated.facebookId = facebookId
     userToBeUpdated.activated = true
-    await userToBeUpdated.save()
+
+    await this.userCollection.save(userToBeUpdated)
     return userToBeUpdated
   }
 
@@ -66,11 +66,15 @@ class UsersRepository extends MongoRepository {
     const userToBeUpdated = await this.findByUsername(username)
     if (userToBeUpdated) {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
-      await userToBeUpdated.save()
+      await this.userCollection.save(userToBeUpdated)
       return userToBeUpdated
     } else {
       return null
     }
+  }
+
+  static async comparePassword (passA, passB) {
+    return bcrypt.compare(passB, passA)
   }
 }
 
