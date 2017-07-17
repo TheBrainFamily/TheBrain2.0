@@ -35,9 +35,15 @@ class UsersRepository extends MongoRepository {
     userToBeUpdated.username = username
     userToBeUpdated.password = password
     userToBeUpdated.activated = true
-    await userToBeUpdated.save()
-    // TODO this didn't return anything, need investigation
-    return userToBeUpdated
+
+    const _id = userToBeUpdated._id
+    delete userToBeUpdated._id
+    const updatedUser = (await this.userCollection.findOneAndUpdate({_id}, {$set: {...userToBeUpdated}}, {
+      upsert: true,
+      returnNewDocument: true
+    })).value
+
+    return updatedUser
   }
 
   async updateFacebookUser (userId: string, facebookId: string) {
