@@ -124,10 +124,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   menuButton: {
+    justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: 30,
     borderColor: '#fff5',
   },
   menuButtonText: {
-    paddingHorizontal: 30,
     color: '#999',
     fontSize: 14,
     fontFamily: 'Exo2-Bold',
