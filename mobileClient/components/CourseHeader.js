@@ -28,7 +28,7 @@ class CourseHeader extends React.Component {
       return <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]} />
     }
     return (
-      <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]}>
+      <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={this.props.onLogoPress}>
