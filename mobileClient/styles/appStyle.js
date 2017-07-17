@@ -12,6 +12,10 @@ export const appStyle = {
     bg: '#9050ba',
     bgAlt: '#fff',
     bgDark: '#000'
+  },
+  pageTitle: {
+    height: 38
+  },
   }
 }
 
