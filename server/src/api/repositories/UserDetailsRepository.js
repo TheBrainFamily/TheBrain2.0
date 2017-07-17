@@ -87,7 +87,7 @@ class UserDetailsRepository extends MongoRepository {
   async closeCourse (userId: string) {
     const user = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
     user.selectedCourse = null
-    await user.save()
+    await this.userDetailsCollection.save(user)
     return { success: true }
   }
 }

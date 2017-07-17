@@ -3,6 +3,7 @@
 import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
+import { UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
 
 const resolvers = {
@@ -144,7 +145,7 @@ const resolvers = {
           throw new Error('User not found')
         }
 
-        const isMatch = await user.comparePassword(args.password)
+        const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
