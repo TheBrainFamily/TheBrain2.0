@@ -1,9 +1,11 @@
 import _ from 'lodash'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, Dimensions } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
+
+import appStyle from '../styles/appStyle'
 
 function getDaysInMonth (month, year = new Date().getFullYear()) {
   return new Date(year, month, 0).getDate()
@@ -25,7 +27,8 @@ function generateDays (start, end, month) {
 const CalendarHeader = (props) => (
   <View style={{
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    height: appStyle.calendarHeader.height
   }}>
     {props.dayHeadings.map((day, index) => {
       const isSunday = index % 7 === 6
@@ -53,6 +56,10 @@ class ReviewsCalendar extends React.Component {
       return <View />
     }
 
+    const windowHeight = Dimensions.get('window').height
+    const pageTitleHeight = appStyle.pageTitle.height
+    const height = windowHeight - appStyle.header.totalHeight - pageTitleHeight - appStyle.calendarHeader.height
+
     const currentDate = new Date()
     const currentMonth = currentDate.getMonth() + 1
     const daysInPreviousMonth = getDaysInMonth(currentMonth - 1)
@@ -73,10 +80,7 @@ class ReviewsCalendar extends React.Component {
     })
 
     return (
-      <View style={{
-        height: '72.3%',
-        backgroundColor: 'white'
-      }}>
+      <View style={{ height }}>
         <CalendarHeader currentDate={currentDate} />
         <View style={{
           flexDirection: 'row',
@@ -150,7 +154,7 @@ const style = {
     backgroundColor: '#ccc',
   },
   calendarDay: {
-    width: `${100 / 7}%`,
+    width: `${100 / 7 - 0.1}%`,
     padding: 5,
     justifyContent: 'space-between',
     borderTopWidth: 1,
