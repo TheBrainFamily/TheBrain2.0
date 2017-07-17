@@ -77,9 +77,7 @@ class Questions extends React.Component {
       const evalItem = itemsWithFlashcard[0].item
 
       return (
-        <div className='questions-container' style={{height: this.calcComponentWidth(this.state.height)}}>
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
-        </div>
+        <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
       )
     }
   }
