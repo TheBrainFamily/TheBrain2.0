@@ -153,7 +153,7 @@ export class ItemsRepository {
     })
 
     return _.map(itemsByDay, (count, ts) => ({
-      ts, count
+      ts: parseInt(ts), count
     }))
   }
 }
