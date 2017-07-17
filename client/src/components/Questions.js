@@ -8,11 +8,18 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import Flashcard from './Flashcard'
-import SessionSummary from './SessionSummary'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
@@ -31,12 +38,36 @@ class Questions extends React.Component {
     }
   }
 
+  componentWillMount = () => {
+    this.updateDimensions()
+  }
+  componentDidMount = () => {
+    window.addEventListener('resize', this.updateDimensions)
+  }
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.updateDimensions)
+  }
+
+  updateDimensions = () => {
+    console.log({
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+  }
+
+  calcComponentWidth = (height) => {
+    return height - 350;
+  }
+
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
-      const sessionCount = this.props.sessionCount.SessionCount
 
       if (!itemsWithFlashcard.length > 0) {
         return <div />
@@ -45,13 +76,8 @@ class Questions extends React.Component {
       const flashcard = itemsWithFlashcard[0].flashcard
       const evalItem = itemsWithFlashcard[0].item
 
-      const newFlashcards = { done: sessionCount.newDone, total: sessionCount.newTotal }
-      const dueFlashcards = { done: sessionCount.dueDone, total: sessionCount.dueTotal }
-      const reviewFlashcards = { done: sessionCount.reviewDone, total: sessionCount.reviewTotal }
-
       return (
-        <div className='questions'>
-          <SessionSummary newFlashcards={newFlashcards} dueFlashcards={dueFlashcards} reviewFlashcards={reviewFlashcards} />
+        <div className='questions-container' style={{height: this.calcComponentWidth(this.state.height)}}>
           <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
         </div>
       )
