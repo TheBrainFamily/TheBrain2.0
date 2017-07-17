@@ -70,15 +70,18 @@ class MainMenu extends React.Component {
     const height = Dimensions.get('window').height - this.props.topMargin
 
     return (
-      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { opacity: fadeAnim, top: this.props.topMargin, height }]}>
+      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { backgroundColor: '#eee', opacity: fadeAnim, top: this.props.topMargin, justifyContent: 'space-between',  height }]}>
         <View style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
           flexDirection: 'row',
           width: '100%',
-          height: '40%',
-          padding: 20
+          height: '33%',
+          backgroundColor: 'white',
         }}>
           <Image
-            style={{ width: '30%', height: '100%' }}
+            style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain'}}
             source={require('../images/BillyBaby.png')}
           />
           <View style={{
@@ -88,7 +91,7 @@ class MainMenu extends React.Component {
             <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
               Michał
             </Text>
-            <View style={{ width: '100%', marginTop: 20, flexDirection: 'row' }}>
+            <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
               <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
                 <Text style={style.text}>DUE</Text>
                 <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
@@ -106,7 +109,7 @@ class MainMenu extends React.Component {
             </View>
           </View>
         </View>
-        <View style={{ backgroundColor: '#eee', paddingHorizontal: 20, paddingVertical: 5 }}>
+        <View style={{marginBottom: '10%', marginTop: '3%', justifyContent: 'space-between', flexDirection:'column', flex:1}}>
           {activated
             ? <MenuButton text="LOG OUT" onPress={this.logout} />
             : <MenuButton text="LOG IN" onPress={this.goLogin} />
