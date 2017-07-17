@@ -11,11 +11,11 @@ class UserDetailsRepository extends MongoRepository {
     this.userDetailsCollection = this.db.collection('userdetails')
   }
 
-  create = async(userId: string, courseId: string) => {
+  create = async (userId: string, courseId: string) => {
     const newUserDetailsItem = {
       userId: new ObjectId(userId),
       hasDisabledTutorial: false,
-      selectedCourse: "",
+      selectedCourse: '',
       progress: [{courseId, lesson: 1}],
       collectedAchievements: [],
       achievementStats: {
@@ -58,7 +58,10 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async updateNextLessonPosition (courseId: string, userId: string) {
-    await this.userDetailsCollection.update({ userId: new ObjectId(userId), 'progress.courseId': courseId }, { $inc: { 'progress.$.lesson': 1 } })
+    await this.userDetailsCollection.update({
+      userId: new ObjectId(userId),
+      'progress.courseId': courseId
+    }, {$inc: {'progress.$.lesson': 1}})
   }
 
   async updateCollectedAchievements (userId: string, collectedAchievementIds) {
@@ -66,7 +69,17 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async disableTutorial (userId: string) {
-    return this.userDetailsCollection.findOneAndUpdate({ userId: new ObjectId(userId) }, { hasDisabledTutorial: true }, { new: true })
+    console.log("JMOZGAWA: userId",userId);
+
+    const userA =(await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}}, {new: true})).value
+
+    const userB = await this.userDetailsCollection.findOne({userId:new ObjectId(userId)})
+
+    console.log("JMOZGAWA: userA",userA);
+    console.log("JMOZGAWA: userB",userB);
+
+
+
   }
 
   async selectCourse (userId: string, courseId: string) {
@@ -77,18 +90,18 @@ class UserDetailsRepository extends MongoRepository {
       user.progress.push({courseId, lesson: 1})
     }
 
-    console.log("JMOZGAWA: PRE");
-    const obj =await this.userDetailsCollection.update({userId: new ObjectId(userId)}, user)
-    console.log("JMOZGAWA: POST");
-    console.log("JMOZGAWA: obj",obj);
-    return { success: true }
+    console.log('JMOZGAWA: PRE')
+    const obj = await this.userDetailsCollection.update({userId: new ObjectId(userId)}, user)
+    console.log('JMOZGAWA: POST')
+    console.log('JMOZGAWA: obj', obj)
+    return {success: true}
   }
 
   async closeCourse (userId: string) {
     const user = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
     user.selectedCourse = null
     await this.userDetailsCollection.save(user)
-    return { success: true }
+    return {success: true}
   }
 }
 
