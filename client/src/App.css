@@ -87,9 +87,8 @@ a {
 
 .course-selector {
     min-height: 300px;
-    margin-top: 10%;
+    margin-top: 100px;
     color: white;
-    /*margin: 0;*/
     padding: 0;
 }
 
@@ -236,13 +235,13 @@ TUTORIAL
     margin: 180px 0;
 }
 
-.questions-container {
+.flexible-wrapper-container {
     margin-top: 20px;
     display: table;
     width: 100%;
 }
 
-.questions-content {
+.flexible-wrapper-content {
     display: table-cell;
     vertical-align: middle;
 }
