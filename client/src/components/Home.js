@@ -9,6 +9,7 @@ import { course } from '../actions'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
 import CourseIcon from './CourseIcon'
+import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 class Home extends React.Component {
   selectCourse = (courseId) => async () => {
@@ -34,12 +35,14 @@ class Home extends React.Component {
     }
 
     return (
+      <FlexibleContentWrapper>
         <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse} onClickArgument={course._id}/>
           })}
         </ul>
+      </FlexibleContentWrapper>
     )
   }
 }
