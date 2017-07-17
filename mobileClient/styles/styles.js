@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   videoPlaceholder: {
     backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
-    height: 300,
+    height: '70%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
@@ -78,6 +78,14 @@ const styles = StyleSheet.create({
     width: '90%',
     // backgroundColor: '#662d91',
     marginLeft: '5%'
+  },
+  flipCardContainer: {
+    backgroundColor: 'transparent',
+    shadowColor: 'black',
+    shadowOffset: {width: 4, height: 4},
+    shadowRadius: 4,
+    shadowOpacity: 0.5,
+    marginBottom: 18
   },
   flipCardBack: {
     position: 'absolute'
@@ -272,21 +280,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
     width: '100%',
-    height: '48.8%'
+    height: 200,
   },
   answerTopLine: {
     position: 'absolute',
     alignSelf: 'center',
-    top: 50,
+    top: "12%",
     width: 2,
-    height: 60,
+    height: "24%",
     backgroundColor: '#71b9d3'
   },
   answerRightLine: {
     position: 'absolute',
     top: '50%',
-    right: 50,
-    width: 88,
+    right: "12%",
+    width: "26%",
     height: 2,
     backgroundColor: '#ff8533',
     transform: [{ translateY: -1 }]
@@ -294,16 +302,16 @@ const styles = StyleSheet.create({
   answerBottomLine: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: 50,
+    bottom: "11.6%",
     width: 2,
-    height: 60,
+    height: "24%",
     backgroundColor: '#c1272d'
   },
   answerLeftLine: {
     position: 'absolute',
     top: '50%',
-    left: 50,
-    width: 88,
+    left: "12%",
+    width: "26%",
     height: 2,
     backgroundColor: '#62c46c',
     transform: [{ translateY: -1 }]
@@ -316,7 +324,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#71b9d3',
     width: 170,
-    height: 50,
+    height: "16%",
     borderRadius: 35,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
@@ -329,7 +337,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ff8533',
-    width: 50,
+    width: "12%",
     height: 170,
     borderRadius: 35,
     borderTopRightRadius: 0,
@@ -343,7 +351,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#c1272d',
     width: 170,
-    height: 50,
+    height: "16%",
     borderRadius: 35,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0
@@ -357,7 +365,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#62c46c',
-    width: 50,
+    width: "12%",
     height: 170,
     borderRadius: 35,
     borderTopLeftRadius: 0,
@@ -373,6 +381,7 @@ const styles = StyleSheet.create({
   answerCircle: {
     position: 'absolute',
     alignSelf: 'center',
+    backgroundColor: 'white',
     top: '50%',
     transform: [{ translateY: -50 }],
     borderWidth: 2,
@@ -404,7 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
-    padding: 40
+    padding: "5%"
   },
   infoText: {
     textAlign: 'center',

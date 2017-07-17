@@ -37,7 +37,7 @@ class AnswerEvaluator extends React.Component {
     const { hasDisabledTutorial } = this.props.userDetails.UserDetails
 
     return (
-      <Animatable.View style={styles.answerEvaluator} animation='slideInUp'>
+      <Animatable.View style={[styles.answerEvaluator, {height: this.props.getAnswerEvaluatorHeight()}]} animation='slideInUp'>
         <LinearGradient
           style={styles.answerTopLine}
           colors={['#71b9d3', '#b3b3b3']}

@@ -23,7 +23,6 @@ import {
 } from 'react-native'
 
 import styles from '../styles/styles'
-import appStyle from '../styles/appStyle'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 class Flashcard extends React.Component {
@@ -48,7 +47,7 @@ class Flashcard extends React.Component {
         height: windowDimensions.height
       },
       dynamicStyles: {
-        content: this.getCardDynamicContentStyle(0, 0)
+        content: {height: this.props.getFlashcardHeight()}
       },
       swipeDirection: DIRECTIONS.left,
       dragLen: 0
@@ -93,7 +92,7 @@ class Flashcard extends React.Component {
     }
     this.setState({
       dynamicStyles: {
-        content: this.getCardDynamicContentStyle(this.state.windowDimensions.height, answerWillBeVisible)
+        content: {height: this.props.getFlashcardHeight()}
       }
     })
   }
@@ -111,19 +110,6 @@ class Flashcard extends React.Component {
     }
   }
 
-  getCardDynamicContentStyle = (height: number, visibleAnswer = false) => {
-    const heightOfOtherElements =
-      StyleSheet.flatten(styles.topContainer).height +
-      appStyle.header.height +
-      StyleSheet.flatten(styles.summaryContainer).height +
-      2 * StyleSheet.flatten(styles.primaryHeader).height +
-      22.5
-    const elementHeight = height - heightOfOtherElements - 278
-    return {
-      height: elementHeight
-    }
-  }
-
   onLayout = () => {
     const {width, height} = Dimensions.get('window')
     this.setState({
@@ -132,7 +118,7 @@ class Flashcard extends React.Component {
         height
       },
       dynamicStyles: {
-        content: this.getCardDynamicContentStyle(height, this.props.flashcard.visibleAnswer)
+        content: {height: this.props.getFlashcardHeight()}
       }
     })
   }
@@ -149,14 +135,7 @@ class Flashcard extends React.Component {
     return (
       <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-          <View style={[{
-            backgroundColor: 'transparent',
-            shadowColor: 'black',
-            shadowOffset: {width: 4, height: 4},
-            shadowRadius: 4,
-            shadowOpacity: 0.5,
-            marginVertical: '5%'
-          }]}>
+          <View style={styles.flipCardContainer}>
             <TouchableOpacity onPress={() => this.flipCard()}>
               <Card dynamicStyles={this.state.dynamicStyles}
                 question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer} />
