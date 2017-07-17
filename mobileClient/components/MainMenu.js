@@ -112,7 +112,7 @@ class MainMenu extends React.Component {
         <View style={{marginBottom: '10%', marginTop: '3%', justifyContent: 'space-between', flexDirection:'column', flex:1}}>
           {activated
             ? <MenuButton text="LOG OUT" onPress={this.logout} />
-            : <MenuButton text="LOG IN" onPress={this.goLogin} />
+            : <MenuButton text="LOG IN" onPress={this.go('/login')} />
           }
           <Separator />
           <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} />
