@@ -13,7 +13,6 @@ import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatc
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
-import { withoutAirplane } from './WithoutAirplaneContainer'
 
 class Lecture extends React.Component {
   render () {
