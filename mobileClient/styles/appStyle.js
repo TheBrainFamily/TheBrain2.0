@@ -17,7 +17,7 @@ const appStyle = {
     height: 38
   },
   calendarHeader: {
-    height: 8
+    height: 28
   }
 }
 
