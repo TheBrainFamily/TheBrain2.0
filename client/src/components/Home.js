@@ -8,6 +8,7 @@ import { push } from 'react-router-redux'
 import { course } from '../actions'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 
@@ -24,6 +25,8 @@ class Home extends React.Component {
     }
 
     if (nextProps.userDetails.UserDetails.selectedCourse) {
+
+
       const courseId = nextProps.userDetails.UserDetails.selectedCourse
       nextProps.dispatch(push(`/course/${courseId}`))
     }
@@ -55,14 +58,6 @@ const selectCourseMutation = gql`
     }
 `
 
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            selectedCourse
-        }
-    }
-`
-
 export default compose(
   connect(),
   graphql(selectCourseMutation, {
@@ -70,7 +65,10 @@ export default compose(
       selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
-        }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
       })
     })
   }),

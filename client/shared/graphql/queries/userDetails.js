@@ -1,3 +1,11 @@
-/**
- * Created by lolezy on 18/07/2017.
- */
+// @flow
+
+import gql from 'graphql-tag'
+
+export default gql`
+    query UserDetails {
+        UserDetails {
+            selectedCourse
+        }
+    }
+`
