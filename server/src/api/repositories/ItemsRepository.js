@@ -1,4 +1,7 @@
 // @flow
+import _ from 'lodash'
+import moment from 'moment'
+
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 
@@ -35,6 +38,26 @@ class ItemsRepository extends MongoRepository {
     }
     await this.itemsCollection.insertOne(newItem)
     return newItem
+  }
+
+  async getReviews (userId: string) {
+    const currentDayTimestamp = moment().startOf('day').unix()
+    const items = await this.itemsCollection.find(
+      {
+        userId,
+        nextRepetition: { $gte: currentDayTimestamp }
+      },
+      {
+        nextRepetition: 1
+      }).toArray()
+    const itemsByDay = _.countBy(items, (item) => {
+      const date = item.nextRepetition - item.nextRepetition % (24 * 60 * 60)
+      return date
+    })
+
+    return _.map(itemsByDay, (count, ts) => ({
+      ts: parseInt(ts), count
+    }))
   }
 }
 

@@ -573,7 +573,7 @@ describe('query.Reviews', () => {
 
   it('returns empty list by default', async () => {
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, Items: new ItemsRepository() }
+    const context = { user: { _id: userId }, Items: itemsRepository }
 
     const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
 
@@ -582,7 +582,7 @@ describe('query.Reviews', () => {
 
   it('returns list of reviews grouped by day timestamp', async () => {
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, Items: new ItemsRepository() }
+    const context = { user: { _id: userId }, Items: itemsRepository }
     const tomorrowDate = moment().add(1, 'day')
     const dayAfterTomorrowDate = moment().add(2, 'day')
     const itemsToExtend = [
