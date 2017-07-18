@@ -101,7 +101,7 @@ class ReviewsCalendar extends React.Component {
             return (
               <View key={`day-${index}`} style={[
                 style.calendarDay,
-                { zIndex: index - (isToday ? 2 : 0) },
+                { zIndex: index - (isToday ? 2 : 0) }, // fix to display a circle separator on top of a current day tile
                 isToday ? { backgroundColor: '#662d91' } : {}
               ]}>
                 {!isSunday &&
@@ -154,7 +154,7 @@ const style = {
     backgroundColor: '#ccc',
   },
   calendarDay: {
-    width: `${100 / 7 - 0.1}%`,
+    width: `${100 / 7 - 0.01}%`, // -0.01 is needed to display calendar properly on some devices
     padding: 5,
     justifyContent: 'space-between',
     borderTopWidth: 1,
