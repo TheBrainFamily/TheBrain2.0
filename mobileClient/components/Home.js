@@ -102,7 +102,7 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
-        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} onLogoPress={this.closeCourse}>
+        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} closeCourse={this.closeCourse}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
 
