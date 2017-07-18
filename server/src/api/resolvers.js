@@ -42,9 +42,11 @@ const resolvers = {
       return context.Flashcards.getFlashcard(args._id)
     },
     async Lesson (root: ?string, args: { courseId: string }, context: Object) {
-      const lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
-
-      return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
+      if (context.user) {
+        const lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
+        return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
+      }
+      return null
     },
     Lessons (root: ?string, args: { courseId: string }, context: Object) {
       return context.Lessons.getLessons(args.courseId)
