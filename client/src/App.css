@@ -15,16 +15,17 @@ body {
 .App {
     text-align: center;
     color: white;
-    background-color: #6922a8;
+    background-color: white;
     min-width: 1024px;
     height: 100%;
-    min-height: 768px;
+    min-height: 810px;
     position: relative;
     margin: 0;
     padding: 0;
     background-image: url('img/bg-airplane.png');
     background-repeat: no-repeat;
     background-position: center bottom;
+    background-size: 1024px 289px;
 }
 
 .App-logo {
@@ -87,9 +88,8 @@ a {
 
 .course-selector {
     min-height: 300px;
-    margin-top: 10%;
+    margin-top: 100px;
     color: white;
-    /*margin: 0;*/
     padding: 0;
 }
 
@@ -228,21 +228,24 @@ TUTORIAL
 
 #video {
     color: white;
+}
+
+#video h2 {
     margin: 0;
     padding: 0;
+    margin-bottom: 10px;
 }
 
 .welldone {
     margin: 180px 0;
 }
 
-.questions-container {
-    margin-top: 20px;
+.flexible-wrapper-container {
     display: table;
     width: 100%;
 }
 
-.questions-content {
+.flexible-wrapper-content {
     display: table-cell;
     vertical-align: middle;
 }

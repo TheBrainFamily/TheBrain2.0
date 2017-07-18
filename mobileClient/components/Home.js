@@ -31,7 +31,8 @@ class Home extends React.Component {
     this.state = {
       isCourseSelected,
       isExitAnimationFinished: isCourseSelected,
-    }
+      courseSelectorIsDisabled: false,
+  }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -94,16 +95,26 @@ class Home extends React.Component {
   }
 
   selectCourse = (course) => async () => {
-    this.props.dispatch(courseActions.select(course))
-    await this.props.selectCourse({courseId: course._id})
-    this.setState({isCourseSelected: true})
+    if (!this.state.isCourseSelected) {
+      this.setState({isCourseSelected: true})
+      this.props.dispatch(courseActions.select(course))
+      await this.props.selectCourse({courseId: course._id})
 
-    this.animateCourseSelector(course._id)
+      this.animateCourseSelector(course._id)
+    }
+  }
+
+  disableCourseSelector = () => {
+    this.setState({courseSelectorIsDisabled: true})
+  }
+  enableCourseSelector = () => {
+    this.setState({courseSelectorIsDisabled: false})
   }
 
   closeCourse = () => {
     this.props.dispatch(courseActions.close())
     this.setState({isCourseSelected: false, isExitAnimationFinished: false})
+    this.enableCourseSelector()
   }
 
   render () {
@@ -119,7 +130,7 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
-        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} onLogoPress={this.closeCourse}>
+        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} closeCourse={this.closeCourse}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
 
@@ -153,6 +164,8 @@ class Home extends React.Component {
                       <CircleButton
                         color={course.color}
                         onPress={this.selectCourse(course)}
+                        disableCourseSelector={this.disableCourseSelector}
+                        courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
                       >
                         <SvgUri
                           width={logoSize}
