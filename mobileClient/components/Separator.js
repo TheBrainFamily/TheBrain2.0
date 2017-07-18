@@ -16,6 +16,7 @@ Separator.defaultProps = {
 
 const style = {
   line: {
+    marginHorizontal: 20,
     position: 'relative',
     zIndex: 1000
   },
