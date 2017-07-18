@@ -50,7 +50,7 @@ class UserDetailsRepository extends MongoRepository {
     let xpGained = getExperienceForAction(action)
     const userDetails = (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$inc: {'experience.value': xpGained}}, {
       upsert: true,
-      returnNewDocument: true
+      returnOriginal: false
     })).value
 
     const newLevel = calculateUserLevel(userDetails.experience.value)
@@ -69,17 +69,7 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async disableTutorial (userId: string) {
-    console.log("JMOZGAWA: userId",userId);
-
-    const userA =(await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}}, {new: true})).value
-
-    const userB = await this.userDetailsCollection.findOne({userId:new ObjectId(userId)})
-
-    console.log("JMOZGAWA: userA",userA);
-    console.log("JMOZGAWA: userB",userB);
-
-
-
+    return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}}, {returnOriginal: false})).value
   }
 
   async selectCourse (userId: string, courseId: string) {
@@ -90,10 +80,7 @@ class UserDetailsRepository extends MongoRepository {
       user.progress.push({courseId, lesson: 1})
     }
 
-    console.log('JMOZGAWA: PRE')
-    const obj = await this.userDetailsCollection.update({userId: new ObjectId(userId)}, user)
-    console.log('JMOZGAWA: POST')
-    console.log('JMOZGAWA: obj', obj)
+    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, user)
     return {success: true}
   }
 
