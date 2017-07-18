@@ -6,16 +6,17 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import resolvers from './resolvers'
-import {
-  CoursesRepository,
-  FlashcardsRepository,
-  ItemsRepository,
-  ItemsWithFlashcardRepository,
-  LessonsRepository,
-  UserDetailsRepository,
-  UsersRepository
-} from './mongooseSetup'
 import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
+import { coursesRepository } from './repositories/CoursesRepository'
+import { lessonsRepository } from './repositories/LessonsRepository'
+import { flashcardRepository } from './repositories/FlashcardsRepository'
+import { userDetailsRepository } from './repositories/UserDetailsRepository'
+import { itemsRepository } from './repositories/ItemsRepository'
+import { itemsWithFlashcardRepository } from './repositories/ItemsWithFlashcardRepository'
+import { usersRepository } from './repositories/UsersRepository'
+
+const testingDBURI = 'mongodb://localhost/testing'
+mongoose.connect(testingDBURI)
 
 extendExpect()
 jest.mock('node-fetch', () => {
@@ -124,7 +125,7 @@ describe('query.Courses', () => {
     done()
   })
   it('returns all courses', async () => {
-    const context = { Courses: new CoursesRepository() }
+    const context = { Courses: coursesRepository }
     const courses = await resolvers.Query.Courses(undefined, undefined, context)
 
     expect(courses.length).toBe(2)
@@ -141,7 +142,7 @@ describe('query.Course', () => {
     const newCourse = await mongoose.connection.db.collection('courses').insertOne({ name: 'testCourseName2' })
     const newCourseId = newCourse.insertedId
 
-    const context = { Courses: new CoursesRepository() }
+    const context = { Courses: coursesRepository }
     const course = await resolvers.Query.Course(undefined, { _id: newCourseId }, context)
 
     expect(course.name).toEqual('testCourseName2')
@@ -159,13 +160,13 @@ describe('query.Lessons', () => {
     done()
   })
   it('returns all lessons for a specified course', async () => {
-    const context = { Lessons: new LessonsRepository() }
+    const context = { Lessons: lessonsRepository }
     const lessons = await resolvers.Query.Lessons(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lessons.length).toBe(2)
   })
   it('returns all lessons for a specified course sorted by its position', async () => {
-    const context = { Lessons: new LessonsRepository() }
+    const context = { Lessons: lessonsRepository }
     const lessons = await resolvers.Query.Lessons(undefined, { courseId: 'testCourseId' }, context)
 
     expect(lessons[0].position).toBe(1);
@@ -183,7 +184,7 @@ describe('query.LessonCount', () => {
     done()
   })
   it('returns all lessons', async () => {
-    const context = { Lessons: new LessonsRepository() }
+    const context = { Lessons: lessonsRepository }
     const lessonCount = await resolvers.Query.LessonCount(undefined, undefined, context)
 
     expect(lessonCount).toEqual({ count: 3 })
@@ -199,7 +200,7 @@ describe('query.flashcards', () => {
     const flashcardsData = await deepFreeze(makeFlashcards())
 
     const dbFlashcards = await resolvers.Query.Flashcards(undefined, undefined,
-      { Flashcards: new FlashcardsRepository() }
+      { Flashcards: flashcardRepository }
     )
 
     expect(dbFlashcards.length).toBe(3)
@@ -220,7 +221,7 @@ describe('query.flashcard', () => {
     const flashcardsData = await makeFlashcards({ flashcardsToExtend })
 
     const dbFlashcards = await resolvers.Query.Flashcard(undefined, { _id: flashcardsData[1]._id },
-      { Flashcards: new FlashcardsRepository() }
+      { Flashcards: flashcardRepository }
     )
 
     expect(dbFlashcards._id).toEqual(flashcardsData[1]._id)
@@ -247,9 +248,9 @@ describe('query.Lesson', () => {
     })
 
     const context = {
-      Lessons: new LessonsRepository(),
+      Lessons: lessonsRepository,
       user: { _id: userId },
-      UserDetails: new UserDetailsRepository()
+      UserDetails: userDetailsRepository
     }
     const lesson = await resolvers.Query.Lesson(undefined, { courseId: 'testCourseId' }, context)
 
@@ -263,9 +264,9 @@ describe('query.Lesson', () => {
     })
 
     const context = {
-      Lessons: new LessonsRepository(),
+      Lessons: lessonsRepository,
       user: { _id: userId },
-      UserDetails: new UserDetailsRepository()
+      UserDetails: userDetailsRepository
     }
     const lesson = await resolvers.Query.Lesson(undefined, { courseId: 'testCourseId' }, context)
 
@@ -283,7 +284,7 @@ describe('query.Item', () => {
     await mongoose.connection.db.collection('items').insert({ userId, extraRepeatToday: true })
     const newItem = await mongoose.connection.db.collection('items').insertOne({ userId, extraRepeatToday: false })
     const newItemId = newItem.insertedId
-    const context = { Items: new ItemsRepository(), user: { _id: userId } }
+    const context = { Items: itemsRepository, user: { _id: userId } }
 
     const course = await resolvers.Query.Item(undefined, { _id: newItemId }, context)
 
@@ -298,7 +299,7 @@ describe('query.ItemsWithFlashcard', () => {
   })
 
   it('returns 0 items if no user exists', async () => {
-    const context = { ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const context = { ItemsWithFlashcard: itemsWithFlashcardRepository }
 
     const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
 
@@ -307,7 +308,7 @@ describe('query.ItemsWithFlashcard', () => {
 
   it('returns 0 items for a new user without any lessons watched', async () => {
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
 
     const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
 
@@ -319,7 +320,7 @@ describe('query.ItemsWithFlashcard', () => {
     const flashcard = await mongoose.connection.db.collection('flashcards').insert({ question: '?', answer: '!' })
     const flashcardId = flashcard.insertedIds[0].toString()
 
-    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
     const itemsToExtend = [
       { userId, flashcardId }, { userId }
     ]
@@ -337,7 +338,7 @@ describe('query.SessionCount', () => {
     done()
   })
   it('returns an empty object if no user exists', async () => {
-    const context = { ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const context = { ItemsWithFlashcard: itemsWithFlashcardRepository }
 
     const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
 
@@ -346,7 +347,7 @@ describe('query.SessionCount', () => {
   it('returns a session count', async () => {
     const userId = mongoose.Types.ObjectId()
     await mongoose.connection.db.collection('items').insertOne({ userId, actualTimesRepeated: 0 })
-    const context = { user: { _id: userId }, ItemsWithFlashcard: new ItemsWithFlashcardRepository() }
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
 
     const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
 
@@ -376,7 +377,7 @@ describe('query.UserDetails', () => {
   it('returns an empty object if no user exists', async () => {
     const context = {
       user: {},
-      UserDetails: new UserDetailsRepository()
+      UserDetails: userDetailsRepository
     }
 
     const userDetails = resolvers.Query.UserDetails(undefined, undefined, context)
@@ -392,7 +393,7 @@ describe('query.UserDetails', () => {
 
     const context = {
       user: { _id: userId },
-      UserDetails: new UserDetailsRepository()
+      UserDetails: userDetailsRepository
     }
 
     const userDetails = await resolvers.Query.UserDetails(undefined, undefined, context)
@@ -408,8 +409,8 @@ describe('mutation.selectCourse', () => {
 
     context = {
       user: {},
-      Users: new UsersRepository(),
-      UserDetails: new UserDetailsRepository(),
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
       req: {
         logIn: jest.fn()
       }
@@ -448,10 +449,10 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
 
     context = {
       user: {},
-      Users: new UsersRepository(),
-      UserDetails: new UserDetailsRepository(),
-      Lessons: new LessonsRepository(),
-      Items: new ItemsRepository(),
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      Lessons: lessonsRepository,
+      Items: itemsRepository,
       req: {
         logIn: jest.fn()
       }
@@ -480,8 +481,8 @@ describe('mutation.hideTutorial', () => {
   beforeAll(async () => {
     context = {
       user: {},
-      Users: new UsersRepository(),
-      UserDetails: new UserDetailsRepository(),
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
       req: {
         logIn: jest.fn()
       }
@@ -498,9 +499,7 @@ describe('mutation.hideTutorial', () => {
       progress: [{ courseId: 'testCourseId', lesson: 1 }]
     })
     context.user = { _id: userId }
-
     const user = await resolvers.Mutation.hideTutorial(undefined, { courseId: 'testCourseId' }, context)
-
     expect(user.hasDisabledTutorial).toBe(true)
   })
 })
@@ -510,8 +509,9 @@ describe('mutation.processEvaluation', () => {
   beforeAll(async () => {
     context = {
       user: { _id: mongoose.Types.ObjectId() },
-      Items: new ItemsRepository(),
-      ItemsWithFlashcard: new ItemsWithFlashcardRepository()
+      Items: itemsRepository,
+      ItemsWithFlashcard: itemsWithFlashcardRepository,
+      UserDetails: userDetailsRepository
     }
   })
 

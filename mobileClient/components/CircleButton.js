@@ -15,20 +15,22 @@ export default class CircleButton extends React.Component {
     if (this.props.withStaticCircles) {
       return
     }
-    this.state.rotation.setValue(0)
-    this.state.radius.setValue(0)
-
-    Animated.parallel([
-      Animated.timing(this.state.rotation, {
-        toValue: 1,
-        duration: 1000,
-        easing: Easing.elastic(1)
-      }),
-      Animated.timing(this.state.radius, {
-        toValue: 20,
-        duration: 1000
-      })
-    ]).start(this.props.onPress)
+    if (!this.props.courseSelectorIsDisabled) {
+      this.props.disableCourseSelector()
+      this.state.rotation.setValue(0)
+      this.state.radius.setValue(0)
+      Animated.parallel([
+        Animated.timing(this.state.rotation, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.elastic(1)
+        }),
+        Animated.timing(this.state.radius, {
+          toValue: 20,
+          duration: 1000
+        })
+      ]).start(this.props.onPress)
+    }
   }
 
   getSize (radius) {

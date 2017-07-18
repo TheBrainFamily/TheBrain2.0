@@ -12,6 +12,8 @@ import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWa
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
+import FlexibleContentWrapper from './FlexibleContentWrapper'
+import { withoutAirplane } from './WithoutAirplaneContainer'
 
 class Lecture extends React.Component {
   render () {
@@ -19,9 +21,9 @@ class Lecture extends React.Component {
       return (
         <div>
           <h2>Congratulations!</h2>
-            <p>
-              You have watched all available lectures in this course.
-            </p>
+          <p>
+            You have watched all available lectures in this course.
+          </p>
         </div>
       )
     }
@@ -37,13 +39,15 @@ class Lecture extends React.Component {
     const selectedCourse = this.props.selectedCourse || this.props.match.params.courseId
 
     return (
-      <div id='video'>
-        <h2>Watch the video<br/>
-          and wait for the questions.</h2>
-        <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
-        <br/>
-        <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
-      </div>
+      <FlexibleContentWrapper>
+        <div id='video'>
+          <h2>Watch the video<br/>
+            and wait for the questions.</h2>
+          <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse}/>
+          <br/>
+          <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
+        </div>
+      </FlexibleContentWrapper>
     )
   }
 }
@@ -93,7 +97,7 @@ export default compose(
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse || ownProps.match.params.courseId
       return ({
-        variables: { courseId: selectedCourse },
+        variables: {courseId: selectedCourse},
         fetchPolicy: 'network-only'
       })
     }

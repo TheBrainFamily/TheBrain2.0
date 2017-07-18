@@ -8,20 +8,22 @@ import { createServer } from 'http'
 import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import session from 'express-session'
-import mongoose from 'mongoose'
-
-import {
-  FlashcardsRepository, CoursesRepository, LessonsRepository, ItemsRepository,
-  ItemsWithFlashcardRepository, UserDetailsRepository, UsersRepository, AchievementsRepository
-} from './api/mongooseSetup'
 
 import cors from 'cors'
 
 import schema from './api/schema'
 
 import facebookConfig from './configuration/facebook'
-
-const MongoStore = require('connect-mongo')(session)
+import { flashcardRepository } from './api/repositories/FlashcardsRepository'
+import {
+  itemsWithFlashcardRepository
+} from './api/repositories/ItemsWithFlashcardRepository'
+import { itemsRepository } from './api/repositories/ItemsRepository'
+import { coursesRepository } from './api/repositories/CoursesRepository'
+import { lessonsRepository } from './api/repositories/LessonsRepository'
+import { achievementsRepository } from './api/repositories/AchievementsRepository'
+import { userDetailsRepository } from './api/repositories/UserDetailsRepository'
+import { usersRepository } from './api/repositories/UsersRepository'
 
 const app = express()
 const port = 8080
@@ -47,7 +49,6 @@ app.use(session({
   secret: '***REMOVED***',
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
 
 app.use(passport.initialize())
@@ -70,9 +71,9 @@ const whitelist = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log('Gozdecki: origin', origin)
+    // console.log('Gozdecki: origin', origin)
     var originIsWhitelisted = whitelist.indexOf(origin) !== -1 || !origin
-    console.log('Gozdecki: originIsWhitelisted', originIsWhitelisted)
+    // console.log('Gozdecki: originIsWhitelisted', originIsWhitelisted)
     callback(null, originIsWhitelisted)
   },
   credentials: true
@@ -108,7 +109,7 @@ app.use('/graphql', graphqlExpress((req) => {
         // Probably indicates someone trying to send an overly expensive query
     throw new Error('Query too large.')
   }
-  console.log('Gozdecki: req.user in graphql', req.user)
+  // console.log('Gozdecki: req.user in graphql', req.user)
     // let user;
     // if (req.user) {
     //     // We get req.user from passport-github with some pretty oddly named fields,
@@ -132,14 +133,14 @@ app.use('/graphql', graphqlExpress((req) => {
       opticsContext,
       user: req.user,
       req,
-      Flashcards: new FlashcardsRepository(),
-      Courses: new CoursesRepository(),
-      Lessons: new LessonsRepository(),
-      Items: new ItemsRepository(),
-      ItemsWithFlashcard: new ItemsWithFlashcardRepository(),
-      UserDetails: new UserDetailsRepository(),
-      Users: new UsersRepository(),
-      Achievements: new AchievementsRepository(),
+      Flashcards: flashcardRepository,
+      Courses: coursesRepository,
+      Lessons: lessonsRepository,
+      Items: itemsRepository,
+      ItemsWithFlashcard: itemsWithFlashcardRepository,
+      UserDetails: userDetailsRepository,
+      Users: usersRepository,
+      Achievements: achievementsRepository,
     }
   }
 }))

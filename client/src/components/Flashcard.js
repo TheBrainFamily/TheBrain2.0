@@ -7,8 +7,8 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 import { flashcard } from '../actions'
-
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 import answerButtonImage1 from '../img/button-easy.png'
 import answerButtonImage2 from '../img/button-medium.png'
@@ -31,7 +31,7 @@ class Flashcard extends React.Component {
   render () {
     if (!this.props.isAnswerVisible) {
       return (
-        <div className='questions-content'>
+        <FlexibleContentWrapper offset={300}>
           <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
             <div className='flashcard-title'>Question: title</div>
             <div className='flashcard-content'>
@@ -41,24 +41,30 @@ class Flashcard extends React.Component {
             </div>
             <div className='flashcard-footer'>Click the card to see the answer!</div>
           </div>
-        </div>)
+        </FlexibleContentWrapper>)
     }
     return (
-      <div className='questions-content'>
-        <div className='flashcard'>
-          <div className='flashcard-title'>Question: title</div>
-          <div className='flashcard-content'>
-            <div className='flashcard-content-text center-text'>
-              <div className='scrollable-text'>{this.props.answer}</div>
+      <div>
+        <FlexibleContentWrapper offset={300}>
+          <div className='flashcard'>
+            <div className='flashcard-title'>Question: title</div>
+            <div className='flashcard-content'>
+              <div className='flashcard-content-text center-text'>
+                <div className='scrollable-text'>{this.props.answer}</div>
+              </div>
             </div>
+            <div className='flashcard-footer'>How would you describe experience answering this question?</div>
           </div>
-          <div className='flashcard-footer'>How would you describe experience answering this question?</div>
-        </div>
+        </FlexibleContentWrapper>
         <div className="answer-buttons-container">
-          <img alt={"Easy"} src={answerButtonImage1} className='answer-button' onClick={() => this.onSubmitEvaluation(1)}/>
-          <img alt={"Medium"} src={answerButtonImage2} className='answer-button' onClick={() => this.onSubmitEvaluation(2.5)}/>
-          <img alt={"Hard"} src={answerButtonImage3} className='answer-button' onClick={() => this.onSubmitEvaluation(4.5)}/>
-          <img alt={"Very hard"} src={answerButtonImage4} className='answer-button' onClick={() => this.onSubmitEvaluation(6)}/>
+          <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(1)}/>
+          <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(6)}/>
         </div>
       </div>)
   }
@@ -91,14 +97,14 @@ export default compose(
   connect(mapStateToProps),
   withRouter,
   graphql(submitEval, {
-    props: ({ ownProps, mutate }) => ({
-      submit: ({ itemId, evaluation }) => mutate({
+    props: ({ownProps, mutate}) => ({
+      submit: ({itemId, evaluation}) => mutate({
         variables: {
           itemId,
           evaluation
         },
         updateQueries: {
-          CurrentItems: (prev, { mutationResult }) => {
+          CurrentItems: (prev, {mutationResult}) => {
             const updateResults = update(prev, {
               ItemsWithFlashcard: {
                 $set: mutationResult.data.processEvaluation
