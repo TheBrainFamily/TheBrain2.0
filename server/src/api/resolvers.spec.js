@@ -5,15 +5,6 @@ import casual from 'casual'
 import _ from 'lodash'
 
 import resolvers from './resolvers'
-import {
-  // CoursesRepository,
-  FlashcardsRepository,
-  ItemsRepository,
-  ItemsWithFlashcardRepository,
-  LessonsRepository,
-  UserDetailsRepository,
-  UsersRepository
-} from '../testHelpers/mongooseSetup'
 import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
 import { coursesRepository } from './repositories/CoursesRepository'
 import { lessonsRepository } from './repositories/LessonsRepository'
@@ -22,6 +13,9 @@ import { userDetailsRepository } from './repositories/UserDetailsRepository'
 import { itemsRepository } from './repositories/ItemsRepository'
 import { itemsWithFlashcardRepository } from './repositories/ItemsWithFlashcardRepository'
 import { usersRepository } from './repositories/UsersRepository'
+
+const testingDBURI = 'mongodb://localhost/testing'
+mongoose.connect(testingDBURI)
 
 extendExpect()
 jest.mock('node-fetch', () => {
@@ -467,18 +461,18 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     await mongoose.connection.db.dropDatabase()
     done()
   })
-//   it('returns the second lesson after watching the first one if you are a logged in user', async () => {
-//     const userId = mongoose.Types.ObjectId()
-//     await mongoose.connection.db.collection('userdetails').insert({
-//       userId,
-//       progress: [{ courseId: 'testCourseId', lesson: 1 }]
-//     })
-//     context.user = { _id: userId }
-//
-//     const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, { courseId: 'testCourseId' }, context)
-//
-//     expect(lesson.position).toBe(2)
-//   })
+  it('returns the second lesson after watching the first one if you are a logged in user', async () => {
+    const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({
+      userId,
+      progress: [{ courseId: 'testCourseId', lesson: 1 }]
+    })
+    context.user = { _id: userId }
+
+    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, { courseId: 'testCourseId' }, context)
+
+    expect(lesson.position).toBe(2)
+  })
 })
 
 describe('mutation.hideTutorial', () => {
@@ -504,70 +498,67 @@ describe('mutation.hideTutorial', () => {
       progress: [{ courseId: 'testCourseId', lesson: 1 }]
     })
     context.user = { _id: userId }
-
     const user = await resolvers.Mutation.hideTutorial(undefined, { courseId: 'testCourseId' }, context)
-
-    console.log("JMOZGAWA: user",user)
-
     expect(user.hasDisabledTutorial).toBe(true)
   })
 })
-//
-// describe('mutation.processEvaluation', () => {
-//   let context
-//   beforeAll(async () => {
-//     context = {
-//       user: { _id: mongoose.Types.ObjectId() },
-//       Items: new ItemsRepository(),
-//       ItemsWithFlashcard: new ItemsWithFlashcardRepository()
-//     }
-//   })
-//
-//   afterAll(async (done) => {
-//     await mongoose.connection.db.dropDatabase()
-//     done()
-//   })
-//
-//   it('returns a correct item after "Wrong" evaluation', async () => {
-//     const userId = context.user._id
-//     const itemsToExtend = [
-//       { userId, _id: mongoose.Types.ObjectId() },
-//       { userId, _id: mongoose.Types.ObjectId() }
-//     ]
-//
-//     await makeItems({ itemsToExtend })
-//
-//     const args = {
-//       itemId: itemsToExtend[1]._id,
-//       evaluation: 2.5
-//     }
-//
-//     const itemsWithFlashcard = await resolvers.Mutation.processEvaluation(undefined, args, context)
-//     const itemWithFlashcard = _.find(itemsWithFlashcard, (doc) => _.isEqual(doc.item._id, args.itemId))
-//
-//     expect(itemWithFlashcard.item.actualTimesRepeated).toEqual(1)
-//   })
-// })
-//
-// describe('login with facebook', async () => {
-//   it('returns user if it already exists', async () => {
-//     const { logInWithFacebook } = resolvers.Mutation
-//     const args = {
-//       accessToken: 'TOKEN'
-//     }
-//
-//     const user = deepFreeze({ username: 'test' })
-//
-//     const context = {
-//       Users: {
-//         findByFacebookId: async () => (user)
-//       },
-//       req: {
-//         logIn: jest.fn()
-//       }
-//     }
-//
-//     await logInWithFacebook(undefined, args, context)
-//     expect(context.req.logIn.mock.calls[0]).toContain(user)
-//   })
-// })
+
+describe('mutation.processEvaluation', () => {
+  let context
+  beforeAll(async () => {
+    context = {
+      user: { _id: mongoose.Types.ObjectId() },
+      Items: itemsRepository,
+      ItemsWithFlashcard: itemsWithFlashcardRepository,
+      UserDetails: userDetailsRepository
+    }
+  })
+
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+
+  it('returns a correct item after "Wrong" evaluation', async () => {
+    const userId = context.user._id
+    const itemsToExtend = [
+      { userId, _id: mongoose.Types.ObjectId() },
+      { userId, _id: mongoose.Types.ObjectId() }
+    ]
+
+    await makeItems({ itemsToExtend })
+
+    const args = {
+      itemId: itemsToExtend[1]._id,
+      evaluation: 2.5
+    }
+
+    const itemsWithFlashcard = await resolvers.Mutation.processEvaluation(undefined, args, context)
+    const itemWithFlashcard = _.find(itemsWithFlashcard, (doc) => _.isEqual(doc.item._id, args.itemId))
+
+    expect(itemWithFlashcard.item.actualTimesRepeated).toEqual(1)
+  })
+})
+
+describe('login with facebook', async () => {
+  it('returns user if it already exists', async () => {
+    const { logInWithFacebook } = resolvers.Mutation
+    const args = {
+      accessToken: 'TOKEN'
+    }
+
+    const user = deepFreeze({ username: 'test' })
+
+    const context = {
+      Users: {
+        findByFacebookId: async () => (user)
+      },
+      req: {
+        logIn: jest.fn()
+      }
+    }
+
+    await logInWithFacebook(undefined, args, context)
+    expect(context.req.logIn.mock.calls[0]).toContain(user)
+  })
+})
