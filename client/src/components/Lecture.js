@@ -112,4 +112,4 @@ export default compose(
     },
     name: 'courseData'
   }),
-)(withoutAirplane(Lecture))
+)(Lecture)
