@@ -25,6 +25,7 @@ body {
     background-image: url('img/bg-airplane.png');
     background-repeat: no-repeat;
     background-position: center bottom;
+    background-size: 1024px 289px;
 }
 
 .App-logo {
