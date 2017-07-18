@@ -18,7 +18,7 @@ body {
     background-color: #6922a8;
     min-width: 1024px;
     height: 100%;
-    min-height: 768px;
+    min-height: 810px;
     position: relative;
     margin: 0;
     padding: 0;
@@ -227,8 +227,12 @@ TUTORIAL
 
 #video {
     color: white;
+}
+
+#video h2 {
     margin: 0;
     padding: 0;
+    margin-bottom: 10px;
 }
 
 .welldone {
@@ -236,7 +240,6 @@ TUTORIAL
 }
 
 .flexible-wrapper-container {
-    margin-top: 20px;
     display: table;
     width: 100%;
 }
