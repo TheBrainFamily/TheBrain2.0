@@ -33,6 +33,8 @@ class MainContainer extends React.Component {
       const selectedCourse = this.props.courses.Courses.find(course => course._id === this.props.userDetails.UserDetails.selectedCourse)
       if(selectedCourse) {
         courseColor = selectedCourse.color
+      } else {
+        courseColor = '#0c6ccb'
       }
     }
     return (
