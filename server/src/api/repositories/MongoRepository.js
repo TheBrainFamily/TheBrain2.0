@@ -6,6 +6,10 @@ const productionDBURI = 'mongodb://localhost/thebrain'
 const testingDBURI = 'mongodb://localhost/testing'
 let resolvedDBURI = ''
 
+let collectionInitQueue = []
+let connectingToDb = false
+let dbInstance = null
+
 switch (process.env.NODE_ENV) {
   case 'TESTING':
     resolvedDBURI = testingDBURI
@@ -23,13 +27,23 @@ export class MongoRepository {
   db: any
 
   constructor () {
+    if (connectingToDb === false) {
+      connectingToDb = true
+      MongoClient.connect(resolvedDBURI, (error, db) => {
+        dbInstance = db
+        collectionInitQueue.forEach(collectionInitCallback => collectionInitCallback())
+      })
+    }
 
-    console.log("JMOZGAWA: resolvedDBURI",resolvedDBURI);
-
-    MongoClient.connect(resolvedDBURI, (error, db) => {
-      this.db = db
+    if (dbInstance) {
+      this.db = dbInstance
       this.init()
-    })
+    } else {
+      collectionInitQueue.push(() => {
+        this.db = dbInstance
+        this.init()
+      })
+    }
   }
 
   init () {
