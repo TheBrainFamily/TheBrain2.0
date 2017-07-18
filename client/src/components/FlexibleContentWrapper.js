@@ -30,7 +30,10 @@ export default class FlexibleContentWrapper extends React.Component {
   }
 
   calcComponentWidth = (height, childHeight) => {
-    const offset = 400
+    let offset = 200
+    if(this.props.offset) {
+      offset = this.props.offset
+    }
     if(height < childHeight) {
       return childHeight - offset
     }

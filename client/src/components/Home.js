@@ -38,7 +38,7 @@ class Home extends React.Component {
     }
 
     return (
-      <FlexibleContentWrapper>
+      <FlexibleContentWrapper offset={200}>
         <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {

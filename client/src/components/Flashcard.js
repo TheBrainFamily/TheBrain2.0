@@ -31,7 +31,7 @@ class Flashcard extends React.Component {
   render () {
     if (!this.props.isAnswerVisible) {
       return (
-        <FlexibleContentWrapper>
+        <FlexibleContentWrapper offset={300}>
           <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
             <div className='flashcard-title'>Question: title</div>
             <div className='flashcard-content'>
@@ -45,7 +45,7 @@ class Flashcard extends React.Component {
     }
     return (
       <div>
-        <FlexibleContentWrapper>
+        <FlexibleContentWrapper offset={300}>
           <div className='flashcard'>
             <div className='flashcard-title'>Question: title</div>
             <div className='flashcard-content'>
