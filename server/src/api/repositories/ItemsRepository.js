@@ -41,10 +41,10 @@ class ItemsRepository extends MongoRepository {
   }
 
   async getReviews (userId: string) {
-    const currentDayTimestamp = moment().startOf('day').unix()
+    const currentDayTimestamp = moment().utc().startOf('day').unix()
     const items = await this.itemsCollection.find(
       {
-        userId,
+        userId: new ObjectId(userId),
         nextRepetition: { $gte: currentDayTimestamp }
       },
       {
