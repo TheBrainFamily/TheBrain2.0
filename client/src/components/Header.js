@@ -18,6 +18,7 @@ class LoginSwitcher extends React.Component {
     this.props.logout()
       .then(() => {
         this.props.client.resetStore()
+        this.props.dispatch(push(`/`))
       })
   }
 
@@ -37,7 +38,7 @@ const logOutQuery = gql`
     }
 `
 
-const LoginSwitcherWithGraphQl = withApollo(graphql(logOutQuery, {
+const LoginSwitcherWithGraphQl = connect()(withApollo(graphql(logOutQuery, {
   props: ({ ownProps, mutate }) => ({
     logout: () => mutate({
       updateQueries: {
@@ -53,7 +54,7 @@ const LoginSwitcherWithGraphQl = withApollo(graphql(logOutQuery, {
       }
     })
   })
-})(LoginSwitcher))
+})(LoginSwitcher)))
 
 class AppHeader extends React.Component {
   closeCourse = () => async () => {
