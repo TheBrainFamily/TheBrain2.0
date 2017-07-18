@@ -119,7 +119,7 @@ class MainMenu extends React.Component {
           <Separator />
           <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
           <Separator />
-          <MenuButton text="CHANGE THE COURSE" onPress={this.go('/')} />
+          <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} />
           <Separator />
           <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
           <Separator />
