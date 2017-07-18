@@ -12,14 +12,6 @@ import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
@@ -36,31 +28,6 @@ class Questions extends React.Component {
     } else {
       nextProps.dispatch(push('/signup'))
     }
-  }
-
-  componentWillMount = () => {
-    this.updateDimensions()
-  }
-  componentDidMount = () => {
-    window.addEventListener('resize', this.updateDimensions)
-  }
-  componentWillUnmount = () => {
-    window.removeEventListener('resize', this.updateDimensions)
-  }
-
-  updateDimensions = () => {
-    console.log({
-      width: window.innerWidth,
-      height: window.innerHeight
-    })
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    })
-  }
-
-  calcComponentWidth = (height) => {
-    return height - 350;
   }
 
   render () {
