@@ -11,6 +11,7 @@ import { push } from 'react-router-redux'
 import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import Hamburger from './Hamburger'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
@@ -72,8 +73,10 @@ class AppHeader extends React.Component {
               <img src={logo} className='App-logo' alt='logo' />
             </Link>
             <div className='App-header-right'>
-              {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
-              | <a onClick={this.closeCourse()}>Close Course</a>
+              <Hamburger>
+                {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
+                | <a onClick={this.closeCourse()}>Close Course</a>
+              </Hamburger>
             </div>
           </div>
         </div>
