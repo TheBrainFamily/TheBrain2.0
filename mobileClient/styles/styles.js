@@ -124,17 +124,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   menuButton: {
+    justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: 30,
     borderColor: '#fff5',
-    borderBottomWidth: 1
   },
   menuButtonText: {
-    paddingHorizontal: 30,
-    paddingVertical: 10,
     color: '#999',
-    fontSize: 18,
-    fontFamily: 'Exo2-Bold'
+    fontSize: 14,
+    fontFamily: 'Exo2-Bold',
   },
   header: {
+    height: appStyle.header.height,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
