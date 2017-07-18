@@ -3,6 +3,7 @@
 import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
+import { UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
 
 const resolvers = {
@@ -100,12 +101,10 @@ const resolvers = {
         console.log('Gozdecki: guestUser')
       }
       const currentLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
-      console.log('JMOZGAWA: currentLessonPosition', currentLessonPosition)
       const lesson = await context.Lessons.getCourseLessonByPosition(args.courseId, currentLessonPosition)
       if (!lesson) {
         return {}
       }
-      console.log('JMOZGAWA: lesson', lesson)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
       flashcardIds.splice(1)
@@ -144,7 +143,7 @@ const resolvers = {
           throw new Error('User not found')
         }
 
-        const isMatch = await user.comparePassword(args.password)
+        const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
