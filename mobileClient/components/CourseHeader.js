@@ -31,7 +31,7 @@ class CourseHeader extends React.Component {
       <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={this.props.onLogoPress}>
+            <TouchableOpacity onPress={this.props.closeCourse}>
               <SvgUri width='100' height='49' source={require('../images/logo.svg')}/>
             </TouchableOpacity>
             <View style={styles.headerBorder}>
@@ -47,7 +47,7 @@ class CourseHeader extends React.Component {
 
         {this.props.children}
 
-        {this.state.active && <MainMenu topMargin={this.props.height}/>}
+        {this.state.active && <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
       </View>
     )
   }
