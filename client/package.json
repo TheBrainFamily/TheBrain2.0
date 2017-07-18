@@ -15,6 +15,7 @@
     "rc-progress": "^2.0.6",
     "react": "^15.5.3",
     "react-apollo": "^1.0.0",
+    "react-dd-menu": "^2.0.1",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
     "react-redux": "^5.0.4",
