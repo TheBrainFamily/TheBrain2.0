@@ -534,7 +534,6 @@ describe('mutation.processEvaluation', () => {
       evaluation: 2.5
     }
 
-    context.UserDetails = new UserDetailsRepository()
     const itemsWithFlashcard = await resolvers.Mutation.processEvaluation(undefined, args, context)
     const itemWithFlashcard = _.find(itemsWithFlashcard, (doc) => _.isEqual(doc.item._id, args.itemId))
 
