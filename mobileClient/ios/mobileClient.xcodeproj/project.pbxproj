@@ -52,6 +52,10 @@
 		D4A4F258C53843B7ADB7AE85 /* Kalam-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C97F726C6DFA4F83B793A6AE /* Kalam-Regular.ttf */; };
 		9A27A00B9A5D442FA7236718 /* YTPlayerView-iframe-player.html in Resources */ = {isa = PBXBuildFile; fileRef = 3EE0827C208B44DA871C4956 /* YTPlayerView-iframe-player.html */; };
 		EA351DBC01F942CE8259B39B /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C65D7DB4DC244DFB53E9AF4 /* libRCTOrientation.a */; };
+		5359D8AA15A545169FE79664 /* Exo2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 943B53FF2E8B4A1B875C5C8D /* Exo2.ttf */; };
+		E58EE51C6E5F4C7C80216BB8 /* Kalam.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4BE546021864BC5A019D71A /* Kalam.ttf */; };
+		14E9A345F1C241D4A90F95F1 /* Exo2_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0ED0FC93449A45118A684AC2 /* Exo2_Bold.ttf */; };
+		14EAF05586764CA5B10AC9D8 /* Kalam_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 782B033F5FB54C64B04AB043 /* Kalam_Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -320,6 +324,10 @@
 		3EE0827C208B44DA871C4956 /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; name = "YTPlayerView-iframe-player.html"; path = "../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A2E90BF8F4D14F869ED95046 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; name = "RCTOrientation.xcodeproj"; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		9C65D7DB4DC244DFB53E9AF4 /* libRCTOrientation.a */ = {isa = PBXFileReference; name = "libRCTOrientation.a"; path = "libRCTOrientation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		943B53FF2E8B4A1B875C5C8D /* Exo2.ttf */ = {isa = PBXFileReference; name = "Exo2.ttf"; path = "../fonts/Exo2.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E4BE546021864BC5A019D71A /* Kalam.ttf */ = {isa = PBXFileReference; name = "Kalam.ttf"; path = "../fonts/Kalam.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0ED0FC93449A45118A684AC2 /* Exo2_Bold.ttf */ = {isa = PBXFileReference; name = "Exo2_Bold.ttf"; path = "../fonts/Exo2_Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		782B033F5FB54C64B04AB043 /* Kalam_Bold.ttf */ = {isa = PBXFileReference; name = "Kalam_Bold.ttf"; path = "../fonts/Kalam_Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -543,6 +551,10 @@
 				3E5DFE973A5C457FA9075FF6 /* Kalam-Light.ttf */,
 				C97F726C6DFA4F83B793A6AE /* Kalam-Regular.ttf */,
 				3EE0827C208B44DA871C4956 /* YTPlayerView-iframe-player.html */,
+				943B53FF2E8B4A1B875C5C8D /* Exo2.ttf */,
+				E4BE546021864BC5A019D71A /* Kalam.ttf */,
+				0ED0FC93449A45118A684AC2 /* Exo2_Bold.ttf */,
+				782B033F5FB54C64B04AB043 /* Kalam_Bold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1036,6 +1048,10 @@
 				995C630DE8FA4752845EFF0E /* Kalam-Light.ttf in Resources */,
 				D4A4F258C53843B7ADB7AE85 /* Kalam-Regular.ttf in Resources */,
 				9A27A00B9A5D442FA7236718 /* YTPlayerView-iframe-player.html in Resources */,
+				5359D8AA15A545169FE79664 /* Exo2.ttf in Resources */,
+				E58EE51C6E5F4C7C80216BB8 /* Kalam.ttf in Resources */,
+				14E9A345F1C241D4A90F95F1 /* Exo2_Bold.ttf in Resources */,
+				14EAF05586764CA5B10AC9D8 /* Kalam_Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

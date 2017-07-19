@@ -206,8 +206,7 @@ const style = StyleSheet.create({
     marginTop: 15,
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: '500',
-    fontFamily: 'Exo2-Regular'
+    fontFamily: 'Exo2-Bold'
   },
   smallCircle: {
     position: 'absolute',

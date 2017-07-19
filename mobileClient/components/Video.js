@@ -9,9 +9,9 @@ export default class Video extends React.Component {
       <YouTube
         ref='youtubePlayer'
         videoId={this.props.videoId}
-        play={false}
         hidden={false}
         fullscreen
+        play
         loop={false}
         showinfo={false}
         modestbranding={false}

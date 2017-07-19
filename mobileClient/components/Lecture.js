@@ -1,12 +1,12 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View, Platform } from 'react-native'
+import { Animated, Easing, Text, View, Platform, TouchableHighlight } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation'
 
 import Loading from './Loading'
 import Video from './Video'
@@ -20,7 +20,8 @@ import currentLessonQuery from '../../client/shared/graphql/queries/currentLesso
 
 class Lecture extends React.Component {
   state = {
-    showLecture: false
+    showLecture: false,
+    playVideo: false
   }
 
   componentWillMount () {
@@ -32,7 +33,7 @@ class Lecture extends React.Component {
       toValue: 1,
       duration: 500,
       easing: Easing.elastic(1)
-    }).start(() => this.setState({showLecture: true}))
+    }).start(() => this.setState({ showLecture: true }))
   }
 
   onChangeState = (event) => {
@@ -41,7 +42,7 @@ class Lecture extends React.Component {
       if (Platform.OS === 'android') {
         Orientation.lockToPortrait()
       }
-      this.props.lessonWatchedMutation({courseId: this.props.selectedCourse._id}).then(() => {
+      this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
         let url = '/questions'
         if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
           url = '/wellDone'
@@ -49,6 +50,10 @@ class Lecture extends React.Component {
         this.props.history.push(url)
       })
     }
+  }
+
+  playVideo = () => {
+    this.setState({ playVideo: true })
   }
 
   render () {
@@ -59,16 +64,17 @@ class Lecture extends React.Component {
     if (!this.props.data.Lesson) {
       return (
         <View>
-          <Text style={[styles.textDefault, {marginTop: 35}]}>Congratulations!</Text>
-          <Text style={[styles.menuButtonText, {paddingHorizontal: 50}]}>You have watched all available lectures in this
+          <Text style={[styles.textDefault, { marginTop: 35 }]}>Congratulations!</Text>
+          <Text style={[styles.menuButtonText, { paddingHorizontal: 50 }]}>You have watched all available lectures in
+            this
             course.</Text>
         </View>
       )
     }
 
     return (
-      <View style={{width: '100%'}}>
-        <Animated.View style={{transform: [{scale: this.infoScale}]}}>
+      <View style={{ width: '100%' }}>
+        <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
           <Text
             style={[styles.textDefault, {
               margin: 20,
@@ -81,12 +87,18 @@ class Lecture extends React.Component {
 
         {this.state.showLecture &&
         <Animatable.View animation='bounceIn'>
-          {this.props.data.loading
-            ? <View style={styles.videoPlaceholder}>
-              <Loading />
+          <TouchableHighlight onPress={this.playVideo}
+                              activeOpacity={1}
+                              underlayColor='#fff'>
+            <View>
+              {!this.state.playVideo || this.props.data.loading
+                ? <View style={styles.videoPlaceholder}>
+                  <Loading />
+                </View>
+                : <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
+              }
             </View>
-            : <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
-          }
+          </TouchableHighlight>
         </Animatable.View>
         }
       </View>
@@ -107,7 +119,7 @@ export default compose(
     options: (ownProps) => {
       const courseId = ownProps.selectedCourse._id
       return ({
-        variables: {courseId},
+        variables: { courseId },
         fetchPolicy: 'network-only'
       })
     }
