@@ -56,8 +56,9 @@ class Questions extends React.Component {
   }
 
   getHeaderHeight = () => {
+    console.log('PINGWIN: appStyle.header.offset', appStyle.header.offset)
     return appStyle.header.offset +
-      appStyle.header.height + 22.5
+      appStyle.header.height + 22.5 // + 24
   }
 
   getFlashcardHeight = () => {
