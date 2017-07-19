@@ -443,8 +443,8 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   let context
   beforeAll(async () => {
     // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await mongoose.connection.db.collection('lessons').insert({ position: 2, courseId: 'testCourseId' })
-    await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourseId' })
+    await mongoose.connection.db.collection('lessons').insert({ position: 2, courseId: 'testCourseId', flashcardIds: [] })
+    await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourseId', flashcardIds: [] })
     await mongoose.connection.db.collection('courses').insert({ _id: 'testCourseId' })
 
     context = {
