@@ -50,10 +50,9 @@ class ItemsRepository extends MongoRepository {
       {
         nextRepetition: 1
       }).toArray()
-    const itemsByDay = _.countBy(items, (item) => {
-      const date = item.nextRepetition - item.nextRepetition % (24 * 60 * 60)
-      return date
-    })
+    const itemsByDay = _.countBy(items, (item) =>
+      item.nextRepetition - item.nextRepetition % (24 * 60 * 60)
+    )
 
     return _.map(itemsByDay, (count, ts) => ({
       ts: parseInt(ts), count

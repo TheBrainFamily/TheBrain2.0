@@ -32,11 +32,12 @@ class Home extends React.Component {
       isCourseSelected,
       isExitAnimationFinished: isCourseSelected,
       courseSelectorIsDisabled: false,
-  }
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses) {
+    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
+      nextProps.courses.loading) {
       return
     }
 
