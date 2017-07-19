@@ -25,9 +25,9 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='/logout' onClick={this.logout}>Logout</Link>
+      return <Link to='/logout' onClick={this.logout}>LOGOUT</Link>
     }
-    return <Link to='/login'>Login</Link>
+    return <Link to='/login'>LOGIN</Link>
   }
 }
 
@@ -75,8 +75,27 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                {!this.props.data.loading && <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />}
-                | <a onClick={this.closeCourse()}>Close Course</a>
+                <div className={'profile-container'}>&nbsp;</div>
+                <div className={'menu-separator'}/>
+                {!this.props.data.loading &&
+                  <span>
+                    <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />
+                    <div className={'menu-separator menu-separator-visible'}/>
+                  </span>
+                }
+                <a>LECTURES LIST</a>
+                <div className={'menu-separator menu-separator-visible'}/>
+                <a>REVIEWS CALLENDAR</a>
+                <div className={'menu-separator menu-separator-visible'}/>
+                <a onClick={this.closeCourse()}>CHANGE THE COURSE</a>
+                <div className={'menu-separator menu-separator-visible'}/>
+                <a>ACHIEVEMENTS LIST</a>
+                <div className={'menu-separator menu-separator-visible'}/>
+                <a>PROFILE</a>
+                <div className={'menu-separator menu-separator-visible'}/>
+                <a>CONTACT</a>
+                <div className={'menu-separator'}/>
+                <div className={'menu-separator'}/>
               </Hamburger>
             </div>
           </div>
