@@ -300,6 +300,19 @@ SESSION SUMMARY
 CONTACT
 ***********************/
 
+.info-text {
+    font-size: 20px;
+}
+
+.info-text a {
+    color: #8ee4ff;
+    text-decoration: none;
+}
+
+.info-text a:hover {
+    text-decoration: underline;
+}
+
 .contact {
     border-top: 1px solid black;
     max-width: 100%;
