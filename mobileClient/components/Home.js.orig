@@ -87,11 +87,17 @@ class Home extends React.Component {
     }
   }
 
+<<<<<<< Updated upstream
   disableCourseSelector = () => {
     this.setState({courseSelectorIsDisabled: true})
   }
   enableCourseSelector = () => {
     this.setState({courseSelectorIsDisabled: false})
+=======
+    // debugger
+
+    this.animateCourseSelector(course._id)
+>>>>>>> Stashed changes
   }
 
   closeCourse = () => {
@@ -207,7 +213,7 @@ const style = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '500',
-    fontFamily: 'Exo2-Regular'
+    fontFamily: 'exo2_regular'
   },
   smallCircle: {
     position: 'absolute',

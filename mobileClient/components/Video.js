@@ -18,6 +18,7 @@ export default class Video extends React.Component {
         rel={false}
         onChangeState={this.props.onChangeState}
         style={{ alignSelf: 'stretch', height: this.props.height, backgroundColor: '#000' }}
+        apiKey="AIzaSyAp-SF0w9lATiBVdEfVPYikwyBC3s7gWps"
       />
     )
   }

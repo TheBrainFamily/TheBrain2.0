@@ -46,7 +46,7 @@ class Header extends React.Component {
     }
 
     return (
-      <Animated.View style={{ zIndex: 1000, top: this.state.topPosition }}>
+      <Animated.View style={{ top: this.state.topPosition }}>
         <View style={headerStyle}>
           <TouchableOpacity onPress={this.goHome}>
             <SvgUri
