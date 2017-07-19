@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View } from 'react-native'
+import { Animated, Easing, Text, View, Platform } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
+import Orientation from 'react-native-orientation';
 
 import Loading from './Loading'
 import Video from './Video'
@@ -37,6 +38,9 @@ class Lecture extends React.Component {
   onChangeState = (event) => {
     console.log('Gozdecki: event', event)
     if (event.state === 'ended') {
+      if (Platform.OS === 'android') {
+        Orientation.lockToPortrait()
+      }
       this.props.lessonWatchedMutation({courseId: this.props.selectedCourse._id}).then(() => {
         let url = '/questions'
         if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
