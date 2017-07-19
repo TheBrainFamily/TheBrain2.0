@@ -45,13 +45,13 @@ class Home extends React.Component {
   animateCourseSelectorsFadeOut = (selectedCourseId) => {
     this.refs.courseSelectorTitle.fadeOut(500)
 
-    this.getOtherCoursesIds(selectedCourseId).forEach((courseId) => {
-      this.refs[`${courseId}courseSelector`].fadeOut(500)
-    })
+    // this.getOtherCoursesIds(selectedCourseId).forEach((courseId) => {
+    //   this.refs[`${courseId}courseSelector`].fadeOut(500)
+    // })
 
-    this.getCoursesIds().forEach((courseId) => {
-      this.refs[`${courseId}courseSelectorText`].fadeOut(500)
-    })
+    // this.getCoursesIds().forEach((courseId) => {
+    //   this.refs[`${courseId}courseSelectorText`].fadeOut(500)
+    // })
 
     InteractionManager.runAfterInteractions(() => {
       this.setState({isExitAnimationFinished: true})
@@ -72,7 +72,7 @@ class Home extends React.Component {
       const elementWidthChangeAfterScaling = (width - newSizeX) / 2
       const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
 
-      this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
+      // this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
       this.animateCourseSelectorsFadeOut(selectedCourseId)
     })
   }
@@ -220,7 +220,7 @@ const style = StyleSheet.create({
     borderRadius: 10
   },
   courseHeader: {
-    zIndex: 500,
+    // zIndex: 500,
     margin: 0,
     height: appStyle.header.height,
     width: '100%',

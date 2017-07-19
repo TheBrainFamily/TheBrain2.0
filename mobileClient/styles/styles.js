@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   topContainer: {
     height: appStyle.header.offset,
     backgroundColor: appStyle.colors.bgAlt,
-    zIndex: 999
+    // zIndex: 999
   },
   textDefault: {
     fontSize: 18,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   baseMarkerStyle: {
     position: 'absolute',
     opacity: 1,
-    zIndex: 100,
+    // zIndex: 100,
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     transform: [{scale: 0}],
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   summaryContainer: {
     height: 25,
     backgroundColor: 'white',
-    zIndex: 50,
+    // zIndex: 50,
     flexDirection: 'row',
     margin: 0,
     padding: 5
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFF',
-    zIndex: 50,
+    // zIndex: 50,
     margin: 0,
     paddingTop: 40,
     paddingBottom: 27,
@@ -393,17 +393,23 @@ const styles = StyleSheet.create({
   },
   draggableContainer: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -35 }, { translateY: -35 }]
+    // top: '50%',
+    // left: '50%',
+    // transform: [{ translateX: -35 }, { translateY: -35 }],
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'red',
+    // elevation: 100,
+    width: "100%",
+    height: "100%",
   },
   answerSwipeBall: {
-    position: 'absolute',
+    // position: 'absolute',
     alignSelf: 'center',
     backgroundColor: '#662d91',
     width: 70,
     height: 70,
-    borderRadius: 35
+    borderRadius: 35,
   },
   answerEvaluatorOverlay: {
     position: 'absolute',

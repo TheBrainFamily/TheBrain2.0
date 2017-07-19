@@ -6,7 +6,7 @@ import reducers from './reducers'
 import devTools from 'remote-redux-devtools'
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:8080/graphql',
+  uri: 'http://192.168.7.241:8080/graphql',
   opts: {
     credentials: 'include'
   }

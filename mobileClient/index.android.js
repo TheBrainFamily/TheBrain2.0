@@ -1,53 +1,63 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+// @flow
 
-import React, { Component } from 'react'
+import React, {Component} from 'react'
+import {ApolloProvider} from 'react-apollo'
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
   View
 } from 'react-native'
+import {NativeRouter, Route} from 'react-router-native'
 
-export default class mobileClient extends Component {
+import Page from './components/Page'
+import Home from './components/Home'
+import Intro from './components/Intro'
+import Congratulations from './components/Congratulations'
+import WellDone from './components/WellDone'
+import Course from './components/Course'
+import Lecture from './components/Lecture'
+import Questions from './components/Questions'
+import styles from './styles/styles'
+// import Footer from './components/Footer';
+import Login from './components/Login'
+import Lectures from './components/Lectures'
+import Calendar from './components/Calendar'
+import Achievements from './components/Achievements'
+import Profile from './components/Profile'
+import Contact from './components/Contact'
+import Signup from './components/Signup'
+import store, { client } from './store'
+
+export default class App extends Component {
   render () {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <ApolloProvider client={client} store={store}>
+        <NativeRouter>
+          <View style={styles.mainPage}>
+            <View style={styles.topContainer} />
+            <Page>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/intro' component={Intro} />
+              <Route exact path='/congratulations' component={Congratulations} />
+              <Route exact path='/course' component={Course} />
+              <Route exact path='/lecture' component={Lecture} />
+              <Route exact path='/wellDone' component={WellDone} />
+              <Route exact path='/questions' component={Questions} />
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/lectures' component={Lectures} />
+              <Route exact path='/calendar' component={Calendar} />
+              <Route exact path='/achievements' component={Achievements} />
+              <Route exact path='/profile' component={Profile} />
+              <Route exact path='/contact' component={Contact} />
+              <Route exact path='/signup' component={Signup} />
+            </Page>
+          </View>
+        </NativeRouter>
+      </ApolloProvider>
     )
   }
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
-  }
-})
+// { <Route exact key="lecture" path="/lecture" component={Lecture}/>
+// }
 
-AppRegistry.registerComponent('mobileClient', () => mobileClient)
+AppRegistry.registerComponent('mobileClient', () => App)
