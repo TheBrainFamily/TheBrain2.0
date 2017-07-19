@@ -5,7 +5,6 @@ import Separator from './Separator'
 
 const PageTitle = (props) => (
   <View style={{
-    paddingHorizontal: '5%',
     paddingVertical: 10
   }}>
     <Text style={style}>
@@ -19,7 +18,7 @@ const style = {
   color: '#999',
   fontSize: 16,
   fontFamily: 'Exo2-Bold',
-  paddingHorizontal: 20,
+  paddingHorizontal: 30,
   paddingVertical: 5
 }
 
