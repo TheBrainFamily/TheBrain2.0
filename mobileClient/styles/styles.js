@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     color: appStyle.colors.text,
-    fontStyle: 'italic',
     fontFamily: 'Kalam-Bold'
   },
   mainPage: {
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
   videoPlaceholder: {
     backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
-    height: '70%',
+    height: '85%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
@@ -212,7 +211,6 @@ const styles = StyleSheet.create({
   primaryText: {
     color: 'black',
     backgroundColor: 'white',
-    fontStyle: 'italic',
     fontFamily: 'Kalam-Regular',
     fontSize: 16,
     padding: 10,
@@ -249,8 +247,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     padding: 15,
     textAlign: 'center',
-    fontWeight: '600',
-    fontFamily: 'Exo2-Regular',
+    fontFamily: 'Exo2-Bold',
     borderRadius: 23,
     overflow: 'hidden'
   },
