@@ -180,11 +180,29 @@ FLASHCARDS
 }
 
 .answer-button {
-    margin-left: 10px;
-    margin-right: 10px;
+     margin-left: 10px;
+     margin-right: 10px;
+     cursor: pointer;
+     width: 120px;
+     height: 120px;
+ }
+
+.skip-tutorial-button {
+    background-image: url('img/button-skip-tutorial.png');
+    background-repeat: repeat-x;
+    background-position: top;
+    background-size: cover;
+    margin: auto;
+    margin-top: 20px;
     cursor: pointer;
-    width: 120px;
-    height: 120px;
+    width: 400px;
+    height: 70px;
+    vertical-align: middle;
+    line-height: 70px;
+
+}
+.skip-tutorial-button:hover {
+    color: #eaeaea;
 }
 
 .scrollable-text {
