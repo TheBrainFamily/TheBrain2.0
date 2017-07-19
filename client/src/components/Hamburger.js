@@ -1,5 +1,6 @@
 import React from 'react'
 import DropdownMenu from 'react-dd-menu'
+import hamburger from '../img/hamburger-icon.png'
 
 export default class Hamburger extends React.Component {
   constructor (props) {
@@ -25,8 +26,14 @@ export default class Hamburger extends React.Component {
     let menuOptions = {
       isOpen: this.state.isMenuOpen,
       close: this.close.bind(this),
-      toggle: <a type="button" onClick={this.toggle.bind(this)}>Hamburger</a>,
+      toggle: <img className={'menu-icon'} src={hamburger} alt={'MENU'} onClick={this.toggle.bind(this)}/>,
+      animate: true,
+      enterTimeout: 0,
+      leaveTimeout: 0,
+      animAlign: 'right',
+      size: 'lg',
       align: 'right',
+      className: 'dropdown',
     }
     return (
       <DropdownMenu {...menuOptions}>
