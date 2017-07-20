@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFF',
-    // zIndex: 50,
+    elevation: 5,
     margin: 0,
     paddingTop: 40,
     paddingBottom: 27,
@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
   headerLogo: {
     padding: 0,
     marginLeft: -10,
-    marginTop: -25,
     marginBottom: 0,
     width: 250,
     height: 65,
