@@ -413,3 +413,71 @@ CONTACT
 .email1 {
     margin: 0 10px 0 40px;
 }
+
+.progress-bar {
+    height: 50px;
+    vertical-align: middle;
+    margin: auto;
+}
+
+.progress-bar div {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.progress-bar-done {
+    vertical-align: middle;
+    background-color: white;
+}
+
+.progress-bar-todo {
+    vertical-align: middle;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.progress-bar-left-label {
+    line-height: 50px;
+    height: 50px;
+    vertical-align: middle;
+    padding-right: 15px;
+    text-align: right;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.progress-bar-right-label {
+    line-height: 50px;
+    height: 50px;
+    vertical-align: middle;
+    padding-left: 15px;
+    text-align: left;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.progress-bar-right-label .course-icon {
+    margin: 0;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.progress-bar-indicators {
+    position: relative;
+    height: 25px;
+}
+
+.progress-bar-indicators div {
+    height: 2px;
+}
+
+.progress-bar-dot {
+    top: 5px;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+}
