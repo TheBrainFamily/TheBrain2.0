@@ -9,6 +9,7 @@ import Course from './Course'
 import WellDone from './WellDone'
 import Lecture from './Lecture'
 import Questions from './Questions'
+import Contact from './Contact'
 import Login from './Login'
 import Signup from './Signup'
 import Header from './Header'
@@ -47,6 +48,7 @@ class MainContainer extends React.Component {
           <Route exact key='Home' path='/' component={Home}/>
           <Route key='Course' path='/course/:courseId' component={Course}/>
           <Route key='Lecture' path='/lecture/:courseId' component={Lecture}/>
+          <Route exact key='contact' path='/contact' component={Contact}/>
           <Route exact key='wellDone' path='/wellDone' component={WellDone}/>
           <Route exact key='questions' path='/questions' component={Questions}/>
           <Route exact key='login' path='/login' component={Login}/>
