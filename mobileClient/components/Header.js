@@ -48,11 +48,11 @@ class Header extends React.Component {
     return (
       <Animated.View style={{ top: this.state.topPosition }}>
         <View style={headerStyle}>
-          <TouchableOpacity onPress={this.goHome}>
+          <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
             <SvgUri
               style={styles.headerLogo}
-              width='250'
-              height='65'
+              width='280'
+              height='70'
               source={logoBig}
             />
           </TouchableOpacity>
@@ -62,7 +62,7 @@ class Header extends React.Component {
             color='#62c46c'
             type='spinCross'
             onPress={this.toggleMenu}
-            style={{ marginTop: 30, flex: 1 }}
+            style={{ flex: 1 }}
           />
         </View>
 
