@@ -10,13 +10,18 @@ import { push } from 'react-router-redux'
 import Flashcard from './Flashcard'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+import ProgressBar from './ProgressBar'
 
 class Questions extends React.Component {
   componentWillReceiveProps (nextProps) {
+
+    if (!nextProps.selectedCourse) {
+      nextProps.dispatch(push('/'))
+    }
+
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
     }
-
     const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
 
     if (itemsWithFlashcard.length > 0) {
@@ -35,17 +40,25 @@ class Questions extends React.Component {
       return <div>Loading...</div>
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const sessionCount = this.props.sessionCount.SessionCount
 
-      if (!itemsWithFlashcard.length > 0) {
+      if (itemsWithFlashcard.length > 0) {
+        const flashcard = itemsWithFlashcard[0].flashcard
+        const evalItem = itemsWithFlashcard[0].item
+
+        const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
+        const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
+        const progress = done / total
+
+        return (
+          <span>
+          <ProgressBar progress={progress} label={'TODAY\'S PROGRESS'} width={1024}
+                       category={this.props.selectedCourse.name}/>
+          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
+        </span>)
+      } else {
         return <div />
       }
-
-      const flashcard = itemsWithFlashcard[0].flashcard
-      const evalItem = itemsWithFlashcard[0].item
-
-      return (
-        <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id} />
-      )
     }
   }
 }
@@ -67,10 +80,16 @@ const currentItemsQuery = gql`
     }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
-  connect(),
   withRouter,
-  graphql(currentUserQuery, { name: 'currentUser' }),
+  connect(mapStateToProps),
+  graphql(currentUserQuery, {name: 'currentUser'}),
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
