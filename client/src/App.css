@@ -367,8 +367,6 @@ SESSION SUMMARY
     padding: 20px 20px;
 }
 
-
-
 /***********************
 CONTACT
 ***********************/
@@ -399,4 +397,40 @@ CONTACT
 
 .email1 {
     margin: 0 10px 0 40px;
+}
+
+/***********************
+FORM
+***********************/
+
+.form label {
+    display: block;
+    margin-top: 2rem;
+    font-size: 2rem;
+}
+
+.form input {
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+
+.form [type='submit'] {
+    margin-top: 3rem;
+    background: #62c46c;
+    color: #fff;
+    padding: 1rem 6rem;
+    border-radius: 3rem;
+    border: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form [type='submit']:hover {
+    background: #6dcd76;
+}
+
+.form [type='submit']:active {
+    outline: 0;
+    background: #50a050;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
 }
