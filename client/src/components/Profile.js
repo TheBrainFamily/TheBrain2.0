@@ -17,11 +17,17 @@ class Profile extends React.Component {
     this.setState({ error: '' })
 
     console.log('* LOG * submit', e)
+  }
+
+  comparePasswords = () => {
+    console.log('* LOG * comparePasswords')
+    if (this.refs.newPassword.value.length !== this.refs.newPasswordConfirmation.value.length) {
+      return this.setState({ error: '' })
+    }
 
     if (this.refs.newPassword.value !== this.refs.newPasswordConfirmation.value) {
       return this.setState({ error: 'Passwords don\'t match' })
     }
-    console.log('* LOG * tu był wilk')
   }
 
   render () {
@@ -41,7 +47,7 @@ class Profile extends React.Component {
           </div>
           <div>
             <label>Confirm New Password:</label>
-            <input ref='newPasswordConfirmation' type='password' name='newPasswordConfirmation' />
+            <input ref='newPasswordConfirmation' type='password' name='newPasswordConfirmation' onChange={this.comparePasswords} />
           </div>
           <div>
             <input type='submit' value='Change Password' />
