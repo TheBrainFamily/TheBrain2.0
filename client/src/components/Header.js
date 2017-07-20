@@ -91,7 +91,7 @@ class AppHeader extends React.Component {
                 <div className={'menu-separator menu-separator-visible'}/>
                 <a>ACHIEVEMENTS LIST</a>
                 <div className={'menu-separator menu-separator-visible'}/>
-                <a>PROFILE</a>
+                <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
                 <div className={'menu-separator menu-separator-visible'}/>
                 <a>CONTACT</a>
                 <div className={'menu-separator'}/>
