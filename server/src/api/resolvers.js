@@ -54,7 +54,7 @@ const resolvers = {
     Item (root: ?string, args: { _id: string }, context: Object) {
       return context.Items.getItemById(args._id, context.user._id)
     },
-    ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
+    async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
       } else {

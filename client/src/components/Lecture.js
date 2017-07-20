@@ -13,6 +13,7 @@ import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatc
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
+import CourseProgressBar from './CourseProgressBar'
 
 class Lecture extends React.Component {
   render () {
@@ -35,11 +36,12 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
-    const selectedCourse = this.props.selectedCourse || this.props.match.params.courseId
+    const selectedCourse = this.props.selectedCourse._id || this.props.match.params.courseId
 
     return (
       <FlexibleContentWrapper>
         <div id='video'>
+          <CourseProgressBar/>
           <h2>Watch the video<br/>
             and wait for the questions.</h2>
           <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse}/>
@@ -94,7 +96,7 @@ export default compose(
   connect(mapStateToProps),
   graphql(currentLessonQuery, {
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse || ownProps.match.params.courseId
+      const selectedCourse = ownProps.selectedCourse._id || ownProps.match.params.courseId
       return ({
         variables: {courseId: selectedCourse},
         fetchPolicy: 'network-only'
@@ -103,7 +105,7 @@ export default compose(
   }),
   graphql(courseById, {
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse || ownProps.match.params.courseId
+      const selectedCourse = ownProps.selectedCourse._id || ownProps.match.params.courseId
       return ({
         variables: {_id: selectedCourse},
         fetchPolicy: 'network-only'
