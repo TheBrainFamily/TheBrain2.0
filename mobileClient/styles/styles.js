@@ -28,6 +28,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  videoPlaceholderText: {
+    color: 'white'
+  },
   wellDonePage: {
     backgroundColor: '#662d91',
     height: '100%'

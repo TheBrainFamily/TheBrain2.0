@@ -91,11 +91,13 @@ class Lecture extends React.Component {
                               activeOpacity={1}
                               underlayColor='#fff'>
             <View>
-              {!this.state.playVideo || this.props.data.loading
-                ? <View style={styles.videoPlaceholder}>
+              {this.state.playVideo && !this.props.data.loading
+                ? <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
+                : this.props.data.loading ? <View style={styles.videoPlaceholder}>
                   <Loading />
+                </View> : <View style={styles.videoPlaceholder}>
+                  <Text style={[styles.textDefault, styles.videoPlaceholderText]}>Tap to play video</Text>
                 </View>
-                : <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
               }
             </View>
           </TouchableHighlight>
