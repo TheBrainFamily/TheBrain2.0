@@ -141,12 +141,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#FFF',
     elevation: 5,
     margin: 0,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingBottom: 27,
-    paddingHorizontal: 30
+    paddingHorizontal: 20
   },
   headerWithShadow: {
     shadowColor: '#000',
@@ -164,13 +165,12 @@ const styles = StyleSheet.create({
   },
   headerLogo: {
     padding: 0,
-    marginLeft: -10,
+    marginLeft: -25,
+    marginTop: 10,
     marginBottom: 0,
-    width: 250,
-    height: 65,
     flex: 1,
     transform: [
-      { scale: 0.83 }
+      { scale: 1.2 }
     ]
   },
   headerBorder: {
