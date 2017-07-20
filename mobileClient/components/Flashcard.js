@@ -14,7 +14,7 @@ import { DIRECTIONS } from '../helpers/SwipeHelpers'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 import {
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
   Animated,
@@ -47,7 +47,7 @@ class Flashcard extends React.Component {
         height: windowDimensions.height
       },
       dynamicStyles: {
-        content: {height: this.props.getFlashcardHeight()}
+        content: { height: this.props.getFlashcardHeight() }
       },
       swipeDirection: DIRECTIONS.left,
       dragLen: 0
@@ -59,7 +59,7 @@ class Flashcard extends React.Component {
     })
   }
 
-  interpolateWrapper = ({inputRange, outputRange}) => {
+  interpolateWrapper = ({ inputRange, outputRange }) => {
     return this.animatedValue.interpolate({
       inputRange,
       outputRange
@@ -92,7 +92,7 @@ class Flashcard extends React.Component {
     }
     this.setState({
       dynamicStyles: {
-        content: {height: this.props.getFlashcardHeight()}
+        content: { height: this.props.getFlashcardHeight() }
       }
     })
   }
@@ -111,14 +111,14 @@ class Flashcard extends React.Component {
   }
 
   onLayout = () => {
-    const {width, height} = Dimensions.get('window')
+    const { width, height } = Dimensions.get('window')
     this.setState({
       windowDimensions: {
         width,
         height
       },
       dynamicStyles: {
-        content: {height: this.props.getFlashcardHeight()}
+        content: { height: this.props.getFlashcardHeight() }
       }
     })
   }
@@ -126,7 +126,7 @@ class Flashcard extends React.Component {
   render = () => {
     const frontAnimatedStyle = {
       transform: [
-        {rotateY: this.frontInterpolate}
+        { rotateY: this.frontInterpolate }
       ]
     }
 
@@ -136,18 +136,22 @@ class Flashcard extends React.Component {
       <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
           <View style={styles.flipCardContainer}>
-            <TouchableOpacity onPress={() => this.flipCard()}>
-              <Card dynamicStyles={this.state.dynamicStyles}
-                question={this.props.question} answer={this.props.answer} visibleAnswer={this.props.flashcard.visibleAnswer} />
-              <View style={{width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1}}>
-                <View style={{
-                  width: (this.state.windowDimensions.width * 0.9) - 200,
-                  height: '100%',
-                  backgroundColor: 'white'
-                }}><Text /></View>
-                <SvgUri width='200' height='22.5' source={require('../images/pageCorner.svg')} />
+            <TouchableWithoutFeedback onPress={() => this.flipCard()}>
+              <View>
+                <Card dynamicStyles={this.state.dynamicStyles}
+                      question={this.props.question} answer={this.props.answer}
+                      visibleAnswer={this.props.flashcard.visibleAnswer}/>
+                <View
+                  style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
+                  <View style={{
+                    width: (this.state.windowDimensions.width * 0.9) - 200,
+                    height: '100%',
+                    backgroundColor: 'white'
+                  }}><Text /></View>
+                  <SvgUri width='200' height='22.5' source={require('../images/pageCorner.svg')}/>
+                </View>
               </View>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
           </View>
         </Animated.View>
       </Animatable.View>
@@ -173,14 +177,14 @@ const submitEval = gql`
 `
 
 export default graphql(submitEval, {
-  props: ({ownProps, mutate}) => ({
-    submit: ({itemId, evaluation}) => mutate({
+  props: ({ ownProps, mutate }) => ({
+    submit: ({ itemId, evaluation }) => mutate({
       variables: {
         itemId,
         evaluation
       },
       updateQueries: {
-        CurrentItems: (prev, {mutationResult}) => {
+        CurrentItems: (prev, { mutationResult }) => {
           const updateResults = update(prev, {
             ItemsWithFlashcard: {
               $set: mutationResult.data.processEvaluation
