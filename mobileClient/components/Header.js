@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Animated, TouchableOpacity, View } from 'react-native'
+import { Animated, TouchableOpacity, View, Platform} from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 
 import Hamburger from 'react-native-hamburger'
@@ -44,9 +44,10 @@ class Header extends React.Component {
         duration: 1000
       }).start()
     }
+    const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
 
     return (
-      <Animated.View style={{ top: this.state.topPosition }}>
+      <Animated.View style={[{top: this.state.topPosition }, dynamicHeaderStyle]}>
         <View style={headerStyle}>
           <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
             <SvgUri
