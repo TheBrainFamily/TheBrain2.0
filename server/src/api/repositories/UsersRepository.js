@@ -58,6 +58,10 @@ export class UsersRepository extends MongoRepository {
     return this.userCollection.findOne({username})
   }
 
+  async getById (userId: string) {
+    return this.userCollection.findOne({_id: new ObjectId(userId)})
+  }
+
   async findByFacebookId (facebookId: string) {
     return this.userCollection.findOne({facebookId})
   }
