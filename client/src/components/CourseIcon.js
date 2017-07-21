@@ -46,6 +46,7 @@ export default class CourseIcon extends React.Component {
                  alt={this.props.name}
                  src={dotsLayer}
           />}
+        {this.props.children && this.props.children}
       </div>
     )
   }
