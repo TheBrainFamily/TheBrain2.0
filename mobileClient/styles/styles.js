@@ -254,11 +254,18 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     overflow: 'hidden'
   },
-  progressBarTrack: {
+  progressBarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'relative',
-    width: '85%',
+    width: '90%',
+    height:15,
+    elevation: 1,
+  },
+  progressBarTrack: {
+    width: '95%',
+    elevation: 2,
     height: 3,
-    marginVertical: 15,
     borderRadius: 1.5,
     backgroundColor: '#0007'
   },
@@ -269,8 +276,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   progressBarProgressCircle: {
+    elevation: 3,
     position: 'absolute',
-    transform: [{ translateX: -7.5 }, { translateY: -6 }],
     width: 15,
     height: 15,
     borderRadius: 7.5,
