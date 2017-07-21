@@ -29,6 +29,9 @@ const resolvers = {
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
+    Reviews (root: ?string, args: ?Object, context: Object) {
+      return context.Items.getReviews(context.user._id)
+    },
     Course (root: ?string, args: { _id: string }, context: Object) {
       return context.Courses.getCourse(args._id)
     },

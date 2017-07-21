@@ -9,6 +9,7 @@ import MainMenu from './MainMenu'
 
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 
 class Header extends React.Component {
   constructor (props) {
@@ -28,7 +29,7 @@ class Header extends React.Component {
   }
 
   render () {
-    const headerStyle = [styles.header]
+    const headerStyle = [styles.header, { height: appStyle.header.height }]
     if (this.props.withShadow) {
       headerStyle.push(styles.headerWithShadow)
     }
@@ -62,7 +63,6 @@ class Header extends React.Component {
             color='#62c46c'
             type='spinCross'
             onPress={this.toggleMenu}
-            style={{ marginTop: 30, flex: 1 }}
           />
         </View>
 
