@@ -12,6 +12,7 @@ import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import Hamburger from './Hamburger'
+import MenuProfile from './MenuProfile'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
@@ -75,7 +76,7 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                <div className={'profile-container'}>&nbsp;</div>
+                <MenuProfile/>
                 <div className={'menu-separator'}/>
                 {!this.props.data.loading &&
                   <span>
