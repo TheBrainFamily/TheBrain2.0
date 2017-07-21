@@ -25,9 +25,9 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='/logout' onClick={this.logout}>LOGOUT</Link>
+      return <Link to='/logout' onClick={this.logout}>LOG OUT</Link>
     }
-    return <Link to='/login'>LOGIN</Link>
+    return <Link to='/login'>LOG IN</Link>
   }
 }
 
