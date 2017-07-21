@@ -6,8 +6,6 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 import Hamburger from 'react-native-hamburger'
 
-import MainMenu from './MainMenu'
-
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 
@@ -21,6 +19,7 @@ class CourseHeader extends React.Component {
 
   toggleMenu = () => {
     this.setState({active: !this.state.active})
+    this.props.toggleMainMenu()
   }
 
   render () {
@@ -46,8 +45,6 @@ class CourseHeader extends React.Component {
         </View>
 
         {this.props.children}
-
-        {this.state.active && <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
       </View>
     )
   }

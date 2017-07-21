@@ -47,7 +47,7 @@ class Header extends React.Component {
     const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
 
     return (
-      <Animated.View style={[{top: this.state.topPosition }, dynamicHeaderStyle]}>
+      <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle]}>
         <View style={headerStyle}>
           <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
             <SvgUri
