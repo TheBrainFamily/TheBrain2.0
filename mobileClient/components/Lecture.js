@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View, Platform, TouchableHighlight } from 'react-native'
+import { Animated, Easing, Text, View, Platform, TouchableWithoutFeedback } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
@@ -87,7 +87,7 @@ class Lecture extends React.Component {
 
         {this.state.showLecture &&
         <Animatable.View animation='bounceIn'>
-          <TouchableHighlight onPress={this.playVideo}
+          <TouchableWithoutFeedback onPress={this.playVideo}
                               activeOpacity={1}
                               underlayColor='#fff'>
             <View>
@@ -100,7 +100,7 @@ class Lecture extends React.Component {
                 </View>
               }
             </View>
-          </TouchableHighlight>
+          </TouchableWithoutFeedback>
         </Animatable.View>
         }
       </View>
