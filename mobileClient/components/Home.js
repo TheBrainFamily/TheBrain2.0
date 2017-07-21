@@ -23,7 +23,7 @@ import coursesQuery from '../../client/shared/graphql/queries/courses'
 class Home extends React.Component {
   constructor (props) {
     super(props)
-    const {height, width} = Dimensions.get('window')
+    const { height, width } = Dimensions.get('window')
     this.height = height
     this.width = width
     const isCourseSelected = !!props.course.selectedCourse || false
@@ -32,7 +32,7 @@ class Home extends React.Component {
       isExitAnimationFinished: isCourseSelected,
       courseSelectorIsDisabled: false,
       mainMenuActive: false
-  }
+    }
   }
 
   getCoursesIds = () => {
@@ -46,16 +46,16 @@ class Home extends React.Component {
   animateCourseSelectorsFadeOut = (selectedCourseId) => {
     this.refs.courseSelectorTitle.fadeOut(500)
 
-    // this.getOtherCoursesIds(selectedCourseId).forEach((courseId) => {
-    //   this.refs[`${courseId}courseSelector`].fadeOut(500)
-    // })
+    this.getOtherCoursesIds(selectedCourseId).forEach((courseId) => {
+      this.refs[`${courseId}courseSelector`].fadeOut(500)
+    })
 
-    // this.getCoursesIds().forEach((courseId) => {
-    //   this.refs[`${courseId}courseSelectorText`].fadeOut(500)
-    // })
+    this.getCoursesIds().forEach((courseId) => {
+      this.refs[`${courseId}courseSelectorText`].fadeOut(500)
+    })
 
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isExitAnimationFinished: true})
+      this.setState({ isExitAnimationFinished: true })
     })
   }
 
@@ -80,34 +80,34 @@ class Home extends React.Component {
 
   selectCourse = (course) => async () => {
     if (!this.state.isCourseSelected) {
-      this.setState({isCourseSelected: true})
+      this.setState({ isCourseSelected: true })
       this.props.dispatch(courseActions.select(course))
-      await this.props.selectCourse({courseId: course._id})
+      await this.props.selectCourse({ courseId: course._id })
 
       this.animateCourseSelector(course._id)
     }
   }
 
   disableCourseSelector = () => {
-    this.setState({courseSelectorIsDisabled: true})
+    this.setState({ courseSelectorIsDisabled: true })
   }
   enableCourseSelector = () => {
-    this.setState({courseSelectorIsDisabled: false})
+    this.setState({ courseSelectorIsDisabled: false })
   }
 
   closeCourse = () => {
     this.props.dispatch(courseActions.close())
-    this.setState({isCourseSelected: false, isExitAnimationFinished: false})
+    this.setState({ isCourseSelected: false, isExitAnimationFinished: false })
     this.enableCourseSelector()
   }
 
   toggleMainMenu = () => {
-    this.setState({mainMenuActive: !this.state.mainMenuActive})
+    this.setState({ mainMenuActive: !this.state.mainMenuActive })
   }
 
   render () {
-    const {isCourseSelected, isExitAnimationFinished} = this.state
-    const {course} = this.props
+    const { isCourseSelected, isExitAnimationFinished } = this.state
+    const { course } = this.props
     const courseColor = _.get(course, 'selectedCourse.color')
 
     return (
@@ -118,7 +118,8 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
-        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
+        {isCourseSelected ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
+                                          toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
 
@@ -138,7 +139,7 @@ class Home extends React.Component {
             </Text>
           </Animatable.View>
           {!this.props.courses.loading &&
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
               const logoSize = courseLogo.scale * 80
@@ -147,7 +148,7 @@ class Home extends React.Component {
                   marginHorizontal: '2%',
                 }}>
                   <View ref={`${course._id}courseSelectorContainer`}>
-                    <Animatable.View style={{zIndex: 100}}
+                    <Animatable.View style={{ zIndex: 100 }}
                                      ref={`${course._id}courseSelector`}>
                       <CircleButton
                         color={course.color}
@@ -159,16 +160,20 @@ class Home extends React.Component {
                           width={logoSize}
                           height={logoSize}
                           source={courseLogo.file}
-                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+                          style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
                         />
                       </CircleButton>
                     </Animatable.View>
                   </View>
-                  <Animatable.View style={{
+                  <View style={{
                     marginHorizontal: 20
-                  }} ref={`${course._id}courseSelectorText`}>
-                    <Text style={style.courseTitle}>{course.name}</Text>
-                  </Animatable.View>
+                  }}>
+                    <Animatable.Text style={style.courseTitle}
+                                     ref={`${course._id}courseSelectorText`}
+                    >
+                      {course.name}
+                    </Animatable.Text>
+                  </View>
                 </View>
               )
             })}
@@ -194,15 +199,15 @@ const selectCourseMutation = gql`
 export default compose(
   connect(state => state),
   graphql(selectCourseMutation, {
-    props: ({ownProps, mutate}) => ({
-      selectCourse: ({courseId}) => mutate({
+    props: ({ ownProps, mutate }) => ({
+      selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
         }
       })
     })
   }),
-  graphql(coursesQuery, {name: 'courses'})
+  graphql(coursesQuery, { name: 'courses' })
 )(Home)
 
 const style = StyleSheet.create({
@@ -217,7 +222,7 @@ const style = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 58,
-    transform: [{translateX: -10}, {translateY: -10}],
+    transform: [{ translateX: -10 }, { translateY: -10 }],
     backgroundColor: 'white',
     width: 20,
     height: 20,
