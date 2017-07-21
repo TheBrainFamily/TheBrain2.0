@@ -10,6 +10,10 @@ export default class ProgressBar extends React.Component {
 
   render () {
     let progress = Math.min(Math.max(this.props.progress, 0), 1)
+    if(!progress) {
+      console.warn('ProgressBar progress is', progress)
+      progress = 0
+    }
 
     const maxWidth = this.props.width - 2 * this.labelWidth
     const completedWidth = progress * maxWidth
@@ -18,7 +22,7 @@ export default class ProgressBar extends React.Component {
       <div className={'progress-bar'} style={{width: this.props.width}}>
         <div className={'progress-bar-left-label'} style={{width: this.labelWidth}}>{this.props.label}</div>
         <div className={'progress-bar-indicators'}>
-          <img className={'progress-bar-dot'} style={{left: completedWidth}} src={dot}/>
+          <img className={'progress-bar-dot'} style={{left: completedWidth}} src={dot} alt={''}/>
           <div className={'progress-bar-done'} style={{width: completedWidth}}/>
           <div className={'progress-bar-todo'} style={{width: maxWidth - completedWidth}}/>
         </div>
