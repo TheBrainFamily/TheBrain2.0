@@ -15,6 +15,7 @@ import {
   Platform
 } from 'react-native'
 
+import MainMenu from './MainMenu'
 import Flashcard from './Flashcard'
 import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
@@ -33,6 +34,13 @@ class Questions extends React.Component {
   constructor (props) {
     super(props)
     props.dispatch(updateAnswerVisibility(false))
+    this.state = {
+      mainMenuActive: false
+    }
+  }
+
+  toggleMainMenu = () => {
+    this.setState({mainMenuActive: !this.state.mainMenuActive})
   }
 
   componentWillReceiveProps (nextProps) {
@@ -96,7 +104,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{backgroundColor: courseColor}}>
-            <CourseHeader onLogoPress={this.goHome}>
+            <CourseHeader onLogoPress={this.goHome} toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
@@ -104,6 +112,7 @@ class Questions extends React.Component {
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}/>
             <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
+            {this.state.mainMenuActive && <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
           </View>
         )
       } else {

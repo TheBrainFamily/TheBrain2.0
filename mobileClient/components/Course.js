@@ -6,6 +6,7 @@ import SvgUri from 'react-native-svg-uri'
 
 import courseLogos from '../helpers/courseLogos'
 
+import MainMenu from './MainMenu'
 import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
@@ -32,6 +33,7 @@ class Course extends React.Component {
             />
           </CircleButton>
         </View>
+        {this.props.mainMenuActive && <MainMenu topMargin={0} closeCourse={this.props.closeCourse}/>}
       </View>
     )
   }
