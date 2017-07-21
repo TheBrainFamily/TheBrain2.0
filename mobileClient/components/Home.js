@@ -31,6 +31,7 @@ class Home extends React.Component {
       isCourseSelected,
       isExitAnimationFinished: isCourseSelected,
       courseSelectorIsDisabled: false,
+      mainMenuActive: false
   }
   }
 
@@ -100,6 +101,10 @@ class Home extends React.Component {
     this.enableCourseSelector()
   }
 
+  toggleMainMenu = () => {
+    this.setState({mainMenuActive: !this.state.mainMenuActive})
+  }
+
   render () {
     const {isCourseSelected, isExitAnimationFinished} = this.state
     const {course} = this.props
@@ -113,7 +118,7 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
-        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} closeCourse={this.closeCourse}>
+        {isCourseSelected ? <CourseHeader style={{position: 'absolute'}} closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
 
@@ -139,7 +144,7 @@ class Home extends React.Component {
               const logoSize = courseLogo.scale * 80
               return (
                 <View key={course._id} style={{
-                  marginHorizontal: 20
+                  marginHorizontal: '2%',
                 }}>
                   <View ref={`${course._id}courseSelectorContainer`}>
                     <Animatable.View style={{zIndex: 100}}
@@ -172,7 +177,7 @@ class Home extends React.Component {
 
         </View>}
 
-        {isExitAnimationFinished && <Course />}
+        {isExitAnimationFinished && <Course mainMenuActive={this.state.mainMenuActive}/>}
       </View>
     )
   }
