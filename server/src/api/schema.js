@@ -73,9 +73,15 @@ export const typeDefs = gql`
         reviewDone: Int,
         reviewTotal: Int
     }
+    
+    type ReviewsPerDay {
+      count: Int,
+      ts: Int,
+    }
 
     type Query {
         Achievements: [Achievement]!,
+        Reviews: [ReviewsPerDay],
         Courses: [Course]!,
         Course(_id: String!): Course,
         Lessons(courseId: String!): [Lesson]!,
