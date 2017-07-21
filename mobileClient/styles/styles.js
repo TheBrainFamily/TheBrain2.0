@@ -205,15 +205,16 @@ const styles = StyleSheet.create({
     color: '#662d91',
     fontSize: 12,
     fontFamily: 'Exo2-Bold',
-    padding: 5
+    padding: 5,
+    backgroundColor: 'transparent'
   },
   flipCardBody: {
     height: 140,
     justifyContent: 'center'
   },
-  primaryText: {
+  cardText: {
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     fontFamily: 'Kalam-Regular',
     fontSize: 16,
     padding: 10,
