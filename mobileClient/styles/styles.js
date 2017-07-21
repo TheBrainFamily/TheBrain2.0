@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     zIndex: 50,
     margin: 0,
     paddingTop: 40,
-    paddingBottom: 27,
     paddingHorizontal: 30
   },
   headerWithShadow: {
