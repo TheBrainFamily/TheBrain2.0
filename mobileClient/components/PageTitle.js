@@ -6,8 +6,8 @@ import appStyle from '../styles/appStyle'
 
 const PageTitle = (props) => (
   <View style={{
-    paddingVertical: 10,
- 	height: appStyle.pageTitle.height
+    paddingHorizontal: 10,
+    height: appStyle.pageTitle.height
   }}>
     <Text style={style}>
       {props.text}
