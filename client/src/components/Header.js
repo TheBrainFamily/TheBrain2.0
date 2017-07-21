@@ -63,7 +63,7 @@ class AppHeader extends React.Component {
     this.props.dispatch(push('/'))
   }
 
-  render() {
+  render () {
     const currentUser = this.props.data.CurrentUser
 
     return (
@@ -76,26 +76,30 @@ class AppHeader extends React.Component {
             <div className='App-header-right'>
               <Hamburger>
                 <div className={'profile-container'}>&nbsp;</div>
-                <div className={'menu-separator'}/>
+                <div className={'menu-separator'} />
                 {!this.props.data.loading &&
                   <span>
                     <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />
-                    <div className={'menu-separator menu-separator-visible'}/>
+                    <div className={'menu-separator menu-separator-visible'} />
                   </span>
                 }
-                <a>LECTURES LIST</a>
-                <div className={'menu-separator menu-separator-visible'}/>
-                <a>REVIEWS CALLENDAR</a>
-                <div className={'menu-separator menu-separator-visible'}/>
-                <a onClick={this.closeCourse()}>CHANGE THE COURSE</a>
-                <div className={'menu-separator menu-separator-visible'}/>
-                <a>ACHIEVEMENTS LIST</a>
-                <div className={'menu-separator menu-separator-visible'}/>
-                <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
-                <div className={'menu-separator menu-separator-visible'}/>
-                <a>CONTACT</a>
-                <div className={'menu-separator'}/>
-                <div className={'menu-separator'}/>
+                {currentUser &&
+                <div>
+                  <a>LECTURES LIST</a>
+                  <div className={'menu-separator menu-separator-visible'} />
+                  <a>REVIEWS CALLENDAR</a>
+                  <div className={'menu-separator menu-separator-visible'} />
+                  <a onClick={this.closeCourse()}>CHANGE THE COURSE</a>
+                  <div className={'menu-separator menu-separator-visible'} />
+                  <a>ACHIEVEMENTS LIST</a>
+                  <div className={'menu-separator menu-separator-visible'} />
+                  <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
+                  <div className={'menu-separator menu-separator-visible'} />
+                </div>
+                }
+                <a onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
+                <div className={'menu-separator'} />
+                <div className={'menu-separator'} />
               </Hamburger>
             </div>
           </div>
