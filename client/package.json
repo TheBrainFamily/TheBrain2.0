@@ -15,11 +15,13 @@
     "rc-progress": "^2.0.6",
     "react": "^15.5.3",
     "react-apollo": "^1.0.0",
+    "react-dd-menu": "^2.0.1",
     "react-dom": "^15.5.3",
     "react-facebook-login": "^3.5.0",
     "react-redux": "^5.0.4",
     "react-router-dom": "^4.0.0",
     "react-router-redux": "next",
+    "react-transition-group": "^2.1.0",
     "react-youtube": "^7.3.0",
     "resolve-pathname": "^2.0.2",
     "warning": "^3.0.0"
