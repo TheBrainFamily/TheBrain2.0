@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import swal from 'sweetalert2'
@@ -10,6 +9,7 @@ import swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
+import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
 
 class Profile extends React.Component {
   state = {
@@ -91,16 +91,8 @@ class Profile extends React.Component {
   }
 }
 
-const changePasswordMutation = gql`
-    mutation changePassword($oldPassword: String!, $newPassword: String!) {
-        changePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
-          success
-        }
-    }
-`
-
 export default compose(
-  connect(state => state),
+  connect(),
   graphql(changePasswordMutation, {
     props: ({ mutate }) => ({
       submit: ({ oldPassword, newPassword }) => mutate({

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Header from './Header'
 import PageTitle from './PageTitle'
 
+import changePasswordMutation from '../../client/shared/graphql/queries/changePasswordMutation'
 class Profile extends React.Component {
   render () {
     return (
@@ -20,4 +21,16 @@ class Profile extends React.Component {
   }
 }
 
-export default connect()(Profile)
+export default compose(
+  connect(),
+  graphql(changePasswordMutation, {
+    props: ({ mutate }) => ({
+      submit: ({ oldPassword, newPassword }) => mutate({
+        variables: {
+          oldPassword,
+          newPassword
+        }
+      })
+    })
+  }),
+)(Profile)
