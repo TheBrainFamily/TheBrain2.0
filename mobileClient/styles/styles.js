@@ -256,28 +256,28 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
     position: 'relative',
-    width: '90%',
-    height:15,
-    elevation: 1,
+    width: '85%',
+    height: 20,
+    marginVertical: 15,
   },
   progressBarTrack: {
-    width: '95%',
-    elevation: 2,
+    top: 3,
+    position: 'relative',
+    width: '100%',
     height: 3,
     borderRadius: 1.5,
     backgroundColor: '#0007'
   },
   progressBarProgressLine: {
-    position: 'absolute',
+    position: 'relative',
     height: 3,
     borderRadius: 1.5,
     backgroundColor: '#fff'
   },
   progressBarProgressCircle: {
-    elevation: 3,
-    position: 'absolute',
+    marginTop: -9,
+    position: 'relative',
     width: 15,
     height: 15,
     borderRadius: 7.5,
