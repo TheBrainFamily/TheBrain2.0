@@ -81,49 +81,71 @@ class MainMenu extends React.Component {
           backgroundColor: 'white',
         }}>
           <Image
-            style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain'}}
+            style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain' }}
             source={require('../images/BillyBaby.png')}
           />
-          <View style={{
-            width: '70%',
-            padding: 20
-          }}>
-            <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
-              Michał
-            </Text>
-            <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
-              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
-                <Text style={style.text}>DUE</Text>
-                <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
-                <View style={[style.card, { backgroundColor: '#4ba695' }]} />
-              </View>
-              <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
-                <View style={{ position: 'absolute', top: -4, left: -4, width: 8, height: 8, borderRadius: 8, backgroundColor: '#999' }} />
-                <View style={{ position: 'absolute', bottom: -4, left: -4, width: 8, height: 8, borderRadius: 8, backgroundColor: '#999' }} />
-              </View>
-              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
-                <Text style={style.text}>REVIEW</Text>
-                <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
-                <View style={[style.card, { backgroundColor: '#c64f34' }]} />
+          {currentUser &&
+            <View style={{
+              width: '70%',
+              padding: 20
+            }}>
+              <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
+                Michał
+              </Text>
+              <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
+                <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                  <Text style={style.text}>DUE</Text>
+                  <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
+                  <View style={[style.card, { backgroundColor: '#4ba695' }]} />
+                </View>
+                <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
+                  <View style={{
+                    position: 'absolute',
+                    top: -4,
+                    left: -4,
+                    width: 8,
+                    height: 8,
+                    borderRadius: 8,
+                    backgroundColor: '#999'
+                  }} />
+                  <View style={{
+                    position: 'absolute',
+                    bottom: -4,
+                    left: -4,
+                    width: 8,
+                    height: 8,
+                    borderRadius: 8,
+                    backgroundColor: '#999'
+                  }} />
+                </View>
+                <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                  <Text style={style.text}>REVIEW</Text>
+                  <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
+                  <View style={[style.card, { backgroundColor: '#c64f34' }]} />
+                </View>
               </View>
             </View>
-          </View>
+          }
         </View>
-        <View style={{marginBottom: '10%', marginTop: '3%', justifyContent: 'space-between', flexDirection:'column', flex:1}}>
+        <View style={{marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start'}}>
           {activated
             ? <MenuButton text="LOG OUT" onPress={this.logout} />
             : <MenuButton text="LOG IN" onPress={this.go('/login')} />
           }
-          <Separator />
-          <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} />
-          <Separator />
-          <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
-          <Separator />
-          <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} />
-          <Separator />
-          <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
-          <Separator />
-          <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+          {currentUser &&
+            <View>
+              <Separator />
+              <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} />
+              <Separator />
+              <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
+              <Separator />
+              <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} />
+              <Separator />
+              <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
+              <Separator />
+              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+            </View>
+          }
           <Separator />
           <MenuButton text="CONTACT" onPress={this.go('/contact')} />
           {/*<Separator />*/}
@@ -193,5 +215,10 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(currentUserQuery, {name: 'currentUser'})
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  })
 )(MainMenu)

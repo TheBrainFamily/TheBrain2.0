@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     justifyContent: 'center',
-    flex: 1,
     paddingHorizontal: 30,
-    borderColor: '#fff5',
+    paddingVertical: 10,
+    borderColor: '#fff5'
   },
   menuButtonText: {
     color: '#999',
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     zIndex: 50,
     margin: 0,
     paddingTop: 40,
-    paddingBottom: 27,
     paddingHorizontal: 30
   },
   headerWithShadow: {

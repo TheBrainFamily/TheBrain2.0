@@ -2,11 +2,12 @@ import React from 'react'
 import { Text, View } from 'react-native'
 
 import Separator from './Separator'
+import appStyle from '../styles/appStyle'
 
 const PageTitle = (props) => (
   <View style={{
-    paddingHorizontal: '5%',
-    paddingVertical: 10
+    paddingHorizontal: 10,
+    height: appStyle.pageTitle.height
   }}>
     <Text style={style}>
       {props.text}
@@ -19,7 +20,7 @@ const style = {
   color: '#999',
   fontSize: 16,
   fontFamily: 'Exo2-Bold',
-  paddingHorizontal: 20,
+  paddingHorizontal: 30,
   paddingVertical: 5
 }
 
