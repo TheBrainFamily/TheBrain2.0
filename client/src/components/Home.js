@@ -12,8 +12,6 @@ import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
-
-import skipTutorialImg from '../img/button-skip-tutorial.png'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 
@@ -27,7 +25,8 @@ class Home extends React.Component {
   }
 
   selectCourse = (courseId) => async () => {
-    this.props.dispatch(course.select(courseId))
+    const selectedCourse = this.props.courses.Courses.find(course=>course._id === courseId)
+    this.props.dispatch(course.select(selectedCourse))
     await this.props.selectCourse({courseId})
     this.props.dispatch(push(`/course/${courseId}`))
   }
@@ -38,8 +37,10 @@ class Home extends React.Component {
     }
 
     if (nextProps.userDetails.UserDetails.selectedCourse) {
-
       const courseId = nextProps.userDetails.UserDetails.selectedCourse
+      const selectedCourse = this.props.courses.Courses.find(course=>course._id === courseId)
+
+      nextProps.dispatch(course.select(selectedCourse))
       nextProps.dispatch(push(`/course/${courseId}`))
     }
   }
@@ -76,12 +77,14 @@ class Home extends React.Component {
             onEnd={this._onIntroEnd}
           />
           <br/>
-          <div className="skip-tutorial-button" background={skipTutorialImg} onClick={this._onIntroEnd}>Skip intro and start learning</div>
+          <div className="skip-tutorial-button" onClick={this._onIntroEnd}>Skip intro and start learning</div>
         </div> : <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse}
-                               onClickArgument={course._id}/>
+                          onClickArgument={course._id}>
+                <div>{course.name}</div>
+              </CourseIcon>
           })}
         </ul>}
       </FlexibleContentWrapper>
