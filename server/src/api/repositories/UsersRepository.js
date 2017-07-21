@@ -73,6 +73,13 @@ export class UsersRepository extends MongoRepository {
     }
   }
 
+  async changePassword (userId: string, newPassword: string) {
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    const password = await bcrypt.hash(newPassword, salt)
+
+    return this.userCollection.update({_id: new ObjectId(userId)}, {$set: { password }})
+  }
+
   static async comparePassword (passA, passB) {
     return bcrypt.compare(passB, passA)
   }
