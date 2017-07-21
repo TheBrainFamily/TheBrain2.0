@@ -10,7 +10,9 @@ import {
   Text,
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  StatusBar,
+  Platform
 } from 'react-native'
 
 import Flashcard from './Flashcard'
@@ -57,8 +59,10 @@ class Questions extends React.Component {
 
   getHeaderHeight = () => {
     console.log('PINGWIN: appStyle.header.offset', appStyle.header.offset)
+    console.log('PINGWIN: StatusBar.currentHeight', StatusBar.currentHeight)
+    const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
     return appStyle.header.offset +
-      appStyle.header.height + 22.5 // + 24
+      appStyle.header.height + actionBarHeight + 22.5
   }
 
   getFlashcardHeight = () => {
