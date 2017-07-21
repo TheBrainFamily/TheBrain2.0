@@ -51,10 +51,6 @@ class Questions extends React.Component {
     }
   }
 
-  goHome = () => {
-    this.props.history.push('/')
-  }
-
   getHeaderHeight = () => {
     return appStyle.header.offset +
       appStyle.header.height + 22.5
@@ -91,7 +87,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{backgroundColor: courseColor}}>
-            <CourseHeader onLogoPress={this.goHome}>
+            <CourseHeader>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
@@ -125,21 +121,20 @@ const currentItemsQuery = gql`
     }
 `
 
-export default withRouter(
-  compose(
-    graphql(currentUserQuery, {name: 'currentUser'}),
-    graphql(currentItemsQuery, {
-        name: 'currentItems',
-        options: {
-          fetchPolicy: 'network-only'
-        }
-      }
-    ),
-    graphql(sessionCountQuery, {
-      name: 'sessionCount',
-      options: {
-        fetchPolicy: 'network-only'
-      }
-    })
-  )(connect(state => state)(Questions))
-)
+export default compose(
+  withRouter,
+  graphql(currentUserQuery, { name: 'currentUser' }),
+  graphql(currentItemsQuery, {
+    name: 'currentItems',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  connect(state => state)
+)(Questions)
