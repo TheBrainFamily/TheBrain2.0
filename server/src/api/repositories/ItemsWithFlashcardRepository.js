@@ -14,16 +14,16 @@ class ItemsWithFlashcardRepository extends MongoRepository {
   }
 
   async getItemsWithFlashcard (userId: string) {
-    const currentItems = await (this.itemsCollection.find({
+    const currentItems = await this.itemsCollection.find({
       userId: new ObjectId(userId),
       $or: [
         { actualTimesRepeated: 0 },
         { extraRepeatToday: true },
         { nextRepetition: { $lte: moment().unix() } }
       ]
-    })).toArray()
+    }).toArray()
 
-    const flashcards = await (this.flashcardsCollection.find({_id: {$in: currentItems.map(item => item.flashcardId)}})).toArray()
+    const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item => item.flashcardId)}}).toArray()
 
     return currentItems.map(item => {
       return {
@@ -36,14 +36,14 @@ class ItemsWithFlashcardRepository extends MongoRepository {
   }
 
   async getSessionCount (userId: string) {
-    const items = await (this.itemsCollection.find({
-      userId,
+    const items = await this.itemsCollection.find({
+      userId: new ObjectId(userId),
       $or: [
         { actualTimesRepeated: 0 },
         { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
         { nextRepetition: { $lte: moment().unix() } }
       ]
-    })).toArray()
+    }).toArray()
 
     return getItemsWithFlashcardsByCount(items)
   }
