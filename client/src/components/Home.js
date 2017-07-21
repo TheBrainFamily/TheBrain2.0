@@ -12,8 +12,6 @@ import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
-
-import skipTutorialImg from '../img/button-skip-tutorial.png'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 
@@ -79,7 +77,7 @@ class Home extends React.Component {
             onEnd={this._onIntroEnd}
           />
           <br/>
-          <div className="skip-tutorial-button" background={skipTutorialImg} onClick={this._onIntroEnd}>Skip intro and start learning</div>
+          <div className="skip-tutorial-button" onClick={this._onIntroEnd}>Skip intro and start learning</div>
         </div> : <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
