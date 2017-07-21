@@ -109,7 +109,14 @@ body {
     background-size: 350px 9px;
 }
 
-.profile-container {
+.menu-icon {
+    margin-top: 35px;
+    cursor: pointer;
+    width: 35px;
+    height: 25px;
+}
+
+.menu-profile-container {
     width: 100%;
     height: 300px;
     background-color: white;
@@ -118,11 +125,58 @@ body {
     background-position: top;
 }
 
-.menu-icon {
-    margin-top: 35px;
-    cursor: pointer;
-    width: 35px;
-    height: 25px;
+.menu-profile-image {
+    float: left;
+    margin: 20px;
+    margin-left: 30px;
+    margin-right: 0;
+    height: 260px;
+}
+
+.menu-profile-info {
+    width: 250px;
+    height: 300px;
+    float: right;
+}
+
+.menu-profile-name {
+    margin: 0;
+    padding: 0;
+    margin-top: 65px;
+    font-size: 30px;
+    color: navy;
+    text-align: center;
+}
+
+.menu-profile-stats {
+    width: 250px;
+    height: 200px;
+    background-image: url('./img/vertical-separator.png');
+    background-size: 8px 120px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.menu-profile-stats div {
+    color: #888888;
+    padding: 20px;
+    padding-top: 60px;
+    float: left;
+    text-align: center;
+    width: 125px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.menu-profile-stats img {
+    margin-top: 10px;
+    width: 30px;
+}
+
+.menu-profile-stat-values {
+    font-weight: bold;
+    font-size: 22px;
 }
 
 h2 {
