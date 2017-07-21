@@ -22,7 +22,7 @@ class CourseProgressBar extends React.Component {
     const progress = currentLesson / lessonsTotal
 
     return (
-      <ProgressBar progress={progress} label={''} width={1024} category={this.props.selectedCourse.name}/>
+      <ProgressBar progress={progress} label={'COURSE PROGRESS'} width={1024} category={this.props.selectedCourse.name}/>
     )
   }
 }

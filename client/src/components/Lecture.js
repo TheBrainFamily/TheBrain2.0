@@ -39,16 +39,18 @@ class Lecture extends React.Component {
     const selectedCourse = this.props.selectedCourse._id || this.props.match.params.courseId
 
     return (
-      <FlexibleContentWrapper>
-        <div id='video'>
-          <CourseProgressBar/>
-          <h2>Watch the video<br/>
-            and wait for the questions.</h2>
-          <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse}/>
-          <br/>
-          <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
-        </div>
-      </FlexibleContentWrapper>
+      <span>
+        <CourseProgressBar/>
+        <FlexibleContentWrapper>
+          <div id='video'>
+            <h2>Watch the video<br/>
+              and wait for the questions.</h2>
+            <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse}/>
+            <br/>
+            <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
+          </div>
+        </FlexibleContentWrapper>
+      </span>
     )
   }
 }
