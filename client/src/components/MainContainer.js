@@ -55,17 +55,17 @@ class MainContainer extends React.Component {
           <Route exact key='login' path='/login' component={Login} />
           <Route exact key='signup' path='/signup' component={Signup} />
           <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
+          <Route key='Lecture' path='/lecture/:courseId' component={Lecture}/>
+          <Route exact key='wellDone' path='/wellDone' component={WellDone}/>
+          <Route exact key='questions' path='/questions' component={Questions}/>
+          <Route key='Course' path='/course/:courseId' component={Course}/>
+          <Route exact key='contact' path='/contact' component={Contact} />
           {
             currentUser &&
             <div>
-              <Route key='Course' path='/course/:courseId' component={Course} />
-              <Route key='Lecture' path='/lecture/:courseId' component={Lecture} />
-              <Route exact key='wellDone' path='/wellDone' component={WellDone} />
               <Route exact key='profile' path='/profile' component={Profile} />
-              <Route exact key='questions' path='/questions' component={Questions} />
             </div>
           }
-          <Route exact key='contact' path='/contact' component={Contact} />
           <Redirect from='*' to='/' />
         </div>
       </Router>)
