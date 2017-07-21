@@ -208,6 +208,30 @@ const resolvers = {
       } else {
         return {success: false}
       }
+    },
+    async changePassword (root: ?string, args: { oldPassword: string, newPassword: string }, context: Object) {
+      try {
+        const userId = context.user._id
+        const user = await context.Users.getById(userId)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
+        const isOldPasswordValid = await UsersRepository.comparePassword(user.password, args.oldPassword)
+        if (!isOldPasswordValid) {
+          throw new Error('Old Password is not correct')
+        }
+
+        const updatedUser = await context.Users.changePassword(context.user._id, args.newPassword)
+        if (updatedUser) {
+          return { success: true }
+        } else {
+          return { success: false }
+        }
+      } catch (e) {
+        throw e
+      }
     }
   }
 }
