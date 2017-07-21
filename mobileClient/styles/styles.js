@@ -123,13 +123,14 @@ const styles = StyleSheet.create({
     top: appStyle.header.height,
     width: '100%',
     position: 'absolute',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    elevation: 500
   },
   menuButton: {
     justifyContent: 'center',
     paddingHorizontal: 30,
     paddingVertical: 10,
-    borderColor: '#fff5'
+    borderColor: '#fff5',
   },
   menuButtonText: {
     color: '#999',
@@ -392,18 +393,12 @@ const styles = StyleSheet.create({
   },
   draggableContainer: {
     position: 'absolute',
-    // top: '50%',
-    // left: '50%',
-    // transform: [{ translateX: -35 }, { translateY: -35 }],
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'red',
-    // elevation: 100,
     width: "100%",
     height: "100%",
   },
   answerSwipeBall: {
-    // position: 'absolute',
     alignSelf: 'center',
     backgroundColor: '#662d91',
     width: 70,
