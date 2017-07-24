@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
-
+import FlexibleContentWrapper from './FlexibleContentWrapper'
 import FBLoginButton from './FBLoginButton'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
@@ -45,27 +45,26 @@ class Signup extends React.Component {
       return <div>Loading...</div>
     }
 
-    return (
-      <form onSubmit={this.submit}>
-        {this.state.error &&
-          <div className='text-error'>{ this.state.error }</div>
-        }
-        <div>
-          <label>Username:</label>
-          <input ref='username' type='text' name='username' />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input ref='password' type='password' name='password' />
-        </div>
-        <div>
-          <input type='submit' value='Signup' />
-        </div>
-
-        <FBLoginButton />
-      </form>
-    )
-  }
+      return (
+        <FlexibleContentWrapper>
+          <form className={'login-form'} onSubmit={this.submit}>
+            <div className='text-error'>{ this.state.error }</div>
+            <div>
+              <label>Username:</label>
+              <input ref='username' type='text' name='username' />
+            </div>
+            <div>
+              <label>Password:</label>
+              <input ref='password' type='password' name='password' />
+            </div>
+            <div className={'login-form-buttons-container'}>
+              <FBLoginButton onLogin={this.redirectAfterLogin} />
+              <input className={'login-button'} type='submit' value='Signup' />
+            </div>
+          </form>
+        </FlexibleContentWrapper>
+      )
+    }
 }
 
 const signup = gql`
