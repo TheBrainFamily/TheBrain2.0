@@ -425,8 +425,6 @@ SESSION SUMMARY
     padding: 20px 20px;
 }
 
-
-
 /***********************
 CONTACT
 ***********************/
@@ -607,4 +605,67 @@ CONTACT
 .text-error {
     height: 20px;
     color: #D00;
+}
+
+/***********************
+FORM
+***********************/
+
+.form label {
+    display: block;
+    margin-top: 2rem;
+    font-size: 2rem;
+}
+
+.form input {
+    font-family: 'Exo 2', sans-serif;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 2rem;
+    border: 3px solid transparent;
+}
+
+.form input.error {
+    border: 3px solid #ce4a48
+}
+
+.form [type='submit'] {
+    margin-top: 3rem;
+    background: #62c46c;
+    color: #fff;
+    padding: 1rem 6rem;
+    border-radius: 3rem;
+    border: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form [type='submit']:hover {
+    background: #6dcd76;
+}
+
+.form [type='submit']:active {
+    outline: 0;
+    background: #50a050;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+.form [type='submit']:disabled {
+    outline: 0;
+    background: rgba(98, 196, 108, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    cursor: not-allowed;
+}
+
+.alert-error {
+    display: inline;
+    padding: 1rem 6rem;
+    border-radius: 0.3rem;
+    color: #a94442;
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.hidden {
+    visibility: hidden;
+    display: inline-block;
 }
