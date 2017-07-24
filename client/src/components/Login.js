@@ -37,9 +37,7 @@ class Login extends React.Component {
     return (
       <FlexibleContentWrapper>
         <form className={'login-form'} onSubmit={this.submit}>
-          {this.state.error &&
-            <div className='text-error'>{ this.state.error }</div>
-          }
+          <div className='text-error'>{ this.state.error }</div>
           <div>
             <label>Username:</label>
             <input ref='username' type='text' name='username' />

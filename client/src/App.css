@@ -542,9 +542,9 @@ CONTACT
 
 .login-form {
     margin: auto;
-    padding-top: 30px;
+    padding-top: 10px;
     color: black;
-    height: 160px;
+    height: 190px;
     width: 400px;
     background-color: white;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
@@ -602,4 +602,9 @@ CONTACT
     width: 170px;
     border-radius: 5px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
+}
+
+.text-error {
+    height: 20px;
+    color: #D00;
 }
