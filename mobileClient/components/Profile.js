@@ -21,6 +21,8 @@ class Profile extends React.Component {
     newPasswordConfirmation: ''
   }
 
+  inputs = {}
+
   goHome = () => {
     this.props.history.push('/')
   }
@@ -70,6 +72,10 @@ class Profile extends React.Component {
     }
   }
 
+  focusNextField(key) {
+    this.inputs[key].focus();
+  }
+
   render () {
     const { isValid } = this.state
 
@@ -85,6 +91,9 @@ class Profile extends React.Component {
           paddingHorizontal: '10%'
         }}>
           <TextField
+            onSubmitEditing={() => {
+              this.focusNextField('newPassword');
+            }}
             autoFocus
             autoCapitalize='none'
             secureTextEntry
@@ -94,6 +103,12 @@ class Profile extends React.Component {
             error={this.state.oldPasswordError}
           />
           <TextField
+            ref={ input => {
+              this.inputs['newPassword'] = input
+            }}
+            onSubmitEditing={() => {
+              this.focusNextField('newPasswordConfirmation');
+            }}
             autoCapitalize='none'
             secureTextEntry
             label='New Password'
@@ -101,6 +116,9 @@ class Profile extends React.Component {
             onChangeText={this.onChangeText('newPassword')}
           />
           <TextField
+            ref={ input => {
+              this.inputs['newPasswordConfirmation'] = input
+            }}
             autoCapitalize='none'
             secureTextEntry
             label='Confirm New Password'

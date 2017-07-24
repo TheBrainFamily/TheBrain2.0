@@ -21,6 +21,8 @@ class Login extends React.Component {
       username: '',
       password: ''
     }
+
+    this.inputs = {}
   }
 
   submit = () => {
@@ -34,6 +36,10 @@ class Login extends React.Component {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
+  }
+
+  focusNextField(key) {
+    this.inputs[key].focus();
   }
 
   render () {
@@ -58,6 +64,9 @@ class Login extends React.Component {
 
             <View style={styles.textInputWrapper}>
               <TextInput
+                onSubmitEditing={() => {
+                  this.focusNextField('password');
+                }}
                 style={styles.textInput}
                 autoFocus
                 autoCapitalize='none'
@@ -70,6 +79,9 @@ class Login extends React.Component {
 
             <View style={styles.textInputWrapper}>
               <TextInput
+                ref={ input => {
+                  this.inputs['password'] = input
+                }}
                 style={styles.textInput}
                 secureTextEntry
                 autoCapitalize='none'
