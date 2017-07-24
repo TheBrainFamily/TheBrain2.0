@@ -18,7 +18,7 @@ body {
     background-color: white;
     min-width: 1024px;
     height: 100%;
-    min-height: 810px;
+    min-height: 860px;
     position: relative;
     margin: 0;
     padding: 0;
@@ -109,7 +109,14 @@ body {
     background-size: 350px 9px;
 }
 
-.profile-container {
+.menu-icon {
+    margin-top: 35px;
+    cursor: pointer;
+    width: 35px;
+    height: 25px;
+}
+
+.menu-profile-container {
     width: 100%;
     height: 300px;
     background-color: white;
@@ -118,11 +125,58 @@ body {
     background-position: top;
 }
 
-.menu-icon {
-    margin-top: 35px;
-    cursor: pointer;
-    width: 35px;
-    height: 25px;
+.menu-profile-image {
+    float: left;
+    margin: 20px;
+    margin-left: 30px;
+    margin-right: 0;
+    height: 260px;
+}
+
+.menu-profile-info {
+    width: 250px;
+    height: 300px;
+    float: right;
+}
+
+.menu-profile-name {
+    margin: 0;
+    padding: 0;
+    margin-top: 65px;
+    font-size: 30px;
+    color: navy;
+    text-align: center;
+}
+
+.menu-profile-stats {
+    width: 250px;
+    height: 200px;
+    background-image: url('./img/vertical-separator.png');
+    background-size: 8px 120px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.menu-profile-stats div {
+    color: #888888;
+    padding: 20px;
+    padding-top: 60px;
+    float: left;
+    text-align: center;
+    width: 125px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.menu-profile-stats img {
+    margin-top: 10px;
+    width: 30px;
+}
+
+.menu-profile-stat-values {
+    font-weight: bold;
+    font-size: 22px;
 }
 
 h2 {
@@ -172,6 +226,10 @@ a {
 .course-icon img:hover {
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
+}
+
+.course-icon div {
+    margin-top: 10px;
 }
 
 
@@ -410,6 +468,143 @@ CONTACT
 
 .email1 {
     margin: 0 10px 0 40px;
+}
+
+.progress-bar {
+    height: 50px;
+    vertical-align: middle;
+    margin: auto;
+}
+
+.progress-bar div {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.progress-bar-done {
+    vertical-align: middle;
+    background-color: white;
+}
+
+.progress-bar-todo {
+    vertical-align: middle;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.progress-bar-left-label {
+    line-height: 50px;
+    height: 50px;
+    vertical-align: middle;
+    padding-right: 15px;
+    text-align: right;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.progress-bar-right-label {
+    line-height: 50px;
+    height: 50px;
+    vertical-align: middle;
+    padding-left: 15px;
+    text-align: left;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.progress-bar-right-label .course-icon {
+    margin: 0;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.progress-bar-indicators {
+    position: relative;
+    height: 25px;
+}
+
+.progress-bar-indicators div {
+    height: 2px;
+}
+
+.progress-bar-dot {
+    top: 5px;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+}
+
+.login-form {
+    margin: auto;
+    padding-top: 10px;
+    color: black;
+    height: 190px;
+    width: 400px;
+    background-color: white;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
+}
+
+.login-form div {
+    padding-top: 10px;
+}
+
+.login-form label {
+    padding-top: 1px;
+    text-align: center;
+    display: inline-block;
+    width: 95px;
+}
+
+.login-form input {
+    padding-bottom: 1px;
+    width: 205px;
+    font-size: 16px;
+    height: 22px;
+    background-color: white;
+    border: 0;
+    border-bottom: 1px solid gray;
+    font-family: 'Exo 2', sans-serif;
+}
+
+.login-form-buttons-container {
+    margin-top: 15px;
+}
+
+.login-button {
+    margin: 5px;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 15px !important;
+    font-family: 'Exo 2', sans-serif;
+    background-color: black !important;
+    color: white;
+    height: 28px !important;
+    width: 130px !important;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
+}
+
+.login-button-fb {
+    margin: 5px;
+    padding: 0;
+    border: 0;
+    font-size: 15px;
+    font-family: 'Exo 2', sans-serif;
+    background-color: #0074D9 !important;
+    color: white;
+    height: 28px !important;
+    width: 170px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
+}
+
+.text-error {
+    height: 20px;
+    color: #D00;
 }
 
 /***********************

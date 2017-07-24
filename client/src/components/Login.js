@@ -8,6 +8,7 @@ import update from 'immutability-helper'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
+import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
@@ -34,24 +35,23 @@ class Login extends React.Component {
 
   render () {
     return (
-      <form onSubmit={this.submit}>
-        {this.state.error &&
+      <FlexibleContentWrapper>
+        <form className={'login-form'} onSubmit={this.submit}>
           <div className='text-error'>{ this.state.error }</div>
-        }
-        <div>
-          <label>Username:</label>
-          <input ref='username' type='text' name='username' />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input ref='password' type='password' name='password' />
-        </div>
-        <div>
-          <input type='submit' value='Log In' />
-        </div>
-
-        <FBLoginButton onLogin={this.redirectAfterLogin} />
-      </form>
+          <div>
+            <label>Username:</label>
+            <input ref='username' type='text' name='username' />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input ref='password' type='password' name='password' />
+          </div>
+          <div className={'login-form-buttons-container'}>
+            <FBLoginButton onLogin={this.redirectAfterLogin} />
+            <input className={'login-button'} type='submit' value='Login' />
+          </div>
+        </form>
+      </FlexibleContentWrapper>
     )
   }
 }
