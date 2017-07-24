@@ -539,3 +539,67 @@ CONTACT
     width: 14px;
     height: 14px;
 }
+
+.login-form {
+    margin: auto;
+    padding-top: 30px;
+    color: black;
+    height: 160px;
+    width: 400px;
+    background-color: white;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
+}
+
+.login-form div {
+    padding-top: 10px;
+}
+
+.login-form label {
+    padding-top: 1px;
+    text-align: center;
+    display: inline-block;
+    width: 95px;
+}
+
+.login-form input {
+    padding-bottom: 1px;
+    width: 205px;
+    font-size: 16px;
+    height: 22px;
+    background-color: white;
+    border: 0;
+    border-bottom: 1px solid gray;
+    font-family: 'Exo 2', sans-serif;
+}
+
+.login-form-buttons-container {
+    margin-top: 15px;
+}
+
+.login-button {
+    margin: 5px;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 15px !important;
+    font-family: 'Exo 2', sans-serif;
+    background-color: black !important;
+    color: white;
+    height: 28px !important;
+    width: 130px !important;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
+}
+
+.login-button-fb {
+    margin: 5px;
+    padding: 0;
+    border: 0;
+    font-size: 15px;
+    font-family: 'Exo 2', sans-serif;
+    background-color: #0074D9 !important;
+    color: white;
+    height: 28px !important;
+    width: 170px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
+}
