@@ -1,5 +1,6 @@
+import _ from 'lodash'
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import { TextField } from 'react-native-material-textfield'
@@ -15,9 +16,9 @@ class Profile extends React.Component {
     oldPasswordError: '',
     confirmationError: '',
     isValid: false,
-    oldPassword: '1111',
-    newPassword: '1111',
-    newPasswordConfirmation: '1111'
+    oldPassword: '',
+    newPassword: '',
+    newPasswordConfirmation: ''
   }
 
   goHome = () => {
@@ -25,12 +26,23 @@ class Profile extends React.Component {
   }
 
   submit = () => {
-    console.log('* LOG * this.state.oldPassword', this.state.oldPassword)
-    console.log('* LOG * this.state.newPassword', this.state.newPassword)
     this.props.submit({ oldPassword: this.state.oldPassword, newPassword: this.state.newPassword })
-      .then(function() {
-        // console.log('* LOG * this.props', this.props)
-        console.log('* LOG * Password changed successfully', arguments)
+      .then((response) => {
+        if(_.get(response, 'data.changePassword.success')) {
+          Alert.alert(
+            'Good job!',
+            'Password changed successfully',
+            [
+              {text: 'OK', onPress: this.goHome},
+            ],
+            { cancelable: false }
+          )
+        } else {
+          Alert.alert(
+            'Oops...',
+            'There was a problem while changing your password',
+          )
+        }
       })
       .catch((data) => {
         const oldPasswordError = data.graphQLErrors[0].message
@@ -39,12 +51,10 @@ class Profile extends React.Component {
   }
 
   onChangeText = (field) => (value) => {
-    console.log('* LOG * field, value', field, value)
     this.setState({ [field]: value }, this.validatePasswords)
   }
 
   validatePasswords = () => {
-    console.log('* LOG * this.state.oldPassword.length', this.state.oldPassword.length)
     if (!this.state.oldPassword.length) {
       this.setState({ oldPasswordError: 'Password cannot be empty', isValid: false })
     } else {
@@ -77,7 +87,6 @@ class Profile extends React.Component {
           paddingHorizontal: '10%'
         }}>
           <TextField
-            // style={styles.textInput}
             autoFocus
             autoCapitalize='none'
             secureTextEntry
@@ -85,34 +94,29 @@ class Profile extends React.Component {
             value={this.state.oldPassword}
             onChangeText={this.onChangeText('oldPassword')}
             error={this.state.oldPasswordError}
-            // ref={component => this.oldPassword = component}
-            // ref='oldPassword'
-            // value={this.state.username}
           />
           <TextField
-            // style={styles.textInput}
             autoCapitalize='none'
             secureTextEntry
             label='New Password'
             value={this.state.newPassword}
             onChangeText={this.onChangeText('newPassword')}
-            // ref='newPassword'
-            // value={this.state.username}
           />
           <TextField
-            // style={styles.textInput}
             autoCapitalize='none'
             secureTextEntry
             label='Confirm New Password'
             value={this.state.newPasswordConfirmation}
             onChangeText={this.onChangeText('newPasswordConfirmation')}
             error={this.state.confirmationError}
-            // ref='newPasswordConfirmation'
-            // value={this.state.username}
           />
 
           <TouchableOpacity onPress={this.submit} activeOpacity={0.8} disabled={!isValid}>
-            <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 5 }, !isValid ? { opacity: 0.7 } : {}]}>CHANGE PASSWORD</Text>
+            <Text style={[
+              styles.button,
+              { backgroundColor: '#68b888', marginTop: 5 },
+              !isValid ? { opacity: 0.7 } : {}
+            ]}>CHANGE PASSWORD</Text>
           </TouchableOpacity>
         </View>
       </View>
