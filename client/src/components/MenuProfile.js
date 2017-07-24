@@ -8,21 +8,21 @@ import sessionCount from '../../shared/graphql/queries/sessionCount'
 class MenuProfile extends React.Component {
   constructor (props) {
     super(props)
-    this.name = 'Michał'
     this.level = 'Baby boy'
   }
 
   render () {
-    const dueValue = this.props.sessionCount.SessionCount.dueDone
-    const dueAll = this.props.sessionCount.SessionCount.dueTotal
-    const reviewValue = this.props.sessionCount.SessionCount.reviewDone
-    const reviewAll = this.props.sessionCount.SessionCount.dueTotal
+    const dueValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueDone
+    const dueAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
+    const reviewValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.reviewDone
+    const reviewAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
+    const name = this.props.currentUser.username
 
     return (
       <div className={'menu-profile-container'}>
         <img className={'menu-profile-image'} src={profileImage} alt={this.level}/>
         <div className={'menu-profile-info'}>
-          <p className={'menu-profile-name'}>{this.name}</p>
+          <p className={'menu-profile-name'}>{name}</p>
           <div className={'menu-profile-stats'}>
             <div>
               DUE<br/>
