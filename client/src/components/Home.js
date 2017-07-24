@@ -38,7 +38,7 @@ class Home extends React.Component {
 
     if (nextProps.userDetails.UserDetails.selectedCourse) {
       const courseId = nextProps.userDetails.UserDetails.selectedCourse
-      const selectedCourse = this.props.courses.Courses.find(course=>course._id === courseId)
+      const selectedCourse = nextProps.courses.Courses.find(course=>course._id === courseId)
 
       nextProps.dispatch(course.select(selectedCourse))
       nextProps.dispatch(push(`/course/${courseId}`))
