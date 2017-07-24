@@ -1,7 +1,8 @@
 import React from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
+import { TextField } from 'react-native-material-textfield'
 
 import Header from './Header'
 import PageTitle from './PageTitle'
@@ -13,18 +14,23 @@ class Profile extends React.Component {
   state = {
     oldPasswordError: '',
     confirmationError: '',
-    isValid: false
+    isValid: false,
+    oldPassword: '1111',
+    newPassword: '1111',
+    newPasswordConfirmation: '1111'
   }
 
   goHome = () => {
     this.props.history.push('/')
   }
 
-  submit = (e) => {
-    e.preventDefault()
-    this.props.submit({ oldPassword: this.refs.oldPassword.value, newPassword: this.refs.newPassword.value })
-      .then(() => {
-        swal("Good job!", "Password changed successfully", "success").then(this.goHome, this.goHome)
+  submit = () => {
+    console.log('* LOG * this.state.oldPassword', this.state.oldPassword)
+    console.log('* LOG * this.state.newPassword', this.state.newPassword)
+    this.props.submit({ oldPassword: this.state.oldPassword, newPassword: this.state.newPassword })
+      .then(function() {
+        // console.log('* LOG * this.props', this.props)
+        console.log('* LOG * Password changed successfully', arguments)
       })
       .catch((data) => {
         const oldPasswordError = data.graphQLErrors[0].message
@@ -32,32 +38,33 @@ class Profile extends React.Component {
       })
   }
 
+  onChangeText = (field) => (value) => {
+    console.log('* LOG * field, value', field, value)
+    this.setState({ [field]: value }, this.validatePasswords)
+  }
+
   validatePasswords = () => {
-    console.log("WILK: this.refs",this.refs);
-    console.log("WILK: this.oldPassword",this.oldPassword);
-    console.log("WILK: this.oldPassword.value",this.oldPassword.value);
-    console.log("WILK: this.oldPassword.getText",this.oldPassword._getText());
-    console.log("WILK: this.oldPassword.lastNativeText",this.oldPassword._lastNativeText);
-    // console.log("WILK: this.refs.oldPassword", this.refs.oldPassword.value);
-    // console.log("WILK: this.refs.newPassword", this.refs.newPassword.value);
-    // console.log("WILK: this.refs.newPasswordConfirmation", this.refs.newPasswordConfirmation.value);
-    // if (!this.refs.oldPassword.value.length) {
-    //   this.setState({ oldPasswordError: 'Password cannot be empty', isValid: false })
-    // } else {
-    //   this.setState({ oldPasswordError: '' })
-    // }
-    //
-    // if (this.refs.newPassword.value.length !== this.refs.newPasswordConfirmation.value.length) {
-    //   return this.setState({ confirmationError: '', isValid: false })
-    // }
-    // if (this.refs.newPassword.value !== this.refs.newPasswordConfirmation.value) {
-    //   return this.setState({ confirmationError: 'Passwords don\'t match', isValid: false })
-    // }
-    // if (this.refs.newPasswordConfirmation.value.length > 3) {
-    //   return this.setState({ isValid: true })
+    console.log('* LOG * this.state.oldPassword.length', this.state.oldPassword.length)
+    if (!this.state.oldPassword.length) {
+      this.setState({ oldPasswordError: 'Password cannot be empty', isValid: false })
+    } else {
+      this.setState({ oldPasswordError: '' })
+    }
+
+    if (this.state.newPassword.length !== this.state.newPasswordConfirmation.length) {
+      return this.setState({ confirmationError: '', isValid: false })
+    }
+    if (this.state.newPassword!== this.state.newPasswordConfirmation) {
+      return this.setState({ confirmationError: 'Passwords don\'t match', isValid: false })
+    }
+    if (this.state.newPasswordConfirmation.length > 3) {
+      return this.setState({ isValid: true })
+    }
   }
 
   render () {
+    const { isValid } = this.state
+
     return (
       <View style={{
         height: '100%',
@@ -65,40 +72,48 @@ class Profile extends React.Component {
       }}>
         <Header />
         <PageTitle text='PROFILE' />
-        <View style={styles.textInputWrapper}>
-          <TextInput
-            style={styles.textInput}
+
+        <View style={{
+          paddingHorizontal: '10%'
+        }}>
+          <TextField
+            // style={styles.textInput}
             autoFocus
             autoCapitalize='none'
-            autoCorrect={false}
-            placeholder='Old Password'
-            onChangeText={this.validatePasswords}
-            ref={component => this.oldPassword = component}
+            secureTextEntry
+            label='Old Password'
+            value={this.state.oldPassword}
+            onChangeText={this.onChangeText('oldPassword')}
+            error={this.state.oldPasswordError}
+            // ref={component => this.oldPassword = component}
             // ref='oldPassword'
             // value={this.state.username}
           />
-        </View>
-        <View style={styles.textInputWrapper}>
-          <TextInput
-            style={styles.textInput}
+          <TextField
+            // style={styles.textInput}
             autoCapitalize='none'
-            autoCorrect={false}
-            placeholder='New Password'
-            onChangeText={this.validatePasswords}
-            ref='newPassword'
+            secureTextEntry
+            label='New Password'
+            value={this.state.newPassword}
+            onChangeText={this.onChangeText('newPassword')}
+            // ref='newPassword'
             // value={this.state.username}
           />
-        </View>
-        <View style={styles.textInputWrapper}>
-          <TextInput
-            style={styles.textInput}
+          <TextField
+            // style={styles.textInput}
             autoCapitalize='none'
-            autoCorrect={false}
-            placeholder='Confirm New Password'
-            onChangeText={this.validatePasswords}
-            ref='newPasswordConfirmation'
+            secureTextEntry
+            label='Confirm New Password'
+            value={this.state.newPasswordConfirmation}
+            onChangeText={this.onChangeText('newPasswordConfirmation')}
+            error={this.state.confirmationError}
+            // ref='newPasswordConfirmation'
             // value={this.state.username}
           />
+
+          <TouchableOpacity onPress={this.submit} activeOpacity={0.8} disabled={!isValid}>
+            <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 5 }, !isValid ? { opacity: 0.7 } : {}]}>CHANGE PASSWORD</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
