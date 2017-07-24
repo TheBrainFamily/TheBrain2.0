@@ -79,7 +79,7 @@ class AppHeader extends React.Component {
                 {currentUser && currentUser.activated
                   ?
                   <span>
-                    <MenuProfile/>
+                    <MenuProfile currentUser={currentUser}/>
                     <div className={'menu-separator'}/>
                   </span>
                   : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}}/>
