@@ -12,6 +12,7 @@ import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import Hamburger from './Hamburger'
+import MenuProfile from './MenuProfile'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
@@ -75,8 +76,14 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                <div className={'profile-container'}>&nbsp;</div>
-                <div className={'menu-separator'} />
+                {currentUser && currentUser.activated
+                  ?
+                  <span>
+                    <MenuProfile currentUser={currentUser}/>
+                    <div className={'menu-separator'}/>
+                  </span>
+                  : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}}/>
+                }
                 {!this.props.data.loading &&
                   <span>
                     <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />
