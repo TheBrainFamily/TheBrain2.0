@@ -76,7 +76,7 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                <MenuProfile/>
+                {currentUser && currentUser.activated && <MenuProfile/>}
                 <div className={'menu-separator'}/>
                 {!this.props.data.loading &&
                   <span>
