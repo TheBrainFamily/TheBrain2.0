@@ -544,7 +544,7 @@ CONTACT
     margin: auto;
     padding-top: 10px;
     color: black;
-    height: 190px;
+    height: 225px;
     width: 400px;
     background-color: white;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
@@ -570,6 +570,11 @@ CONTACT
     border: 0;
     border-bottom: 1px solid gray;
     font-family: 'Exo 2', sans-serif;
+}
+
+.login-form input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
 }
 
 .login-form-buttons-container {
