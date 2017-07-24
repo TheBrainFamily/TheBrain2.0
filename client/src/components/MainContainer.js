@@ -11,7 +11,6 @@ import Lecture from './Lecture'
 import Questions from './Questions'
 import Contact from './Contact'
 import Login from './Login'
-import Signup from './Signup'
 import Header from './Header'
 import ResetPassword from './ResetPassword'
 import coursesQuery from '../../shared/graphql/queries/courses'
@@ -52,7 +51,7 @@ class MainContainer extends React.Component {
           <Route exact key='wellDone' path='/wellDone' component={WellDone}/>
           <Route exact key='questions' path='/questions' component={Questions}/>
           <Route exact key='login' path='/login' component={Login}/>
-          <Route exact key='signup' path='/signup' component={Signup}/>
+          <Route exact key='signup' path='/signup' component={Login}/>
           <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword}/>
         </div>
       </Router>)
