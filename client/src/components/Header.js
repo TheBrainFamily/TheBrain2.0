@@ -76,8 +76,14 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                {currentUser && currentUser.activated && <MenuProfile currentUser={currentUser}/>}
-                <div className={'menu-separator'}/>
+                {currentUser && currentUser.activated
+                  ?
+                  <span>
+                    <MenuProfile currentUser={currentUser}/>
+                    <div className={'menu-separator'}/>
+                  </span>
+                  : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}}/>
+                }
                 {!this.props.data.loading &&
                   <span>
                     <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />
