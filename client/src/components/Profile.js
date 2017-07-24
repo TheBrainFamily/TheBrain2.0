@@ -1,5 +1,5 @@
 // @flow
-
+import _ from 'lodash'
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
@@ -25,8 +25,12 @@ class Profile extends React.Component {
   submit = (e) => {
     e.preventDefault()
     this.props.submit({ oldPassword: this.refs.oldPassword.value, newPassword: this.refs.newPassword.value })
-      .then(() => {
-        swal("Good job!", "Password changed successfully", "success").then(this.goHome, this.goHome)
+      .then((response) => {
+        if(_.get(response, 'data.changePassword.success')) {
+          swal('Good job!', 'Password changed successfully', 'success').then(this.goHome, this.goHome)
+        } else {
+          swal('Oops...', 'There was a problem while changing your password', 'error')
+        }
       })
       .catch((data) => {
         const oldPasswordError = data.graphQLErrors[0].message
