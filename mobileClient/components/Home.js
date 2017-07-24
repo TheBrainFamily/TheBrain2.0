@@ -73,7 +73,7 @@ class Home extends React.Component {
       const elementWidthChangeAfterScaling = (width - newSizeX) / 2
       const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
 
-      // this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
+      this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
       this.animateCourseSelectorsFadeOut(selectedCourseId)
     })
   }
@@ -147,7 +147,7 @@ class Home extends React.Component {
                 <View key={course._id} style={{
                   marginHorizontal: '2%',
                 }}>
-                  <View ref={`${course._id}courseSelectorContainer`}>
+                  <View ref={`${course._id}courseSelectorContainer`} onLayout={() => {}}>
                     <Animatable.View style={{ zIndex: 100 }}
                                      ref={`${course._id}courseSelector`}>
                       <CircleButton
