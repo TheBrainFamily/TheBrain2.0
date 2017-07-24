@@ -28,13 +28,11 @@ class Profile extends React.Component {
   submit = () => {
     this.props.submit({ oldPassword: this.state.oldPassword, newPassword: this.state.newPassword })
       .then((response) => {
-        if(_.get(response, 'data.changePassword.success')) {
+        if (_.get(response, 'data.changePassword.success')) {
           Alert.alert(
             'Good job!',
             'Password changed successfully',
-            [
-              {text: 'OK', onPress: this.goHome},
-            ],
+            [{ text: 'OK', onPress: this.goHome }],
             { cancelable: false }
           )
         } else {
@@ -64,7 +62,7 @@ class Profile extends React.Component {
     if (this.state.newPassword.length !== this.state.newPasswordConfirmation.length) {
       return this.setState({ confirmationError: '', isValid: false })
     }
-    if (this.state.newPassword!== this.state.newPasswordConfirmation) {
+    if (this.state.newPassword !== this.state.newPasswordConfirmation) {
       return this.setState({ confirmationError: 'Passwords don\'t match', isValid: false })
     }
     if (this.state.newPasswordConfirmation.length > 3) {
