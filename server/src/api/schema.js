@@ -101,6 +101,7 @@ export const typeDefs = gql`
     }
     
     type Mutation {
+        changePassword(oldPassword: String!, newPassword: String!): Status,
         selectCourse(courseId: String!): Status,
         closeCourse: Status,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
