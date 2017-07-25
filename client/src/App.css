@@ -669,3 +669,55 @@ FORM
     visibility: hidden;
     display: inline-block;
 }
+
+/***********************
+CALENDAR
+***********************/
+
+.calendar-container {
+    height: 700px;
+    width: 700px;
+    margin: 0px auto;
+    background: #fff;
+}
+
+.calendar-header {
+    display: flex;
+    /*height: 50px;*/
+}
+
+.calendar-body {
+    flex-flow: row wrap;
+    place-content: stretch space-around;
+    height: 100%;
+}
+
+.day-heading {
+    color: #999;
+    font-family: 'Exo 2', sans-serif;
+    padding: 5px;
+    text-align: center;
+    flex: 1;
+    /*display: flex;*/
+}
+
+.day-heading.today{
+    color: #662d91;
+}
+
+.day-heading.sunday{
+    color: #a00;
+}
+
+.calendar-day {
+    width: 14.2857%;
+    padding: 5px;
+    justify-content: space-between;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-color: rgb(204, 204, 204);
+}
+
+.calendar-day.today {
+    background: #662d91;
+}
