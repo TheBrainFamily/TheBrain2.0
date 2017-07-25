@@ -12,11 +12,10 @@ import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
+
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
-
 class Home extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
