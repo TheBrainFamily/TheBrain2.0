@@ -28,7 +28,7 @@ class Questions extends React.Component {
       return
     }
 
-    if (nextProps.currentUser.activated) {
+    if (nextProps.currentUser.CurrentUser.activated) {
       nextProps.dispatch(push('/'))
     } else {
       nextProps.dispatch(push('/signup'))
