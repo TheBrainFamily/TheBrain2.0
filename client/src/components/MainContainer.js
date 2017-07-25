@@ -52,7 +52,7 @@ class MainContainer extends React.Component {
             backgroundColor: courseColor
           }}>
           <Header />
-          <Route exact key='Home' path='/' component={ReviewsCalendar} />
+          <Route exact key='Home' path='/' component={Home} />
           <Route exact key='login' path='/login' component={Login} />
           <Route exact key='signup' path='/signup' component={Signup} />
           <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />

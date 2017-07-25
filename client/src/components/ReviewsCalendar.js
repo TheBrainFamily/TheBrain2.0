@@ -57,10 +57,6 @@ class ReviewsCalendar extends React.Component {
     const month = currentDate.toLocaleString('en-us', { month: 'long' }).toUpperCase()
     const year = currentDate.getFullYear()
 
-    // const windowHeight = Dimensions.get('window').height
-    // const pageTitleHeight = appStyle.pageTitle.height
-    // const height = windowHeight - appStyle.header.totalHeight - pageTitleHeight - appStyle.calendarHeader.height
-
     const currentMonth = currentDate.getMonth() + 1
     const daysInPreviousMonth = getDaysInMonth(currentMonth - 1)
     const daysInCurrentMonth = getDaysInMonth(currentMonth)
@@ -93,27 +89,31 @@ class ReviewsCalendar extends React.Component {
               const isToday = isCurrentMonth && isCurrentDay
               const timestamp = new Date(Date.UTC(today.getFullYear(), date.month - 1, date.day)).valueOf() / 1000
               const count = _.get(reviewsByTimestamp, timestamp, 0)
+              const calendarDayStyle = { zIndex: index - (isToday ? 2 : 0) } // fix to display a circle separator on top of a current day tile
 
               const calendarDayClasses = cs({
                 'calendar-day': true,
                 'today': isToday
-                // { zIndex: index - (isToday ? 2 : 0) }, // fix to display a circle separator on top of a current day tile
+              })
+
+              const dayNumberClasses = cs({
+                'day-number': true,
+                'today': isToday,
+                'sunday': isSunday
+              })
+
+              const reviewTextClasses = cs({
+                'review-text': true,
+                'today': isToday
               })
 
               return (
-                <div key={`day-${index}`} className={calendarDayClasses}>
+                <div key={`day-${index}`} className={calendarDayClasses} style={calendarDayStyle}>
                   {!isSunday &&
-                  <div style={style.circle}/>
+                    <div className='small-circle' />
                   }
-                  <span style={[
-                    style.smallText,
-                    isSunday ? { color: '#a00' } : {},
-                    isToday ? { color: '#fff' } : {}
-                  ]}>{date.day}</span>
-                  <span style={[
-                    style.reviewText,
-                    isToday ? { color: '#fff' } : {}
-                  ]}>{count ? `${count} r.` : ''}</span>
+                  <div className={dayNumberClasses}>{date.day}</div>
+                  <span className={reviewTextClasses}>{count ? `${count} r.` : ''}</span>
                 </div>
               )
             })}
@@ -121,39 +121,6 @@ class ReviewsCalendar extends React.Component {
         </div>
       </FlexibleContentWrapper>
     )
-  }
-}
-
-const style = {
-
-  smallText: {
-    color: '#999',
-    fontFamily: 'Exo2-Regular',
-    fontSize: 13
-  },
-  reviewText: {
-    color: '#662d91',
-    fontFamily: 'Exo2-Bold',
-    fontSize: 15,
-    textAlign: 'center',
-    marginBottom: 5
-  },
-  circle: {
-    position: 'absolute',
-    top: -3,
-    right: -3,
-    width: 6,
-    height: 6,
-    borderRadius: 6,
-    backgroundColor: '#ccc',
-  },
-  calendarDay: {
-    width: `${100 / 7 - 0.01}%`, // -0.01 is needed to display calendar properly on some devices
-    padding: 5,
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#ccc',
   }
 }
 
