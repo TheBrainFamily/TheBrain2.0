@@ -17,6 +17,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Header from './Header'
 import ResetPassword from './ResetPassword'
+import ReviewsCalendar from './ReviewsCalendar'
 
 import { history } from '../store'
 
@@ -64,6 +65,7 @@ class MainContainer extends React.Component {
             currentUser &&
             <div>
               <Route exact key='profile' path='/profile' component={Profile} />
+              <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
             </div>
           }
           <Redirect from='*' to='/' />
