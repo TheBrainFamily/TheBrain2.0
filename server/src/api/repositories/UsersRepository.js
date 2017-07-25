@@ -58,6 +58,10 @@ export class UsersRepository extends MongoRepository {
     return this.userCollection.findOne({username})
   }
 
+  async getById (userId: string) {
+    return this.userCollection.findOne({_id: new ObjectId(userId)})
+  }
+
   async findByFacebookId (facebookId: string) {
     return this.userCollection.findOne({facebookId})
   }
@@ -71,6 +75,13 @@ export class UsersRepository extends MongoRepository {
     } else {
       return null
     }
+  }
+
+  async changePassword (userId: string, newPassword: string) {
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    const password = await bcrypt.hash(newPassword, salt)
+
+    return this.userCollection.update({_id: new ObjectId(userId)}, {$set: { password }})
   }
 
   static async comparePassword (passA, passB) {
