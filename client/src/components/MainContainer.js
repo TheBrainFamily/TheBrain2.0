@@ -17,6 +17,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Header from './Header'
 import ResetPassword from './ResetPassword'
+import ReviewsCalendar from './ReviewsCalendar'
 
 import { history } from '../store'
 
@@ -51,7 +52,7 @@ class MainContainer extends React.Component {
             backgroundColor: courseColor
           }}>
           <Header />
-          <Route exact key='Home' path='/' component={Home} />
+          <Route exact key='Home' path='/' component={ReviewsCalendar} />
           <Route exact key='login' path='/login' component={Login} />
           <Route exact key='signup' path='/signup' component={Signup} />
           <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
@@ -64,6 +65,7 @@ class MainContainer extends React.Component {
             currentUser &&
             <div>
               <Route exact key='profile' path='/profile' component={Profile} />
+              <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
             </div>
           }
           <Redirect from='*' to='/' />
