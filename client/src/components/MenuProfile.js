@@ -16,7 +16,7 @@ class MenuProfile extends React.Component {
     const dueAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
     const reviewValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.reviewDone
     const reviewAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
-    const name = this.props.currentUser.username
+    const name = this.props.currentUser.username.split("@")[0]
 
     return (
       <div className={'menu-profile-container'}>
