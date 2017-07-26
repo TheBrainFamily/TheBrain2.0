@@ -66,8 +66,6 @@ class Questions extends React.Component {
   }
 
   getHeaderHeight = () => {
-    console.log('PINGWIN: appStyle.header.offset', appStyle.header.offset)
-    console.log('PINGWIN: StatusBar.currentHeight', StatusBar.currentHeight)
     const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
     return appStyle.header.offset +
       appStyle.header.height + actionBarHeight + 22.5
@@ -76,7 +74,6 @@ class Questions extends React.Component {
   getFlashcardHeight = () => {
     const windowDimensions = Dimensions.get('window')
     const elementHeight = (windowDimensions.height - this.getHeaderHeight()) * 0.39
-    console.log('PINGWIN: elementHeight', elementHeight)
     return elementHeight
   }
 

@@ -9,7 +9,6 @@ export default class ProgressBar extends React.Component {
   render() {
     const progressInPercent = this.props.progress * 100
     const progressInPercentText = `${progressInPercent}%`
-    console.log('######EEEEEEXTRAAA PONTON######: progressInPercentText', progressInPercentText)
 
     return (
       <View style={styles.progressBarContainer}>
