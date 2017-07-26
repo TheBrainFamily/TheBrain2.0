@@ -2,7 +2,10 @@ import React from 'react'
 import DropdownMenu from 'react-dd-menu'
 import hamburger from '../img/hamburger-icon.png'
 
-export default class Hamburger extends React.Component {
+import 'react-dd-menu/dist/react-dd-menu.css'
+
+export default class
+  extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
