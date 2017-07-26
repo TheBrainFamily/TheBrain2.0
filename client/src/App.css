@@ -17,8 +17,7 @@ body {
     color: white;
     background-color: white;
     min-width: 1024px;
-    height: 100%;
-    min-height: 860px;
+    min-height: 100%;
     position: relative;
     margin: 0;
     padding: 0;
@@ -69,10 +68,13 @@ body {
     padding-right: 20px;
 }
 
+.dd-menu .dd-menu-items {
+    z-index: 1000;
+}
+
 .dropdown .dd-menu-items {
     top: 115px;
     padding: 0;
-    margin: 20px;
 }
 
 .dropdown .dd-menu-items ul {
@@ -106,7 +108,7 @@ body {
     background-image: url('img/menu-separator.png');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 350px 9px;
+    background-size: contain;
 }
 
 .menu-icon {
@@ -673,4 +675,95 @@ FORM
 .hidden {
     visibility: hidden;
     display: inline-block;
+}
+
+/***********************
+CALENDAR
+***********************/
+
+.calendar-container {
+    width: 700px;
+    margin: 50px auto;
+    background: #fff;
+}
+
+.calendar-header {
+    display: flex;
+}
+
+.calendar-body {
+    display: flex;
+    flex-flow: row wrap;
+    place-content: stretch space-around;
+    height: 100%;
+}
+
+.day-heading {
+    color: #999;
+    font-family: 'Exo 2', sans-serif;
+    padding: 10px 5px;
+    text-align: center;
+    flex: 1;
+    font-size: 20px;
+}
+
+.day-heading.today{
+    color: #662d91;
+}
+
+.day-heading.sunday{
+    color: #a00;
+}
+
+.calendar-day {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: calc(100% / 7 - 11px);
+    height: 100px;
+    padding: 5px;
+    justify-content: space-between;
+    border: 1px solid rgb(204, 204, 204);
+    border-bottom-width: 0;
+    border-left-width: 0;
+    color: #999;
+}
+
+.calendar-day.today {
+    background: #662d91;
+}
+
+.calendar-day .small-circle {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background: #ccc;
+}
+
+.day-number {
+    text-align: left;
+    color: #999;
+    font-size: 16px;
+}
+
+.day-number.today {
+    color: #fff;
+}
+
+.day-number.sunday {
+    color: #a00;
+}
+
+.review-text {
+    color: rgb(102, 45, 145);
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.review-text.today {
+    color: #fff;
 }

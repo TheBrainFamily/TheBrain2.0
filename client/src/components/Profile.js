@@ -10,6 +10,7 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
+import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
 
 class Profile extends React.Component {
   state = {
@@ -26,7 +27,7 @@ class Profile extends React.Component {
     e.preventDefault()
     this.props.submit({ oldPassword: this.refs.oldPassword.value, newPassword: this.refs.newPassword.value })
       .then((response) => {
-        if(_.get(response, 'data.changePassword.success')) {
+        if (_.get(response, 'data.changePassword.success')) {
           swal('Good job!', 'Password changed successfully', 'success').then(this.goHome, this.goHome)
         } else {
           swal('Oops...', 'There was a problem while changing your password', 'error')
@@ -39,22 +40,10 @@ class Profile extends React.Component {
   }
 
   validatePasswords = () => {
-    if (!this.refs.oldPassword.value.length) {
-      this.setState({ oldPasswordError: 'Password cannot be empty', isValid: false })
-    } else {
-      this.setState({ oldPasswordError: '' })
-    }
-
-    if (this.refs.newPassword.value.length !== this.refs.newPasswordConfirmation.value.length) {
-      return this.setState({ confirmationError: '', isValid: false })
-    }
-    if (this.refs.newPassword.value !== this.refs.newPasswordConfirmation.value) {
-      return this.setState({ confirmationError: 'Passwords don\'t match', isValid: false })
-    }
-    if (this.refs.newPasswordConfirmation.value.length > 3) {
-      return this.setState({ isValid: true })
-    }
-
+    const oldPassword = this.refs.oldPassword.value
+    const newPassword = this.refs.newPassword.value
+    const newPasswordConfirmation = this.refs.newPasswordConfirmation.value
+    this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
   render () {
