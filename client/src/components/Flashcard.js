@@ -25,6 +25,15 @@ class Flashcard extends React.Component {
       itemId: this.props.evalItemId,
       evaluation: value
     })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.question !== this.props.question) {
+      this.props.dispatch(flashcard.showAnswer(false))
+    }
+  }
+
+  componentWillMount () {
     this.props.dispatch(flashcard.showAnswer(false))
   }
 
@@ -70,14 +79,14 @@ class Flashcard extends React.Component {
   }
 }
 
-const submitEval = gql`    
+const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
             item {
                 _id
                 flashcardId
                 extraRepeatToday
-                actualTimesRepeated 
+                actualTimesRepeated
             }
             flashcard
             {
