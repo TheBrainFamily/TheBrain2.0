@@ -10,6 +10,7 @@ import PageTitle from './PageTitle'
 
 import styles from '../styles/styles'
 import changePasswordMutation from '../../client/shared/graphql/queries/changePasswordMutation'
+import getPasswordValidationState from '../../client/shared/helpers/getPasswordValidationState'
 
 class Profile extends React.Component {
   state = {
@@ -55,21 +56,8 @@ class Profile extends React.Component {
   }
 
   validatePasswords = () => {
-    if (!this.state.oldPassword.length) {
-      this.setState({ oldPasswordError: 'Password cannot be empty', isValid: false })
-    } else {
-      this.setState({ oldPasswordError: '' })
-    }
-
-    if (this.state.newPassword.length !== this.state.newPasswordConfirmation.length) {
-      return this.setState({ confirmationError: '', isValid: false })
-    }
-    if (this.state.newPassword !== this.state.newPasswordConfirmation) {
-      return this.setState({ confirmationError: 'Passwords don\'t match', isValid: false })
-    }
-    if (this.state.newPasswordConfirmation.length > 3) {
-      return this.setState({ isValid: true })
-    }
+    const { oldPassword, newPassword, newPasswordConfirmation } = this.state
+    this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
   focusNextField(key) {
