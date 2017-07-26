@@ -68,10 +68,13 @@ body {
     padding-right: 20px;
 }
 
+.dd-menu .dd-menu-items {
+    z-index: 1000;
+}
+
 .dropdown .dd-menu-items {
     top: 115px;
     padding: 0;
-    margin: 20px;
 }
 
 .dropdown .dd-menu-items ul {
@@ -105,7 +108,7 @@ body {
     background-image: url('img/menu-separator.png');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 350px 9px;
+    background-size: contain;
 }
 
 .menu-icon {

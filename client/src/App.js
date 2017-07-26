@@ -5,7 +5,6 @@ import { ApolloProvider } from 'react-apollo'
 import store, { client } from './store'
 import MainContainer from './components/MainContainer'
 import './App.css'
-import './react-dd-menu.css'
 
 class App extends Component {
   render () {
