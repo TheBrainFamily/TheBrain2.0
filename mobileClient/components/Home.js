@@ -3,7 +3,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { StyleSheet, Text, View, InteractionManager, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 import Header from './Header'
@@ -61,24 +61,29 @@ class Home extends React.Component {
 
   animateCourseSelector = (selectedCourseId) => {
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
-      console.log('PINGWIN: fx, fy, width, height, pageXOffset, pageYOffset', fx, fy, width, height, pageXOffset, pageYOffset)
       const scale = 0.75
+
       const desiredBottomYOffset = 25
       const newSizeY = height * scale
-      const desiredTopYOffset = this.height - desiredBottomYOffset - newSizeY
-      console.log('PINGWIN: desiredTopYOffset', desiredTopYOffset)
+      const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
+      let iPhoneOffset = 0
+      if (Platform.OS === 'ios' && this.height === 568) iPhoneOffset = 20
+      if (Platform.OS === 'ios' && this.height === 667) iPhoneOffset = 31
+      if (Platform.OS === 'ios' && this.height === 736) iPhoneOffset = 38.5
       const elementHeightChangeAfterScaling = (height - newSizeY) / 2
-      console.log('PINGWIN: this.height, pageYOffset, desiredTopYOffset, elementHeightChangeAfterScaling', this.height, pageYOffset, desiredTopYOffset, elementHeightChangeAfterScaling)
-      const translateYValue = desiredTopYOffset - pageYOffset - elementHeightChangeAfterScaling
-      console.log('PINGWIN: translateYValue', translateYValue)
+      const translateYValue = this.height - pageYOffset - desiredElementTopYOffset - elementHeightChangeAfterScaling - iPhoneOffset
 
       const newSizeX = width * scale
       const centeredLeftXOffset = (this.width - newSizeX) / 2
-      const elementWidthChangeAfterScaling = (width - newSizeX) / 2
+      const elementWidthChangeAfterScaling = (width - newSizeX) /2
       const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
-      console.log('PINGWIN: translateXValue', translateXValue)
 
-      this.refs[`${selectedCourseId}courseSelector`].transitionTo({ transform: [{ translateX: translateXValue }, { translateY: translateYValue }, { scale }] }, 2000)
+      if (Platform.OS === 'ios') {
+        this.refs[`${selectedCourseId}courseSelector`].transitionTo({ transform: [{ translateX: translateXValue }, { translateY: translateYValue }, { scale }] }, 2000)
+      } else {
+        this.refs[`${selectedCourseId}courseSelector`].bounceOut(1000)
+      }
+
       this.animateCourseSelectorsFadeOut(selectedCourseId)
     })
   }
@@ -132,7 +137,6 @@ class Home extends React.Component {
           flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'yellow'
         }}>
           <Animatable.View ref='courseSelectorTitle'>
             <Text
@@ -146,17 +150,15 @@ class Home extends React.Component {
             </Text>
           </Animatable.View>
           {!this.props.courses.loading &&
-          <View style={{ flexDirection: 'row', backgroundColor: 'blue', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1 }}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
               const logoSize = courseLogo.scale * 80
               return (
-                <Animatable.View key={course._id} style={{ zIndex: 100, marginHorizontal: '2%'}}
+                <Animatable.View key={course._id} style={{ zIndex: 100, marginHorizontal: '2%' }}
                                  ref={`${course._id}courseSelector`}>
-                  <View style={{ backgroundColor: 'pink', }} ref={`${course._id}courseSelectorContainer`}
+                  <View ref={`${course._id}courseSelectorContainer`}
                         onLayout={() => {}}>
-                    {/*<Animatable.View style={{ zIndex: 100 }}*/}
-                    {/*ref={`${course._id}courseSelector`}>*/}
                     <CircleButton
                       color={course.color}
                       onPress={this.selectCourse(course)}
@@ -170,7 +172,6 @@ class Home extends React.Component {
                         style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
                       />
                     </CircleButton>
-                    {/*</Animatable.View>*/}
                   </View>
                   <View style={{
                     marginHorizontal: 20
