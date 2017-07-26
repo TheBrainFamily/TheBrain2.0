@@ -104,7 +104,7 @@ export default compose(
   connect(mapStateToProps),
   graphql(currentLessonQuery, {
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id || ownProps.match.params.courseId
+      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
       return ({
         variables: {courseId: selectedCourse},
         fetchPolicy: 'network-only'
@@ -113,7 +113,7 @@ export default compose(
   }),
   graphql(courseById, {
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id || ownProps.match.params.courseId
+      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id ) || ownProps.match.params.courseId
       return ({
         variables: {_id: selectedCourse},
         fetchPolicy: 'network-only'
