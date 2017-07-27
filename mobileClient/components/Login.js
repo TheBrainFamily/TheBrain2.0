@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
@@ -21,6 +21,8 @@ class Login extends React.Component {
       username: '',
       password: ''
     }
+
+    this.inputs = {}
   }
 
   submit = () => {
@@ -36,10 +38,13 @@ class Login extends React.Component {
       })
   }
 
+  focusNextField(key) {
+    this.inputs[key].focus();
+  }
+
   render () {
     return (
-      <View style={{ backgroundColor: 'white', height: '100%' }}>
-        <Header />
+      <PageContainer>
 
         <View style={{ alignItems: 'center' }}>
           <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign in and stay educated</Text>
@@ -58,6 +63,9 @@ class Login extends React.Component {
 
             <View style={styles.textInputWrapper}>
               <TextInput
+                onSubmitEditing={() => {
+                  this.focusNextField('password');
+                }}
                 style={styles.textInput}
                 autoFocus
                 autoCapitalize='none'
@@ -70,6 +78,9 @@ class Login extends React.Component {
 
             <View style={styles.textInputWrapper}>
               <TextInput
+                ref={ input => {
+                  this.inputs['password'] = input
+                }}
                 style={styles.textInput}
                 secureTextEntry
                 autoCapitalize='none'
@@ -86,7 +97,7 @@ class Login extends React.Component {
 
           </View>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }

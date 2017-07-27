@@ -3,7 +3,7 @@ import { FlatList, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 import Video from './Video'
 
@@ -28,11 +28,7 @@ class Lectures extends React.Component {
       return <View />
     }
     return (
-      <View style={{
-        height: '100%',
-        backgroundColor: 'white'
-      }}>
-        <Header />
+      <PageContainer>
 
         <PageTitle text='LECTURES LIST' />
         <FlatList
@@ -43,7 +39,7 @@ class Lectures extends React.Component {
           }}
           numColumns={2}
         />
-      </View>
+      </PageContainer>
     )
   }
 }

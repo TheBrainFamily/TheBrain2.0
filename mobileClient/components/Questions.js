@@ -61,10 +61,6 @@ class Questions extends React.Component {
     }
   }
 
-  goHome = () => {
-    this.props.history.push('/')
-  }
-
   getHeaderHeight = () => {
     const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
     return appStyle.header.offset +
@@ -136,21 +132,20 @@ const currentItemsQuery = gql`
     }
 `
 
-export default withRouter(
-  compose(
-    graphql(currentUserQuery, {name: 'currentUser'}),
-    graphql(currentItemsQuery, {
-        name: 'currentItems',
-        options: {
-          fetchPolicy: 'network-only'
-        }
-      }
-    ),
-    graphql(sessionCountQuery, {
-      name: 'sessionCount',
-      options: {
-        fetchPolicy: 'network-only'
-      }
-    })
-  )(connect(state => state)(Questions))
-)
+export default compose(
+  withRouter,
+  graphql(currentUserQuery, { name: 'currentUser' }),
+  graphql(currentItemsQuery, {
+    name: 'currentItems',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(sessionCountQuery, {
+    name: 'sessionCount',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  connect(state => state)
+)(Questions)

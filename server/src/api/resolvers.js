@@ -29,6 +29,9 @@ const resolvers = {
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
+    Reviews (root: ?string, args: ?Object, context: Object) {
+      return context.Items.getReviews(context.user._id)
+    },
     Course (root: ?string, args: { _id: string }, context: Object) {
       return context.Courses.getCourse(args._id)
     },
@@ -54,7 +57,7 @@ const resolvers = {
     Item (root: ?string, args: { _id: string }, context: Object) {
       return context.Items.getItemById(args._id, context.user._id)
     },
-    ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
+    async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
       } else {
@@ -83,10 +86,8 @@ const resolvers = {
     async selectCourse (root: ?string, args: { courseId: string }, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
-        const guestUser = await context.Users.createGuest(args.courseId)
-        console.log('Gozdecki: guestUser', guestUser)
+        const guestUser = await loginWithGuest(root, args, context)
         userId = guestUser._id
-        context.req.logIn(guestUser, (err) => { if (err) throw err })
       }
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
@@ -171,13 +172,18 @@ const resolvers = {
           throw new Error('Username and password cannot be empty')
         }
 
-        const user = await context.Users.findByUsername(username)
+        const dbUser = await context.Users.findByUsername(username)
 
-        if (user) {
+        if (dbUser) {
           throw new Error('Username is already taken')
         }
 
-        await context.Users.updateUser(context.user._id, username, args.password)
+        let user = context.user
+
+        if (!user) {
+          user = await loginWithGuest(root, args, context)
+        }
+        await context.Users.updateUser(user._id, username, args.password)
 
         return resolvers.Mutation.logIn(root, {username, password: args.password}, context)
       } catch (e) {
@@ -208,9 +214,40 @@ const resolvers = {
       } else {
         return {success: false}
       }
+    },
+    async changePassword (root: ?string, args: { oldPassword: string, newPassword: string }, context: Object) {
+      try {
+        const userId = context.user._id
+        const user = await context.Users.getById(userId)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
+        const isOldPasswordValid = await UsersRepository.comparePassword(user.password, args.oldPassword)
+        if (!isOldPasswordValid) {
+          throw new Error('Old Password is not correct')
+        }
+
+        const updatedUser = await context.Users.changePassword(context.user._id, args.newPassword)
+        if (updatedUser) {
+          return {success: true}
+        } else {
+          return {success: false}
+        }
+      } catch (e) {
+        throw e
+      }
     }
   }
 }
+
+const loginWithGuest = async (root: ?string, args: ?Object, context: Object) => {
+  const guestUser = await context.Users.createGuest(args.courseId)
+  context.req.logIn(guestUser, (err) => { if (err) throw err })
+  return guestUser
+}
+
 //
 process.on('unhandledRejection', (reason) => {
   // console.log('Reason: ' + reason)

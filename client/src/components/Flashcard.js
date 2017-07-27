@@ -25,6 +25,15 @@ class Flashcard extends React.Component {
       itemId: this.props.evalItemId,
       evaluation: value
     })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.question !== this.props.question) {
+      this.props.dispatch(flashcard.showAnswer(false))
+    }
+  }
+
+  componentWillMount () {
     this.props.dispatch(flashcard.showAnswer(false))
   }
 
@@ -58,26 +67,26 @@ class Flashcard extends React.Component {
         </FlexibleContentWrapper>
         <div className="answer-buttons-container">
           <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(1)}/>
-          <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(2.5)}/>
-          <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(4.5)}/>
-          <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
                onClick={() => this.onSubmitEvaluation(6)}/>
+          <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(4.5)}/>
+          <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(2.5)}/>
+          <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(1)}/>
         </div>
       </div>)
   }
 }
 
-const submitEval = gql`    
+const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
             item {
                 _id
                 flashcardId
                 extraRepeatToday
-                actualTimesRepeated 
+                actualTimesRepeated
             }
             flashcard
             {

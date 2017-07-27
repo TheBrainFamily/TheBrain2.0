@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
   topContainer: {
     height: appStyle.header.offset,
     backgroundColor: appStyle.colors.bgAlt,
-    // zIndex: 999
   },
   textDefault: {
     fontSize: 18,
@@ -53,7 +52,6 @@ const styles = StyleSheet.create({
   baseMarkerStyle: {
     position: 'absolute',
     opacity: 1,
-    // zIndex: 100,
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     transform: [{scale: 0}],
@@ -98,7 +96,6 @@ const styles = StyleSheet.create({
   summaryContainer: {
     height: 25,
     backgroundColor: 'white',
-    // zIndex: 50,
     flexDirection: 'row',
     margin: 0,
     padding: 5

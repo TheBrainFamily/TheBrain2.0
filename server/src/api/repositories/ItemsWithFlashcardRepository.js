@@ -23,7 +23,7 @@ class ItemsWithFlashcardRepository extends MongoRepository {
       ]
     }).toArray()
 
-    const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item => item.flashcardId)}}).toArray()
+    const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
 
     return currentItems.map(item => {
       return {

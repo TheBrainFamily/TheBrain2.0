@@ -39,5 +39,9 @@ class Course extends React.Component {
 export default compose(
   connect(),
   withRouter,
-  graphql(currentItemsExistQuery)
+  graphql(currentItemsExistQuery,{
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  })
 )(Course)

@@ -3,6 +3,7 @@
 import mongoose from 'mongoose'
 import casual from 'casual'
 import _ from 'lodash'
+import moment from 'moment'
 
 import resolvers from './resolvers'
 import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
@@ -442,8 +443,8 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   let context
   beforeAll(async () => {
     // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await mongoose.connection.db.collection('lessons').insert({ position: 2, courseId: 'testCourseId' })
-    await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourseId' })
+    await mongoose.connection.db.collection('lessons').insert({ position: 2, courseId: 'testCourseId', flashcardIds: [] })
+    await mongoose.connection.db.collection('lessons').insert({ position: 1, courseId: 'testCourseId', flashcardIds: [] })
     await mongoose.connection.db.collection('courses').insert({ _id: 'testCourseId' })
 
     context = {
@@ -560,5 +561,40 @@ describe('login with facebook', async () => {
 
     await logInWithFacebook(undefined, args, context)
     expect(context.req.logIn.mock.calls[0]).toContain(user)
+  })
+})
+
+describe('query.Reviews', () => {
+  afterAll(async (done) => {
+    await mongoose.connection.db.dropDatabase()
+    done()
+  })
+
+  it('returns empty list by default', async () => {
+    const userId = mongoose.Types.ObjectId()
+    const context = { user: { _id: userId }, Items: itemsRepository }
+
+    const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
+
+    expect(reviews.length).toBe(0)
+  })
+
+  it('returns list of reviews grouped by day timestamp', async () => {
+    const userId = mongoose.Types.ObjectId()
+    const context = { user: { _id: userId }, Items: itemsRepository }
+    const tomorrowDate = moment().add(1, 'day')
+    const dayAfterTomorrowDate = moment().add(2, 'day')
+    const itemsToExtend = [
+      { userId, nextRepetition: tomorrowDate.unix() }, { userId, nextRepetition: dayAfterTomorrowDate.unix() },
+      { userId, nextRepetition: dayAfterTomorrowDate.add(1, 'hour').unix() }
+    ]
+    await makeItems({ itemsToExtend, number: itemsToExtend.length })
+
+    const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
+
+    expect(reviews).toEqual([
+      { ts: tomorrowDate.clone().utc().startOf('day').unix(), count: 1 },
+      { ts: dayAfterTomorrowDate.clone().utc().startOf('day').unix(), count: 2 }
+    ])
   })
 })
