@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TheBrain</string>
+    <string name="fb_app_id">***REMOVED***</string>
+    <string name="fb_login_protocol_scheme">***REMOVED***</string>
 </resources>
