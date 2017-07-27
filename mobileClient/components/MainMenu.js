@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 
-import { Animated, Dimensions, Image, Text, View, TouchableHighlight } from 'react-native'
+import { Animated, Dimensions, Image, Text, View, TouchableHighlight, Keyboard } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import Separator from './Separator'
@@ -70,6 +70,8 @@ class MainMenu extends React.Component {
     const sessionCount = this.props.sessionCount.SessionCount
 
     const height = Dimensions.get('window').height - this.props.topMargin
+    
+    Keyboard.dismiss()
 
     return (
       <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { backgroundColor: '#eee', opacity: fadeAnim, top: this.props.topMargin, justifyContent: 'space-between',  height }]}>
