@@ -8,20 +8,43 @@ import update from 'immutability-helper'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
+import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Login extends React.Component {
   state = {
-    error: ''
+    error: '',
+    isSignup: false
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if(nextProps.match.path === '/signup') {
+      this.setState({isSignup: true})
+
+      if (!nextProps.currentUser || nextProps.currentUser.loading) {
+        return
+      }
+
+      if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
+        nextProps.dispatch(push('/'))
+      }
+    }
   }
 
   submit = (e) => {
     e.preventDefault()
+    let submitAction = this.props.login
+    if(this.refs.isSignup.checked) {
+      submitAction = this.props.signup
+    }
     this.setState({ error: '' })
 
-    this.props.submit({ username: this.refs.username.value, password: this.refs.password.value })
-      .then(this.redirectAfterLogin)
+    submitAction({ username: this.refs.username.value, password: this.refs.password.value })
+      .then(() => {
+        this.redirectAfterLogin()
+      })
       .catch((data) => {
         const error = data.graphQLErrors[0].message
         this.setState({ error })
@@ -31,27 +54,35 @@ class Login extends React.Component {
   redirectAfterLogin = () => {
     this.props.dispatch(push('/'))
   }
+  
+  checkboxClick = () => {
+    this.setState({isSignup: !this.state.isSignup})
+  }
 
   render () {
     return (
-      <form onSubmit={this.submit}>
-        {this.state.error &&
+      <FlexibleContentWrapper>
+        <form className={'login-form'} onSubmit={this.submit}>
           <div className='text-error'>{ this.state.error }</div>
-        }
-        <div>
-          <label>Username:</label>
-          <input ref='username' type='text' name='username' />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input ref='password' type='password' name='password' />
-        </div>
-        <div>
-          <input type='submit' value='Log In' />
-        </div>
-
-        <FBLoginButton onLogin={this.redirectAfterLogin} />
-      </form>
+          <div>
+            <label>Username:</label>
+            <input ref='username' type='text' name='username'/>
+          </div>
+          <div>
+            <label>Password:</label>
+            <input ref='password' type='password' name='password'/>
+          </div>
+          <div>
+            <input ref='isSignup' type="checkbox" name="newAccount" checked={this.state.isSignup}
+                   onChange={this.checkboxClick}/>
+            <label>New account</label>
+          </div>
+          <div className={'login-form-buttons-container'}>
+            <FBLoginButton onLogin={this.redirectAfterLogin}/>
+            <input className={'login-button'} type='submit' value='Login'/>
+          </div>
+        </form>
+      </FlexibleContentWrapper>
     )
   }
 }
@@ -63,20 +94,26 @@ const logIn = gql`
     }
 `
 
+const signup = gql`
+    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!){
+        setUsernameAndPasswordForGuest(username: $username, password: $password) {
+            username
+        }
+    }
+`
+
 export default compose(
   connect(),
   withRouter,
   graphql(logIn, {
-    props: ({ ownProps, mutate }) => ({
-      submit: ({ username, password }) => mutate({
+    props: ({ownProps, mutate}) => ({
+      login: ({username, password}) => mutate({
         variables: {
           username,
           password
         },
         updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
+          CurrentUser: (prev, {mutationResult}) => {
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logIn
@@ -89,5 +126,24 @@ export default compose(
         }]
       })
     })
+  }),
+  graphql(signup, {
+    props: ({ownProps, mutate}) => ({
+      signup: ({username, password}) => mutate({
+        variables: {
+          username,
+          password
+        },
+        refetchQueries: [{
+          query: currentUserQuery
+        }]
+      })
+    })
+  }),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
   })
 )(Login)

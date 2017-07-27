@@ -12,6 +12,7 @@ import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import Hamburger from './Hamburger'
+import MenuProfile from './MenuProfile'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
@@ -25,9 +26,9 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='/logout' onClick={this.logout}>LOGOUT</Link>
+      return <Link to='/logout' onClick={this.logout}>LOG OUT</Link>
     }
-    return <Link to='/login'>LOGIN</Link>
+    return <Link to='/login'>LOG IN</Link>
   }
 }
 
@@ -63,7 +64,7 @@ class AppHeader extends React.Component {
     this.props.dispatch(push('/'))
   }
 
-  render() {
+  render () {
     const currentUser = this.props.data.CurrentUser
 
     return (
@@ -75,12 +76,18 @@ class AppHeader extends React.Component {
             </Link>
             <div className='App-header-right'>
               <Hamburger>
-                <div className={'profile-container'}>&nbsp;</div>
-                <div className={'menu-separator'}/>
+                {currentUser && currentUser.activated
+                  ?
+                  <span>
+                    <MenuProfile currentUser={currentUser}/>
+                    <div className={'menu-separator'}/>
+                  </span>
+                  : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}}/>
+                }
                 {!this.props.data.loading &&
                   <span>
                     <LoginSwitcherWithGraphQl activated={currentUser && currentUser.activated} />
-                    <div className={'menu-separator menu-separator-visible'}/>
+                    <div className={'menu-separator menu-separator-visible'} />
                   </span>
                 }
                 <a>LECTURES LIST</a>

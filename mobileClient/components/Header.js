@@ -7,6 +7,7 @@ import Hamburger from 'react-native-hamburger'
 
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
+import appStyle from '../styles/appStyle'
 
 class Header extends React.Component {
   constructor (props) {
@@ -27,7 +28,7 @@ class Header extends React.Component {
   }
 
   render () {
-    const headerStyle = [styles.header]
+    const headerStyle = [styles.header, { height: appStyle.header.height }]
     if (this.props.withShadow) {
       headerStyle.push(styles.headerWithShadow)
     }
