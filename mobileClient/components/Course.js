@@ -1,18 +1,28 @@
 import React from 'react'
 import { View } from 'react-native'
-import { compose } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import SvgUri from 'react-native-svg-uri'
+import { withRouter } from 'react-router-native'
 
 import courseLogos from '../helpers/courseLogos'
 
-import MainMenu from './MainMenu'
 import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
-class Course extends React.Component {
-  render () {
+import currentItemsExistQuery from '../../client/shared/graphql/queries/currentItemsExist'
 
+class Course extends React.Component {
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
+      return
+    }
+    if (nextProps.data.ItemsWithFlashcard.length > 0) {
+      nextProps.history.push('/questions')
+    }
+  }
+
+  render () {
     const courseLogo = courseLogos[this.props.selectedCourse.name]
     const logoSize = courseLogo.scale * 60
 
@@ -33,7 +43,6 @@ class Course extends React.Component {
             />
           </CircleButton>
         </View>
-        {this.props.mainMenuActive && <MainMenu topMargin={0} closeCourse={this.props.closeCourse}/>}
       </View>
     )
   }
@@ -51,4 +60,6 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  withRouter,
+  graphql(currentItemsExistQuery)
 )(Course)

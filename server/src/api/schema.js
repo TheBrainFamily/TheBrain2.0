@@ -73,9 +73,15 @@ export const typeDefs = gql`
         reviewDone: Int,
         reviewTotal: Int
     }
+    
+    type ReviewsPerDay {
+      count: Int,
+      ts: Int,
+    }
 
     type Query {
         Achievements: [Achievement]!,
+        Reviews: [ReviewsPerDay],
         Courses: [Course]!,
         Course(_id: String!): Course,
         Lessons(courseId: String!): [Lesson]!,
@@ -95,6 +101,7 @@ export const typeDefs = gql`
     }
     
     type Mutation {
+        changePassword(oldPassword: String!, newPassword: String!): Status,
         selectCourse(courseId: String!): Status,
         closeCourse: Status,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,

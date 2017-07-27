@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { connect } from 'react-redux'
 
 import { Animated, Dimensions, Image, Text, View, TouchableHighlight } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
@@ -54,6 +55,7 @@ class MainMenu extends React.Component {
   }
 
   go = (path) => () => {
+    console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
     this.props.history.push(path)
   }
 
@@ -135,12 +137,13 @@ class MainMenu extends React.Component {
           {currentUser &&
             <View>
               <Separator />
-              <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} />
-              <Separator />
+              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null }
+              {this.props.selectedCourse ? <Separator /> : null }
+
               <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
               <Separator />
-              <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} />
-              <Separator />
+              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} /> : null }
+              {this.props.selectedCourse ? <Separator /> : null }
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
               <MenuButton text="PROFILE" onPress={this.go('/profile')} />
@@ -189,9 +192,16 @@ const logOutQuery = gql`
     }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
   withApollo,
   withRouter,
+  connect(mapStateToProps),
   graphql(logOutQuery, {
     props: ({ ownProps, mutate }) => ({
       logout: () => mutate({

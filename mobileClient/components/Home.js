@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
+
 import Header from './Header'
 import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
@@ -36,6 +37,23 @@ class Home extends React.Component {
     }
   }
 
+  // componentWillReceiveProps (nextProps) {
+  //   if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
+  //     nextProps.courses.loading) {
+  //     return
+  //   }
+  //
+  //   const courseId = nextProps.userDetails.UserDetails.selectedCourse
+  //
+  //   if (!courseId) {
+  //     return
+  //   }
+  //
+  //   const course = nextProps.courses.Courses.find((course) => course._id === courseId)
+  //   this.props.dispatch(courseActions.select(course))
+  //   this.setState({ isCourseSelected: true, isExitAnimationFinished: true })
+  // }
+
   getCoursesIds = () => {
     return this.props.courses.Courses.map(course => course._id)
   }
@@ -63,7 +81,6 @@ class Home extends React.Component {
   animateCourseSelector = (selectedCourseId) => {
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
       const scale = 0.75
-
       const desiredBottomYOffset = 25
       const newSizeY = height * scale
       const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
@@ -107,8 +124,9 @@ class Home extends React.Component {
   }
 
   closeCourse = () => {
+    console.log('######EEEEEEXTRAAA PONTON######: incloseCourse ' )
     this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false })
+    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
     this.enableCourseSelector()
   }
 
@@ -192,9 +210,9 @@ class Home extends React.Component {
 
         </View>}
 
-        {this.state.mainMenuActive && <MainMenu />}
+        {isExitAnimationFinished && <Course />}
 
-        {isExitAnimationFinished && <Course mainMenuActive={this.state.mainMenuActive}/>}
+        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse}/>}
       </View>
     )
   }
@@ -204,6 +222,14 @@ const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
             success
+        }
+    }
+`
+
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            selectedCourse
         }
     }
 `
@@ -219,7 +245,8 @@ export default compose(
       })
     })
   }),
-  graphql(coursesQuery, { name: 'courses' })
+  graphql(coursesQuery, { name: 'courses' }),
+  graphql(userDetailsQuery, { name: 'userDetails' })
 )(Home)
 
 const style = StyleSheet.create({
@@ -241,7 +268,6 @@ const style = StyleSheet.create({
     borderRadius: 10
   },
   courseHeader: {
-    // zIndex: 500,
     margin: 0,
     height: appStyle.header.height,
     width: '100%',

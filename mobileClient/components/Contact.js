@@ -2,17 +2,13 @@ import React from 'react'
 import { Linking, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 
 class Contact extends React.Component {
   render () {
     return (
-      <View style={{
-        height: '100%',
-        backgroundColor: 'white'
-      }}>
-        <Header />
+      <PageContainer>
 
         <PageTitle text='CONTACT' />
 
@@ -25,7 +21,7 @@ class Contact extends React.Component {
         <TouchableOpacity onPress={() => Linking.openURL('http://team.thebrain.pro')}>
           <Text style={style.link}>http://team.thebrain.pro</Text>
         </TouchableOpacity>
-      </View>
+      </PageContainer>
     )
   }
 }
