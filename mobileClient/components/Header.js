@@ -5,8 +5,6 @@ import SvgUri from 'react-native-svg-uri'
 
 import Hamburger from 'react-native-hamburger'
 
-import MainMenu from './MainMenu'
-
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
 
@@ -25,6 +23,7 @@ class Header extends React.Component {
 
   toggleMenu = () => {
     this.setState({ active: !this.state.active })
+    this.props.toggleMainMenu()
   }
 
   render () {
@@ -67,7 +66,6 @@ class Header extends React.Component {
           />
         </View>
 
-        {this.state.active && <MainMenu />}
       </Animated.View>
     )
   }

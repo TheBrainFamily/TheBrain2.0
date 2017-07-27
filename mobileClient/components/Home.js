@@ -11,6 +11,7 @@ import CircleButton from './CircleButton'
 import CourseHeader from './CourseHeader'
 import CourseProgressBar from './CourseProgressBar'
 import Course from './Course'
+import MainMenu from './MainMenu'
 
 import * as courseActions from '../actions/CourseActions'
 
@@ -127,7 +128,7 @@ class Home extends React.Component {
         height: '100%',
         backgroundColor: courseColor
       }}>
-        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected}/>}
+        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} toggleMainMenu={this.toggleMainMenu}/>}
         {isCourseSelected ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
                                           toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
@@ -190,6 +191,8 @@ class Home extends React.Component {
           }
 
         </View>}
+
+        {this.state.mainMenuActive && <MainMenu />}
 
         {isExitAnimationFinished && <Course mainMenuActive={this.state.mainMenuActive}/>}
       </View>
