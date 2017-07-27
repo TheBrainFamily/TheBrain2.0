@@ -31,10 +31,15 @@ export const typeDefs = gql`
     type LessonCount {
         count: Int
     }
+    type Image {
+      url: String,
+      hasAlpha: Boolean,
+    }
     type Flashcard {
         _id: String,
         question: String!,
-        answer: String!
+        answer: String!,
+        image: Image,
     }
     type Item {
         _id: String,
