@@ -78,10 +78,10 @@ const currentItemsQuery = gql`
             }
             flashcard
             {
-                _id question answer 
+                _id question answer
                 image {
-                  url
-                  hasAlpha
+                    url
+                    hasAlpha
                 }
             }
         }
@@ -97,7 +97,11 @@ const mapStateToProps = (state) => {
 export default compose(
   withRouter,
   connect(mapStateToProps),
-  graphql(currentUserQuery, {name: 'currentUser'}),
+  graphql(currentUserQuery, {
+    name: 'currentUser', options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
