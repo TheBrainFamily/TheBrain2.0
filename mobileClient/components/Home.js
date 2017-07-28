@@ -93,7 +93,7 @@ class Home extends React.Component {
 
       const newSizeX = width * scale
       const centeredLeftXOffset = (this.width - newSizeX) / 2
-      const elementWidthChangeAfterScaling = (width - newSizeX) /2
+      const elementWidthChangeAfterScaling = (width - newSizeX) / 2
       const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
 
       if (Platform.OS === 'ios') {
@@ -124,7 +124,6 @@ class Home extends React.Component {
   }
 
   closeCourse = () => {
-    console.log('######EEEEEEXTRAAA PONTON######: incloseCourse ' )
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
     this.enableCourseSelector()

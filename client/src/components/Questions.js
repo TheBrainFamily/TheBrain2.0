@@ -54,7 +54,11 @@ class Questions extends React.Component {
           <span>
           <ProgressBar progress={progress} label={'TODAY\'S PROGRESS'} width={1024}
                        category={this.props.selectedCourse.name}/>
-          <Flashcard question={flashcard.question} answer={flashcard.answer} evalItemId={evalItem._id}/>
+          <Flashcard question={flashcard.question}
+                     answer={flashcard.answer}
+                     image={flashcard.image}
+                     evalItemId={evalItem._id}
+          />
         </span>)
       } else {
         return <div />
@@ -75,6 +79,10 @@ const currentItemsQuery = gql`
             flashcard
             {
                 _id question answer
+                image {
+                    url
+                    hasAlpha
+                }
             }
         }
     }
@@ -89,7 +97,11 @@ const mapStateToProps = (state) => {
 export default compose(
   withRouter,
   connect(mapStateToProps),
-  graphql(currentUserQuery, {name: 'currentUser'}),
+  graphql(currentUserQuery, {
+    name: 'currentUser', options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
