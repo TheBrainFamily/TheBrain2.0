@@ -9,6 +9,7 @@ import { withRouter } from 'react-router'
 import { flashcard } from '../actions'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
+import ResizableImage from './ResizableImage'
 
 import answerButtonImage1 from '../img/button-easy.png'
 import answerButtonImage2 from '../img/button-medium.png'
@@ -45,7 +46,10 @@ class Flashcard extends React.Component {
             <div className='flashcard-title'>Question: title</div>
             <div className='flashcard-content'>
               <div className='flashcard-content-text'>
-                <div className='scrollable-text'>{this.props.question}</div>
+                <div className='scrollable-text'>
+                  {this.props.image && <ResizableImage image={this.props.image}/>}
+                  {this.props.question}
+                </div>
               </div>
             </div>
             <div className='flashcard-footer'>Click the card to see the answer!</div>
@@ -91,6 +95,10 @@ const submitEval = gql`
             flashcard
             {
                 _id question answer
+                image {
+                  url
+                  hasAlpha
+                }
             }
         }
     }
