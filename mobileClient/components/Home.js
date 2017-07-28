@@ -37,22 +37,22 @@ class Home extends React.Component {
     }
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-  //     nextProps.courses.loading) {
-  //     return
-  //   }
-  //
-  //   const courseId = nextProps.userDetails.UserDetails.selectedCourse
-  //
-  //   if (!courseId) {
-  //     return
-  //   }
-  //
-  //   const course = nextProps.courses.Courses.find((course) => course._id === courseId)
-  //   this.props.dispatch(courseActions.select(course))
-  //   this.setState({ isCourseSelected: true, isExitAnimationFinished: true })
-  // }
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
+      nextProps.courses.loading) {
+      return
+    }
+
+    const courseId = nextProps.userDetails.UserDetails.selectedCourse
+
+    if (!courseId) {
+      return
+    }
+
+    const course = nextProps.courses.Courses.find((course) => course._id === courseId)
+    this.props.dispatch(courseActions.select(course))
+    this.setState({ isCourseSelected: true, isExitAnimationFinished: true })
+  }
 
   getCoursesIds = () => {
     return this.props.courses.Courses.map(course => course._id)
