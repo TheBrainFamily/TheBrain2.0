@@ -62,6 +62,10 @@
       <string>Kalam-Bold.ttf</string>
       <string>Kalam-Light.ttf</string>
       <string>Kalam-Regular.ttf</string>
+      <string>Exo2.ttf</string>
+      <string>Kalam.ttf</string>
+      <string>Exo2_Bold.ttf</string>
+      <string>Kalam_Bold.ttf</string>
     </array>
     <key>LSApplicationQueriesSchemes</key>
     <array>

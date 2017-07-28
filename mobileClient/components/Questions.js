@@ -10,9 +10,12 @@ import {
   Text,
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  StatusBar,
+  Platform
 } from 'react-native'
 
+import MainMenu from './MainMenu'
 import Flashcard from './Flashcard'
 import CourseHeader from './CourseHeader'
 import AnswerEvaluator from './AnswerEvaluator'
@@ -31,6 +34,13 @@ class Questions extends React.Component {
   constructor (props) {
     super(props)
     props.dispatch(updateAnswerVisibility(false))
+    this.state = {
+      mainMenuActive: false
+    }
+  }
+
+  toggleMainMenu = () => {
+    this.setState({mainMenuActive: !this.state.mainMenuActive})
   }
 
   componentWillReceiveProps (nextProps) {
@@ -52,14 +62,14 @@ class Questions extends React.Component {
   }
 
   getHeaderHeight = () => {
+    const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
     return appStyle.header.offset +
-      appStyle.header.height + 22.5
+      appStyle.header.height + actionBarHeight + 22.5
   }
 
   getFlashcardHeight = () => {
     const windowDimensions = Dimensions.get('window')
     const elementHeight = (windowDimensions.height - this.getHeaderHeight()) * 0.39
-    console.log('PINGWIN: elementHeight', elementHeight)
     return elementHeight
   }
 
@@ -87,7 +97,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{backgroundColor: courseColor}}>
-            <CourseHeader>
+            <CourseHeader onLogoPress={this.goHome} toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
@@ -95,6 +105,7 @@ class Questions extends React.Component {
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}/>
             <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
+            {this.state.mainMenuActive && <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
           </View>
         )
       } else {

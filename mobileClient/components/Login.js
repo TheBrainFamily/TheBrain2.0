@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
@@ -44,13 +44,12 @@ class Login extends React.Component {
 
   render () {
     return (
-      <View style={{ backgroundColor: 'white', height: '100%' }}>
-        <Header />
+      <PageContainer>
 
         <View style={{ alignItems: 'center' }}>
           <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign in and stay educated</Text>
 
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center',  marginVertical: 10 }}>
             <FBLoginButton />
           </View>
 
@@ -98,7 +97,7 @@ class Login extends React.Component {
 
           </View>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }

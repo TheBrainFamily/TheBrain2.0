@@ -7,11 +7,9 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
 
-import Loading from './Loading'
 import Video from './Video'
 
 import styles from '../styles/styles'
-import courseLogos from '../helpers/courseLogos'
 
 import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
@@ -19,7 +17,8 @@ import currentLessonQuery from '../../client/shared/graphql/queries/currentLesso
 
 class Lecture extends React.Component {
   state = {
-    showLecture: false
+    showLecture: false,
+    playVideo: false
   }
 
   componentWillMount () {
@@ -31,13 +30,13 @@ class Lecture extends React.Component {
       toValue: 1,
       duration: 500,
       easing: Easing.elastic(1)
-    }).start(() => this.setState({showLecture: true}))
+    }).start(() => this.setState({ showLecture: true }))
   }
 
   onChangeState = (event) => {
-    console.log('Gozdecki: event', event)
+    console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
-      this.props.lessonWatchedMutation({courseId: this.props.selectedCourse._id}).then(() => {
+      this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
         let url = '/questions'
         if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
           url = '/wellDone'
@@ -55,16 +54,17 @@ class Lecture extends React.Component {
     if (!this.props.data.Lesson) {
       return (
         <View>
-          <Text style={[styles.textDefault, {marginTop: 35}]}>Congratulations!</Text>
-          <Text style={[styles.infoText, {color: '#fff', paddingHorizontal: 50}]}>You have watched all available lectures in this
-            course.</Text>
+          <Text style={[styles.textDefault, { marginTop: 35 }]}>Congratulations!</Text>
+          <Text style={[styles.infoText, { color: '#fff', paddingHorizontal: 50 }]}>
+            You have watched all available lectures in this course.
+          </Text>
         </View>
       )
     }
 
     return (
-      <View style={{width: '100%'}}>
-        <Animated.View style={{transform: [{scale: this.infoScale}]}}>
+      <View style={{ width: '100%' }}>
+        <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
           <Text
             style={[styles.textDefault, {
               margin: 20,
@@ -76,13 +76,9 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-        <Animatable.View animation='bounceIn'>
-          {this.props.data.loading
-            ? <View style={styles.videoPlaceholder}>
-              <Loading />
-            </View>
-            : <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
-          }
+        <Animatable.View animation='bounceIn' style={{height: '60%'}}>
+          <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}
+                 loading={this.props.data.loading}/>
         </Animatable.View>
         }
       </View>
@@ -103,7 +99,7 @@ export default compose(
     options: (ownProps) => {
       const courseId = ownProps.selectedCourse._id
       return ({
-        variables: {courseId},
+        variables: { courseId },
         fetchPolicy: 'network-only'
       })
     }

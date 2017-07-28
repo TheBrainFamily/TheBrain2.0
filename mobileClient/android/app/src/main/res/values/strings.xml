@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">mobileClient</string>
+    <string name="app_name">TheBrain</string>
+    <string name="fb_app_id">794881630542767</string>
+    <string name="fb_login_protocol_scheme">794881630542767</string>
 </resources>

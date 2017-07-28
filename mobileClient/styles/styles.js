@@ -8,13 +8,11 @@ const styles = StyleSheet.create({
   topContainer: {
     height: appStyle.header.offset,
     backgroundColor: appStyle.colors.bgAlt,
-    zIndex: 999
   },
   textDefault: {
     fontSize: 18,
     textAlign: 'center',
     color: appStyle.colors.text,
-    fontStyle: 'italic',
     fontFamily: 'Kalam-Bold'
   },
   mainPage: {
@@ -24,10 +22,15 @@ const styles = StyleSheet.create({
   videoPlaceholder: {
     backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
-    height: '70%',
+    height:'100%',
+    width:'100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  videoPlaceholderText: {
+    backgroundColor: 'transparent',
+    color: 'white'
   },
   wellDonePage: {
     backgroundColor: '#662d91',
@@ -51,7 +54,6 @@ const styles = StyleSheet.create({
   baseMarkerStyle: {
     position: 'absolute',
     opacity: 1,
-    zIndex: 100,
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     transform: [{scale: 0}],
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
   summaryContainer: {
     height: 25,
     backgroundColor: 'white',
-    zIndex: 50,
     flexDirection: 'row',
     margin: 0,
     padding: 5
@@ -121,13 +122,14 @@ const styles = StyleSheet.create({
     top: appStyle.header.height,
     width: '100%',
     position: 'absolute',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    elevation: 500
   },
   menuButton: {
     justifyContent: 'center',
     paddingHorizontal: 30,
     paddingVertical: 10,
-    borderColor: '#fff5'
+    borderColor: '#fff5',
   },
   menuButtonText: {
     color: '#999',
@@ -139,11 +141,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#FFF',
-    zIndex: 50,
+    elevation: 5,
     margin: 0,
-    paddingTop: 40,
-    paddingHorizontal: 30
+    paddingTop: 20,
+    paddingBottom: 27,
+    paddingHorizontal: 20
   },
   headerWithShadow: {
     shadowColor: '#000',
@@ -161,14 +165,12 @@ const styles = StyleSheet.create({
   },
   headerLogo: {
     padding: 0,
-    marginLeft: -10,
-    marginTop: -25,
+    marginLeft: -25,
+    marginTop: 10,
     marginBottom: 0,
-    width: 250,
-    height: 65,
     flex: 1,
     transform: [
-      { scale: 0.83 }
+      { scale: 1.2 }
     ]
   },
   headerBorder: {
@@ -202,16 +204,16 @@ const styles = StyleSheet.create({
     color: '#662d91',
     fontSize: 12,
     fontFamily: 'Exo2-Bold',
-    padding: 5
+    padding: 5,
+    backgroundColor: 'transparent'
   },
   flipCardBody: {
     height: 140,
     justifyContent: 'center'
   },
-  primaryText: {
+  cardText: {
     color: 'black',
-    backgroundColor: 'white',
-    fontStyle: 'italic',
+    backgroundColor: 'transparent',
     fontFamily: 'Kalam-Regular',
     fontSize: 16,
     padding: 10,
@@ -248,28 +250,34 @@ const styles = StyleSheet.create({
     color: '#FFF',
     padding: 15,
     textAlign: 'center',
-    fontWeight: '600',
-    fontFamily: 'Exo2-Regular',
+    fontFamily: 'Exo2-Bold',
     borderRadius: 23,
     overflow: 'hidden'
   },
-  progressBarTrack: {
+  progressBarContainer: {
+    justifyContent: 'center',
     position: 'relative',
     width: '85%',
-    height: 3,
+    height: 20,
     marginVertical: 15,
+  },
+  progressBarTrack: {
+    top: 3,
+    position: 'relative',
+    width: '100%',
+    height: 3,
     borderRadius: 1.5,
     backgroundColor: '#0007'
   },
   progressBarProgressLine: {
-    position: 'absolute',
+    position: 'relative',
     height: 3,
     borderRadius: 1.5,
     backgroundColor: '#fff'
   },
   progressBarProgressCircle: {
-    position: 'absolute',
-    transform: [{ translateX: -7.5 }, { translateY: -6 }],
+    marginTop: -9,
+    position: 'relative',
     width: 15,
     height: 15,
     borderRadius: 7.5,
@@ -392,17 +400,17 @@ const styles = StyleSheet.create({
   },
   draggableContainer: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -35 }, { translateY: -35 }]
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: "100%",
+    height: "100%",
   },
   answerSwipeBall: {
-    position: 'absolute',
     alignSelf: 'center',
     backgroundColor: '#662d91',
     width: 70,
     height: 70,
-    borderRadius: 35
+    borderRadius: 35,
   },
   answerEvaluatorOverlay: {
     position: 'absolute',
