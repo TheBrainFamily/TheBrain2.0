@@ -21,8 +21,7 @@ export default class PageContainer extends React.Component {
         backgroundColor: 'white'
       }}>
         <Header toggleMainMenu={this.toggleMainMenu}/>
-        {this.props.children}
-        {this.state.mainMenuActive && <MainMenu />}
+        {this.state.mainMenuActive ? <MainMenu /> : this.props.children}
       </View>
     )
   }
