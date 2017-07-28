@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import { TextField } from 'react-native-material-textfield'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 
 import styles from '../styles/styles'
@@ -68,11 +68,7 @@ class Profile extends React.Component {
     const { isValid } = this.state
 
     return (
-      <View style={{
-        height: '100%',
-        backgroundColor: 'white'
-      }}>
-        <Header />
+      <PageContainer>
         <PageTitle text='PROFILE' />
 
         <View style={{
@@ -123,7 +119,7 @@ class Profile extends React.Component {
             ]}>CHANGE PASSWORD</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }

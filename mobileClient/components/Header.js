@@ -1,11 +1,9 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Animated, TouchableOpacity, View } from 'react-native'
+import { Animated, TouchableOpacity, View, Platform} from 'react-native'
 import SvgUri from 'react-native-svg-uri'
 
 import Hamburger from 'react-native-hamburger'
-
-import MainMenu from './MainMenu'
 
 import logoBig from '../images/logoBig.svg'
 import styles from '../styles/styles'
@@ -26,6 +24,7 @@ class Header extends React.Component {
 
   toggleMenu = () => {
     this.setState({ active: !this.state.active })
+    this.props.toggleMainMenu()
   }
 
   render () {
@@ -45,15 +44,16 @@ class Header extends React.Component {
         duration: 1000
       }).start()
     }
+    const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
 
     return (
-      <Animated.View style={{ zIndex: 1000, top: this.state.topPosition }}>
+      <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle]}>
         <View style={headerStyle}>
-          <TouchableOpacity onPress={this.goHome}>
+          <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
             <SvgUri
               style={styles.headerLogo}
-              width='250'
-              height='65'
+              width='280'
+              height='70'
               source={logoBig}
             />
           </TouchableOpacity>
@@ -63,10 +63,10 @@ class Header extends React.Component {
             color='#62c46c'
             type='spinCross'
             onPress={this.toggleMenu}
+            style={{ flex: 1 }}
           />
         </View>
 
-        {this.state.active && <MainMenu />}
       </Animated.View>
     )
   }

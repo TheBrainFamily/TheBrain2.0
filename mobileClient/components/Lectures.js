@@ -3,7 +3,7 @@ import { FlatList, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 import Video from './Video'
 
@@ -12,10 +12,11 @@ import currentLessonQuery from '../../client/shared/graphql/queries/currentLesso
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
+    
     return (
-      <View style={{ width: '50%', padding: 10 }} key={item._id}>
-        <View>
-          <Video videoId={item.youtubeId} height={100} />
+      <View style={{ width: '50%',height: 160, paddingHorizontal: 10, paddingVertical:3 }} key={item._id}>
+        <View style ={{ height: '75%', width:'100%'}}>
+          <Video videoId={item.youtubeId} height='100%'/>
           <View pointerEvents="none" style={item.position >= this.props.currentLesson.Lesson.position ? style.overlay : {}} />
         </View>
         <Text style={style.title}>{item.description}</Text>
@@ -28,11 +29,7 @@ class Lectures extends React.Component {
       return <View />
     }
     return (
-      <View style={{
-        height: '100%',
-        backgroundColor: 'white'
-      }}>
-        <Header />
+      <PageContainer>
 
         <PageTitle text='LECTURES LIST' />
         <FlatList
@@ -43,13 +40,14 @@ class Lectures extends React.Component {
           }}
           numColumns={2}
         />
-      </View>
+      </PageContainer>
     )
   }
 }
 
 const style = {
   title: {
+    height: '25%',
     color: '#999',
     fontSize: 12,
     fontFamily: 'Exo2-Regular',

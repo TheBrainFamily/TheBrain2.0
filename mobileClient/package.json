@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --no-packager\"",
+    "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --simulator='iPhone 5' --no-packager\"",
+    "startAndroid": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-android --no-packager\"",
     "test": "jest",
     "flow": "flow",
     "standard": "standard",
@@ -23,6 +24,7 @@
     "react-native-facebook-login": "^1.5.0",
     "react-native-hamburger": "^0.0.2",
     "react-native-linear-gradient": "^2.0.0",
+    "react-native-orientation": "^2.1.0",
     "react-native-material-textfield": "^0.6.5",
     "react-native-svg-uri": "^1.2.0",
     "react-native-youtube": "github:inprogress-team/react-native-youtube",
