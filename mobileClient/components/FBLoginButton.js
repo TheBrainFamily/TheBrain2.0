@@ -8,7 +8,7 @@ import { withApollo, graphql } from 'react-apollo'
 class FBLoginButton extends React.Component {
   render () {
     return (
-      <FBLogin style={{ marginVertical: 10, maxHeight: 60 }}
+      <FBLogin style={{ maxHeight: 40, justifyContent: 'center',}}
                ref={(fbLogin) => {
                  this.fbLogin = fbLogin
                }}

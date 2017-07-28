@@ -49,7 +49,7 @@ class Login extends React.Component {
         <View style={{ alignItems: 'center' }}>
           <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign in and stay educated</Text>
 
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center',  marginVertical: 10 }}>
             <FBLoginButton />
           </View>
 
