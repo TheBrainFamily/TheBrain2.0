@@ -56,7 +56,7 @@ class Lecture extends React.Component {
       return (
         <View>
           <Text style={[styles.textDefault, {marginTop: 35}]}>Congratulations!</Text>
-          <Text style={[styles.menuButtonText, {paddingHorizontal: 50}]}>You have watched all available lectures in this
+          <Text style={[styles.infoText, {color: '#fff', paddingHorizontal: 50}]}>You have watched all available lectures in this
             course.</Text>
         </View>
       )
