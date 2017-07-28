@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
 import Loading from './Loading'
 
@@ -59,8 +59,7 @@ class Signup extends React.Component {
     }
 
     return (
-      <View style={{ backgroundColor: 'white', height: '100%' }}>
-        <Header />
+      <PageContainer>
 
         <View style={{ alignItems: 'center' }}>
           <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign up and stay educated</Text>
@@ -113,7 +112,7 @@ class Signup extends React.Component {
 
           </View>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }
