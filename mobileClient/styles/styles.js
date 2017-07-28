@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   videoPlaceholderText: {
+    backgroundColor: 'transparent',
     color: 'white'
   },
   wellDonePage: {
