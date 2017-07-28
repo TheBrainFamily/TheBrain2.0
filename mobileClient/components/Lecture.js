@@ -1,18 +1,15 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View, Platform, TouchableWithoutFeedback } from 'react-native'
+import { Animated, Easing, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
-import Orientation from 'react-native-orientation'
 
-import Loading from './Loading'
 import Video from './Video'
 
 import styles from '../styles/styles'
-import courseLogos from '../helpers/courseLogos'
 
 import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
@@ -37,11 +34,8 @@ class Lecture extends React.Component {
   }
 
   onChangeState = (event) => {
-    console.log('Gozdecki: event', event)
+    console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
-      if (Platform.OS === 'android') {
-        Orientation.lockToPortrait()
-      }
       this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
         let url = '/questions'
         if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
@@ -50,10 +44,6 @@ class Lecture extends React.Component {
         this.props.history.push(url)
       })
     }
-  }
-
-  playVideo = () => {
-    this.setState({ playVideo: true })
   }
 
   render () {
@@ -86,21 +76,9 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-        <Animatable.View animation='bounceIn'>
-          <TouchableWithoutFeedback onPress={this.playVideo}
-                              activeOpacity={1}
-                              underlayColor='#fff'>
-            <View>
-              {this.state.playVideo && !this.props.data.loading
-                ? <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}/>
-                : this.props.data.loading ? <View style={styles.videoPlaceholder}>
-                  <Loading />
-                </View> : <View style={styles.videoPlaceholder}>
-                  <Text style={[styles.textDefault, styles.videoPlaceholderText]}>Tap to play video</Text>
-                </View>
-              }
-            </View>
-          </TouchableWithoutFeedback>
+        <Animatable.View animation='bounceIn' style={{height: '60%'}}>
+          <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}
+                 loading={this.props.data.loading}/>
         </Animatable.View>
         }
       </View>
