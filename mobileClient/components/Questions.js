@@ -22,6 +22,8 @@ import AnswerEvaluator from './AnswerEvaluator'
 import ProgressBar from './ProgressBar'
 import Loading from './Loading'
 
+import * as courseActions from '../actions/CourseActions'
+
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 
@@ -78,6 +80,11 @@ class Questions extends React.Component {
     return windowDimensions.height - this.getHeaderHeight() - this.getFlashcardHeight() - StyleSheet.flatten(styles.flipCardContainer).marginBottom
   }
 
+  closeCourse = () => {
+    this.props.dispatch(courseActions.close())
+    this.props.history.push('/')
+  }
+
   render () {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <Loading />
@@ -97,7 +104,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{backgroundColor: courseColor}}>
-            <CourseHeader onLogoPress={this.goHome} toggleMainMenu={this.toggleMainMenu}>
+            <CourseHeader closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 

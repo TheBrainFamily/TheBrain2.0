@@ -19,6 +19,7 @@ class Header extends React.Component {
   }
 
   goHome = () => {
+    if (this.state.active) this.toggleMenu()
     this.props.history.push('/')
   }
 
