@@ -7,14 +7,15 @@ import styles from '../styles/styles'
 import Orientation from 'react-native-orientation'
 
 export default class Video extends React.Component {
-    state = {
-      playVideo: false
-    }
+  state = {
+    playVideo: false,
+    videoState: ''
+  }
   playVideo = () => {
     this.setState({ playVideo: true })
   }
   onChangeState = (event) => {
-    console.log('Gozdecki: event', event)
+    this.setState({ videoState: event.state })
     if (event.state === 'ended') {
       this.setState({ playVideo: false })
       if (Platform.OS === 'android') {
@@ -23,6 +24,12 @@ export default class Video extends React.Component {
     }
     this.props.onChangeState && this.props.onChangeState(event)
   }
+  onChangeFullscreen = (event) => {
+    if (this.state.videoState === 'paused' && !event.isFullscreen) {
+      this.setState({playVideo: false})
+    }
+  }
+
   render () {
     return (
     <TouchableWithoutFeedback onPress={this.playVideo}
@@ -41,6 +48,7 @@ export default class Video extends React.Component {
           modestbranding={false}
           rel={false}
           onChangeState={this.onChangeState}
+          onChangeFullscreen={this.onChangeFullscreen}
           style={{ backgroundColor: '#000'}}
           apiKey="AIzaSyAp-SF0w9lATiBVdEfVPYikwyBC3s7gWps"
           />
