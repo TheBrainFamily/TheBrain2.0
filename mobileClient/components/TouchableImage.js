@@ -9,16 +9,10 @@ import Animator from './Animator'
 import NetworkImage from './NetworkImage'
 
 export default class TouchableImage extends React.Component {
-  layoutStyle: Object
   state: Object
 
   constructor(props: Object) {
     super(props)
-
-    this.layoutStyle = {
-      position: 'absolute',
-      zIndex: 9999,
-    }
 
     this.state = {
       animator: new Animator(this.props.animator)
@@ -32,7 +26,7 @@ export default class TouchableImage extends React.Component {
 
   render = () => {
     return (
-      <Animated.View style={[this.layoutStyle, this.props.style, this.state.animator.getStyle()]}>
+      <Animated.View style={[this.props.style, this.state.animator.getStyle()]}>
         <TouchableWithoutFeedback onPress={() => {
           this.state.animator.startAnimations()
         }}>
