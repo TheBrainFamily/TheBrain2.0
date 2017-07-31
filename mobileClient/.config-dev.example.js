@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export default {
-  graphqlUri: 'http://localhost:8080/graphql'
+  graphqlUri: Platform.OS === 'android' ? 'http://localhost:8080/graphql' : 'http://localhost:8080/graphql'
 }
