@@ -5,8 +5,12 @@ import { ApolloClient, createNetworkInterface } from 'apollo-client'
 import reducers from './reducers'
 import devTools from 'remote-redux-devtools'
 
+import config from './.config-dev'
+
+const graphqlUri = config.graphqlUri || 'http://localhost:8080/graphql'
+
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:8080/graphql',
+  uri: graphqlUri,
   opts: {
     credentials: 'include'
   }

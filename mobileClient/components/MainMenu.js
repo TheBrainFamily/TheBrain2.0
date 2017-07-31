@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 import { Animated, Dimensions, Image, Text, View, TouchableHighlight, Keyboard } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
+import * as courseActions from '../actions/CourseActions'
+
 import Separator from './Separator'
 
 import styles from '../styles/styles'
@@ -58,6 +60,11 @@ class MainMenu extends React.Component {
   go = (path) => () => {
     console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
     this.props.history.push(path)
+  }
+
+  closeCourse = () => {
+    this.props.dispatch(courseActions.close())
+    this.go('/')()
   }
 
   render () {
@@ -146,7 +153,7 @@ class MainMenu extends React.Component {
 
               <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
               <Separator />
-              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.go('/')} /> : null }
+              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse} /> : null }
               {this.props.selectedCourse ? <Separator /> : null }
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
