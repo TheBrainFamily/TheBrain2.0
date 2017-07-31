@@ -47,7 +47,7 @@ class Flashcard extends React.Component {
         height: windowDimensions.height
       },
       dynamicStyles: {
-        content: { height: this.props.getFlashcardHeight() }
+        content: { height: this.props.getFlashcardHeight(), width: this.props.getFlashcardWidth() }
       },
       swipeDirection: DIRECTIONS.left,
       dragLen: 0
@@ -92,7 +92,7 @@ class Flashcard extends React.Component {
     }
     this.setState({
       dynamicStyles: {
-        content: { height: this.props.getFlashcardHeight() }
+        content: { height: this.props.getFlashcardHeight(), width: this.props.getFlashcardWidth() }
       }
     })
   }
@@ -118,7 +118,7 @@ class Flashcard extends React.Component {
         height
       },
       dynamicStyles: {
-        content: { height: this.props.getFlashcardHeight() }
+        content: { height: this.props.getFlashcardHeight(), width: this.props.getFlashcardWidth() }
       }
     })
   }
@@ -202,12 +202,3 @@ export default graphql(submitEval, {
     })
   })
 })(connect(state => state)(Flashcard))
-
-// <BackCard dynamicStyles={this.state.dynamicStyles}
-// interpolateCb={this.interpolateWrapper}
-// flipCardCb={this.flipCard}
-// submitCb={this.props.submit}
-// updateSwipeStateCb={this.updateSwipeState}
-// answer={this.props.answer}
-// evalItemId={this.props.evalItemId}
-// />

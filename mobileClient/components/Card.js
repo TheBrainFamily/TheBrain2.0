@@ -23,14 +23,9 @@ export default class Card extends React.Component {
         final: this.props.dynamicStyles.content.height,
         friction: 7,
       },
-      right: {
-        initial: 10,
-        final: 0,
-        friction: 7,
-      },
-      top: {
-        initial: 10,
-        final: 0,
+      bottom: {
+        initial: 0,
+        final: 27,
         friction: 7,
       },
       shadowRadius: {
@@ -45,6 +40,11 @@ export default class Card extends React.Component {
       },
       borderRadius: {
         initial: 5,
+        final: 0,
+        friction: 7,
+      },
+      borderWidth: {
+        initial: 1,
         final: 0,
         friction: 7,
       }
