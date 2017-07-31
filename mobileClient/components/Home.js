@@ -211,7 +211,7 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course />}
 
-        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse}/>}
+        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}/>}
       </View>
     )
   }
