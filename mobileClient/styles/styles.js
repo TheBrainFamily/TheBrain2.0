@@ -219,6 +219,19 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center'
   },
+  cardImage: {
+    top: 10,
+    right: 10,
+    width: 100,
+    height: 100,
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 4,
+    shadowOpacity: 0.5,
+    borderWidth: 1,
+    borderRadius: 5
+  },
   form: {
     marginTop: 20,
     width: '70%'

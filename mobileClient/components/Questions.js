@@ -108,7 +108,7 @@ class Questions extends React.Component {
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
-            <Flashcard question={flashcard.question} answer={flashcard.answer}
+            <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}/>
             <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
@@ -133,7 +133,9 @@ const currentItemsQuery = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                    url hasAlpha
+                }
             }
         }
     }

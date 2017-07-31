@@ -222,7 +222,7 @@ a {
 .course-icon img {
     display: inline-block;
     -webkit-transition: -webkit-transform .8s ease-in-out;
-    transition:         transform .8s ease-in-out;
+    transition: transform .8s ease-in-out;
 }
 
 .course-icon img:hover {
@@ -234,13 +234,12 @@ a {
     margin-top: 10px;
 }
 
-
 /***********************
 FLASHCARDS
 ***********************/
 
 .flashcard {
-    position:relative;
+    position: relative;
     margin: auto;
     color: black;
     padding: 15px;
@@ -253,6 +252,24 @@ FLASHCARDS
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.flashcardImageContainer {
+    text-align: center;
+}
+
+.flashcardImage {
+    background-color: white;
+    border: 2px solid black;
+}
+
+.flashcardAlphaImage {
+
+}
+
+.button-answer {
+    font-family: 'Orbitron', cursive;
+    position: relative;
 }
 
 .flashcard-title {
@@ -296,7 +313,7 @@ FLASHCARDS
     display: table;
     top: 0;
     left: 0;
-    background-color: rgba(0,0,0,0.9);
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     position: fixed;
     width: 100%;
@@ -320,7 +337,7 @@ FLASHCARDS
     line-height: 40px;
     width: 250px;
     margin: auto;
-    background-color: rgba(0,0,0,0.50);
+    background-color: rgba(0, 0, 0, 0.50);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -349,12 +366,12 @@ FLASHCARDS
 }
 
 .answer-button {
-     margin-left: 10px;
-     margin-right: 10px;
-     cursor: pointer;
-     width: 120px;
-     height: 120px;
- }
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 120px;
+    height: 120px;
+}
 
 .skip-tutorial-button {
     background-image: url('img/button-skip-tutorial.png');
@@ -370,6 +387,7 @@ FLASHCARDS
     line-height: 70px;
 
 }
+
 .skip-tutorial-button:hover {
     color: #eaeaea;
 }
@@ -388,12 +406,12 @@ FLASHCARDS
     height: 60%;
 }
 
-.hidden>p {
-    display:none;
+.hidden > p {
+    display: none;
 }
 
-.visible>p {
-    display:block;
+.visible > p {
+    display: block;
 }
 
 /***********************
@@ -547,7 +565,7 @@ CONTACT
 
 .progress-bar-todo {
     vertical-align: middle;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .progress-bar-left-label {
@@ -761,11 +779,11 @@ CALENDAR
     font-size: 20px;
 }
 
-.day-heading.today{
+.day-heading.today {
     color: #662d91;
 }
 
-.day-heading.sunday{
+.day-heading.sunday {
     color: #a00;
 }
 
