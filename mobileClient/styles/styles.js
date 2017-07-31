@@ -209,7 +209,9 @@ const styles = StyleSheet.create({
   },
   flipCardBody: {
     height: 140,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column'
   },
   cardText: {
     color: 'black',
@@ -220,8 +222,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   cardImage: {
-    top: 10,
-    right: 10,
     width: 100,
     height: 100,
     backgroundColor: 'white',
