@@ -21,6 +21,7 @@ import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
+import WithData from './WithData'
 
 class Home extends React.Component {
   constructor (props) {
@@ -246,7 +247,7 @@ export default compose(
   }),
   graphql(coursesQuery, { name: 'courses' }),
   graphql(userDetailsQuery, { name: 'userDetails' })
-)(Home)
+)(WithData(Home, ['courses', 'userDetails']))
 
 const style = StyleSheet.create({
   courseTitle: {
