@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   flipCardContent: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    overflow: 'hidden'
   },
   summaryContainer: {
     height: 25,
