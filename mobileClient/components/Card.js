@@ -30,7 +30,7 @@ export default class Card extends React.Component {
       },
       shadowRadius: {
         initial: 4,
-        final: 10,
+        final: 0,
         friction: 7,
       },
       shadowOpacity: {
@@ -46,6 +46,11 @@ export default class Card extends React.Component {
       borderWidth: {
         initial: 1,
         final: 0,
+        friction: 7,
+      },
+      marginVertical: {
+        initial: 0,
+        final: 1000,
         friction: 7,
       }
     }
