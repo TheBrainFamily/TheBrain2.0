@@ -1,22 +1,21 @@
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/styles'
 
 export default (Component, graphqlDataNames) => {
   return class DataContainer extends React.Component {
-    state = {dataLoaded: false, isLoading: false, showRetry: false}
+    state = { dataLoaded: false, isLoading: false, showRetry: false }
 
     componentWillReceiveProps = (nextPros) => {
       let networkFailure = false
       graphqlDataNames.forEach(dataName => {
-        console.log('JMOZGAWA: this.props[dataName].networkStatus', dataName, this.props[dataName].networkStatus)
         if (this.props[dataName].networkStatus === 8) {
           networkFailure = true
         }
       })
-      console.log('JMOZGAWA: networkFailure', networkFailure)
+
       if (networkFailure !== this.state.showRetry) {
-        this.setState({showRetry: networkFailure})
+        this.setState({ showRetry: networkFailure })
       }
     }
 
@@ -30,16 +29,29 @@ export default (Component, graphqlDataNames) => {
     render () {
       if (this.state.showRetry) {
         return (
-          <View>
+          <View style={style.container}>
+            <Text style={[styles.textDefault]}>
+              No Internet connection
+            </Text>
             <TouchableOpacity onPress={this.refetchData}>
-              <Text style={[styles.button, {backgroundColor: '#68b888', paddingHorizontal: 50}]}>
+              <Text style={[styles.button, { backgroundColor: '#68b888', paddingHorizontal: 50 }]}>
                 Retry
               </Text>
             </TouchableOpacity>
           </View>
         )
       }
-      return (<Component {...this.props}/>)
+      return (<Component {...this.props} />)
     }
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 60
+  }
+})
