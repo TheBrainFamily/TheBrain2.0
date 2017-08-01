@@ -42,7 +42,7 @@ class Questions extends React.Component {
   }
 
   toggleMainMenu = () => {
-    this.setState({mainMenuActive: !this.state.mainMenuActive})
+    this.setState({ mainMenuActive: !this.state.mainMenuActive })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -75,6 +75,12 @@ class Questions extends React.Component {
     return elementHeight
   }
 
+  getFlashcardWidth = () => {
+    const windowDimensions = Dimensions.get('window')
+    const elementWidth = windowDimensions.width * 0.9
+    return elementWidth
+  }
+
   getAnswerEvaluatorHeight = () => {
     const windowDimensions = Dimensions.get('window')
     return windowDimensions.height - this.getHeaderHeight() - this.getFlashcardHeight() - StyleSheet.flatten(styles.flipCardContainer).marginBottom
@@ -103,16 +109,18 @@ class Questions extends React.Component {
         const courseColor = _.get(this.props.course, 'selectedCourse.color')
 
         return (
-          <View style={{backgroundColor: courseColor}}>
+          <View style={{ backgroundColor: courseColor }}>
             <CourseHeader closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
-            <Flashcard question={flashcard.question} answer={flashcard.answer}
-                       evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}/>
+            <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
+                       evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}
+                       getFlashcardWidth={this.getFlashcardWidth}/>
             <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
-            {this.state.mainMenuActive && <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
+            {this.state.mainMenuActive &&
+            <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
           </View>
         )
       } else {
@@ -133,7 +141,9 @@ const currentItemsQuery = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer image {
+                    url hasAlpha
+                }
             }
         }
     }
