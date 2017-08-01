@@ -55,6 +55,8 @@ class MainMenu extends React.Component {
         })
         this.props.client.resetStore()
       })
+    this.closeCourse()
+    this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
   go = (path) => () => {
@@ -74,6 +76,7 @@ class MainMenu extends React.Component {
     let { fadeAnim } = this.state
 
     const currentUser = this.props.currentUser.CurrentUser
+    const notFacebookUser = this.props.currentUser.CurrentUser && this.props.currentUser.CurrentUser.username !== 'guest'
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
@@ -157,7 +160,7 @@ class MainMenu extends React.Component {
               {this.props.selectedCourse ? <Separator /> : null }
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
-              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+              {notFacebookUser ? <MenuButton text="PROFILE" onPress={this.go('/profile')} /> : null}
             </View>
           }
           <Separator />

@@ -39,7 +39,11 @@ export const typeDefs = gql`
         _id: String,
         question: String!,
         answer: String!,
-        image: Image,
+        image: FlashcardImage,
+    }
+    type FlashcardImage {
+        url: String,
+        hasAlpha: Boolean,
     }
     type Item {
         _id: String,
