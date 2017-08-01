@@ -3592,7 +3592,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.5.9:
+prop-types@^15.0.0, prop-types@^15.5.0, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.5.9:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -3718,6 +3718,10 @@ react-native-material-textfield@^0.6.5:
   dependencies:
     prop-types "^15.5.9"
 
+react-native-orientation@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-orientation/-/react-native-orientation-2.1.0.tgz#1bd820ad96d93c05431f3d473bcc7dce9728a1f7"
+
 react-native-svg-uri@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-svg-uri/-/react-native-svg-uri-1.2.0.tgz#2e03023a35b044b9a65c9ddb843d5a3b2f23cb70"
@@ -3732,9 +3736,11 @@ react-native-svg@^4.3.1:
     color "^0.11.1"
     lodash "^4.0.0"
 
-"react-native-youtube@github:inprogress-team/react-native-youtube":
-  version "0.8.2"
-  resolved "https://codeload.github.com/inprogress-team/react-native-youtube/tar.gz/3f24562e2a7b035b7ba5a89333a799e278991555"
+react-native-youtube@^1.0.0-beta.2:
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-native-youtube/-/react-native-youtube-1.0.0-beta.2.tgz#10672a11f9d6cfdf19947ff41dc7435c30a13048"
+  dependencies:
+    prop-types "^15.5.0"
 
 react-native@0.43.2:
   version "0.43.2"
