@@ -67,7 +67,8 @@ class Lecture extends React.Component {
         <Animated.View style={{ transform: [{ scale: this.infoScale }] }}>
           <Text
             style={[styles.textDefault, {
-              margin: 20,
+              marginHorizontal: 20,
+              marginVertical: 15,
               width: 220,
               alignSelf: 'center'
             }]}>
