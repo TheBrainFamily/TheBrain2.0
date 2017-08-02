@@ -14,7 +14,7 @@ class Calendar extends React.Component {
     return (
       <PageContainer >
 
-        <PageTitle text={`REVIEWS CALENDAR - ${month} ${year}`}/>
+        <PageTitle text={`REVIEWS - ${month} ${year}`}/>
 
         <ReviewsCalendar />
       </PageContainer>
