@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   flipCardContent: {
     backgroundColor: 'white',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   summaryContainer: {
     height: 25,
@@ -209,10 +209,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   flipCardBody: {
-    height: 140,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   cardText: {
     color: 'black',
@@ -231,7 +230,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOpacity: 0.5,
     borderWidth: 1,
-    borderRadius: 5
+    borderRadius: 5,
+    alignSelf: 'center',
+    position: 'absolute'
   },
   form: {
     marginTop: 20,
