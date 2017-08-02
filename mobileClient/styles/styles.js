@@ -22,15 +22,18 @@ const styles = StyleSheet.create({
   videoPlaceholder: {
     backgroundColor: appStyle.colors.bgDark,
     alignSelf: 'stretch',
-    height:'100%',
-    width:'100%',
+    height: '100%',
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   },
   videoPlaceholderText: {
     backgroundColor: 'transparent',
-    color: 'white'
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5
   },
   wellDonePage: {
     backgroundColor: '#662d91',
