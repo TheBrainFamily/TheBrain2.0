@@ -8,11 +8,10 @@ import styles from '../styles/styles'
 export default class Card extends React.Component {
   render = () => {
 
-    const displayStyleQuestion = { display: this.props.visibleAnswer ? 'none' : 'flex' }
+    const displayStyleQuestion = { display: this.props.visibleAnswer ? 'none' : 'flex', flex: this.props.image ? 0 : 1 }
     const displayStyleQuestionImage = { opacity: this.props.visibleAnswer ? 0 : 1 }
-    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none' }
+    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none', flex: 1 }
 
-    console.log('PINGWIN: this.props.dynamicStyles.content.height', this.props.dynamicStyles.content.height)
     const imageThumbnailSize = this.props.dynamicStyles.content.height < 180 ? 50 : 100
     const questionFontSizeStyle = { fontSize: this.props.image && this.props.dynamicStyles.content.height < 180 ? 12 : 16 }
 
@@ -27,11 +26,9 @@ export default class Card extends React.Component {
         final: this.props.dynamicStyles.content.height,
         friction: 7,
       },
-      top: {
-        initial: 0,
-        // final: this.props.dynamicStyles.content.height * 0.136,
-        final: -(this.props.dynamicStyles.content.height - imageThumbnailSize)/ 2,
-        // final: 0,
+      bottom: {
+        initial: 10,
+        final: 0,
         friction: 7,
       },
       shadowRadius: {
@@ -63,20 +60,20 @@ export default class Card extends React.Component {
 
     return (
       <View style={[styles.flipCardContent, this.props.dynamicStyles.content]}>
-        <View style={displayStyleQuestion}>
+        <View style={[displayStyleQuestion, { flex: 1 }]}>
           <Text
             style={styles.flipCardHeader}>{!this.props.visibleAnswer && 'QUESTION'}</Text>
           <View style={[styles.flipCardBody, displayStyleQuestion]}>
             <Text
               style={[styles.cardText, questionFontSizeStyle]}>{!this.props.visibleAnswer && this.props.question}</Text>
-            {this.props.image ? <TouchableImage imageProperties={{
-              source: this.props.image.url,
-              resizeMode: 'contain',
-            }}
-                                                style={[styles.cardImage, displayStyleQuestionImage]}
-                                                animator={animationSettings}
-            /> : null}
           </View>
+          {this.props.image ? <TouchableImage imageProperties={{
+            source: this.props.image.url,
+            resizeMode: 'contain',
+          }}
+                                              style={[styles.cardImage, displayStyleQuestionImage]}
+                                              animator={animationSettings}
+          /> : null}
         </View>
         <View style={[{ transform: [{ rotateY: '180deg' }] }, displayStyleAnswer]}>
           <Text style={styles.flipCardHeader}>{this.props.visibleAnswer && 'ANSWER'}</Text>
