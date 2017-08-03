@@ -38,22 +38,21 @@ class Home extends React.Component {
     }
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-  //     nextProps.courses.loading) {
-  //     return
-  //   }
-  //
-  //   const courseId = nextProps.userDetails.UserDetails.selectedCourse
-  //
-  //   if (!courseId) {
-  //     return
-  //   }
-  //
-  //   const course = nextProps.courses.Courses.find((course) => course._id === courseId)
-  //   this.props.dispatch(courseActions.select(course))
-  //   this.setState({ isCourseSelected: true, isExitAnimationFinished: true })
-  // }
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
+      nextProps.courses.loading) {
+      return
+    }
+
+    const courseId = nextProps.userDetails.UserDetails.selectedCourse
+
+    if (!courseId) {
+      return
+    }
+
+    const course = nextProps.courses.Courses.find((course) => course._id === courseId)
+    this.selectCourse(course)
+  }
 
   getCoursesIds = () => {
     return this.props.courses.Courses.map(course => course._id)
@@ -124,9 +123,10 @@ class Home extends React.Component {
     this.setState({ courseSelectorIsDisabled: false })
   }
 
-  closeCourse = () => {
+  closeCourse = async () => {
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    await this.props.closeCourse()
     this.enableCourseSelector()
   }
 
@@ -234,6 +234,14 @@ const userDetailsQuery = gql`
     }
 `
 
+const closeCourseMutation = gql`
+    mutation closeCourse {
+        closeCourse {
+            success
+        }
+    }
+`
+
 export default compose(
   connect(state => state),
   graphql(selectCourseMutation, {
@@ -243,6 +251,11 @@ export default compose(
           courseId
         }
       })
+    })
+  }),
+  graphql(closeCourseMutation, {
+    props: ({ mutate }) => ({
+      closeCourse: () => mutate()
     })
   }),
   graphql(coursesQuery, { name: 'courses' }),
