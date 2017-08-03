@@ -87,7 +87,7 @@ class ReviewsCalendar extends React.Component {
 
     return (
       <View style={{ height }}>
-        <CalendarHeader currentDate={currentDate} />
+        <CalendarHeader currentDate={currentDate}/>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
@@ -97,6 +97,9 @@ class ReviewsCalendar extends React.Component {
         }}>
           {dates.map((date, index) => {
             const isSunday = index % 7 === 6
+            const isMonday = index % 7 === 0
+            const firstRow = index < 7
+            const lastRow = index > 34
             const today = new Date()
             const isCurrentMonth = date.month === today.getMonth() + 1
             const isCurrentDay = date.day === today.getDate()
@@ -110,9 +113,14 @@ class ReviewsCalendar extends React.Component {
                 { zIndex: index - (isToday ? 2 : 0) }, // fix to display a circle separator on top of a current day tile
                 isToday ? { backgroundColor: '#662d91' } : {}
               ]}>
-                {!isSunday &&
-                <View style={style.circle} />
-                }
+                {!isMonday && !firstRow &&
+                <View style={[style.circle, style.leftTopCircle]}/>}
+                {!isSunday && !firstRow &&
+                <View style={[style.circle, style.rightTopCircle]}/>}
+                {!isMonday && !lastRow &&
+                <View style={[style.circle, style.leftBottomCircle]}/>}
+                {!isSunday && !lastRow &&
+                <View style={[style.circle, style.rightBottomCircle]}/>}
                 <Text style={[
                   style.smallText,
                   isSunday ? { color: '#a00' } : {},
@@ -152,12 +160,26 @@ const style = {
   },
   circle: {
     position: 'absolute',
-    top: -3,
-    right: -3,
     width: 6,
     height: 6,
     borderRadius: 6,
     backgroundColor: '#ccc',
+  },
+  leftTopCircle: {
+    top: -3,
+    left: -3,
+  },
+  rightTopCircle: {
+    top: -3,
+    right: -3,
+  },
+  leftBottomCircle: {
+    bottom: -3,
+    left: -3,
+  },
+  rightBottomCircle: {
+    bottom: -3,
+    right: -3,
   },
   calendarDay: {
     width: `${100 / 7 - 0.01}%`, // -0.01 is needed to display calendar properly on some devices
