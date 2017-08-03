@@ -61,6 +61,7 @@ class MainMenu extends React.Component {
 
   go = (path) => () => {
     this.props.history.push(path)
+    this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
   closeCourse = () => {
