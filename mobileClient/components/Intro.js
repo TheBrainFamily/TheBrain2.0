@@ -1,33 +1,27 @@
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { connect } from 'react-redux'
+import { AsyncStorage, Text, TouchableOpacity, View } from 'react-native'
 
-import Header from './Header'
+import PageContainer from './PageContainer'
 import Video from './Video'
 
 import styles from '../styles/styles'
 
-class Intro extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
+export default class Intro extends React.Component {
   skipIntro = () => {
-    this.props.history.push('/')
+    const isIntroDisabled = JSON.stringify(true)
+    AsyncStorage.setItem('isIntroDisabled', isIntroDisabled, () => {
+      this.props.history.push('/')
+    })
   }
 
   render () {
-    return (
-      <View style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#662d91'
-      }}>
-        <Header withShadow dynamic/>
+    const videoHeight = 200
 
+    return (
+      <PageContainer>
         <View style={{
-          flexGrow: 1,
+          flex: 1,
+          backgroundColor: '#9050ba',
           justifyContent: 'center',
           alignItems: 'center'
         }}>
@@ -38,19 +32,17 @@ class Intro extends React.Component {
             Learn smart and save your time.
           </Text>
 
-          <View style={{ marginVertical: 30, width: '100%' }}>
-            <Video height={200} videoId={'vvYTsbp2CRw'}/>
+          <View style={{ marginVertical: 30, height: videoHeight, width: '100%' }}>
+            <Video height={videoHeight} videoId={'vvYTsbp2CRw'} />
           </View>
 
           <TouchableOpacity onPress={this.skipIntro}>
-            <Text style={[styles.button, { backgroundColor: '#68b888', paddingHorizontal: 50 }]}>
+            <Text style={[styles.button, { backgroundColor: '#68b888', paddingHorizontal: 40, marginHorizontal: 20 }]}>
               Skip intro and start learning
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }
-
-export default connect()(Intro)
