@@ -1,10 +1,11 @@
 import React from 'react'
-import { View } from 'react-native'
+import {View} from 'react-native'
 
 const Separator = (props) => (
-  <View style={[style.line, { height: props.height, backgroundColor: props.color }]}>
-    <View style={[style.circle, getSize(props), { backgroundColor: props.color }]} />
-    <View style={[style.circle, getSize(props), { right: 0, backgroundColor: props.color }]} />
+  <View style={{alignSelf: 'center', justifyContent: 'center', height: props.circleSize, width: '90%'}}>
+    <View style={[style.line, {height: props.height, width: '100%', backgroundColor: props.color, alignSelf: 'center'}]}/>
+    <View style={[style.circle, getSize(props), {backgroundColor: props.color, alignSelf: 'flex-start'}]}/>
+    <View style={[style.circle, getSize(props), {backgroundColor: props.color, alignSelf: 'flex-end'}]}/>
   </View>
 )
 
@@ -16,18 +17,15 @@ Separator.defaultProps = {
 
 const style = {
   line: {
-    marginHorizontal: 20,
     position: 'relative',
-    zIndex: 1000
   },
   circle: {
     position: 'absolute'
   }
 }
 
-function getSize ({ circleSize, height }) {
+function getSize ({ circleSize }) {
   return {
-    top: -circleSize / 2 + height / 2,
     width: circleSize,
     height: circleSize,
     borderRadius: circleSize
