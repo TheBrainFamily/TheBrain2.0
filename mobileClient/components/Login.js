@@ -129,10 +129,7 @@ export default compose(
               }
             })
           }
-        },
-        refetchQueries: [{
-          query: currentLessonQuery
-        }]
+        }
       })
     })
   })

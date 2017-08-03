@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
@@ -78,6 +79,7 @@ class MainMenu extends React.Component {
     const notFacebookUser = this.props.currentUser.CurrentUser && this.props.currentUser.CurrentUser.username !== 'guest'
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
+    const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
 
     const height = Dimensions.get('window').height - this.props.topMargin
     
@@ -104,7 +106,7 @@ class MainMenu extends React.Component {
               padding: 20
             }}>
               <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
-                Michał
+                {username}
               </Text>
               <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
                 <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
