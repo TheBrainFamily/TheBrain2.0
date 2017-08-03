@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 
-import { Animated, Dimensions, Image, Text, View, TouchableHighlight, Keyboard } from 'react-native'
+import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import * as courseActions from '../actions/CourseActions'
@@ -23,7 +23,7 @@ const MenuButton = (props) => (
   <TouchableHighlight
     onPress={props.onPress}
     activeOpacity={1}
-    underlayColor='#fff'
+    underlayColor="#fff"
     style={styles.menuButton}
   >
     <Text style={styles.menuButtonText}>{props.text}</Text>
@@ -60,7 +60,6 @@ class MainMenu extends React.Component {
   }
 
   go = (path) => () => {
-    console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
     this.props.history.push(path)
   }
 
@@ -82,11 +81,17 @@ class MainMenu extends React.Component {
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
 
     const height = Dimensions.get('window').height - this.props.topMargin
-    
+
     Keyboard.dismiss()
 
     return (
-      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, { backgroundColor: '#eee', opacity: fadeAnim, top: this.props.topMargin, justifyContent: 'space-between',  height }]}>
+      <Animated.View style={[styles.headerWithShadow, styles.menuOverlay, {
+        backgroundColor: '#eee',
+        opacity: fadeAnim,
+        top: this.props.topMargin,
+        justifyContent: 'space-between',
+        height
+      }]}>
         <View style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -143,7 +148,7 @@ class MainMenu extends React.Component {
             </View>
           }
         </View>
-        <View style={{marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start'}}>
+        <View style={{ marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start' }}>
           {activated
             ? <MenuButton text="LOG OUT" onPress={this.logout} />
             : <MenuButton text="LOG IN" onPress={this.go('/login')} />
@@ -151,13 +156,14 @@ class MainMenu extends React.Component {
           {currentUser &&
             <View>
               <Separator />
-              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null }
-              {this.props.selectedCourse ? <Separator /> : null }
+              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null}
+              {this.props.selectedCourse ? <Separator /> : null}
 
               <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
               <Separator />
-              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE" onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse} /> : null }
-              {this.props.selectedCourse ? <Separator /> : null }
+              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
+                                                       onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse} /> : null}
+              {this.props.selectedCourse ? <Separator /> : null}
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
               {notFacebookUser ? <MenuButton text="PROFILE" onPress={this.go('/profile')} /> : null}
