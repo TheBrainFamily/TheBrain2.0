@@ -1,20 +1,41 @@
 import React from 'react'
-import { View} from 'react-native'
+import { View, BackAndroid } from 'react-native'
 import Header from './Header'
 import MainMenu from './MainMenu'
+import { withRouter } from 'react-router'
 
-
-export default class PageContainer extends React.Component {
+class PageContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       mainMenuActive: false
-    }}
+    }
+  }
+
   toggleMainMenu = () => {
     this.setState({ mainMenuActive: !this.state.mainMenuActive })
   }
-  render() {
 
+  componentDidMount = () => {
+    BackAndroid.addEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  componentWillUnmount = () => {
+    BackAndroid.removeEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  handleBack = () => {
+    const { history } = this.props
+    if (history.index === 0) {
+      BackAndroid.exitApp()
+      return true
+    } else {
+      history.goBack()
+      return true
+    }
+  }
+
+  render () {
     return (
       <View style={{
         height: '100%',
@@ -26,3 +47,5 @@ export default class PageContainer extends React.Component {
     )
   }
 }
+
+export default withRouter(PageContainer)
