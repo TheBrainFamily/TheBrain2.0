@@ -153,9 +153,9 @@ class MainMenu extends React.Component {
             ? <MenuButton text="LOG OUT" onPress={this.logout} />
             : <MenuButton text="LOG IN" onPress={this.go('/login')} />
           }
+          <Separator />
           {currentUser &&
             <View>
-              <Separator />
               {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
 
