@@ -3,7 +3,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 
@@ -36,6 +36,12 @@ class Home extends React.Component {
       courseSelectorIsDisabled: false,
       mainMenuActive: false
     }
+
+    AsyncStorage.getItem('isIntroDisabled').then((isIntroDisabled) => {
+      if (!isIntroDisabled) {
+        props.history.push('/intro')
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -121,6 +127,12 @@ class Home extends React.Component {
   }
   enableCourseSelector = () => {
     this.setState({ courseSelectorIsDisabled: false })
+  }
+
+  logoutAction = () => {
+    this.props.dispatch(courseActions.close())
+    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.enableCourseSelector()
   }
 
   closeCourse = async () => {
@@ -212,7 +224,7 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course />}
 
-        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu} logoutAction={this.logoutAction}/>}
       </View>
     )
   }
