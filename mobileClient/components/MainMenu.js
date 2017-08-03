@@ -167,9 +167,9 @@ class MainMenu extends React.Component {
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
               {notFacebookUser ? <MenuButton text="PROFILE" onPress={this.go('/profile')} /> : null}
+              {notFacebookUser ? <Separator /> : null}
             </View>
           }
-          {/*<Separator />*/}
           <MenuButton text="CONTACT" onPress={this.go('/contact')} />
           {/*<Separator />*/}
           {/*<MenuButton text="QUESTIONS" onPress={this.go('/questions')} />*/}
