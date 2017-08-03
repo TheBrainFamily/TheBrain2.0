@@ -3,7 +3,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 
@@ -36,6 +36,12 @@ class Home extends React.Component {
       courseSelectorIsDisabled: false,
       mainMenuActive: false
     }
+
+    AsyncStorage.getItem('isIntroDisabled').then((isIntroDisabled) => {
+      if (!isIntroDisabled) {
+        props.history.push('/intro')
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
