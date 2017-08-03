@@ -163,7 +163,7 @@ class MainMenu extends React.Component {
               {notFacebookUser ? <MenuButton text="PROFILE" onPress={this.go('/profile')} /> : null}
             </View>
           }
-          <Separator />
+          {/*<Separator />*/}
           <MenuButton text="CONTACT" onPress={this.go('/contact')} />
           {/*<Separator />*/}
           {/*<MenuButton text="QUESTIONS" onPress={this.go('/questions')} />*/}
