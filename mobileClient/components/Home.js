@@ -123,6 +123,12 @@ class Home extends React.Component {
     this.setState({ courseSelectorIsDisabled: false })
   }
 
+  logoutAction = () => {
+    this.props.dispatch(courseActions.close())
+    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.enableCourseSelector()
+  }
+
   closeCourse = async () => {
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
@@ -212,7 +218,7 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course />}
 
-        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu} logoutAction={this.logoutAction}/>}
       </View>
     )
   }

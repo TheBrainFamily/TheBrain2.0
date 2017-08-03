@@ -55,7 +55,7 @@ class MainMenu extends React.Component {
         })
         this.props.client.resetStore()
       })
-    this.closeCourse()
+    this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
     this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
