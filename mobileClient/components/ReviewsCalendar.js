@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { Text, View, Dimensions } from 'react-native'
+import { Text, View, Dimensions, Platform, StatusBar } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
@@ -51,6 +51,12 @@ CalendarHeader.defaultProps = {
 }
 
 class ReviewsCalendar extends React.Component {
+  getHeaderHeight = () => {
+    const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
+    return appStyle.header.offset +
+      appStyle.header.height + actionBarHeight
+  }
+
   render () {
     if (this.props.data.loading) {
       return <View />
@@ -58,7 +64,7 @@ class ReviewsCalendar extends React.Component {
 
     const windowHeight = Dimensions.get('window').height
     const pageTitleHeight = appStyle.pageTitle.height
-    const height = windowHeight - appStyle.header.totalHeight - pageTitleHeight - appStyle.calendarHeader.height
+    const height = windowHeight - this.getHeaderHeight() - pageTitleHeight - appStyle.calendarHeader.height
 
     const currentDate = new Date()
     const currentMonth = currentDate.getMonth() + 1
