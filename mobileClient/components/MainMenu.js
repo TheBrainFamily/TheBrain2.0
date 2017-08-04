@@ -15,6 +15,7 @@ import Separator from './Separator'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
+import levelImages from '../helpers/levelImages'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
@@ -70,7 +71,7 @@ class MainMenu extends React.Component {
   }
 
   render () {
-    if (this.props.currentUser.loading || this.props.sessionCount.loading) {
+    if (this.props.currentUser.loading || this.props.sessionCount.loading || this.props.userDetails.loading) {
       return <View />
     }
     let { fadeAnim } = this.state
@@ -80,6 +81,8 @@ class MainMenu extends React.Component {
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
+    const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
+    const level = Math.min(userLevel, 8)
 
     const height = Dimensions.get('window').height - this.props.topMargin
 
@@ -104,7 +107,7 @@ class MainMenu extends React.Component {
         }}>
           <Image
             style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain' }}
-            source={require('../images/BillyBaby.png')}
+            source={levelImages[level].file}
           />
           {currentUser &&
             <View style={{
@@ -207,6 +210,18 @@ const logOutQuery = gql`
     }
 `
 
+
+
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            experience {
+              level
+            }
+        }
+    }
+`
+
 const mapStateToProps = (state) => {
   return {
     selectedCourse: state.course.selectedCourse
@@ -242,6 +257,12 @@ export default compose(
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
     options: {
       fetchPolicy: 'network-only'
     }
