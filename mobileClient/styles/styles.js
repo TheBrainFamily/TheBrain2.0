@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   form: {
-    marginTop: 20,
+    marginTop: 5,
     width: '70%'
   },
   errorText: {
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     padding: 5,
     color: 'white',
     backgroundColor: '#D00',
-    marginBottom: 10
+    marginVertical: 10
   },
   textInputWrapper: {
     borderBottomWidth: 1,

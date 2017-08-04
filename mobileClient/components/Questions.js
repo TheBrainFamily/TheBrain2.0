@@ -59,7 +59,7 @@ class Questions extends React.Component {
     if (nextProps.currentUser.activated) {
       nextProps.history.push('/')
     } else {
-      nextProps.history.push('/signup')
+      nextProps.history.push('/login')
     }
   }
 

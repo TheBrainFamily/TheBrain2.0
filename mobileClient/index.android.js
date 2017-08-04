@@ -24,7 +24,6 @@ import Calendar from './components/Calendar'
 import Achievements from './components/Achievements'
 import Profile from './components/Profile'
 import Contact from './components/Contact'
-import Signup from './components/Signup'
 import store, { client } from './store'
 
 export default class App extends Component {
@@ -48,7 +47,6 @@ export default class App extends Component {
               <Route exact path='/achievements' component={Achievements} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/contact' component={Contact} />
-              <Route exact path='/signup' component={Signup} />
             </Page>
           </View>
         </NativeRouter>
