@@ -5,7 +5,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { compose } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import CourseHeader from './CourseHeader'
+import PageContainer from './PageContainer'
 
 import styles from '../styles/styles'
 
@@ -16,28 +16,20 @@ class Congratulations extends React.Component {
 
   render () {
     return (
-      <View style={{
-        position: 'relative',
-        height: '100%',
-        backgroundColor: '#6905ea'
-      }}>
-        <CourseHeader height={80} />
-
-        <View style={{
-          flexGrow: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
+      <PageContainer>
+        <View style={{ backgroundColor: '#6905ea', height: '100%', paddingTop: 10 }}>
           <Text style={[styles.textDefault, { fontSize: 26 }]}>
             Congratulations
           </Text>
           <Text style={[styles.textDefault, { fontSize: 26, lineHeight: 36 }]}>
             Michał!
           </Text>
-          <Image
-            style={{ width: '30%', height: '40%', alignSelf: 'center', marginVertical: 10 }}
-            source={require('../images/BillyBaby.png')}
-          />
+          <View style={{ width: '100%', height: '35%', marginVertical: 10 }}>
+            <Image
+              style={{ width: '25%', height: '100%', alignSelf: 'center' }}
+              source={require('../images/TB_level2.png')}
+            />
+          </View>
           <Text style={[styles.textDefault, { fontSize: 12 }]}>
             You've just became
           </Text>
@@ -47,12 +39,12 @@ class Congratulations extends React.Component {
 
 
           <TouchableOpacity onPress={this.continue}>
-            <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 20, paddingHorizontal: 50 }]}>
+            <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 10, marginHorizontal: 10, paddingHorizontal: 50 }]}>
               Continue learning Baby!
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </PageContainer>
     )
   }
 }
