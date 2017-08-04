@@ -27,6 +27,17 @@ class Login extends React.Component {
     this.inputs = {}
   }
 
+  componentWillReceiveProps (nextProps) {
+        if (nextProps.currentUser.loading) {
+            return
+          }
+
+          if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
+            console.log('going to /')
+            nextProps.history.push('/')
+          }
+      }
+
   toggleSwitch = () => {
     this.setState({ isLogin: !this.state.isLogin })
   }
@@ -164,5 +175,11 @@ export default compose(
         }
       })
     })
+  }),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
   })
 )(Login)
