@@ -28,34 +28,24 @@ class Login extends React.Component {
   }
 
   toggleSwitch = () => {
-    this.setState({isLogin: !this.state.isLogin})
+    this.setState({ isLogin: !this.state.isLogin })
   }
 
   submit = () => {
-    this.setState({error: ''})
-    if (this.state.isLogin) {
-      this.props.login({username: this.state.username, password: this.state.password})
-        .then(() => {
-          this.props.history.push('/')
-        })
-        .catch((data) => {
-          const error = data.graphQLErrors[0].message
-          this.setState({error})
-        })
-    } else {
-      this.props.signup({username: this.state.username, password: this.state.password})
-        .then(() => {
-          this.props.history.push('/')
-        })
-        .catch((data) => {
-          const error = data.graphQLErrors[0].message
-          this.setState({error})
-        })
-    }
+    this.setState({ error: '' })
+    const actionName = this.state.isLogin ? 'login' : 'signup'
+    this.props[actionName]({ username: this.state.username, password: this.state.password })
+      .then(() => {
+        this.props.history.push('/')
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
+      })
   }
 
-  focusNextField(key) {
-    this.inputs[key].focus();
+  focusNextField (key) {
+    this.inputs[key].focus()
   }
 
   render () {
@@ -67,7 +57,7 @@ class Login extends React.Component {
             {this.state.isLogin ? 'Sign in' : 'Sign up' } and stay educated
           </Text>
 
-          <View style={{ alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <FBLoginButton />
           </View>
 
@@ -79,34 +69,35 @@ class Login extends React.Component {
               : <Text />
             }
 
-              <TextField
-                underlineColorAndroid='transparent'
-                onSubmitEditing={() => {
-                  this.focusNextField('password');
-                }}
-                autoFocus
-                autoCapitalize='none'
-                autoCorrect={false}
-                label='Username'
-                onChangeText={(username) => this.setState({ username })}
-                value={this.state.username}
-              />
+            <TextField
+              underlineColorAndroid='transparent'
+              onSubmitEditing={() => {
+                this.focusNextField('password')
+              }}
+              autoFocus
+              autoCapitalize='none'
+              autoCorrect={false}
+              label='Username'
+              onChangeText={(username) => this.setState({ username })}
+              value={this.state.username}
+            />
 
-              <TextField
-                underlineColorAndroid='transparent'
-                ref={ input => {
-                  this.inputs['password'] = input
-                }}
-                secureTextEntry
-                autoCapitalize='none'
-                autoCorrect={false}
-                label='Password'
-                onChangeText={(password) => this.setState({ password })}
-                value={this.state.password}
-              />
-            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
+            <TextField
+              underlineColorAndroid='transparent'
+              ref={ input => {
+                this.inputs['password'] = input
+              }}
+              secureTextEntry
+              autoCapitalize='none'
+              autoCorrect={false}
+              label='Password'
+              onChangeText={(password) => this.setState({ password })}
+              value={this.state.password}
+            />
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
               <Text>New account?</Text>
-              <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin} />
+              <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin}/>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.submit}>
