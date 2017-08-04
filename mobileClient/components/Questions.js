@@ -55,8 +55,7 @@ class Questions extends React.Component {
     if (itemsWithFlashcard.length > 0) {
       return
     }
-
-    if (nextProps.currentUser.activated) {
+    if (nextProps.currentUser.CurrentUser.activated) {
       nextProps.history.push('/')
     } else {
       nextProps.history.push('/login')
