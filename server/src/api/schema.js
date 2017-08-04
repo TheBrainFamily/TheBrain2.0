@@ -64,7 +64,13 @@ export const typeDefs = gql`
 
     type UserDetails {
         hasDisabledTutorial: Boolean,
-        selectedCourse: String
+        selectedCourse: String,
+        experience: Experience
+    }
+    
+    type Experience {
+      value: Int, 
+      level: Int
     }
     
     type User {
