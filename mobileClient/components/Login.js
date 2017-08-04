@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Text, TextInput, TouchableOpacity, View, Switch } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -11,12 +11,14 @@ import FBLoginButton from './FBLoginButton'
 import styles from '../styles/styles'
 
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
+import currentUserQuery from './../queries/currentUser'
 
 class Login extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
+      isLogin: false,
       error: '',
       username: '',
       password: ''
@@ -25,17 +27,31 @@ class Login extends React.Component {
     this.inputs = {}
   }
 
-  submit = () => {
-    this.setState({ error: '' })
+  toggleSwitch = () => {
+    this.setState({isLogin: !this.state.isLogin})
+  }
 
-    this.props.login({ username: this.state.username, password: this.state.password })
-      .then(() => {
-        this.props.history.push('/')
-      })
-      .catch((data) => {
-        const error = data.graphQLErrors[0].message
-        this.setState({ error })
-      })
+  submit = () => {
+    this.setState({error: ''})
+    if (this.state.isLogin) {
+      this.props.login({username: this.state.username, password: this.state.password})
+        .then(() => {
+          this.props.history.push('/')
+        })
+        .catch((data) => {
+          const error = data.graphQLErrors[0].message
+          this.setState({error})
+        })
+    } else {
+      this.props.signup({username: this.state.username, password: this.state.password})
+        .then(() => {
+          this.props.history.push('/')
+        })
+        .catch((data) => {
+          const error = data.graphQLErrors[0].message
+          this.setState({error})
+        })
+    }
   }
 
   focusNextField(key) {
@@ -47,13 +63,13 @@ class Login extends React.Component {
       <PageContainer>
 
         <View style={{ alignItems: 'center' }}>
-          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 30 }]}>Sign in and stay educated</Text>
+          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 20 }]}>Sign in and stay educated</Text>
 
-          <View style={{ alignItems: 'center',  marginVertical: 10 }}>
+          <View style={{ alignItems: 'center'}}>
             <FBLoginButton />
           </View>
 
-          <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 30 }]}>OR</Text>
+          <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 15 }]}>OR</Text>
 
           <View style={styles.form}>
             {this.state.error
@@ -90,9 +106,13 @@ class Login extends React.Component {
                 value={this.state.password}
               />
             </View>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+              <Text>New account?</Text>
+              <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin} />
+            </TouchableOpacity>
 
             <TouchableOpacity onPress={this.submit}>
-              <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 5 }]}>LOGIN</Text>
+              <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 20 }]}>{this.state.isLogin ? 'LOGIN' : 'SIGNUP'}</Text>
             </TouchableOpacity>
 
           </View>
@@ -101,6 +121,14 @@ class Login extends React.Component {
     )
   }
 }
+
+const signup = gql`
+    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!) {
+        setUsernameAndPasswordForGuest(username: $username, password: $password) {
+            username
+        }
+    }
+`
 
 const logIn = gql`
     mutation logIn($username: String!, $password: String!){
@@ -112,6 +140,19 @@ const logIn = gql`
 
 export default compose(
   connect(),
+  graphql(signup, {
+    props: ({ ownProps, mutate }) => ({
+      signup: ({ username, password }) => mutate({
+        variables: {
+          username,
+          password
+        },
+        refetchQueries: [{
+          query: currentUserQuery
+        }]
+      })
+    })
+  }),
   graphql(logIn, {
     props: ({ ownProps, mutate }) => ({
       login: ({ username, password }) => mutate({

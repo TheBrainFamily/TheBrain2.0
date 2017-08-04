@@ -172,12 +172,6 @@ class MainMenu extends React.Component {
             </View>
           }
           <MenuButton text="CONTACT" onPress={this.go('/contact')} />
-          {/*<Separator />*/}
-          {/*<MenuButton text="QUESTIONS" onPress={this.go('/questions')} />*/}
-          {/*<Separator />*/}
-          {/*<MenuButton text="CONGRATULATIONS" onPress={this.go('/congratulations')} />*/}
-          {/*<Separator />*/}
-          {/*<MenuButton text="SIGN UP" onPress={this.go('/signup')} />*/}
         </View>
       </Animated.View>
     )
