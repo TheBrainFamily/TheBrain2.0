@@ -1,5 +1,6 @@
 import React from 'react'
-import { Text, TextInput, TouchableOpacity, View, Switch } from 'react-native'
+import { Text, TouchableOpacity, View, Switch } from 'react-native'
+import { TextField } from 'react-native-material-textfield'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -10,7 +11,6 @@ import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
 
-import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 import currentUserQuery from './../queries/currentUser'
 
 class Login extends React.Component {
@@ -18,7 +18,7 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      isLogin: false,
+      isLogin: true,
       error: '',
       username: '',
       password: ''
@@ -63,7 +63,9 @@ class Login extends React.Component {
       <PageContainer>
 
         <View style={{ alignItems: 'center' }}>
-          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 20 }]}>Sign in and stay educated</Text>
+          <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 20 }]}>
+            {this.state.isLogin ? 'Sign in' : 'Sign up' } and stay educated
+          </Text>
 
           <View style={{ alignItems: 'center'}}>
             <FBLoginButton />
@@ -77,42 +79,40 @@ class Login extends React.Component {
               : <Text />
             }
 
-            <View style={styles.textInputWrapper}>
-              <TextInput
+              <TextField
+                underlineColorAndroid='transparent'
                 onSubmitEditing={() => {
                   this.focusNextField('password');
                 }}
-                style={styles.textInput}
                 autoFocus
                 autoCapitalize='none'
                 autoCorrect={false}
-                placeholder='Username'
+                label='Username'
                 onChangeText={(username) => this.setState({ username })}
                 value={this.state.username}
               />
-            </View>
 
-            <View style={styles.textInputWrapper}>
-              <TextInput
+              <TextField
+                underlineColorAndroid='transparent'
                 ref={ input => {
                   this.inputs['password'] = input
                 }}
-                style={styles.textInput}
                 secureTextEntry
                 autoCapitalize='none'
                 autoCorrect={false}
-                placeholder='Password'
+                label='Password'
                 onChangeText={(password) => this.setState({ password })}
                 value={this.state.password}
               />
-            </View>
-            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
               <Text>New account?</Text>
               <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.submit}>
-              <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 20 }]}>{this.state.isLogin ? 'LOGIN' : 'SIGNUP'}</Text>
+              <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 20 }]}>
+                {this.state.isLogin ? 'LOGIN' : 'SIGNUP'}
+              </Text>
             </TouchableOpacity>
 
           </View>
