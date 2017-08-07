@@ -15,7 +15,7 @@ import Separator from './Separator'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
-import levelImages from '../helpers/levelImages'
+import levelConfig from '../helpers/levelConfig'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
@@ -107,7 +107,7 @@ class MainMenu extends React.Component {
         }}>
           <Image
             style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain' }}
-            source={levelImages[level].file}
+            source={levelConfig[level].file}
           />
           {currentUser &&
             <View style={{

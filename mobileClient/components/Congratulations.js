@@ -1,9 +1,12 @@
 // @flow
-
+import _ from 'lodash'
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
-import { compose } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import gql from 'graphql-tag'
+import levelConfig from '../helpers/levelConfig'
 
 import PageContainer from './PageContainer'
 
@@ -15,6 +18,10 @@ class Congratulations extends React.Component {
   }
 
   render () {
+    const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
+    const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
+    const level = Math.min(userLevel, 8)
+
     return (
       <PageContainer>
         <View style={{ backgroundColor: '#6905ea', height: '100%', paddingTop: 10 }}>
@@ -22,25 +29,25 @@ class Congratulations extends React.Component {
             Congratulations
           </Text>
           <Text style={[styles.textDefault, { fontSize: 26, lineHeight: 36 }]}>
-            Michał!
+            {username}
           </Text>
           <View style={{ width: '100%', height: '35%', marginVertical: 10 }}>
             <Image
               style={{ width: '25%', height: '100%', alignSelf: 'center' }}
-              source={require('../images/TB_level2.png')}
+              source={levelConfig[level].file}
             />
           </View>
           <Text style={[styles.textDefault, { fontSize: 12 }]}>
             You've just became
           </Text>
           <Text style={[styles.textDefault, { fontSize: 26 }]}>
-            Billy Baby!
+            {levelConfig[level].name} (level {userLevel})
           </Text>
 
 
           <TouchableOpacity onPress={this.continue}>
             <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 10, marginHorizontal: 10, paddingHorizontal: 50 }]}>
-              Continue learning Baby!
+              Continue learning!
             </Text>
           </TouchableOpacity>
         </View>
@@ -49,6 +56,28 @@ class Congratulations extends React.Component {
   }
 }
 
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            experience {
+              level
+            }
+        }
+    }
+`
+
 export default compose(
   connect(),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
 )(Congratulations)
