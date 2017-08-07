@@ -129,6 +129,17 @@ const submitEval = gql`
     }
 `
 
+const userDetailsQuery = gql`
+    query UserDetails {
+        UserDetails {
+            hasDisabledTutorial
+            experience {
+              level
+            }
+        }
+    }
+`
+
 export default graphql(submitEval, {
   props: ({ownProps, mutate}) => ({
     submit: ({itemId, evaluation}) => mutate({
@@ -147,6 +158,9 @@ export default graphql(submitEval, {
       },
       refetchQueries: [{
         query: sessionCountQuery
+      },
+      {
+        query: userDetailsQuery
       }]
     })
   })

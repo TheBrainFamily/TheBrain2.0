@@ -7,6 +7,8 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
+import LevelUpWrapper from './LevelUpWrapper'
+import { withRouter } from 'react-router'
 
 import styles from '../styles/styles'
 
@@ -115,12 +117,16 @@ const userDetailsQuery = gql`
     query UserDetails {
         UserDetails {
             hasDisabledTutorial
+            experience {
+              level
+            }
         }
     }
 `
 
 export default compose(
   connect(),
+  withRouter,
   graphql(hideTutorialQuery, {
     props: ({ ownProps, mutate }) => ({
       hideTutorial: () => mutate({
@@ -132,5 +138,6 @@ export default compose(
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails'
-  })
+  }),
+LevelUpWrapper
 )(AnswerEvaluator)
