@@ -8,12 +8,14 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import CourseProgressBar from './CourseProgressBar'
+import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
   render () {
@@ -91,7 +93,8 @@ export class LectureVideo extends React.Component {
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   withRouter,
-  connect()
+  connect(),
+  LevelUpWrapper,
 )(LectureVideo)
 
 const mapStateToProps = (state) => {
@@ -102,6 +105,7 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  withRouter,
   graphql(currentLessonQuery, {
     options: (ownProps) => {
       const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
@@ -121,4 +125,11 @@ export default compose(
     },
     name: 'courseData'
   }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  LevelUpWrapper
 )(Lecture)

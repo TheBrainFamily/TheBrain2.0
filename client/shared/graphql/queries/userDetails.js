@@ -6,6 +6,9 @@ export default gql`
     query UserDetails {
         UserDetails {
             selectedCourse
+            experience {
+              level
+            }
         }
     }
 `

@@ -7,5 +7,6 @@ export default {
   5: { file: require('../images/TB_level5.png'), name: 'Student' },
   6: { file: require('../images/TB_level6.png'), name: 'Grownup' },
   7: { file: require('../images/TB_level7.png'), name: 'Specialist' },
-  8: { file: require('../images/TB_level8.png'), name: 'Expert' }
+  8: { file: require('../images/TB_level8.png'), name: 'Expert' },
+  levelCap: 8
 }

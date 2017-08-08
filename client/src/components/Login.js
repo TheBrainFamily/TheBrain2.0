@@ -12,6 +12,7 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   state = {
@@ -52,6 +53,7 @@ class Login extends React.Component {
   }
 
   redirectAfterLogin = () => {
+    sessionStorage.setItem('userLevelCache', null)
     this.props.dispatch(push('/'))
   }
   
@@ -75,7 +77,7 @@ class Login extends React.Component {
           <div>
             <input ref='isSignup' type="checkbox" name="newAccount" checked={this.state.isSignup}
                    onChange={this.checkboxClick}/>
-            <label>New account</label>
+            <label onClick={this.checkboxClick}>New account</label>
           </div>
           <div className={'login-form-buttons-container'}>
             <FBLoginButton onLogin={this.redirectAfterLogin}/>
@@ -139,6 +141,12 @@ export default compose(
         }]
       })
     })
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',

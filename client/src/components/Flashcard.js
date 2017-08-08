@@ -8,6 +8,7 @@ import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 import { flashcard } from '../actions'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import ResizableImage from './ResizableImage'
 
@@ -15,6 +16,7 @@ import answerButtonImage1 from '../img/button-easy.png'
 import answerButtonImage2 from '../img/button-medium.png'
 import answerButtonImage3 from '../img/button-hard.png'
 import answerButtonImage4 from '../img/button-veryhard.png'
+import LevelUpWrapper from './LevelUpWrapper'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
@@ -113,6 +115,13 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   withRouter,
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  LevelUpWrapper,
   graphql(submitEval, {
     props: ({ownProps, mutate}) => ({
       submit: ({itemId, evaluation}) => mutate({
@@ -132,7 +141,10 @@ export default compose(
         },
         refetchQueries: [{
           query: sessionCountQuery
-        }]
+        },{
+          query: userDetailsQuery
+        },
+        ]
       })
     })
   })

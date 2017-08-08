@@ -373,6 +373,10 @@ FLASHCARDS
     height: 120px;
 }
 
+.levelUpImage {
+    height: 30%;
+}
+
 .skip-tutorial-button {
     background-image: url('img/button-skip-tutorial.png');
     background-repeat: repeat-x;

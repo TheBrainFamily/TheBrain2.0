@@ -17,6 +17,7 @@ import Login from './Login'
 import Header from './Header'
 import ResetPassword from './ResetPassword'
 import ReviewsCalendar from './ReviewsCalendar'
+import Congratulations from './Congratulations'
 
 import { history } from '../store'
 
@@ -60,6 +61,7 @@ class MainContainer extends React.Component {
           <Route exact key='questions' path='/questions' component={Questions}/>
           <Route key='Course' path='/course/:courseId' component={Course}/>
           <Route exact key='contact' path='/contact' component={Contact} />
+          <Route exact key='congratulations' path='/congratulations' component={Congratulations} />
           {
             currentUser &&
             <div>
@@ -82,5 +84,5 @@ export default compose(
     }
   }),
   graphql(coursesQuery, { name: 'courses' }),
-  graphql(currentUserQuery)
+  graphql(currentUserQuery),
 )(MainContainer)
