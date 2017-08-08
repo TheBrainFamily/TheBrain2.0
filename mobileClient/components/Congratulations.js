@@ -20,7 +20,8 @@ class Congratulations extends React.Component {
   render () {
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
-    const level = Math.min(userLevel, 8)
+    const levelCap = levelConfig.levelCap
+    const level = Math.min(userLevel, levelCap)
 
     return (
       <PageContainer>

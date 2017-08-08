@@ -19,6 +19,7 @@ import levelConfig from '../helpers/levelConfig'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 const MenuButton = (props) => (
   <TouchableHighlight
@@ -82,7 +83,8 @@ class MainMenu extends React.Component {
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
-    const level = Math.min(userLevel, 8)
+    const levelCap = levelConfig.levelCap
+    const level = Math.min(userLevel, levelCap)
 
     const height = Dimensions.get('window').height - this.props.topMargin
 
@@ -206,18 +208,6 @@ const logOutQuery = gql`
     mutation logOut {
         logOut {
             _id, username, activated
-        }
-    }
-`
-
-
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            experience {
-              level
-            }
         }
     }
 `
