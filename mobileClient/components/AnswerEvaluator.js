@@ -9,6 +9,7 @@ import * as Animatable from 'react-native-animatable'
 import SwipeBall from './SwipeBall'
 import LevelUpWrapper from '../../client/shared/components/LevelUpWrapper'
 import { withRouter } from 'react-router'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 import styles from '../styles/styles'
 
@@ -109,17 +110,6 @@ const hideTutorialQuery = gql`
     mutation hideTutorial {
         hideTutorial {
             hasDisabledTutorial
-        }
-    }
-`
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            hasDisabledTutorial
-            experience {
-              level
-            }
         }
     }
 `

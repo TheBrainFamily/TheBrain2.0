@@ -5,8 +5,8 @@ import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-import gql from 'graphql-tag'
 import levelConfig from '../../client/shared/helpers/levelConfig'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 import PageContainer from './PageContainer'
 
@@ -56,16 +56,6 @@ class Congratulations extends React.Component {
     )
   }
 }
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            experience {
-              level
-            }
-        }
-    }
-`
 
 export default compose(
   connect(),
