@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import gql from 'graphql-tag'
-import levelConfig from '../helpers/levelConfig'
+import levelConfig from '../../client/shared/helpers/levelConfig'
 
 import PageContainer from './PageContainer'
 
