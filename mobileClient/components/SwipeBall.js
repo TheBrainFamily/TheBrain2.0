@@ -11,6 +11,7 @@ import { updateAnswerVisibility } from '../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
 
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
@@ -124,17 +125,6 @@ const submitEval = gql`
             flashcard
             {
                 _id question answer
-            }
-        }
-    }
-`
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            hasDisabledTutorial
-            experience {
-              level
             }
         }
     }
