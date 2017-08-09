@@ -53,7 +53,6 @@ class Login extends React.Component {
   }
 
   redirectAfterLogin = () => {
-    sessionStorage.setItem('userLevelCache', null)
     this.props.dispatch(push('/'))
   }
   
