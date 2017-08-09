@@ -8,7 +8,7 @@ import _ from 'lodash'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import gql from 'graphql-tag'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import levelConfig from '../../shared/helpers/levelConfig'
 
 class Congratulations extends React.Component {
@@ -25,39 +25,29 @@ class Congratulations extends React.Component {
     return (
       <FlexibleContentWrapper>
 
-            Congratulations
+        Congratulations
 
 
         {username} <br/>
 
-            <img className={'levelUpImage'}
-              src={levelConfig[level].file}
-            />
+        <img className={'levelUpImage'}
+             src={levelConfig[level].file}
+        />
 
-            You've just became<br/>
+        You've just became<br/>
 
-            {levelConfig[level].name} (level {userLevel})<br/>
+        {levelConfig[level].name} (level {userLevel})<br/>
 
 
-          <div onClick={this.click}>
+        <div onClick={this.click}>
 
-              Continue learning!
+          Continue learning!
 
-          </div>
+        </div>
       </FlexibleContentWrapper>
     )
   }
 }
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            experience {
-              level
-            }
-        }
-    }
-`
 
 export default compose(
   connect(),
