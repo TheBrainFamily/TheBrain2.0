@@ -31,25 +31,17 @@ class Congratulations extends React.Component {
     return (
       <FlexibleContentWrapper>
 
-        Congratulations
-
-
-        {username} <br/>
+        <h2>Congratulations {username}!</h2>
 
         <img className={'levelUpImage'}
              src={levelConfig[level].file}
+             alt={levelConfig[level].name}
         />
 
-        You've just became<br/>
+        <h2>You've just became<br/>
 
-        {levelConfig[level].name} (level {userLevel})<br/>
-
-
-        <div onClick={this.click}>
-
-          Continue learning!
-
-        </div>
+          {levelConfig[level].name} (level {userLevel})</h2>
+        <div className={'confirm-level-up-button'} onClick={this.click}>Continue learning!</div>
       </FlexibleContentWrapper>
     )
   }
