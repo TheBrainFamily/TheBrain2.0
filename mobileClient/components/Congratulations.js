@@ -13,9 +13,14 @@ import PageContainer from './PageContainer'
 import styles from '../styles/styles'
 
 class Congratulations extends React.Component {
-  continue = () => {
+  click = () => {
     this.props.confirmLevelUp()
-    this.props.history.push('/')
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if(!nextProps.userDetails.UserDetails.experience.showLevelUp) {
+      this.props.history.push('/')
+    }
   }
 
   render () {
@@ -46,7 +51,7 @@ class Congratulations extends React.Component {
           </Text>
 
 
-          <TouchableOpacity onPress={this.continue}>
+          <TouchableOpacity onPress={this.click}>
             <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 10, marginHorizontal: 10, paddingHorizontal: 50 }]}>
               Continue learning!
             </Text>

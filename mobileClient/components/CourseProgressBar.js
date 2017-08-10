@@ -38,6 +38,7 @@ export default compose(
   connect(mapStateToProps),
   graphql(currentLessonQuery, {
     name: 'currentLesson',
+    skip: props => !props.selectedCourse,
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse._id
       return ({

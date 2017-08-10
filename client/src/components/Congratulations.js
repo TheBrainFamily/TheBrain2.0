@@ -14,7 +14,12 @@ import confirmLevelUpMutation from '../../shared/graphql/mutations/confirmLevelU
 class Congratulations extends React.Component {
   click = () => {
     this.props.confirmLevelUp()
-    this.props.history.push('/')
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if(!nextProps.userDetails.UserDetails.experience.showLevelUp) {
+      this.props.history.push('/')
+    }
   }
 
   render () {
