@@ -1,13 +1,9 @@
-// @flow
-
 import gql from 'graphql-tag'
 
 export default gql`
-    query UserDetails {
-        UserDetails {
-            selectedCourse
+    mutation confirmLevelUp {
+        confirmLevelUp {
             experience {
-              level
               showLevelUp
             }
         }

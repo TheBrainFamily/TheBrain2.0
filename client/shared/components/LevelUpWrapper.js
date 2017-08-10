@@ -1,24 +1,30 @@
 import React from 'react'
-
+import { compose, graphql } from 'react-apollo'
+import { withRouter } from 'react-router'
+import userDetailsQuery from '../graphql/queries/userDetails'
 
 export default (Component) => {
-  return class LevelUp extends React.Component {
-    currentLevel: null
+
+  class LevelUpWrapper extends React.Component {
+    componentWillReceiveProps = (nextProps) => {
+      if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.experience) {
+        if (nextProps.userDetails.UserDetails.experience.showLevelUp) {
+          nextProps.history.push('/congratulations')
+        }
+      }
+    }
 
     render () {
-
-      if(this.props.userDetails && this.props.userDetails.UserDetails && this.props.userDetails.UserDetails.experience) {
-        if(this.currentLevel && this.props.userDetails.UserDetails.experience.level > this.currentLevel) {
-          console.log('###### LVL UP!')
-          this.props.history.push('/congratulations')
-        }
-        this.currentLevel = this.props.userDetails.UserDetails.experience.level
-      }
-
-
       return (
         <Component {...this.props}/>
       )
     }
   }
+
+  return compose(
+    withRouter,
+    graphql(userDetailsQuery, {
+      name: 'userDetails'
+    })
+  )(LevelUpWrapper)
 }
