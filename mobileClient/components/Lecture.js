@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
 
 import Video from './Video'
+import LevelUpWrapper from './LevelUpWrapper'
 
 import styles from '../styles/styles'
 
@@ -105,5 +106,6 @@ export default compose(
       })
     }
   }),
-  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams)
+  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  LevelUpWrapper
 )(Lecture)
