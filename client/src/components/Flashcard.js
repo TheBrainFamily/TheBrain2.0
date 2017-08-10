@@ -16,7 +16,7 @@ import answerButtonImage1 from '../img/button-easy.png'
 import answerButtonImage2 from '../img/button-medium.png'
 import answerButtonImage3 from '../img/button-hard.png'
 import answerButtonImage4 from '../img/button-veryhard.png'
-import LevelUpWrapper from '../../shared/components/LevelUpWrapper'
+import LevelUpWrapper from './LevelUpWrapper'
 
 class Flashcard extends React.Component {
   answeredQuestion = () => {
