@@ -127,7 +127,7 @@ export default compose(
     })
   }),
   graphql(userDetailsQuery, {
-    name: 'userDetails'
+    name: 'userDetails',
   }),
   LevelUpWrapper
 )(AnswerEvaluator)
