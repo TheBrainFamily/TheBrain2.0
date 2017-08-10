@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
-import LevelUpWrapper from '../../client/shared/components/LevelUpWrapper'
+import LevelUpWrapper from './LevelUpWrapper'
 import { withRouter } from 'react-router'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 

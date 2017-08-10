@@ -15,7 +15,7 @@ import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import CourseProgressBar from './CourseProgressBar'
-import LevelUpWrapper from '../../shared/components/LevelUpWrapper'
+import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
   render () {
