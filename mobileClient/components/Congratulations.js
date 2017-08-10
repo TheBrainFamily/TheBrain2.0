@@ -4,16 +4,17 @@ import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import levelConfig from '../../client/shared/helpers/levelConfig'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
-
+import confirmLevelUpMutation from '../../client/shared/graphql/mutations/confirmLevelUp'
 import PageContainer from './PageContainer'
 
 import styles from '../styles/styles'
 
 class Congratulations extends React.Component {
   continue = () => {
+    this.props.confirmLevelUp()
     this.props.history.push('/')
   }
 
@@ -22,7 +23,6 @@ class Congratulations extends React.Component {
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
     const levelCap = levelConfig.levelCap
     const level = Math.min(userLevel, levelCap)
-
     return (
       <PageContainer>
         <View style={{ backgroundColor: '#6905ea', height: '100%', paddingTop: 10 }}>
@@ -64,6 +64,15 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
+  }),
+  graphql(confirmLevelUpMutation, {
+    props: ({ ownProps, mutate }) => ({
+      confirmLevelUp: () => mutate({
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails',
