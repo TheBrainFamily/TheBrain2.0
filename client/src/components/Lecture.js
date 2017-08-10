@@ -8,7 +8,6 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
 import CourseIcon from './CourseIcon'
@@ -124,12 +123,6 @@ export default compose(
       })
     },
     name: 'courseData'
-  }),
-  graphql(userDetailsQuery, {
-    name: 'userDetails',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   }),
   LevelUpWrapper
 )(Lecture)

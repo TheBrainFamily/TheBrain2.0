@@ -12,7 +12,6 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   state = {
@@ -140,12 +139,6 @@ export default compose(
         }]
       })
     })
-  }),
-  graphql(userDetailsQuery, {
-    name: 'userDetails',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',
