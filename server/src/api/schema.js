@@ -70,7 +70,8 @@ export const typeDefs = gql`
     
     type Experience {
       value: Int, 
-      level: Int
+      level: Int,
+      showLevelUp: Boolean
     }
     
     type User {
@@ -127,6 +128,7 @@ export const typeDefs = gql`
         logInWithFacebook(accessToken: String!): User
         logOut: User
         hideTutorial: UserDetails
+        confirmLevelUp: UserDetails
         resetPassword(username: String!): Status
     }
     

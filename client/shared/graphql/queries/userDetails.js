@@ -8,6 +8,7 @@ export default gql`
             selectedCourse
             experience {
               level
+              showLevelUp
             }
         }
     }

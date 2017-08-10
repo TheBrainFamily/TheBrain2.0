@@ -3,16 +3,17 @@
 import React from 'react'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 
-
 import _ from 'lodash'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import levelConfig from '../../shared/helpers/levelConfig'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
-import levelConfig from '../../shared/helpers/levelConfig'
+import confirmLevelUpMutation from '../../shared/graphql/mutations/confirmLevelUp'
 
 class Congratulations extends React.Component {
   click = () => {
+    this.props.confirmLevelUp()
     this.props.history.push('/')
   }
 
@@ -56,6 +57,15 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
+  }),
+  graphql(confirmLevelUpMutation, {
+    props: ({ ownProps, mutate }) => ({
+      confirmLevelUp: () => mutate({
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails',
