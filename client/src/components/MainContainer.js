@@ -84,5 +84,5 @@ export default compose(
     }
   }),
   graphql(coursesQuery, { name: 'courses' }),
-  graphql(currentUserQuery),
+  graphql(currentUserQuery)
 )(MainContainer)

@@ -93,7 +93,6 @@ const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   withRouter,
   connect(),
-  LevelUpWrapper,
 )(LectureVideo)
 
 const mapStateToProps = (state) => {
@@ -104,7 +103,6 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
-  withRouter,
   graphql(currentLessonQuery, {
     options: (ownProps) => {
       const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
