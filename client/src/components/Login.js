@@ -75,7 +75,7 @@ class Login extends React.Component {
           <div>
             <input ref='isSignup' type="checkbox" name="newAccount" checked={this.state.isSignup}
                    onChange={this.checkboxClick}/>
-            <label>New account</label>
+            <label onClick={this.checkboxClick}>New account</label>
           </div>
           <div className={'login-form-buttons-container'}>
             <FBLoginButton onLogin={this.redirectAfterLogin}/>

@@ -14,6 +14,7 @@ import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import CourseProgressBar from './CourseProgressBar'
+import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
   render () {
@@ -91,7 +92,7 @@ export class LectureVideo extends React.Component {
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   withRouter,
-  connect()
+  connect(),
 )(LectureVideo)
 
 const mapStateToProps = (state) => {
@@ -121,4 +122,5 @@ export default compose(
     },
     name: 'courseData'
   }),
+  LevelUpWrapper
 )(Lecture)
