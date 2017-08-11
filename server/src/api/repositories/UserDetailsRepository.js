@@ -54,7 +54,7 @@ class UserDetailsRepository extends MongoRepository {
     })).value
     const prevLevel = calculateUserLevel(userDetails.experience.value - xpGained)
     const newLevel = calculateUserLevel(userDetails.experience.value)
-    const levelUp = prevLevel && prevLevel < newLevel
+    const levelUp = (prevLevel && prevLevel < newLevel) || userDetails.experience.showLevelUp
     await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {'experience.level': newLevel, 'experience.showLevelUp': levelUp}})
   }
 
