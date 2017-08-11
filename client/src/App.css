@@ -241,6 +241,7 @@ FLASHCARDS
 .flashcard {
     position: relative;
     margin: auto;
+    margin-bottom: 180px;
     color: black;
     padding: 15px;
     padding-right: 25px;
