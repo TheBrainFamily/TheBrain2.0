@@ -7,10 +7,9 @@ import FacebookLogin from 'react-facebook-login'
 import update from 'immutability-helper'
 
 class FBLoginButton extends React.Component {
-  responseFacebook = (response: { accessToken: string }) => {
-    console.log(response)
-    this.props.logInWithFacebook({ accessToken: response.accessToken })
-
+  responseFacebook = (response: { accessToken: string, name: string, email: string }) => {
+    console.log('logInWithFacebook', response)
+    this.props.logInWithFacebook({ accessToken: response.accessToken, username: response.name, email: response.email })
     this.props.onLogin && this.props.onLogin()
   }
 
@@ -20,7 +19,7 @@ class FBLoginButton extends React.Component {
         cssClass={'login-button-fb'}
         appId='794881630542767'
         autoLoad={false}
-        fields='name,email,picture'
+        fields='name,email'
         callback={this.responseFacebook}
       />
     )
@@ -28,18 +27,20 @@ class FBLoginButton extends React.Component {
 }
 
 const logInWithFacebook = gql`
-    mutation logInWithFacebook($accessToken: String!){
-        logInWithFacebook(accessToken:$accessToken) {
-            _id, username, activated
+    mutation logInWithFacebook($accessToken: String!, $username: String!, $email: String){
+        logInWithFacebook(accessToken:$accessToken, username:$username, email:$email) {
+            _id, username, activated, email
         }
     }
 `
 
 export default graphql(logInWithFacebook, {
   props: ({ ownProps, mutate }) => ({
-    logInWithFacebook: ({ accessToken }) => mutate({
+    logInWithFacebook: ({ accessToken, username, email }) => mutate({
       variables: {
-        accessToken
+        accessToken,
+        username,
+        email
       },
       updateQueries: {
         CurrentUser: (prev, { mutationResult }) => {

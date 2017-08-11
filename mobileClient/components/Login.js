@@ -28,15 +28,17 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-        if (nextProps.currentUser.loading) {
-            return
-          }
-
-          if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
-            console.log('going to /')
-            nextProps.history.push('/')
-          }
+    if (nextProps.match.path === '/signup') {
+      if (nextProps.currentUser.loading) {
+        return
       }
+
+      if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
+        console.log('going to /')
+        nextProps.history.push('/')
+      }
+    }
+  }
 
   toggleSwitch = () => {
     this.setState({ isLogin: !this.state.isLogin })
