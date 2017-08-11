@@ -78,6 +78,7 @@ export const typeDefs = gql`
         _id: String!,
         password: String!,
         username: String!,
+        email: String,
         activated: Boolean!
     }
     
@@ -125,7 +126,7 @@ export const typeDefs = gql`
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
-        logInWithFacebook(accessToken: String!): User
+        logInWithFacebook(accessToken: String!, username: String!, email: String): User
         logOut: User
         hideTutorial: UserDetails
         confirmLevelUp: UserDetails
