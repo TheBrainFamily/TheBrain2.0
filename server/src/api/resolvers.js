@@ -118,22 +118,19 @@ const resolvers = {
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
     },
-    async logInWithFacebook (root: ?string, args: { accessToken: string }, context: Object) {
-      const {accessToken: userToken} = args
+    async logInWithFacebook (root: ?string, args: { accessToken: string, username: string, email: string }, context: Object) {
+      const {accessToken: userToken, username, email} = args
       const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
-
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
       if (parsedResponse.data.is_valid) {
         const facebookId = parsedResponse.data.user_id
-        const user = await context.Users.findByFacebookId(facebookId)
-
-        if (user) {
-          context.req.logIn(user, (err) => { if (err) throw err })
-          return user
+        let user = await context.Users.findByFacebookId(facebookId)
+        if(!user) {
+          user = await loginWithGuest(root, args, context)
         }
-        const newUser = await context.Users.updateFacebookUser(context.user._id, facebookId)
-        return newUser
+        user = await context.Users.updateFacebookUser(user._id, facebookId, username, email)
+        return user
       } else {
         return null
       }
@@ -157,6 +154,7 @@ const resolvers = {
       }
     },
     async logOut (root: ?string, args: ?Object, context: Object) {
+      console.log('#####', context.user)
       if (context.user) {
         context.req.logOut()
       }
