@@ -19,6 +19,15 @@ class Login extends React.Component {
     isSignup: false
   }
 
+  loginButtonLabels = {
+    login: 'Login',
+    signup: 'Signup'
+  }
+
+  getLoginButtonLabel = (isSignup) => {
+    return isSignup ? this.loginButtonLabels.signup : this.loginButtonLabels.login
+  }
+
   componentWillReceiveProps (nextProps) {
     if(nextProps.match.path === '/signup') {
       this.setState({isSignup: true})
@@ -79,7 +88,7 @@ class Login extends React.Component {
           </div>
           <div className={'login-form-buttons-container'}>
             <FBLoginButton onLogin={this.redirectAfterLogin}/>
-            <input className={'login-button'} type='submit' value='Login'/>
+            <input className={'login-button'} type='submit' value={this.getLoginButtonLabel(this.state.isSignup)}/>
           </div>
         </form>
       </FlexibleContentWrapper>
