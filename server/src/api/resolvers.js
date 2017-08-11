@@ -200,6 +200,9 @@ const resolvers = {
 
       return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
     },
+    async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
+      return context.UserDetails.resetLevelUpFlag(context.user._id)
+    },
     async resetPassword (root: ?string, args: { username: string }, context: Object) {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {

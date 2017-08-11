@@ -64,7 +64,14 @@ export const typeDefs = gql`
 
     type UserDetails {
         hasDisabledTutorial: Boolean,
-        selectedCourse: String
+        selectedCourse: String,
+        experience: Experience
+    }
+    
+    type Experience {
+      value: Int, 
+      level: Int,
+      showLevelUp: Boolean
     }
     
     type User {
@@ -121,6 +128,7 @@ export const typeDefs = gql`
         logInWithFacebook(accessToken: String!): User
         logOut: User
         hideTutorial: UserDetails
+        confirmLevelUp: UserDetails
         resetPassword(username: String!): Status
     }
     
