@@ -8,7 +8,6 @@ import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
 import LevelUpWrapper from './LevelUpWrapper'
-import { withRouter } from 'react-router'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 import styles from '../styles/styles'
@@ -116,7 +115,6 @@ const hideTutorialQuery = gql`
 
 export default compose(
   connect(),
-  withRouter,
   graphql(hideTutorialQuery, {
     props: ({ ownProps, mutate }) => ({
       hideTutorial: () => mutate({
@@ -127,7 +125,7 @@ export default compose(
     })
   }),
   graphql(userDetailsQuery, {
-    name: 'userDetails',
+    name: 'userDetails'
   }),
   LevelUpWrapper
 )(AnswerEvaluator)
