@@ -86,6 +86,9 @@ export default compose(
     name: 'currentCourse',
     skip: props => !props.selectedCourse,
     options: (ownProps) => {
+      if(!ownProps.selectedCourse) {
+        return false
+      }
       const selectedCourse = ownProps.selectedCourse._id
       return {
         variables: {_id: selectedCourse},

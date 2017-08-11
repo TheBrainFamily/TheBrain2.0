@@ -11,6 +11,7 @@ import { updateAnswerVisibility } from '../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
 
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
@@ -147,6 +148,9 @@ export default graphql(submitEval, {
       },
       refetchQueries: [{
         query: sessionCountQuery
+      },
+      {
+        query: userDetailsQuery
       }]
     })
   })

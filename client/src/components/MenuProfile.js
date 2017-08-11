@@ -1,26 +1,27 @@
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
-import profileImage from '../img/portrait-default.png'
 import cardsGreen from '../img/menu-cards-green.png'
 import cardsRed from '../img/menu-cards-red.png'
 import sessionCount from '../../shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
+import levelConfig from '../../shared/helpers/levelConfig'
 
 class MenuProfile extends React.Component {
-  constructor (props) {
-    super(props)
-    this.level = 'Baby boy'
-  }
-
   render () {
     const dueValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueDone
     const dueAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
     const reviewValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.reviewDone
     const reviewAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
     const name = this.props.currentUser.username.split("@")[0]
+    const userLevel = this.props.userDetails.loading || !this.props.userDetails.UserDetails.experience ? 0 : this.props.userDetails.UserDetails.experience.level
+    const levelCap = levelConfig.levelCap
+    const cappedLevel = Math.min(userLevel, levelCap)
+    const profileImage = levelConfig[cappedLevel].file
+    const levelName = levelConfig[cappedLevel].name
 
     return (
       <div className={'menu-profile-container'}>
-        <img className={'menu-profile-image'} src={profileImage} alt={this.level}/>
+        <img className={'menu-profile-image'} src={profileImage} alt={levelName}/>
         <div className={'menu-profile-info'}>
           <p className={'menu-profile-name'}>{name}</p>
           <div className={'menu-profile-stats'}>
@@ -49,5 +50,11 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
-  })
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
 )(MenuProfile)

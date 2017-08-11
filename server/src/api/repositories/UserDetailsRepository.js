@@ -52,9 +52,16 @@ class UserDetailsRepository extends MongoRepository {
       upsert: true,
       returnOriginal: false
     })).value
-
+    const prevLevel = calculateUserLevel(userDetails.experience.value - xpGained)
     const newLevel = calculateUserLevel(userDetails.experience.value)
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {'experience.level': newLevel}})
+    const levelUp = (prevLevel && prevLevel < newLevel) || userDetails.experience.showLevelUp
+    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {'experience.level': newLevel, 'experience.showLevelUp': levelUp}})
+  }
+
+  async resetLevelUpFlag (userId: string) {
+    return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {'experience.showLevelUp': false}}, {
+      upsert: true,
+    })).value
   }
 
   async updateNextLessonPosition (courseId: string, userId: string) {

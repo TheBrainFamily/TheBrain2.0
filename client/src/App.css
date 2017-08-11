@@ -373,6 +373,10 @@ FLASHCARDS
     height: 120px;
 }
 
+.levelUpImage {
+    height: 30%;
+}
+
 .skip-tutorial-button {
     background-image: url('img/button-skip-tutorial.png');
     background-repeat: repeat-x;
@@ -389,6 +393,25 @@ FLASHCARDS
 }
 
 .skip-tutorial-button:hover {
+    color: #eaeaea;
+}
+
+.confirm-level-up-button {
+    background-image: url('img/button-skip-tutorial.png');
+    background-repeat: repeat-x;
+    background-position: top;
+    background-size: cover;
+    margin: auto;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 400px;
+    height: 70px;
+    vertical-align: middle;
+    line-height: 70px;
+
+}
+
+.confirm-level-up-button:hover {
     color: #eaeaea;
 }
 

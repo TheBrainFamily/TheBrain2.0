@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   menuButton: {
     justifyContent: 'center',
     paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderColor: '#fff5',
   },
   menuButtonText: {
