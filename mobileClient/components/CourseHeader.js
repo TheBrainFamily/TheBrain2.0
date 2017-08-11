@@ -84,7 +84,7 @@ export default compose(
   connect(mapStateToProps),
   graphql(currentCourseQuery, {
     name: 'currentCourse',
-    skip: (props) => !props.selectedCourse,
+    skip: props => !props.selectedCourse,
     options: (ownProps) => {
       if(!ownProps.selectedCourse) {
         return false
@@ -92,7 +92,6 @@ export default compose(
       const selectedCourse = ownProps.selectedCourse._id
       return {
         variables: {_id: selectedCourse},
-        fetchPolicy: 'network-only'
       }
     }
   }),

@@ -115,12 +115,6 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  graphql(userDetailsQuery, {
-    name: 'userDetails',
-    options: {
-      fetchPolicy: 'network-only'
-    }
-  }),
   LevelUpWrapper,
   graphql(submitEval, {
     props: ({ownProps, mutate}) => ({
