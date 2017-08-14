@@ -35,7 +35,7 @@ class LoginSwitcher extends React.Component {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `
@@ -100,8 +100,14 @@ class AppHeader extends React.Component {
                   <div className={'menu-separator menu-separator-visible'} />
                   <a>ACHIEVEMENTS LIST</a>
                   <div className={'menu-separator menu-separator-visible'} />
-                  <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
-                  <div className={'menu-separator menu-separator-visible'} />
+                  { currentUser && !currentUser.facebookId
+                    ?
+                    <span>
+                      <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
+                      < div className={'menu-separator menu-separator-visible'} />
+                    </span>
+                    : null
+                  }
                 </div>
                 }
                 <a onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
