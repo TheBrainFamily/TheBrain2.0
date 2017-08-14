@@ -98,7 +98,7 @@ class Login extends React.Component {
 const logIn = gql`
     mutation logIn($username: String!, $password: String!){
         logIn(username: $username, password: $password) {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `
@@ -106,7 +106,7 @@ const logIn = gql`
 const signup = gql`
     mutation setUsernameAndPasswordForGuest($username: String!, $password: String!){
         setUsernameAndPasswordForGuest(username: $username, password: $password) {
-            username
+            username, facebookId
         }
     }
 `
