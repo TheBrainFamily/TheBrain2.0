@@ -1,4 +1,5 @@
 // @flow
+import _ from 'lodash'
 import { Collection, ObjectId } from 'mongodb'
 import moment from 'moment'
 import { MongoRepository } from './MongoRepository'
@@ -13,7 +14,7 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     this.itemsCollection = this.db.collection('items')
   }
 
-  async getItemsWithFlashcard (userId: string) {
+  async getItemsWithFlashcard (userId: string, isCasual: Boolean) {
     const currentItems = await this.itemsCollection.find({
       userId: new ObjectId(userId),
       $or: [
@@ -25,12 +26,35 @@ class ItemsWithFlashcardRepository extends MongoRepository {
 
     const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
 
-    return currentItems.map(item => {
-      return {
-        item,
-        flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
-      }
-    }).sort((a, b) => {
+    const casualFlashcards = flashcards.filter((flashcard) => {
+      return flashcard.isCasual
+    })
+
+    console.log('#### FLASHCARDS CASUAL', casualFlashcards)
+
+    let currentItemsWithFlashcards = []
+    if(isCasual) {
+      currentItemsWithFlashcards = _.compact(currentItems.map(item => {
+        const flashcard = casualFlashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
+        if(!flashcard) {
+          return false
+        }
+        return {
+          item,
+          flashcard
+        }
+      }))
+    } else {
+      currentItemsWithFlashcards = currentItems.map(item => {
+        return {
+          item,
+          flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
+        }
+      })
+    }
+
+    console.log('##### MERGED', currentItemsWithFlashcards)
+    return currentItemsWithFlashcards.sort((a, b) => {
       return a.item.lastRepetition - b.item.lastRepetition
     })
   }

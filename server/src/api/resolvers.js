@@ -59,7 +59,7 @@ const resolvers = {
     },
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
-        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
+        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, context.user.isCasual)
       } else {
         return []
       }
@@ -110,7 +110,7 @@ const resolvers = {
       }
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(1)
+      //flashcardIds.splice(1)
       flashcardIds.forEach((flashcardId) => {
         context.Items.create(flashcardId, userId)
       })
@@ -207,7 +207,7 @@ const resolvers = {
       // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
 
-      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
+      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, context.user.isCasual)
     },
     async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.resetLevelUpFlag(context.user._id)
