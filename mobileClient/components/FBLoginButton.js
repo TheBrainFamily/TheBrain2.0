@@ -2,8 +2,9 @@ import React from 'react'
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
-import gql from 'graphql-tag'
 import { withApollo, graphql } from 'react-apollo'
+import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class FBLoginButton extends React.Component {
   render () {
@@ -15,8 +16,8 @@ class FBLoginButton extends React.Component {
                permissions={['email']}
                loginBehavior={FBLoginManager.LoginBehaviors.Native}
                onLogin={(data) => {
-                 console.log('Logged in!')
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token })
+                 console.log('Logged in!', data)
+                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
                  this.props.history.push('/')
                }}
                onLogout={() => {
@@ -25,9 +26,9 @@ class FBLoginButton extends React.Component {
                  this.props.history.push('/')
                }}
                onLoginFound={(data) => {
-                 console.log('Existing login found.')
+                 console.log('Existing login found.', data)
                  console.log(data)
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token })
+                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
                }}
                onLoginNotFound={() => {
                  console.log('No user logged in.')
@@ -48,19 +49,12 @@ class FBLoginButton extends React.Component {
   };
 }
 
-const logInWithFacebook = gql`
-    mutation logInWithFacebook($accessToken: String!){
-        logInWithFacebook(accessToken:$accessToken) {
-            _id, username, activated
-        }
-    }
-`
-
 export default withRouter(withApollo(graphql(logInWithFacebook, {
   props: ({ ownProps, mutate }) => ({
-    logInWithFacebook: ({ accessToken }) => mutate({
+    logInWithFacebook: ({ accessToken, userId }) => mutate({
       variables: {
-        accessToken
+        accessToken,
+        userId
       },
       updateQueries: {
         CurrentUser: (prev, { mutationResult }) => {

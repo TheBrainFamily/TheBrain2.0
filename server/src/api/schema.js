@@ -78,7 +78,9 @@ export const typeDefs = gql`
         _id: String!,
         password: String!,
         username: String!,
-        activated: Boolean!
+        email: String,
+        activated: Boolean!,
+        facebookId: String
     }
     
     type SessionCount {
@@ -125,7 +127,7 @@ export const typeDefs = gql`
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
-        logInWithFacebook(accessToken: String!): User
+        logInWithFacebook(accessToken: String!, userId: String!): User
         logOut: User
         hideTutorial: UserDetails
         confirmLevelUp: UserDetails
