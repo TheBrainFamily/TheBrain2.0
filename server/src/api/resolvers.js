@@ -72,7 +72,6 @@ const resolvers = {
       }
     },
     CurrentUser (root: ?string, args: ?Object, context: Object) {
-      console.log('###### CURRENT USER CONTEXT', context.user)
       return context.user
     },
     async UserDetails (root: ?string, args: ?Object, context: Object) {
@@ -121,7 +120,7 @@ const resolvers = {
     },
     async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
       const {accessToken, userId} = args
-      const requestUrl = `https://graph.facebook.com/v2.3/${userId}?fields=name,email&access_token=${accessToken}`;
+      const requestUrl = `https://graph.facebook.com/v2.10/${userId}?fields=name,email&access_token=${accessToken}`;
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
       if(parsedResponse.error) {
