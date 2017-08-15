@@ -45,9 +45,11 @@ export class UsersRepository extends MongoRepository {
     return userToBeUpdated
   }
 
-  async updateFacebookUser (userId: string, facebookId: string) {
+  async updateFacebookUser (userId: string, facebookId: string, username: string, email: string) {
     const userToBeUpdated = await this.userCollection.findOne({_id: new ObjectId(userId)})
     userToBeUpdated.facebookId = facebookId
+    userToBeUpdated.username = username
+    userToBeUpdated.email = email
     userToBeUpdated.activated = true
 
     await this.userCollection.save(userToBeUpdated)

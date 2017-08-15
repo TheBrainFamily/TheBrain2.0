@@ -28,15 +28,17 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-        if (nextProps.currentUser.loading) {
-            return
-          }
-
-          if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
-            console.log('going to /')
-            nextProps.history.push('/')
-          }
-      }
+    if (nextProps.currentUser.loading) {
+      return
+    }
+    if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
+      console.log('going to /')
+      nextProps.history.push('/')
+    }
+    if (nextProps.match.path === '/signup') {
+      this.setState({isLogin: false})
+    }
+  }
 
   toggleSwitch = () => {
     this.setState({ isLogin: !this.state.isLogin })
@@ -135,7 +137,7 @@ const signup = gql`
 const logIn = gql`
     mutation logIn($username: String!, $password: String!){
         logIn(username: $username, password: $password) {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `
