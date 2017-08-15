@@ -2,6 +2,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import swal from 'sweetalert2'
@@ -11,6 +12,7 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
 import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
 class Profile extends React.Component {
   state = {
@@ -46,11 +48,20 @@ class Profile extends React.Component {
     this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
+  casualSwitchClick = () => {
+
+  }
+
   render () {
     const error = this.state.oldPasswordError || this.state.confirmationError
-
+    console.log('ĄŚŽŁū', this.props)
     return (
       <FlexibleContentWrapper offset={400}>
+        <form>
+          <input onClick={this.casualSwitchClick} type="checkbox"/>
+          <label onClick={this.casualSwitchClick}>JESTEM HARDKOREM</label>
+        </form>
+        { this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId ?
         <form className='form' onSubmit={this.submit}>
           <div className={!error ? 'hidden' : null}>
             <p className='alert-error'>{ error }</p>
@@ -78,20 +89,43 @@ class Profile extends React.Component {
           <div>
             <input type='submit' value='Change Password' disabled={!this.state.isValid || !!error}/>
           </div>
-        </form>
+        </form> : null}
       </FlexibleContentWrapper>
     )
   }
 }
 
+const setUserIsCasual = gql`
+  mutation setUserIsCasual($isCasual: Boolean!) {
+    setUserIsCasual(isCasual: $isCasual) {
+      isCasual
+    }
+  }
+`
+
 export default compose(
   connect(),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
   graphql(changePasswordMutation, {
     props: ({ mutate }) => ({
       submit: ({ oldPassword, newPassword }) => mutate({
         variables: {
           oldPassword,
           newPassword
+        }
+      })
+    })
+  }),
+  graphql(setUserIsCasual, {
+    props: ({ mutate }) => ({
+      submit: ({ isCasual }) => mutate({
+        variables: {
+          isCasual
         }
       })
     })
