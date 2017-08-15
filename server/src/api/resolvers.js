@@ -72,6 +72,7 @@ const resolvers = {
       }
     },
     CurrentUser (root: ?string, args: ?Object, context: Object) {
+      console.log('###### CURRENT USER CONTEXT', context.user)
       return context.user
     },
     async UserDetails (root: ?string, args: ?Object, context: Object) {
@@ -118,22 +119,31 @@ const resolvers = {
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
     },
-    async logInWithFacebook (root: ?string, args: { accessToken: string }, context: Object) {
-      const {accessToken: userToken} = args
-      const requestUrl = `https://graph.facebook.com/debug_token?input_token=${userToken}&access_token=${facebookIds.appToken}`
-
+    async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
+      const {accessToken, userId} = args
+      const requestUrl = `https://graph.facebook.com/v2.3/${userId}?fields=name,email&access_token=${accessToken}`;
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
-      if (parsedResponse.data.is_valid) {
-        const facebookId = parsedResponse.data.user_id
-        const user = await context.Users.findByFacebookId(facebookId)
-
-        if (user) {
-          context.req.logIn(user, (err) => { if (err) throw err })
-          return user
+      if(parsedResponse.error) {
+        console.error('FBLogin failed:', parsedResponse)
+        return null
+      }
+      if (parsedResponse.id === userId) {
+        let user = await context.Users.findByFacebookId(userId)
+        let idToUpdate = null
+        if(user) {
+          idToUpdate = user._id
+        } else  {
+          if(context.user && context.user._id) {
+            idToUpdate = context.user._id
+          } else {
+            user = await context.Users.createGuest()
+            idToUpdate = user._id
+          }
         }
-        const newUser = await context.Users.updateFacebookUser(context.user._id, facebookId)
-        return newUser
+        user = await context.Users.updateFacebookUser(idToUpdate, userId, parsedResponse.name, parsedResponse.email)
+        context.req.logIn(user, (err) => { if (err) throw err })
+        return user
       } else {
         return null
       }

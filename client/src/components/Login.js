@@ -19,6 +19,15 @@ class Login extends React.Component {
     isSignup: false
   }
 
+  loginButtonLabels = {
+    login: 'Login',
+    signup: 'Signup'
+  }
+
+  getLoginButtonLabel = (isSignup) => {
+    return isSignup ? this.loginButtonLabels.signup : this.loginButtonLabels.login
+  }
+
   componentWillReceiveProps (nextProps) {
     if(nextProps.match.path === '/signup') {
       this.setState({isSignup: true})
@@ -79,7 +88,7 @@ class Login extends React.Component {
           </div>
           <div className={'login-form-buttons-container'}>
             <FBLoginButton onLogin={this.redirectAfterLogin}/>
-            <input className={'login-button'} type='submit' value='Login'/>
+            <input className={'login-button'} type='submit' value={this.getLoginButtonLabel(this.state.isSignup)}/>
           </div>
         </form>
       </FlexibleContentWrapper>
@@ -89,7 +98,7 @@ class Login extends React.Component {
 const logIn = gql`
     mutation logIn($username: String!, $password: String!){
         logIn(username: $username, password: $password) {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `
@@ -97,7 +106,7 @@ const logIn = gql`
 const signup = gql`
     mutation setUsernameAndPasswordForGuest($username: String!, $password: String!){
         setUsernameAndPasswordForGuest(username: $username, password: $password) {
-            username
+            username, facebookId
         }
     }
 `

@@ -78,7 +78,7 @@ class MainMenu extends React.Component {
     let { fadeAnim } = this.state
 
     const currentUser = this.props.currentUser.CurrentUser
-    const notFacebookUser = this.props.currentUser.CurrentUser && this.props.currentUser.CurrentUser.username !== 'guest'
+    const notFacebookUser = this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
