@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import swal from 'sweetalert2'
+import update from 'immutability-helper'
 
 import 'sweetalert2/dist/sweetalert2.min.css'
 
@@ -13,12 +14,13 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
 import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 class Profile extends React.Component {
   state = {
     oldPasswordError: '',
     confirmationError: '',
-    isValid: false
+    isValid: false,
   }
 
   goHome = () => {
@@ -48,18 +50,19 @@ class Profile extends React.Component {
     this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
-  casualSwitchClick = () => {
-
+  casualSwitchClick = async () => {
+    await this.props.switchUserIsCasual()
+    console.log('CASUAL?', this.props.userDetails.UserDetails.isCasual)
   }
 
   render () {
     const error = this.state.oldPasswordError || this.state.confirmationError
-    console.log('ĄŚŽŁū', this.props)
     return (
       <FlexibleContentWrapper offset={400}>
         <form>
-          <input onClick={this.casualSwitchClick} type="checkbox"/>
-          <label onClick={this.casualSwitchClick}>JESTEM HARDKOREM</label>
+          <input type="checkbox" checked={this.props.userDetails.UserDetails.isCasual}
+                 onChange={this.casualSwitchClick}/>
+          <label onClick={this.casualSwitchClick}>JESTEM CASUALEM</label>
         </form>
         { this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId ?
         <form className='form' onSubmit={this.submit}>
@@ -95,10 +98,16 @@ class Profile extends React.Component {
   }
 }
 
-const setUserIsCasual = gql`
-  mutation setUserIsCasual($isCasual: Boolean!) {
-    setUserIsCasual(isCasual: $isCasual) {
+const switchUserIsCasualMutation = gql`
+  mutation switchUserIsCasual {
+    switchUserIsCasual {
+      selectedCourse
+      hasDisabledTutorial
       isCasual
+      experience {
+        level
+        showLevelUp
+      }
     }
   }
 `
@@ -107,6 +116,12 @@ export default compose(
   connect(),
   graphql(currentUserQuery, {
     name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
     options: {
       fetchPolicy: 'network-only'
     }
@@ -121,13 +136,19 @@ export default compose(
       })
     })
   }),
-  graphql(setUserIsCasual, {
-    props: ({ mutate }) => ({
-      submit: ({ isCasual }) => mutate({
-        variables: {
-          isCasual
+  graphql(switchUserIsCasualMutation, {
+    props: ({ownProps, mutate}) => ({
+      switchUserIsCasual: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, {mutationResult}) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.switchUserIsCasual
+              }
+            })
+          }
         }
-      })
+      }),
     })
   }),
 )(Profile)

@@ -30,7 +30,7 @@ export default graphql(logInWithFacebook, {
     logInWithFacebook: ({ accessToken, userId }) => mutate({
       variables: {
         accessToken,
-        userId
+        userId,
       },
       updateQueries: {
         CurrentUser: (prev, { mutationResult }) => {
