@@ -15,46 +15,30 @@ class ItemsWithFlashcardRepository extends MongoRepository {
   }
 
   async getItemsWithFlashcard (userId: string, isCasual: Boolean) {
+    //TODO: gdy casual false pobieraj wszystkie
     const currentItems = await this.itemsCollection.find({
       userId: new ObjectId(userId),
+      $and: [
+        { isCasual: { $eq: !!isCasual } }
+      ],
       $or: [
         { actualTimesRepeated: 0 },
         { extraRepeatToday: true },
-        { nextRepetition: { $lte: moment().unix() } }
+        { nextRepetition: { $lte: moment().unix() } },
       ]
     }).toArray()
 
+    console.log('##### isCasual', isCasual)
+    console.log('result: ', currentItems)
+
     const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
 
-    const casualFlashcards = flashcards.filter((flashcard) => {
-      return flashcard.isCasual
-    })
-
-    console.log('#### FLASHCARDS CASUAL', casualFlashcards)
-
-    let currentItemsWithFlashcards = []
-    if(isCasual) {
-      currentItemsWithFlashcards = _.compact(currentItems.map(item => {
-        const flashcard = casualFlashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
-        if(!flashcard) {
-          return false
-        }
-        return {
-          item,
-          flashcard
-        }
-      }))
-    } else {
-      currentItemsWithFlashcards = currentItems.map(item => {
-        return {
-          item,
-          flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
-        }
-      })
-    }
-
-    console.log('##### MERGED', currentItemsWithFlashcards)
-    return currentItemsWithFlashcards.sort((a, b) => {
+    return currentItems.map(item => {
+      return {
+        item,
+        flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
+      }
+    }).sort((a, b) => {
       return a.item.lastRepetition - b.item.lastRepetition
     })
   }

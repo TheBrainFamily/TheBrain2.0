@@ -29,8 +29,9 @@ const resolvers = {
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
-    Reviews (root: ?string, args: ?Object, context: Object) {
-      return context.Items.getReviews(context.user._id)
+    async Reviews (root: ?string, args: ?Object, context: Object) {
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      return context.Items.getReviews(context.user._id, userDetails.isCasual)
     },
     Course (root: ?string, args: { _id: string }, context: Object) {
       return context.Courses.getCourse(args._id)
@@ -59,10 +60,12 @@ const resolvers = {
     },
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
-        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, context.user.isCasual)
-      } else {
-        return []
+        const userDetails = await context.UserDetails.getById(context.user._id)
+        if(userDetails) {
+          return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
+        }
       }
+      return []
     },
     SessionCount (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
@@ -109,10 +112,11 @@ const resolvers = {
         return {}
       }
       const flashcardIds = lesson.flashcardIds
+      const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       // TODO THIS SPLICE HAS TO GO
       //flashcardIds.splice(1)
-      flashcardIds.forEach((flashcardId) => {
-        context.Items.create(flashcardId, userId)
+      flashcards.forEach((flashcard) => {
+        context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
       })
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
@@ -174,6 +178,9 @@ const resolvers = {
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
     },
+    async switchUserIsCasual (root: ?string, args: ?Object, context: Object) {
+      return context.UserDetails.switchUserIsCasual(context.user._id)
+    },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {
         const username = args.username.trim()
@@ -206,8 +213,8 @@ const resolvers = {
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
-
-      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, context.user.isCasual)
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
     },
     async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.resetLevelUpFlag(context.user._id)

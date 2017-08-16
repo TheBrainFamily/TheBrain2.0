@@ -14,6 +14,11 @@ class FlashcardsRepository extends MongoRepository {
     return flashcards
   }
 
+  async getFlashcardsByIds (ids: [Object]) {
+    const flashcards = await (this.flashcardsCollection.find({_id: { $in: ids}})).toArray()
+    return flashcards
+  }
+
   async getFlashcard (_id: string) {
     return this.flashcardsCollection.findOne({_id})
   }

@@ -24,7 +24,7 @@ class ItemsRepository extends MongoRepository {
     return this.itemsCollection.findOne({_id: new ObjectId(_id), userId: new ObjectId(userId)})
   }
 
-  async create (flashcardId: string, userId: string) {
+  async create (flashcardId: string, userId: string, isCasual: Boolean) {
     const newItem = {
       flashcardId,
       userId: new ObjectId(userId),
@@ -34,19 +34,24 @@ class ItemsRepository extends MongoRepository {
       lastRepetition: 0,
       nextRepetition: 0,
       previousDaysChange: 0,
-      timesRepeated: 0
+      timesRepeated: 0,
+      isCasual
     }
     await this.itemsCollection.insertOne(newItem)
     return newItem
   }
 
-  async getReviews (userId: string) {
+  async getReviews (userId: string, isCasual: Boolean) {
     const currentDayTimestamp = moment().utc().startOf('day').unix()
+    const itemsQuery = {
+      userId: new ObjectId(userId),
+      nextRepetition: { $gte: currentDayTimestamp },
+    }
+    if(isCasual) {
+      itemsQuery.isCasual = true
+    }
     const items = await this.itemsCollection.find(
-      {
-        userId: new ObjectId(userId),
-        nextRepetition: { $gte: currentDayTimestamp }
-      },
+      itemsQuery,
       {
         nextRepetition: 1
       }).toArray()

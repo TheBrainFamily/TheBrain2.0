@@ -7,6 +7,7 @@ export default gql`
         UserDetails {
             selectedCourse
             hasDisabledTutorial
+            isCasual
             experience {
               level
               showLevelUp
