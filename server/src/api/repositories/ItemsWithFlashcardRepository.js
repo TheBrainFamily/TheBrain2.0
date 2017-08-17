@@ -47,15 +47,22 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     })
   }
 
-  async getSessionCount (userId: string) {
-    const items = await this.itemsCollection.find({
+  async getSessionCount (userId: string, isCasual: Boolean) {
+    let currentItemsQuery = {
       userId: new ObjectId(userId),
       $or: [
         { actualTimesRepeated: 0 },
         { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
         { nextRepetition: { $lte: moment().unix() } }
       ]
-    }).toArray()
+    }
+    const isCasualQuery = { $and: [
+      { isCasual: { $eq: true } }
+    ]}
+    if(isCasual) {
+      currentItemsQuery = _.extend({}, currentItemsQuery, isCasualQuery)
+    }
+    const items = await this.itemsCollection.find(currentItemsQuery).toArray()
 
     return getItemsWithFlashcardsByCount(items)
   }
