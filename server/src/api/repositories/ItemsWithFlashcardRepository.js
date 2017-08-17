@@ -29,12 +29,8 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     if(isCasual) {
       currentItemsQuery = _.extend({}, currentItemsQuery, isCasualQuery)
     }
-    console.log('currentItemsQuery', currentItemsQuery)
-    const currentItems = await this.itemsCollection.find(currentItemsQuery).toArray()
-
-    console.log('##### isCasual', isCasual)
-    console.log('result: ', currentItems)
-
+    // currently changed to fetching only one current item, after testing and approving, code below should be refactored
+    const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 1, sort: {lastRepetition: 1} }).toArray()
     const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
 
     return currentItems.map(item => {
@@ -42,8 +38,6 @@ class ItemsWithFlashcardRepository extends MongoRepository {
         item,
         flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
       }
-    }).sort((a, b) => {
-      return a.item.lastRepetition - b.item.lastRepetition
     })
   }
 
