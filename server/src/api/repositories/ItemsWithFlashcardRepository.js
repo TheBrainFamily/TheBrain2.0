@@ -15,18 +15,22 @@ class ItemsWithFlashcardRepository extends MongoRepository {
   }
 
   async getItemsWithFlashcard (userId: string, isCasual: Boolean) {
-    //TODO: gdy casual false pobieraj wszystkie
-    const currentItems = await this.itemsCollection.find({
+    let currentItemsQuery = {
       userId: new ObjectId(userId),
-      $and: [
-        { isCasual: { $eq: !!isCasual } }
-      ],
       $or: [
         { actualTimesRepeated: 0 },
         { extraRepeatToday: true },
         { nextRepetition: { $lte: moment().unix() } },
       ]
-    }).toArray()
+    }
+    const isCasualQuery = { $and: [
+      { isCasual: { $eq: true } }
+    ]}
+    if(isCasual) {
+      currentItemsQuery = _.extend({}, currentItemsQuery, isCasualQuery)
+    }
+    console.log('currentItemsQuery', currentItemsQuery)
+    const currentItems = await this.itemsCollection.find(currentItemsQuery).toArray()
 
     console.log('##### isCasual', isCasual)
     console.log('result: ', currentItems)
