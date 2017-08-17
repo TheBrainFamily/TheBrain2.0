@@ -61,9 +61,7 @@ const resolvers = {
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
-        if(userDetails) {
-          return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
-        }
+        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
       }
       return []
     },

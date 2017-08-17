@@ -35,7 +35,7 @@ class ItemsRepository extends MongoRepository {
       nextRepetition: 0,
       previousDaysChange: 0,
       timesRepeated: 0,
-      isCasual
+      isCasual: !!isCasual
     }
     await this.itemsCollection.insertOne(newItem)
     return newItem
@@ -43,12 +43,15 @@ class ItemsRepository extends MongoRepository {
 
   async getReviews (userId: string, isCasual: Boolean) {
     const currentDayTimestamp = moment().utc().startOf('day').unix()
-    const itemsQuery = {
+    let itemsQuery = {
       userId: new ObjectId(userId),
       nextRepetition: { $gte: currentDayTimestamp },
     }
+    const isCasualQuery = {
+      isCasual: true
+    }
     if(isCasual) {
-      itemsQuery.isCasual = true
+      itemsQuery = _.extend({}, itemsQuery, isCasualQuery)
     }
     const items = await this.itemsCollection.find(
       itemsQuery,
