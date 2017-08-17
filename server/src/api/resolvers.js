@@ -65,9 +65,10 @@ const resolvers = {
       }
       return []
     },
-    SessionCount (root: ?string, args: ?Object, context: Object) {
+    async SessionCount (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
-        return context.ItemsWithFlashcard.getSessionCount(context.user._id)
+        const userDetails = await context.UserDetails.getById(context.user._id)
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails.isCasual)
       } else {
         return {}
       }
