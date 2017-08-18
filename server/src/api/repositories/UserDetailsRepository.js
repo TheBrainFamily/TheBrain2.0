@@ -72,6 +72,13 @@ class UserDetailsRepository extends MongoRepository {
     return currentUserDetails
   }
 
+  async setUserIsCasual (userId: string, isCasual: boolean) {
+    const currentUserDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: { isCasual }})
+    currentUserDetails.isCasual = isCasual
+    return currentUserDetails
+  }
+
   async updateNextLessonPosition (courseId: string, userId: string) {
     await this.userDetailsCollection.update({
       userId: new ObjectId(userId),

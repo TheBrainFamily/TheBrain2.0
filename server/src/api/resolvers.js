@@ -113,7 +113,7 @@ const resolvers = {
       const flashcardIds = lesson.flashcardIds
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       // TODO THIS SPLICE HAS TO GO
-      //flashcardIds.splice(1)
+      flashcardIds.splice(1)
       flashcards.forEach((flashcard) => {
         context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
       })
@@ -179,6 +179,9 @@ const resolvers = {
     },
     async switchUserIsCasual (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.switchUserIsCasual(context.user._id)
+    },
+    async setUserIsCasual (root: ?string, args: { isCasual: boolean }, context: Object) {
+      return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {

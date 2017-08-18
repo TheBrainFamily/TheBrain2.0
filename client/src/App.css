@@ -277,6 +277,54 @@ FLASHCARDS
     color: gray;
 }
 
+.flashcard-title-not-casual {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 14px;
+    right: 30px;
+    background-color: red;
+}
+
+.flashcard-not-casual-popup {
+    cursor: default;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 210px;
+    height: 205px;
+    position: absolute;
+    text-align: justify;
+    top: 14px;
+    left: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
+}
+
+.flashcard-not-casual-popup p {
+    cursor: pointer;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    background-color: #ddd;
+    color: black;
+    border-radius: 5px;
+}
+
+.flashcard-not-casual-popup p:hover {
+    background-color: black;
+    color: white;
+}
+
+.flashcard-not-casual-popup strong {
+    color: black;
+}
+
+.flashcard-not-casual-popup div {
+    margin-top: 5px;
+}
+
 .flashcard-content {
     display: table;
     width: 100%;

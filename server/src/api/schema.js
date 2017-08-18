@@ -132,6 +132,7 @@ export const typeDefs = gql`
         logIn(username: String!, password: String!): User
         logInWithFacebook(accessToken: String!, userId: String!): User
         switchUserIsCasual: UserDetails
+        setUserIsCasual(isCasual: Boolean!): UserDetails
         logOut: User
         hideTutorial: UserDetails
         confirmLevelUp: UserDetails
