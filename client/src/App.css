@@ -817,6 +817,22 @@ FORM
     display: inline-block;
 }
 
+.user-casual-label {
+    display: inline !important;
+}
+
+.form [type='checkbox'] {
+    padding: 0;
+    margin: 0;
+    top: -7px;
+    left: -15px;
+    position: relative;
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+}
+
 /***********************
 CALENDAR
 ***********************/

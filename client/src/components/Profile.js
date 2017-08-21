@@ -59,10 +59,10 @@ class Profile extends React.Component {
     const error = this.state.oldPasswordError || this.state.confirmationError
     return (
       <FlexibleContentWrapper offset={400}>
-        <form>
+        <form className={'form'}>
           <input type="checkbox" checked={this.props.userDetails.UserDetails.isCasual}
                  onChange={this.casualSwitchClick}/>
-          <label onClick={this.casualSwitchClick}>JESTEM CASUALEM</label>
+          <label className={'user-casual-label'} onClick={this.casualSwitchClick}>Do not show hard questions</label>
         </form>
         { this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId ?
         <form className='form' onSubmit={this.submit}>
