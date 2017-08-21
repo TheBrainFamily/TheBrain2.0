@@ -110,12 +110,15 @@ const resolvers = {
       if (!lesson) {
         return {}
       }
+      const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
-      const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(1)
+      flashcardIds.splice(3)
+      const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       flashcards.forEach((flashcard) => {
-        context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
+        if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
+          context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
+        }
       })
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)

@@ -39,7 +39,9 @@ class Flashcard extends React.Component {
       nextProps.dispatch(push('/'))
     }
 
-    if (nextProps.currentItems.ItemsWithFlashcard && nextProps.currentItems.ItemsWithFlashcard.length === 0) {
+    if (nextProps.currentItems.loading === false
+      && nextProps.currentItems.ItemsWithFlashcard
+      && nextProps.currentItems.ItemsWithFlashcard.length === 0) {
       if(nextProps.currentUser.CurrentUser) {
         if (nextProps.currentUser.CurrentUser.activated) {
           nextProps.dispatch(push('/'))
@@ -208,12 +210,6 @@ export default compose(
   connect(mapStateToProps),
   withRouter,
   LevelUpWrapper,
-  graphql(currentItemsQuery, {
-    name: 'currentItems',
-    options: {
-      fetchPolicy: 'network-only'
-    }
-  }),
   graphql(currentUserQuery, {
     name: 'currentUser', options: {
       fetchPolicy: 'network-only'
@@ -221,6 +217,12 @@ export default compose(
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails', options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(currentItemsQuery, {
+    name: 'currentItems',
+    options: {
       fetchPolicy: 'network-only'
     }
   }),

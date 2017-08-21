@@ -47,11 +47,8 @@ class ItemsRepository extends MongoRepository {
       userId: new ObjectId(userId),
       nextRepetition: { $gte: currentDayTimestamp },
     }
-    const isCasualQuery = {
-      isCasual: true
-    }
     if(isCasual) {
-      itemsQuery = _.extend({}, itemsQuery, isCasualQuery)
+      itemsQuery = _.extend({}, itemsQuery, {isCasual: true})
     }
     const items = await this.itemsCollection.find(
       itemsQuery,
