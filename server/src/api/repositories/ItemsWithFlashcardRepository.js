@@ -23,11 +23,8 @@ class ItemsWithFlashcardRepository extends MongoRepository {
         { nextRepetition: { $lte: moment().unix() } },
       ]
     }
-    const isCasualQuery = { $and: [
-      { isCasual: { $eq: true } }
-    ]}
     if(isCasual) {
-      currentItemsQuery = _.extend({}, currentItemsQuery, isCasualQuery)
+      currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     // currently changed to fetching only one current item, after testing and approving, code below should be refactored
     const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 1, sort: {lastRepetition: 1} }).toArray()
@@ -50,11 +47,8 @@ class ItemsWithFlashcardRepository extends MongoRepository {
         { nextRepetition: { $lte: moment().unix() } }
       ]
     }
-    const isCasualQuery = { $and: [
-      { isCasual: { $eq: true } }
-    ]}
     if(isCasual) {
-      currentItemsQuery = _.extend({}, currentItemsQuery, isCasualQuery)
+      currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     const items = await this.itemsCollection.find(currentItemsQuery).toArray()
 

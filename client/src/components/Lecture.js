@@ -79,11 +79,7 @@ export class LectureVideo extends React.Component {
   _onEnd = () => {
     console.log('onYTend props:', this.props)
     this.props.lessonWatchedMutation({courseId: this.props.courseId}).then(() => {
-      let url = '/questions'
-      if (this.props.lesson && this.props.lesson.position <= 2) {
-        url = '/wellDone'
-      }
-      this.props.dispatch(push(url))
+      this.props.dispatch(push('/questions'))
     })
 
   }
