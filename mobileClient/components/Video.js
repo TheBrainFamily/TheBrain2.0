@@ -58,7 +58,7 @@ export default class Video extends React.Component {
               rel={false}
               onChangeState={this.onChangeState}
               onChangeFullscreen={this.onChangeFullscreen}
-              style={{ backgroundColor: '#000'}}
+              style={{ width: '100%', height: '100%', backgroundColor: '#000'}}
               apiKey='AIzaSyAp-SF0w9lATiBVdEfVPYikwyBC3s7gWps'
             />
             :
