@@ -52,7 +52,7 @@ class Questions extends React.Component {
 
     const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
 
-    if (itemsWithFlashcard.length > 0) {
+    if (nextProps.currentItems.loading || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
       return
     }
     if (nextProps.currentUser.CurrentUser.activated) {
@@ -97,7 +97,7 @@ class Questions extends React.Component {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
       const sessionCount = this.props.sessionCount.SessionCount
 
-      if (itemsWithFlashcard.length > 0) {
+      if (itemsWithFlashcard && itemsWithFlashcard.length > 0) {
         const flashcard = itemsWithFlashcard[0].flashcard
         const evalItem = itemsWithFlashcard[0].item
 
