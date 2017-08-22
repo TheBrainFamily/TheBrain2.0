@@ -63,6 +63,10 @@ class ItemsRepository extends MongoRepository {
       ts: parseInt(ts), count
     }))
   }
+
+  async clearNotCasualItems (userId: string) {
+    return await this.itemsCollection.removeMany({userId: new ObjectId(userId), isCasual: false})
+  }
 }
 
 export const itemsRepository = new ItemsRepository()

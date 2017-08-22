@@ -124,6 +124,13 @@ const resolvers = {
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
     },
+    async clearNotCasualItems(root: ?string, args: ?Object, context: Object) {
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      if(userDetails.isCasual) {
+        context.Items.clearNotCasualItems(context.user._id)
+      }
+      return true
+    },
     async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
       const {accessToken, userId} = args
       const requestUrl = `https://graph.facebook.com/v2.10/${userId}?fields=name,email&access_token=${accessToken}`;
