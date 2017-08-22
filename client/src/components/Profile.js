@@ -2,7 +2,6 @@
 import _ from 'lodash'
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import swal from 'sweetalert2'
@@ -12,6 +11,7 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
+import switchUserIsCasualMutation from '../../shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -97,20 +97,6 @@ class Profile extends React.Component {
     )
   }
 }
-
-const switchUserIsCasualMutation = gql`
-  mutation switchUserIsCasual {
-    switchUserIsCasual {
-      selectedCourse
-      hasDisabledTutorial
-      isCasual
-      experience {
-        level
-        showLevelUp
-      }
-    }
-  }
-`
 
 export default compose(
   connect(),
