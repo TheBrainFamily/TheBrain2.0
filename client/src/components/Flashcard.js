@@ -42,6 +42,8 @@ class Flashcard extends React.Component {
     if (nextProps.currentItems.loading === false
       && nextProps.currentItems.ItemsWithFlashcard
       && nextProps.currentItems.ItemsWithFlashcard.length === 0) {
+      console.log('KONIEC FISZEK')
+      this.props.clearNotCasual()
       if(nextProps.currentUser.CurrentUser) {
         if (nextProps.currentUser.CurrentUser.activated) {
           nextProps.dispatch(push('/'))
@@ -200,6 +202,12 @@ const setUserIsCasualMutation = gql`
   }
 `
 
+const clearNotCasualItemsMutation = gql`
+  mutation clearNotCasualItems {
+    clearNotCasualItems
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
     isAnswerVisible: state.flashcard.isAnswerVisible
@@ -270,6 +278,12 @@ export default compose(
         refetchQueries: [{
           query: currentItemsQuery
         }]
+      }),
+    })
+  }),
+  graphql(clearNotCasualItemsMutation, {
+    props: ({ownProps, mutate}) => ({
+      clearNotCasual: () => mutate({
       }),
     })
   }),
