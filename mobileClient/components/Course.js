@@ -17,12 +17,18 @@ class Course extends React.Component {
     if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
       return
     }
+    if (!nextProps.selectedCourse) {
+      nextProps.history.push('/')
+    }
     if (nextProps.data.ItemsWithFlashcard.length > 0) {
       nextProps.history.push('/questions')
     }
   }
 
   render () {
+    if(!this.props.selectedCourse) {
+      return null
+    }
     const courseLogo = courseLogos[this.props.selectedCourse.name]
     const logoSize = courseLogo.scale * 60
 

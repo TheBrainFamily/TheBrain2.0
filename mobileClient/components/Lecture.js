@@ -38,11 +38,7 @@ class Lecture extends React.Component {
     console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
       this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
-        let url = '/questions'
-        if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
-          url = '/wellDone'
-        }
-        this.props.history.push(url)
+        this.props.history.push('/questions')
       })
     }
   }

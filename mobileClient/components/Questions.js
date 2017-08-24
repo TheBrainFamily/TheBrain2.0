@@ -46,6 +46,10 @@ class Questions extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (!nextProps.course || !nextProps.course.selectedCourse) {
+      nextProps.history.push('/')
+    }
+
     if (nextProps.currentItems.loading || nextProps.currentUser.loading || nextProps.sessionCount.loading) {
       return
     }
@@ -55,7 +59,7 @@ class Questions extends React.Component {
     if (nextProps.currentItems.loading || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
       return
     }
-    if (nextProps.currentUser.CurrentUser.activated) {
+    if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
       nextProps.history.push('/')
     } else {
       nextProps.history.push('/login')
