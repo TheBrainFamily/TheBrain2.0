@@ -35,25 +35,6 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 5
   },
-  wellDonePage: {
-    backgroundColor: '#662d91',
-    height: '100%'
-  },
-  wellDoneContainer: {
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  wellDoneHeader: {
-    height: 60,
-    fontSize: 30
-  },
-  wellDoneContent: {
-    color: '#DDD',
-    padding: 20,
-    height: 150,
-    fontSize: 20
-  },
   baseMarkerStyle: {
     position: 'absolute',
     opacity: 1,

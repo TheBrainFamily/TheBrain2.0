@@ -207,7 +207,7 @@ MainMenu.defaultProps = {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `
