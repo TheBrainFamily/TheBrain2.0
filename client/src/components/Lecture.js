@@ -6,11 +6,11 @@ import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import gql from 'graphql-tag'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
+import clearNotCasualItems from '../../shared/graphql/mutations/clearNotCasualItems'
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
@@ -87,16 +87,9 @@ export class LectureVideo extends React.Component {
   }
 }
 
-
-const clearNotCasualItemsMutation = gql`
-  mutation clearNotCasualItems {
-    clearNotCasualItems
-  }
-`
-
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
-  graphql(clearNotCasualItemsMutation, {
+  graphql(clearNotCasualItems, {
     props: ({ownProps, mutate}) => ({
       clearNotCasual: () => mutate({
       }),
