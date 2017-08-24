@@ -124,7 +124,11 @@ const submitEval = gql`
             }
             flashcard
             {
-                _id question answer
+                _id question answer isCasual
+                image {
+                  url
+                  hasAlpha
+                }
             }
         }
     }

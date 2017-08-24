@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import gql from 'graphql-tag'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
@@ -76,7 +77,8 @@ export class LectureVideo extends React.Component {
     )
   }
 
-  _onEnd = () => {
+  _onEnd = async () => {
+    await this.props.clearNotCasual()
     console.log('onYTend props:', this.props)
     this.props.lessonWatchedMutation({courseId: this.props.courseId}).then(() => {
       this.props.dispatch(push('/questions'))
@@ -85,8 +87,21 @@ export class LectureVideo extends React.Component {
   }
 }
 
+
+const clearNotCasualItemsMutation = gql`
+  mutation clearNotCasualItems {
+    clearNotCasualItems
+  }
+`
+
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  graphql(clearNotCasualItemsMutation, {
+    props: ({ownProps, mutate}) => ({
+      clearNotCasual: () => mutate({
+      }),
+    })
+  }),
   withRouter,
   connect(),
 )(LectureVideo)
