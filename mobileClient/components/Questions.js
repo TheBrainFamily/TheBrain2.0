@@ -56,12 +56,15 @@ class Questions extends React.Component {
 
     const itemsWithFlashcard = nextProps.currentItems.ItemsWithFlashcard
 
-    if (nextProps.currentItems.loading || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
+    if (nextProps.currentItems.loading || !itemsWithFlashcard || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
       return
     }
+    console.log(nextProps.currentItems)
     if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
+      console.log('redirecting / ')
       nextProps.history.push('/')
     } else {
+      console.log('redirecting /login ')
       nextProps.history.push('/login')
     }
   }
