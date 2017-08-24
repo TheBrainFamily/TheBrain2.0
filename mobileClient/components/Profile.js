@@ -75,8 +75,8 @@ class Profile extends React.Component {
   }
 
   componentWillUpdate = (nextProps) => {
-    if(nextProps.userDetails.loading === false && nextProps.userDetails.UserDetails.isCasual !== this.state.isCasual) {
-      this.setState({isCasual: nextProps.userDetails.UserDetails.isCasual})
+    if(nextProps.userDetails.loading === false && !!nextProps.userDetails.UserDetails.isCasual !== this.state.isCasual) {
+      this.setState({isCasual: !!nextProps.userDetails.UserDetails.isCasual})
     }
   }
 
