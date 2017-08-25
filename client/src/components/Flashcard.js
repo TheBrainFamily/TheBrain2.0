@@ -23,8 +23,8 @@ import answerButtonImage4 from '../img/button-veryhard.png'
 import LevelUpWrapper from './LevelUpWrapper'
 
 class Flashcard extends React.Component {
-  answeredQuestion = () => {
-    this.props.dispatch(flashcard.showAnswer(true))
+  showQuestion = (isVisible) => {
+    this.props.dispatch(flashcard.showAnswer(isVisible))
   }
 
   onSubmitEvaluation = (value, itemId) => {
@@ -96,9 +96,11 @@ class Flashcard extends React.Component {
     if (!this.props.isAnswerVisible) {
       return (
         <FlexibleContentWrapper offset={300}>
-          <div className='flashcard' style={{cursor: 'pointer'}} onClick={this.answeredQuestion}>
+          <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
             <div className='flashcard-title'>Question: title
-              { !isCasual ? <div className={'flashcard-title-not-casual'}/> : null }
+              { !isCasual ? <div className={'flashcard-title-not-casual'}>
+                <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
+              </div> : null }
               {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
@@ -118,9 +120,11 @@ class Flashcard extends React.Component {
     return (
       <div>
         <FlexibleContentWrapper offset={300}>
-          <div className='flashcard'>
-            <div className='flashcard-title'>Question: title
-              { !isCasual ? <div className={'flashcard-title-not-casual'}/> : null }
+          <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(false)}>
+            <div className='flashcard-title'>Answer: title
+              { !isCasual ? <div className={'flashcard-title-not-casual'}>
+                <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
+              </div> : null }
               {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
