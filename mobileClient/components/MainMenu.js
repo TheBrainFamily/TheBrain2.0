@@ -172,8 +172,8 @@ class MainMenu extends React.Component {
               {this.props.selectedCourse ? <Separator /> : null}
               <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />
               <Separator />
-              {notFacebookUser ? <MenuButton text="PROFILE" onPress={this.go('/profile')} /> : null}
-              {notFacebookUser ? <Separator /> : null}
+              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+              <Separator />
             </View>
           }
           <MenuButton text="CONTACT" onPress={this.go('/contact')} />
@@ -207,7 +207,7 @@ MainMenu.defaultProps = {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated
+            _id, username, activated, facebookId
         }
     }
 `

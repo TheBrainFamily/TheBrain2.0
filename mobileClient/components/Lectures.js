@@ -12,7 +12,9 @@ import currentLessonQuery from '../../client/shared/graphql/queries/currentLesso
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
-    
+    if(!item) {
+      return
+    }
     return (
       <View style={{ width: '50%',height: 160, paddingHorizontal: 10, paddingVertical:3 }} key={item._id}>
         <View style ={{ height: '75%', width:'100%'}}>

@@ -40,6 +40,7 @@ export const typeDefs = gql`
         question: String!,
         answer: String!,
         image: FlashcardImage,
+        isCasual: Boolean,
     }
     type FlashcardImage {
         url: String,
@@ -54,7 +55,8 @@ export const typeDefs = gql`
         lastRepetition: Int,
         nextRepetition: Int,
         previousDaysChange: Int,
-        timesRepeated: Int
+        timesRepeated: Int,
+        isCasual: Boolean,
     }
     
     type ItemWithFlashcard {
@@ -65,7 +67,8 @@ export const typeDefs = gql`
     type UserDetails {
         hasDisabledTutorial: Boolean,
         selectedCourse: String,
-        experience: Experience
+        experience: Experience,
+        isCasual: Boolean
     }
     
     type Experience {
@@ -80,7 +83,7 @@ export const typeDefs = gql`
         username: String!,
         email: String,
         activated: Boolean!,
-        facebookId: String
+        facebookId: String,
     }
     
     type SessionCount {
@@ -128,6 +131,9 @@ export const typeDefs = gql`
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
         logInWithFacebook(accessToken: String!, userId: String!): User
+        switchUserIsCasual: UserDetails
+        setUserIsCasual(isCasual: Boolean!): UserDetails
+        clearNotCasualItems: Boolean
         logOut: User
         hideTutorial: UserDetails
         confirmLevelUp: UserDetails

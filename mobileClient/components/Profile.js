@@ -1,16 +1,21 @@
 import _ from 'lodash'
 import React from 'react'
-import { Text, TouchableOpacity, View, Alert } from 'react-native'
+import { Text, TouchableOpacity, Switch, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import { TextField } from 'react-native-material-textfield'
+import update from 'immutability-helper'
 
 import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
+import Separator from './Separator'
 
 import styles from '../styles/styles'
 import changePasswordMutation from '../../client/shared/graphql/queries/changePasswordMutation'
+import switchUserIsCasualMutation from '../../client/shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from '../../client/shared/helpers/getPasswordValidationState'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class Profile extends React.Component {
   state = {
@@ -19,7 +24,8 @@ class Profile extends React.Component {
     isValid: false,
     oldPassword: '',
     newPassword: '',
-    newPasswordConfirmation: ''
+    newPasswordConfirmation: '',
+    isCasual: false
   }
 
   inputs = {}
@@ -64,14 +70,40 @@ class Profile extends React.Component {
     this.inputs[key].focus();
   }
 
+  casualSwitchAction = () => {
+    this.props.switchUserIsCasual()
+    this.setState({isCasual: !this.state.isCasual})
+  }
+
+  componentWillUpdate = (nextProps) => {
+    if(nextProps.userDetails.loading === false && !!nextProps.userDetails.UserDetails.isCasual !== this.state.isCasual) {
+      this.setState({isCasual: !!nextProps.userDetails.UserDetails.isCasual})
+    }
+  }
+
   render () {
     const { isValid } = this.state
+    const isGuest = this.props.currentUser ? !this.props.currentUser.CurrentUser.activated : true
+    const isFacebookUser = this.props.currentUser ? this.props.currentUser.CurrentUser.facebookId : false
 
     return (
       <PageContainer>
         <PageTitle text='PROFILE' />
 
         <View style={{
+          paddingHorizontal: '10%'
+        }}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
+            <Text>Hide hard questions</Text>
+            <Switch onValueChange={this.casualSwitchAction} value={this.state.isCasual}/>
+          </TouchableOpacity>
+        </View>
+        <View style={{paddingHorizontal: 10, marginTop: 18}}>
+          <Separator/>
+        </View>
+
+        { isGuest || isFacebookUser ? null : <View style={{
           paddingHorizontal: '10%'
         }}>
           <TextField
@@ -118,7 +150,7 @@ class Profile extends React.Component {
               !isValid ? { opacity: 0.7 } : {}
             ]}>CHANGE PASSWORD</Text>
           </TouchableOpacity>
-        </View>
+        </View> }
       </PageContainer>
     )
   }
@@ -134,6 +166,33 @@ export default compose(
           newPassword
         }
       })
+    })
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(switchUserIsCasualMutation, {
+    props: ({ownProps, mutate}) => ({
+      switchUserIsCasual: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, {mutationResult}) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.switchUserIsCasual
+              }
+            })
+          }
+        }
+      }),
     })
   }),
 )(Profile)
