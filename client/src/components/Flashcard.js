@@ -3,7 +3,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
@@ -11,6 +10,9 @@ import { flashcard } from '../actions'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import currentItemsQuery from '../../shared/graphql/queries/ItemsWithFlashcard'
+import submitEval from '../../shared/graphql/mutations/processEvaluation'
+import setUserIsCasualMutation from '../../shared/graphql/mutations/setUserIsCasual'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import ResizableImage from './ResizableImage'
 
@@ -144,62 +146,6 @@ class Flashcard extends React.Component {
       </div>)
   }
 }
-
-const submitEval = gql`
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
-        processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer isCasual
-                image {
-                  url
-                  hasAlpha
-                }
-            }
-        }
-    }
-`
-
-const currentItemsQuery = gql`
-    query CurrentItems {
-        ItemsWithFlashcard {
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer isCasual
-                image {
-                    url
-                    hasAlpha
-                }
-            }
-        }
-    }
-`
-
-const setUserIsCasualMutation = gql`
-  mutation setUserIsCasual($isCasual: Boolean!) {
-    setUserIsCasual(isCasual:$isCasual) {
-      selectedCourse
-      hasDisabledTutorial
-      isCasual
-      experience {
-        level
-        showLevelUp
-      }
-    }
-  }
-`
 
 const mapStateToProps = (state) => {
   return {

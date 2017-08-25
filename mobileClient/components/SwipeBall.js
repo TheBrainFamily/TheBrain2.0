@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Animated, PanResponder, View } from 'react-native'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -12,6 +11,7 @@ import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '.
 
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import submitEval from '../../client/shared/graphql/mutations/processEvaluation'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
@@ -112,27 +112,6 @@ class SwipeBall extends React.Component {
     )
   }
 }
-
-const submitEval = gql`
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
-        processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer isCasual
-                image {
-                  url
-                  hasAlpha
-                }
-            }
-        }
-    }
-`
 
 export default graphql(submitEval, {
   props: ({ownProps, mutate}) => ({
