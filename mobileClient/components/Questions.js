@@ -29,7 +29,7 @@ import appStyle from '../styles/appStyle'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-import currentItemsQuery from '../../client/shared/graphql/queries/ItemsWithFlashcard'
+import currentItemsQuery from '../../client/shared/graphql/queries/itemsWithFlashcard'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
