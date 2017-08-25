@@ -4,7 +4,6 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import {
   Text,
@@ -30,6 +29,7 @@ import appStyle from '../styles/appStyle'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import currentItemsQuery from '../../client/shared/graphql/queries/ItemsWithFlashcard'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 class Questions extends React.Component {
@@ -123,7 +123,7 @@ class Questions extends React.Component {
             <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}
                        getFlashcardWidth={this.getFlashcardWidth}/>
-            <AnswerEvaluator enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
+            <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
             {this.state.mainMenuActive &&
             <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
@@ -135,25 +135,6 @@ class Questions extends React.Component {
     }
   }
 }
-
-const currentItemsQuery = gql`
-    query CurrentItems {
-        ItemsWithFlashcard {
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer image {
-                    url hasAlpha
-                }
-            }
-        }
-    }
-`
 
 export default compose(
   withRouter,

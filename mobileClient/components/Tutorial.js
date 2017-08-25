@@ -26,7 +26,7 @@ class Tutorial extends React.Component {
     const { hasDisabledTutorial } = this.props.userDetails.UserDetails
 
     return (
-        this.props.enabled && !hasDisabledTutorial && this.state.showTutorial &&
+        !hasDisabledTutorial && this.state.showTutorial &&
         <View style={styles.answerEvaluatorOverlay}>
           <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
           <Text style={styles.infoText}>
@@ -36,12 +36,12 @@ class Tutorial extends React.Component {
           <View style={{ flexDirection: 'row' }}>
             <Text
               onPress={this.hideTutorial}
-              style={[styles.button, { backgroundColor: '#62c46c' }]}
+              style={[styles.button, { backgroundColor: '#662d91' }]}
             >OK, go on</Text>
             <Text
               onPress={this.hideTutorialPermanently}
-              style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}
-            >OK, go on. Don't show it again</Text>
+              style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5}]}
+            >Don't show it again</Text>
           </View>
         </View>
     )

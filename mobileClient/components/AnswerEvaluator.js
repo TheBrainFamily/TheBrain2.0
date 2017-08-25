@@ -8,6 +8,7 @@ import * as Animatable from 'react-native-animatable'
 import SwipeBall from './SwipeBall'
 import LevelUpWrapper from './LevelUpWrapper'
 import Tutorial from './Tutorial'
+import CasualQuestionModal from './CasualQuestionModal'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 import styles from '../styles/styles'
@@ -63,7 +64,8 @@ class AnswerEvaluator extends React.Component {
         <SwipeBall evalItemId={this.props.evalItemId} />
 
         {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
-        <Tutorial enabled={this.props.enabled}/>
+        {this.props.enabled && <Tutorial/>}
+        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && <CasualQuestionModal/>}
       </Animatable.View>
     )
   }
