@@ -29,8 +29,9 @@ const resolvers = {
     Courses (root: ?string, args: ?Object, context: Object) {
       return context.Courses.getCourses()
     },
-    Reviews (root: ?string, args: ?Object, context: Object) {
-      return context.Items.getReviews(context.user._id)
+    async Reviews (root: ?string, args: ?Object, context: Object) {
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      return context.Items.getReviews(context.user._id, userDetails.isCasual)
     },
     Course (root: ?string, args: { _id: string }, context: Object) {
       return context.Courses.getCourse(args._id)
@@ -59,14 +60,15 @@ const resolvers = {
     },
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
-        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
-      } else {
-        return []
+        const userDetails = await context.UserDetails.getById(context.user._id)
+        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
       }
+      return []
     },
-    SessionCount (root: ?string, args: ?Object, context: Object) {
+    async SessionCount (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
-        return context.ItemsWithFlashcard.getSessionCount(context.user._id)
+        const userDetails = await context.UserDetails.getById(context.user._id)
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails.isCasual)
       } else {
         return {}
       }
@@ -108,15 +110,26 @@ const resolvers = {
       if (!lesson) {
         return {}
       }
+      const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
       // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(1)
-      flashcardIds.forEach((flashcardId) => {
-        context.Items.create(flashcardId, userId)
+      flashcardIds.splice(3)
+      const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
+      flashcards.forEach((flashcard) => {
+        if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
+          context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
+        }
       })
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
+    },
+    async clearNotCasualItems(root: ?string, args: ?Object, context: Object) {
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      if(userDetails.isCasual) {
+        context.Items.clearNotCasualItems(context.user._id)
+      }
+      return true
     },
     async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
       const {accessToken, userId} = args
@@ -169,10 +182,16 @@ const resolvers = {
       if (context.user) {
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false}
+      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
+    },
+    async switchUserIsCasual (root: ?string, args: ?Object, context: Object) {
+      return context.UserDetails.switchUserIsCasual(context.user._id)
+    },
+    async setUserIsCasual (root: ?string, args: { isCasual: boolean }, context: Object) {
+      return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
     },
     async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
       try {
@@ -206,8 +225,8 @@ const resolvers = {
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
-
-      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id)
+      const userDetails = await context.UserDetails.getById(context.user._id)
+      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
     },
     async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.resetLevelUpFlag(context.user._id)
