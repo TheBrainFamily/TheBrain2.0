@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import LinearGradient from 'react-native-linear-gradient'
@@ -10,12 +10,16 @@ import LevelUpWrapper from './LevelUpWrapper'
 import Tutorial from './Tutorial'
 import CasualQuestionModal from './CasualQuestionModal'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 import styles from '../styles/styles'
 
 console.disableYellowBox = true
 
 class AnswerEvaluator extends React.Component {
+  overlayPress = () => {
+    this.props.dispatch(updateAnswerVisibility(true))
+  }
 
   render () {
     if (this.props.userDetails.loading) {
@@ -63,7 +67,8 @@ class AnswerEvaluator extends React.Component {
         <View style={styles.answerCircle} />
         <SwipeBall evalItemId={this.props.evalItemId} />
 
-        {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
+        {!this.props.enabled && <TouchableWithoutFeedback onPress={this.overlayPress}>
+          <View style={styles.answerEvaluatorOverlay}/></TouchableWithoutFeedback>}
         {this.props.enabled && <Tutorial/>}
         {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && <CasualQuestionModal/>}
       </Animatable.View>
@@ -77,4 +82,4 @@ export default compose(
     name: 'userDetails'
   }),
   LevelUpWrapper
-)(AnswerEvaluator)
+)(connect(state => state)(AnswerEvaluator))
