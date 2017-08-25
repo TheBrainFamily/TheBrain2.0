@@ -15,6 +15,7 @@ import changePasswordMutation from '../../client/shared/graphql/queries/changePa
 import switchUserIsCasualMutation from '../../client/shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from '../../client/shared/helpers/getPasswordValidationState'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class Profile extends React.Component {
   state = {
@@ -82,6 +83,8 @@ class Profile extends React.Component {
 
   render () {
     const { isValid } = this.state
+    const isGuest = this.props.currentUser ? !this.props.currentUser.CurrentUser.activated : true
+    const isFacebookUser = this.props.currentUser ? this.props.currentUser.CurrentUser.facebookId : false
 
     return (
       <PageContainer>
@@ -99,7 +102,8 @@ class Profile extends React.Component {
         <View style={{paddingHorizontal: 10, marginTop: 18}}>
           <Separator/>
         </View>
-        <View style={{
+
+        { isGuest || isFacebookUser ? null : <View style={{
           paddingHorizontal: '10%'
         }}>
           <TextField
@@ -146,7 +150,7 @@ class Profile extends React.Component {
               !isValid ? { opacity: 0.7 } : {}
             ]}>CHANGE PASSWORD</Text>
           </TouchableOpacity>
-        </View>
+        </View> }
       </PageContainer>
     )
   }
@@ -166,6 +170,12 @@ export default compose(
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
     options: {
       fetchPolicy: 'network-only'
     }

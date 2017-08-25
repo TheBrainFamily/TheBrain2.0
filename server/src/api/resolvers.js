@@ -182,7 +182,7 @@ const resolvers = {
       if (context.user) {
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false}
+      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)

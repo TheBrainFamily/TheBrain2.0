@@ -18,8 +18,8 @@ class LoginSwitcher extends React.Component {
   logout = (e) => {
     e.preventDefault()
     this.props.logout()
-      .then(() => {
-        this.props.client.resetStore()
+      .then( async () => {
+        await this.props.client.resetStore()
         this.props.dispatch(push(`/`))
       })
   }
