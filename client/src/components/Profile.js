@@ -56,6 +56,8 @@ class Profile extends React.Component {
   }
 
   render () {
+    const isGuest = this.props.currentUser ? !this.props.currentUser.CurrentUser.activated : true
+    const isFacebookUser = this.props.currentUser ? this.props.currentUser.CurrentUser.facebookId : false
     const error = this.state.oldPasswordError || this.state.confirmationError
     return (
       <FlexibleContentWrapper offset={400}>
@@ -64,7 +66,7 @@ class Profile extends React.Component {
                  onChange={this.casualSwitchClick}/>
           <label className={'user-casual-label'} onClick={this.casualSwitchClick}>Do not show hard questions</label>
         </form>
-        { this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId ?
+        { isFacebookUser || isGuest ? null :
         <form className='form' onSubmit={this.submit}>
           <div className={!error ? 'hidden' : null}>
             <p className='alert-error'>{ error }</p>
@@ -92,7 +94,7 @@ class Profile extends React.Component {
           <div>
             <input type='submit' value='Change Password' disabled={!this.state.isValid || !!error}/>
           </div>
-        </form> : null}
+        </form> }
       </FlexibleContentWrapper>
     )
   }
