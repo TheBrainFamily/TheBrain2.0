@@ -5,18 +5,22 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import swal from 'sweetalert2'
+import update from 'immutability-helper'
 
 import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
+import switchUserIsCasualMutation from '../../shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
+import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 class Profile extends React.Component {
   state = {
     oldPasswordError: '',
     confirmationError: '',
-    isValid: false
+    isValid: false,
   }
 
   goHome = () => {
@@ -46,11 +50,23 @@ class Profile extends React.Component {
     this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
-  render () {
-    const error = this.state.oldPasswordError || this.state.confirmationError
+  casualSwitchClick = async () => {
+    await this.props.switchUserIsCasual()
+    console.log('CASUAL?', this.props.userDetails.UserDetails.isCasual)
+  }
 
+  render () {
+    const isGuest = this.props.currentUser ? !this.props.currentUser.CurrentUser.activated : true
+    const isFacebookUser = this.props.currentUser ? this.props.currentUser.CurrentUser.facebookId : false
+    const error = this.state.oldPasswordError || this.state.confirmationError
     return (
       <FlexibleContentWrapper offset={400}>
+        <form className={'form'}>
+          <input type="checkbox" checked={this.props.userDetails.UserDetails.isCasual}
+                 onChange={this.casualSwitchClick}/>
+          <label className={'user-casual-label'} onClick={this.casualSwitchClick}>Do not show hard questions</label>
+        </form>
+        { isFacebookUser || isGuest ? null :
         <form className='form' onSubmit={this.submit}>
           <div className={!error ? 'hidden' : null}>
             <p className='alert-error'>{ error }</p>
@@ -78,7 +94,7 @@ class Profile extends React.Component {
           <div>
             <input type='submit' value='Change Password' disabled={!this.state.isValid || !!error}/>
           </div>
-        </form>
+        </form> }
       </FlexibleContentWrapper>
     )
   }
@@ -86,6 +102,18 @@ class Profile extends React.Component {
 
 export default compose(
   connect(),
+  graphql(currentUserQuery, {
+    name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
   graphql(changePasswordMutation, {
     props: ({ mutate }) => ({
       submit: ({ oldPassword, newPassword }) => mutate({
@@ -94,6 +122,21 @@ export default compose(
           newPassword
         }
       })
+    })
+  }),
+  graphql(switchUserIsCasualMutation, {
+    props: ({ownProps, mutate}) => ({
+      switchUserIsCasual: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, {mutationResult}) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.switchUserIsCasual
+              }
+            })
+          }
+        }
+      }),
     })
   }),
 )(Profile)

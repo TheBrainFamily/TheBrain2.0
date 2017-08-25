@@ -10,6 +10,7 @@ import { push } from 'react-router-redux'
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import lessonWatchedMutationParams from '../../shared/graphql/mutations/lessonWatchedMutationParams'
 import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutationSchema'
+import clearNotCasualItems from '../../shared/graphql/mutations/clearNotCasualItems'
 import CourseIcon from './CourseIcon'
 import courseById from '../../shared/graphql/queries/courseById'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
@@ -76,14 +77,11 @@ export class LectureVideo extends React.Component {
     )
   }
 
-  _onEnd = () => {
+  _onEnd = async () => {
+    await this.props.clearNotCasual()
     console.log('onYTend props:', this.props)
     this.props.lessonWatchedMutation({courseId: this.props.courseId}).then(() => {
-      let url = '/questions'
-      if (this.props.lesson && this.props.lesson.position <= 2) {
-        url = '/wellDone'
-      }
-      this.props.dispatch(push(url))
+      this.props.dispatch(push('/questions'))
     })
 
   }
@@ -91,6 +89,12 @@ export class LectureVideo extends React.Component {
 
 const LectureVideoWithRouter = compose(
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  graphql(clearNotCasualItems, {
+    props: ({ownProps, mutate}) => ({
+      clearNotCasual: () => mutate({
+      }),
+    })
+  }),
   withRouter,
   connect(),
 )(LectureVideo)

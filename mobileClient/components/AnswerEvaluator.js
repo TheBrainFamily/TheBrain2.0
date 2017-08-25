@@ -2,12 +2,13 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
 import LevelUpWrapper from './LevelUpWrapper'
+import Tutorial from './Tutorial'
+import CasualQuestionModal from './CasualQuestionModal'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 import styles from '../styles/styles'
@@ -15,28 +16,11 @@ import styles from '../styles/styles'
 console.disableYellowBox = true
 
 class AnswerEvaluator extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      showTutorial: true
-    }
-  }
-
-  hideTutorial = () => {
-    this.setState({ showTutorial: false })
-  }
-
-  hideTutorialPermanently = () => {
-    this.props.hideTutorial()
-  }
 
   render () {
     if (this.props.userDetails.loading) {
       return <View />
     }
-
-    const { hasDisabledTutorial } = this.props.userDetails.UserDetails
 
     return (
       <Animatable.View style={[styles.answerEvaluator, {height: this.props.getAnswerEvaluatorHeight()}]} animation='slideInUp'>
@@ -80,50 +64,15 @@ class AnswerEvaluator extends React.Component {
         <SwipeBall evalItemId={this.props.evalItemId} />
 
         {!this.props.enabled && <View style={styles.answerEvaluatorOverlay} />}
-
-        {this.props.enabled && !hasDisabledTutorial && this.state.showTutorial &&
-          <View style={styles.answerEvaluatorOverlay}>
-            <Text style={styles.infoText}>How would you describe experience answering this question?</Text>
-            <Text style={styles.infoText}>
-              Rate using one of the four answers.{'\n'}
-              Just slide your finger from the center circle to correct button.
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text
-                onPress={this.hideTutorial}
-                style={[styles.button, { backgroundColor: '#62c46c' }]}
-              >OK, go on</Text>
-              <Text
-                onPress={this.hideTutorialPermanently}
-                style={[styles.button, { backgroundColor: '#662d91', marginLeft: 5 }]}
-              >OK, go on. Don't show it again</Text>
-            </View>
-          </View>
-        }
+        {this.props.enabled && <Tutorial/>}
+        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && <CasualQuestionModal/>}
       </Animatable.View>
     )
   }
 }
 
-const hideTutorialQuery = gql`
-    mutation hideTutorial {
-        hideTutorial {
-            hasDisabledTutorial
-        }
-    }
-`
-
 export default compose(
   connect(),
-  graphql(hideTutorialQuery, {
-    props: ({ ownProps, mutate }) => ({
-      hideTutorial: () => mutate({
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
   graphql(userDetailsQuery, {
     name: 'userDetails'
   }),

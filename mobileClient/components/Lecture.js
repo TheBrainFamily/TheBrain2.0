@@ -13,6 +13,7 @@ import LevelUpWrapper from './LevelUpWrapper'
 import styles from '../styles/styles'
 
 import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
+import clearNotCasualItems from '../../client/shared/graphql/mutations/clearNotCasualItems'
 import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
 import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
 
@@ -34,15 +35,12 @@ class Lecture extends React.Component {
     }).start(() => this.setState({ showLecture: true }))
   }
 
-  onChangeState = (event) => {
+  onChangeState = async (event) => {
     console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
+      await this.props.clearNotCasual()
       this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
-        let url = '/questions'
-        if (this.props.data.Lesson && this.props.data.Lesson.position <= 2) {
-          url = '/wellDone'
-        }
-        this.props.history.push(url)
+        this.props.history.push('/questions')
       })
     }
   }
@@ -97,6 +95,12 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   withRouter,
+  graphql(clearNotCasualItems, {
+    props: ({ownProps, mutate}) => ({
+      clearNotCasual: () => mutate({
+      }),
+    })
+  }),
   graphql(currentLessonQuery, {
     options: (ownProps) => {
       const courseId = ownProps.selectedCourse._id
