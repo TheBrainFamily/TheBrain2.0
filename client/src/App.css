@@ -281,9 +281,32 @@ FLASHCARDS
     width: 20px;
     height: 20px;
     position: absolute;
-    top: 14px;
+    top: 15px;
     right: 30px;
-    background-color: red;
+    background-image: url('./img/exclamation.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.flashcard-title-not-casual .flashcard-title-not-casual-tooltip {
+    color: black;
+    width: 165px;
+    height: 30px;
+    line-height: 30px;
+    padding: 5px;
+    position: absolute;
+    top: -10px;
+    right: -3px;
+    visibility: hidden;
+    z-index: 100;
+    background-color: rgba(255,255,255,1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.flashcard-title-not-casual:hover .flashcard-title-not-casual-tooltip {
+    visibility: visible;
 }
 
 .flashcard-not-casual-popup {
@@ -295,7 +318,7 @@ FLASHCARDS
     height: 205px;
     position: absolute;
     text-align: justify;
-    top: 14px;
+    top: 15px;
     left: 400px;
     background-color: white;
     border-radius: 10px;
