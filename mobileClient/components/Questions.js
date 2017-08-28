@@ -122,7 +122,8 @@ class Questions extends React.Component {
 
             <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}
-                       getFlashcardWidth={this.getFlashcardWidth}/>
+                       getFlashcardWidth={this.getFlashcardWidth}
+                       isQuestionCasual={flashcard.isCasual}/>
             <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
             {this.state.mainMenuActive &&
