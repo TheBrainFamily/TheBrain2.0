@@ -2,20 +2,15 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import SvgUri from 'react-native-svg-uri'
 import * as Animatable from 'react-native-animatable'
 
 import Card from './Card'
 import type { Direction } from '../helpers/SwipeHelpers'
 import { DIRECTIONS } from '../helpers/SwipeHelpers'
-import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
 
 import {
   TouchableWithoutFeedback,
-  StyleSheet,
   Dimensions,
   Animated,
   View,
@@ -142,7 +137,7 @@ class Flashcard extends React.Component {
                       question={this.props.question} answer={this.props.answer}
                       image={this.props.image}
                       visibleAnswer={this.props.flashcard.visibleAnswer}
-                      isCasualFlashcard={this.props.flashcard.isCasual}/>
+                      isCasualFlashcard={this.props.isQuestionCasual}/>
                 <View
                   style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
                   <View style={{
