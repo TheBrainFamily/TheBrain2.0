@@ -44,7 +44,6 @@ class Flashcard extends React.Component {
     if (nextProps.currentItems.loading === false
       && nextProps.currentItems.ItemsWithFlashcard
       && nextProps.currentItems.ItemsWithFlashcard.length === 0) {
-      console.log('KONIEC FISZEK')
       if(nextProps.currentUser.CurrentUser) {
         if (nextProps.currentUser.CurrentUser.activated) {
           nextProps.dispatch(push('/'))
@@ -97,7 +96,7 @@ class Flashcard extends React.Component {
       return (
         <FlexibleContentWrapper offset={300}>
           <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
-            <div className='flashcard-title'>Question: title
+            <div className='flashcard-title'>QUESTION
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
@@ -121,7 +120,7 @@ class Flashcard extends React.Component {
       <div>
         <FlexibleContentWrapper offset={300}>
           <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(false)}>
-            <div className='flashcard-title'>Answer: title
+            <div className='flashcard-title'>ANSWER
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }

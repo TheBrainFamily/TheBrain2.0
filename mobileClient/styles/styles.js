@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   flipCardHeader: {
     height: 24,
-    color: '#662d91',
+    color: 'black',
     fontSize: 12,
     fontFamily: 'Exo2-Bold',
     padding: 5,
