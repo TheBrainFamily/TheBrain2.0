@@ -141,7 +141,8 @@ class Flashcard extends React.Component {
                 <Card dynamicStyles={this.state.dynamicStyles}
                       question={this.props.question} answer={this.props.answer}
                       image={this.props.image}
-                      visibleAnswer={this.props.flashcard.visibleAnswer}/>
+                      visibleAnswer={this.props.flashcard.visibleAnswer}
+                      isCasualFlashcard={this.props.flashcard.isCasual}/>
                 <View
                   style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
                   <View style={{
@@ -160,45 +161,4 @@ class Flashcard extends React.Component {
   }
 }
 
-const submitEval = gql`
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
-        processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
-            flashcard
-            {
-                _id question answer image {
-                    url hasAlpha
-                }
-            }
-        }
-    }
-`
-
-export default graphql(submitEval, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ itemId, evaluation }) => mutate({
-      variables: {
-        itemId,
-        evaluation
-      },
-      updateQueries: {
-        CurrentItems: (prev, { mutationResult }) => {
-          const updateResults = update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
-            }
-          })
-          return updateResults
-        }
-      },
-      refetchQueries: [{
-        query: sessionCountQuery
-      }]
-    })
-  })
-})(connect(state => state)(Flashcard))
+export default (connect(state => state)(Flashcard))
