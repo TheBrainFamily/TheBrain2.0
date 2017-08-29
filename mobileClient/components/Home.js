@@ -21,6 +21,8 @@ import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
+import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
+import update from 'immutability-helper'
 import WithData from './WithData'
 
 class Home extends React.Component {
@@ -42,6 +44,23 @@ class Home extends React.Component {
         props.history.push('/intro')
       }
     })
+    this.logInWithSavedData()
+  }
+
+  logInWithSavedData = async () => {
+    const userId = await AsyncStorage.getItem('userId')
+    const accessToken = await AsyncStorage.getItem('accessToken')
+    const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
+
+    if(userId && accessToken) {
+      console.log('loguje z TOKEN', accessToken, userId)
+      await this.props.logInWithToken({ accessToken, userId })
+    }
+
+    if(userId && accessTokenFb) {
+      console.log('loguje z FB ', accessTokenFb, userId)
+      await this.props.logInWithFacebook({ accessTokenFb, userId })
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -254,8 +273,54 @@ const closeCourseMutation = gql`
     }
 `
 
+const logInWithTokenMutation = gql`
+    mutation logInWithToken($accessToken: String!, $userId: String!) {
+        logInWithToken(accessToken:$accessToken, userId:$userId) {
+            _id, username, activated, email, facebookId
+        }
+    }
+`
+
 export default compose(
   connect(state => state),
+  graphql(logInWithTokenMutation, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithToken: ({ accessToken, userId }) => mutate({
+        variables: {
+          accessToken,
+          userId
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithToken
+              }
+            })
+          }
+        }
+      })
+    })
+  }),
+  graphql(logInWithFacebook, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithFacebook: ({ accessTokenFb, userId }) => mutate({
+        variables: {
+          accessTokenFb,
+          userId
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithFacebook
+              }
+            })
+          }
+        }
+      })
+    })
+  }),
   graphql(selectCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       selectCourse: ({ courseId }) => mutate({

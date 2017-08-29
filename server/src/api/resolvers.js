@@ -170,6 +170,8 @@ const resolvers = {
 
         const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
+          user.currentAccessToken = await context.Users.insertNewUserToken(user._id)
+          console.log('######EEEEEEXTRAAA PONTON######: user', user)
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
@@ -178,11 +180,34 @@ const resolvers = {
         throw e
       }
     },
+    async logInWithToken (root: ?string, args: { userId: string, accessToken: string }, context: Object) {
+      try {
+        const user = await context.Users.getById(args.userId)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
+        const isMatch = await context.Users.findToken(args.userId, args.accessToken)
+        if (isMatch) {
+          user.currentAccessToken = args.accessToken
+          context.req.logIn(user, (err) => { if (err) throw err })
+          return user
+        }
+        throw new Error('Token expired')
+      } catch (e) {
+        throw e
+      }
+    },
     async logOut (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
+        const userId = context.user._id
+        const accessToken = context.user.currentAccessToken
+        await context.Users.removeToken(userId, accessToken)
+        console.log('######EEEEEEXTRAAA PONTON######: context.user', context.user.currentAccessToken)
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null}
+      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null, accessToken: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)

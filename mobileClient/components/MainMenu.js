@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 
-import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View } from 'react-native'
+import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View, AsyncStorage } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import * as courseActions from '../actions/CourseActions'
@@ -47,7 +47,10 @@ class MainMenu extends React.Component {
     ).start()
   }
 
-  logout = () => {
+  logout = async () => {
+    await AsyncStorage.removeItem('accessTokenFb')
+    await AsyncStorage.removeItem('accessToken')
+    await AsyncStorage.removeItem('userId')
     this.props.logout()
       .then(() => {
         FBLoginManager.getCredentials((error, data) => {
@@ -78,7 +81,6 @@ class MainMenu extends React.Component {
     let { fadeAnim } = this.state
 
     const currentUser = this.props.currentUser.CurrentUser
-    const notFacebookUser = this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
@@ -207,7 +209,7 @@ MainMenu.defaultProps = {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated, facebookId
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `

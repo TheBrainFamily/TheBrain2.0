@@ -3,10 +3,17 @@ import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import { withApollo, graphql } from 'react-apollo'
+import { AsyncStorage } from 'react-native'
 import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class FBLoginButton extends React.Component {
+
+  logInWithFacebook = async (accessTokenFb, userId) => {
+    this.props.logInWithFacebook({ accessTokenFb, userId})
+    await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
+    await AsyncStorage.setItem('userId', userId)
+  }
+
   render () {
     return (
       <FBLogin style={{ maxHeight: 40, justifyContent: 'center',}}
@@ -17,10 +24,12 @@ class FBLoginButton extends React.Component {
                loginBehavior={FBLoginManager.LoginBehaviors.Native}
                onLogin={(data) => {
                  console.log('Logged in!', data)
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
+                 this.logInWithFacebook(data.credentials.accessToken, data.credentials.userId)
                  this.props.history.push('/')
                }}
-               onLogout={() => {
+               onLogout={async () => {
+                 await AsyncStorage.removeItem('accessTokenFb')
+                 await AsyncStorage.removeItem('userId')
                  console.log('Logged out.')
                  this.props.client.resetStore()
                  this.props.history.push('/')
@@ -28,7 +37,7 @@ class FBLoginButton extends React.Component {
                onLoginFound={(data) => {
                  console.log('Existing login found.', data)
                  console.log(data)
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
+                 this.logInWithFacebook(data.credentials.accessToken, data.credentials.userId)
                }}
                onLoginNotFound={() => {
                  console.log('No user logged in.')
