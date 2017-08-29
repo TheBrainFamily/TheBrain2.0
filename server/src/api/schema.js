@@ -84,6 +84,7 @@ export const typeDefs = gql`
         email: String,
         activated: Boolean!,
         facebookId: String,
+        currentAccessToken: String,
     }
     
     type SessionCount {
@@ -131,6 +132,7 @@ export const typeDefs = gql`
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
         logInWithFacebook(accessToken: String!, userId: String!): User
+        logInWithToken(accessToken: String!, userId: String!): User
         switchUserIsCasual: UserDetails
         setUserIsCasual(isCasual: Boolean!): UserDetails
         clearNotCasualItems: Boolean

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity, View, Switch } from 'react-native'
+import { Text, TouchableOpacity, View, Switch, AsyncStorage } from 'react-native'
 import { TextField } from 'react-native-material-textfield'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
@@ -11,7 +11,7 @@ import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
 
-import currentUserQuery from './../queries/currentUser'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 
 class Login extends React.Component {
   constructor (props) {
@@ -48,7 +48,12 @@ class Login extends React.Component {
     this.setState({ error: '' })
     const actionName = this.state.isLogin ? 'login' : 'signup'
     this.props[actionName]({ username: this.state.username, password: this.state.password })
-      .then(() => {
+      .then( async () => {
+      console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
+        const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
+        const userId = this.props.currentUser.CurrentUser._id
+        await AsyncStorage.setItem('accessToken', accessToken)
+        await AsyncStorage.setItem('userId', userId)
         this.props.history.push('/')
       })
       .catch((data) => {
@@ -129,7 +134,7 @@ class Login extends React.Component {
 const signup = gql`
     mutation setUsernameAndPasswordForGuest($username: String!, $password: String!) {
         setUsernameAndPasswordForGuest(username: $username, password: $password) {
-            username
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
@@ -137,7 +142,7 @@ const signup = gql`
 const logIn = gql`
     mutation logIn($username: String!, $password: String!){
         logIn(username: $username, password: $password) {
-            _id, username, activated, facebookId
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
@@ -151,9 +156,17 @@ export default compose(
           username,
           password
         },
-        refetchQueries: [{
-          query: currentUserQuery
-        }]
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult vhjhgjg', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.setUsernameAndPasswordForGuest
+              }
+            })
+          }
+        }
       })
     })
   }),
