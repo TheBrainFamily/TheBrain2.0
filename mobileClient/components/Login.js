@@ -49,7 +49,6 @@ class Login extends React.Component {
     const actionName = this.state.isLogin ? 'login' : 'signup'
     this.props[actionName]({ username: this.state.username, password: this.state.password })
       .then( async () => {
-      console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
         const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
         const userId = this.props.currentUser.CurrentUser._id
         await AsyncStorage.setItem('accessToken', accessToken)
