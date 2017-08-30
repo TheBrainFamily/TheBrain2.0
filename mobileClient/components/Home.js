@@ -49,6 +49,7 @@ class Home extends React.Component {
 
   logInWithSavedData = async () => {
     const userId = await AsyncStorage.getItem('userId')
+    const userIdFb = await AsyncStorage.getItem('userIdFb')
     const accessToken = await AsyncStorage.getItem('accessToken')
     const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
 
@@ -57,9 +58,9 @@ class Home extends React.Component {
       await this.props.logInWithToken({ accessToken, userId })
     }
 
-    if(userId && accessTokenFb) {
-      console.log('loguje z FB ', accessTokenFb, userId)
-      await this.props.logInWithFacebook({ accessTokenFb, userId })
+    if(userIdFb && accessTokenFb) {
+      console.log('loguje z FB ', accessTokenFb, userIdFb)
+      await this.props.logInWithFacebook({ accessTokenFb, userIdFb })
     }
   }
 
@@ -70,7 +71,6 @@ class Home extends React.Component {
     }
 
     const courseId = nextProps.userDetails.UserDetails.selectedCourse
-
     if (!courseId) {
       return
     }
@@ -131,12 +131,11 @@ class Home extends React.Component {
     })
   }
 
-  selectCourse = (course) => async () => {
+  selectCourse = (course) => {
     if (!this.state.isCourseSelected) {
       this.setState({ isCourseSelected: true })
       this.props.dispatch(courseActions.select(course))
-      await this.props.selectCourse({ courseId: course._id })
-
+      this.props.selectCourse({ courseId: course._id })
       this.animateCourseSelector(course._id)
     }
   }
@@ -276,7 +275,7 @@ const closeCourseMutation = gql`
 const logInWithTokenMutation = gql`
     mutation logInWithToken($accessToken: String!, $userId: String!) {
         logInWithToken(accessToken:$accessToken, userId:$userId) {
-            _id, username, activated, email, facebookId
+            _id, username, activated, email, facebookId, currentAccessToken
         }
     }
 `
@@ -298,16 +297,19 @@ export default compose(
               }
             })
           }
-        }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
       })
     })
   }),
   graphql(logInWithFacebook, {
     props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessTokenFb, userId }) => mutate({
+      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
         variables: {
           accessTokenFb,
-          userId
+          userIdFb
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
@@ -317,7 +319,10 @@ export default compose(
               }
             })
           }
-        }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
       })
     })
   }),

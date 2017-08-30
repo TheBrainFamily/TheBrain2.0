@@ -131,17 +131,17 @@ const resolvers = {
       }
       return true
     },
-    async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
-      const {accessToken, userId} = args
-      const requestUrl = `https://graph.facebook.com/v2.10/${userId}?fields=name,email&access_token=${accessToken}`;
+    async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, context: Object) {
+      const {accessTokenFb, userIdFb} = args
+      const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`;
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
       if(parsedResponse.error) {
         console.error('FBLogin failed:', parsedResponse)
         return null
       }
-      if (parsedResponse.id === userId) {
-        let user = await context.Users.findByFacebookId(userId)
+      if (parsedResponse.id === userIdFb) {
+        let user = await context.Users.findByFacebookId(userIdFb)
         let idToUpdate = null
         if(user) {
           idToUpdate = user._id
@@ -153,7 +153,7 @@ const resolvers = {
             idToUpdate = user._id
           }
         }
-        user = await context.Users.updateFacebookUser(idToUpdate, userId, parsedResponse.name, parsedResponse.email)
+        user = await context.Users.updateFacebookUser(idToUpdate, userIdFb, parsedResponse.name, parsedResponse.email)
         context.req.logIn(user, (err) => { if (err) throw err })
         return user
       } else {
