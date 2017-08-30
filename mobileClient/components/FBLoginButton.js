@@ -8,10 +8,10 @@ import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFa
 
 class FBLoginButton extends React.Component {
 
-  logInWithFacebook = async (accessTokenFb, userId) => {
-    this.props.logInWithFacebook({ accessTokenFb, userId})
+  logInWithFacebook = async (accessTokenFb, userIdFb) => {
+    const user = await this.props.logInWithFacebook({ accessTokenFb, userIdFb})
     await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
-    await AsyncStorage.setItem('userId', userId)
+    await AsyncStorage.setItem('userIdFb', userIdFb)
   }
 
   render () {
@@ -24,12 +24,12 @@ class FBLoginButton extends React.Component {
                loginBehavior={FBLoginManager.LoginBehaviors.Native}
                onLogin={(data) => {
                  console.log('Logged in!', data)
-                 this.logInWithFacebook(data.credentials.accessToken, data.credentials.userId)
+                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
                  this.props.history.push('/')
                }}
                onLogout={async () => {
                  await AsyncStorage.removeItem('accessTokenFb')
-                 await AsyncStorage.removeItem('userId')
+                 await AsyncStorage.removeItem('userIdFb')
                  console.log('Logged out.')
                  this.props.client.resetStore()
                  this.props.history.push('/')
@@ -37,7 +37,7 @@ class FBLoginButton extends React.Component {
                onLoginFound={(data) => {
                  console.log('Existing login found.', data)
                  console.log(data)
-                 this.logInWithFacebook(data.credentials.accessToken, data.credentials.userId)
+                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
                }}
                onLoginNotFound={() => {
                  console.log('No user logged in.')
@@ -60,10 +60,10 @@ class FBLoginButton extends React.Component {
 
 export default withRouter(withApollo(graphql(logInWithFacebook, {
   props: ({ ownProps, mutate }) => ({
-    logInWithFacebook: ({ accessToken, userId }) => mutate({
+    logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
       variables: {
-        accessToken,
-        userId
+        accessTokenFb,
+        userIdFb
       },
       updateQueries: {
         CurrentUser: (prev, { mutationResult }) => {

@@ -131,7 +131,7 @@ export const typeDefs = gql`
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!): User
         logIn(username: String!, password: String!): User
-        logInWithFacebook(accessToken: String!, userId: String!): User
+        logInWithFacebook(accessTokenFb: String!, userIdFb: String!): User
         logInWithToken(accessToken: String!, userId: String!): User
         switchUserIsCasual: UserDetails
         setUserIsCasual(isCasual: Boolean!): UserDetails
