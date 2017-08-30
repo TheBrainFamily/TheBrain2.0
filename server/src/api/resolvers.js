@@ -181,6 +181,7 @@ const resolvers = {
       }
     },
     async logInWithToken (root: ?string, args: { userId: string, accessToken: string }, context: Object) {
+      console.log('#### LOG IN WITH:', args)
       try {
         const user = await context.Users.getById(args.userId)
 

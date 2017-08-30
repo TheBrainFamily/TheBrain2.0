@@ -70,12 +70,21 @@ class Home extends React.Component {
       return
     }
 
+    console.log('next props ',nextProps)
+    //return
+
     const courseId = nextProps.userDetails.UserDetails.selectedCourse
+    //let courseId = nextProps.course && nextProps.course.selectedCourse ? nextProps.course.selectedCourse._id : null
+    // if (!courseId) {
+    //   courseId = nextProps.userDetails.UserDetails.selectedCourse
+    // }
     if (!courseId) {
       return
     }
-
+    console.log('######EEEEEEXTRAAA PONTON######: nextProps.course && nextProps.course.selectedCourse', nextProps.course && nextProps.course.selectedCourse)
+  console.log('will receive select course courseId', courseId)
     const course = nextProps.courses.Courses.find((course) => course._id === courseId)
+    console.log('found course', course)
     this.selectCourse(course)
   }
 
@@ -104,6 +113,7 @@ class Home extends React.Component {
   }
 
   animateCourseSelector = (selectedCourseId) => {
+    // console.log('######EEEEEEXTRAAA PONTON######: selectedCourseId', selectedCourseId)
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
       const scale = 0.75
       const desiredBottomYOffset = 25
@@ -131,11 +141,12 @@ class Home extends React.Component {
     })
   }
 
-  selectCourse = (course) => {
+  selectCourse = async (course) => {
+    console.log('selecting', course)
     if (!this.state.isCourseSelected) {
       this.setState({ isCourseSelected: true })
-      this.props.dispatch(courseActions.select(course))
-      this.props.selectCourse({ courseId: course._id })
+      await this.props.dispatch(courseActions.select(course))
+      await this.props.selectCourse({ courseId: course._id })
       this.animateCourseSelector(course._id)
     }
   }
@@ -154,6 +165,7 @@ class Home extends React.Component {
   }
 
   closeCourse = async () => {
+    console.log('######EEEEEEXTRAAA PONTON######:' )
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
     await this.props.closeCourse()
@@ -210,7 +222,7 @@ class Home extends React.Component {
                         onLayout={() => {}}>
                     <CircleButton
                       color={course.color}
-                      onPress={this.selectCourse(course)}
+                      onPress={() => { this.selectCourse(course) }}
                       disableCourseSelector={this.disableCourseSelector}
                       courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
                     >
@@ -251,7 +263,7 @@ class Home extends React.Component {
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
-            success
+            selectedCourse
         }
     }
 `
@@ -267,7 +279,7 @@ const userDetailsQuery = gql`
 const closeCourseMutation = gql`
     mutation closeCourse {
         closeCourse {
-            success
+            selectedCourse
         }
     }
 `
@@ -331,13 +343,32 @@ export default compose(
       selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
-        }
+        },
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.selectCourse
+              }
+            })
+          }
+        },
       })
     })
   }),
   graphql(closeCourseMutation, {
     props: ({ mutate }) => ({
-      closeCourse: () => mutate()
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
     })
   }),
   graphql(coursesQuery, { name: 'courses' }),
