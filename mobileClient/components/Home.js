@@ -85,16 +85,16 @@ class Home extends React.Component {
     //   courseId = nextProps.userDetails.UserDetails.selectedCourse
     // }
     if (!courseId) {
-      if(nextProps.course && nextProps.course.selectedCourse) {
-        console.log('######CLOSE COURSE ACTION ASDASDASDASD ######:' )
-        this.props.dispatch(courseActions.close())
-        this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
-        this.enableCourseSelector()
-      }
+      // if(nextProps.course && nextProps.course.selectedCourse) {
+      //   console.log('######CLOSE COURSE ACTION ASDASDASDASD ######:' )
+      //   this.props.dispatch(courseActions.close())
+      //   this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+      //   this.enableCourseSelector()
+      // }
       return
     }
-    console.log('######EEEEEEXTRAAA PONTON######: nextProps.course && nextProps.course.selectedCourse', nextProps.course && nextProps.course.selectedCourse)
-  console.log('will receive select course courseId', courseId)
+    //console.log('######EEEEEEXTRAAA PONTON######: nextProps.course && nextProps.course.selectedCourse', nextProps.course && nextProps.course.selectedCourse)
+    //console.log('will receive select course courseId', courseId)
     const course = nextProps.courses.Courses.find((course) => course._id === courseId)
     console.log('found course', course)
     this.selectCourse(course)
@@ -156,6 +156,7 @@ class Home extends React.Component {
   selectCourse = async (course) => {
     console.log('selecting', course)
     if (!this.state.isCourseSelected) {
+      console.log('really selecting')
       this.setState({ isCourseSelected: true })
       await this.props.dispatch(courseActions.select(course))
       await this.props.selectCourse({ courseId: course._id })
