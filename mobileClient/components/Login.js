@@ -12,6 +12,7 @@ import FBLoginButton from './FBLoginButton'
 import styles from '../styles/styles'
 
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   constructor (props) {
@@ -21,7 +22,8 @@ class Login extends React.Component {
       isLogin: true,
       error: '',
       username: '',
-      password: ''
+      password: '',
+      waitingForRefetch: false
     }
 
     this.inputs = {}
@@ -31,12 +33,20 @@ class Login extends React.Component {
     if (nextProps.currentUser.loading) {
       return
     }
-    if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
-      console.log('going to /')
-      nextProps.history.push('/')
-    }
+
     if (nextProps.match.path === '/signup') {
       this.setState({isLogin: false})
+    }
+
+    console.log('this.state.waitingForRefetch', this.state.waitingForRefetch)
+    console.log('nextProps.userDetails', nextProps.userDetails)
+    if(this.state.waitingForRefetch && nextProps.userDetails && nextProps.userDetails.UserDetails) {
+      //wait for user details
+      console.log('redirecting to / after wait')
+      if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
+        console.log('going to /')
+        nextProps.history.push('/')
+      }
     }
   }
 
@@ -47,13 +57,14 @@ class Login extends React.Component {
   submit = () => {
     this.setState({ error: '' })
     const actionName = this.state.isLogin ? 'login' : 'signup'
+    console.log('>>>>>>> USER', actionName)
+    this.setState({waitingForRefetch: true})
     this.props[actionName]({ username: this.state.username, password: this.state.password })
       .then( async () => {
         const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
         const userId = this.props.currentUser.CurrentUser._id
         await AsyncStorage.setItem('accessToken', accessToken)
         await AsyncStorage.setItem('userId', userId)
-        this.props.history.push('/')
       })
       .catch((data) => {
         const error = data.graphQLErrors[0].message
@@ -165,7 +176,10 @@ export default compose(
               }
             })
           }
-        }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
       })
     })
   }),
@@ -186,12 +200,21 @@ export default compose(
               }
             })
           }
-        }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
       })
     })
   }),
-  graphql(currentUserQuery, {
+    graphql(currentUserQuery, {
     name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
     options: {
       fetchPolicy: 'network-only'
     }
