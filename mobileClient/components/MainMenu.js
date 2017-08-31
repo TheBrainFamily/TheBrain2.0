@@ -48,6 +48,7 @@ class MainMenu extends React.Component {
   }
 
   logout = async () => {
+    console.log('>>>>>>>>>> LOGOUT')
     await AsyncStorage.removeItem('accessTokenFb')
     await AsyncStorage.removeItem('accessToken')
     await AsyncStorage.removeItem('userId')
@@ -59,9 +60,9 @@ class MainMenu extends React.Component {
           }
         })
         this.props.client.resetStore()
+        this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
+        this.props.toggleMainMenu && this.props.toggleMainMenu()
       })
-    this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
-    this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
   go = (path) => () => {

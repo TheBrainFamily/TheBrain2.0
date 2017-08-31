@@ -22,6 +22,8 @@ import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
 import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
 import WithData from './WithData'
 
@@ -44,7 +46,7 @@ class Home extends React.Component {
         props.history.push('/intro')
       }
     })
-    this.logInWithSavedData()
+    console.log('>>>>>>>> CONSTRUCTOR', props)
   }
 
   logInWithSavedData = async () => {
@@ -66,8 +68,12 @@ class Home extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-      nextProps.courses.loading) {
+      nextProps.courses.loading || !nextProps.currentUser || nextProps.currentUser.loading) {
       return
+    }
+
+    if(!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+      this.logInWithSavedData()
     }
 
     console.log('next props ',nextProps)
@@ -79,6 +85,12 @@ class Home extends React.Component {
     //   courseId = nextProps.userDetails.UserDetails.selectedCourse
     // }
     if (!courseId) {
+      if(nextProps.course && nextProps.course.selectedCourse) {
+        console.log('######CLOSE COURSE ACTION ASDASDASDASD ######:' )
+        this.props.dispatch(courseActions.close())
+        this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+        this.enableCourseSelector()
+      }
       return
     }
     console.log('######EEEEEEXTRAAA PONTON######: nextProps.course && nextProps.course.selectedCourse', nextProps.course && nextProps.course.selectedCourse)
@@ -165,7 +177,7 @@ class Home extends React.Component {
   }
 
   closeCourse = async () => {
-    console.log('######EEEEEEXTRAAA PONTON######:' )
+    console.log('######CLOSE COURSE ACTION######:' )
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
     await this.props.closeCourse()
@@ -264,14 +276,12 @@ const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
             selectedCourse
-        }
-    }
-`
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
-            selectedCourse
+            hasDisabledTutorial
+            isCasual
+            experience {
+              level
+              showLevelUp
+            }
         }
     }
 `
@@ -280,6 +290,12 @@ const closeCourseMutation = gql`
     mutation closeCourse {
         closeCourse {
             selectedCourse
+            hasDisabledTutorial
+            isCasual
+            experience {
+              level
+              showLevelUp
+            }
         }
     }
 `
@@ -371,8 +387,9 @@ export default compose(
       })
     })
   }),
+  graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
-  graphql(userDetailsQuery, { name: 'userDetails' })
+  graphql(userDetailsQuery, { name: 'userDetails' }),
 )(WithData(Home, ['courses', 'userDetails']))
 
 const style = StyleSheet.create({
