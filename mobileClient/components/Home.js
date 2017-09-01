@@ -3,9 +3,11 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
+import DeviceInfo from 'react-native-device-info'
+import { FBLoginManager } from 'react-native-facebook-login'
 
 import Header from './Header'
 import CircleButton from './CircleButton'
@@ -49,6 +51,7 @@ class Home extends React.Component {
   }
 
   logInWithSavedData = async () => {
+    const deviceId = DeviceInfo.getUniqueID()
     const userId = await AsyncStorage.getItem('userId')
     const userIdFb = await AsyncStorage.getItem('userIdFb')
     const accessToken = await AsyncStorage.getItem('accessToken')
@@ -56,12 +59,21 @@ class Home extends React.Component {
 
     if(userId && accessToken) {
       console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId })
+      await this.props.logInWithToken({ accessToken, userId, deviceId }).catch(async () => {
+        await AsyncStorage.removeItem('accessToken')
+        await AsyncStorage.removeItem('userId')
+        Alert.alert( 'You were logged out', 'Please log in again')
+      })
     }
 
     if(userIdFb && accessTokenFb) {
       console.log('loguje z FB ', accessTokenFb, userIdFb)
-      await this.props.logInWithFacebook({ accessTokenFb, userIdFb })
+      await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
+        await AsyncStorage.removeItem('accessTokenFb')
+        await AsyncStorage.removeItem('userIdFb')
+        FBLoginManager.logout(() => {})
+        Alert.alert( 'Facebook login expired', 'Please log in again')
+      })
     }
   }
 
@@ -77,7 +89,6 @@ class Home extends React.Component {
 
     const courseId = nextProps.userDetails.UserDetails.selectedCourse
     if (!courseId) {
-
       return
     }
 
@@ -284,8 +295,8 @@ const closeCourseMutation = gql`
 `
 
 const logInWithTokenMutation = gql`
-    mutation logInWithToken($accessToken: String!, $userId: String!) {
-        logInWithToken(accessToken:$accessToken, userId:$userId) {
+    mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {
+        logInWithToken(accessToken:$accessToken, userId:$userId, deviceId:$deviceId) {
             _id, username, activated, email, facebookId, currentAccessToken
         }
     }
@@ -295,10 +306,11 @@ export default compose(
   connect(state => state),
   graphql(logInWithTokenMutation, {
     props: ({ ownProps, mutate }) => ({
-      logInWithToken: ({ accessToken, userId }) => mutate({
+      logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
         variables: {
           accessToken,
-          userId
+          userId,
+          deviceId
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {

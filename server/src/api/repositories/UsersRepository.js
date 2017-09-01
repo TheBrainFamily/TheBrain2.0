@@ -92,27 +92,26 @@ export class UsersRepository extends MongoRepository {
     return bcrypt.compare(passB, passA)
   }
 
-  async insertNewUserToken (userId: string) {
-    console.log('userid', userId)
+  async insertNewUserToken (userId: string, deviceId: string) {
     const timestamp = moment().unix()
-    const user = await this.userCollection.findOne({ _id: new ObjectId(userId) })
     const salt = await bcrypt.genSalt(Math.random() * Math.random())
     const random = Math.random() * Math.random()
-    const rawToken = `${userId}_!s@e#c&u#%fG#%$G#$@#D@^H&&;_${timestamp}_${random}`
+    const rawToken = `${userId}_!s@eVc&uM%fG#D$G#$@<D@^H&&;_${timestamp}_${random}_${deviceId}`
     const token = await bcrypt.hash(rawToken, salt)
-    console.log('user', user, 'rawToken', rawToken, 'salt', salt, 'token', token)
     await this.authTokenCollection.insertOne({
       userId: new ObjectId(userId),
       token,
+      deviceId,
       createdAt: timestamp
     })
     return token
   }
 
-  async findToken (userId: string, token: string) {
+  async findToken (userId: string, token: string, deviceId: string) {
     const tokenFound = await this.authTokenCollection.findOne({
       userId: new ObjectId(userId),
       token,
+      deviceId
     })
     return tokenFound
   }
