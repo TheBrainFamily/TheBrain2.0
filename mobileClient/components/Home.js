@@ -46,7 +46,6 @@ class Home extends React.Component {
         props.history.push('/intro')
       }
     })
-    console.log('>>>>>>>> CONSTRUCTOR', props)
   }
 
   logInWithSavedData = async () => {
@@ -76,27 +75,13 @@ class Home extends React.Component {
       this.logInWithSavedData()
     }
 
-    console.log('next props ',nextProps)
-    //return
-
     const courseId = nextProps.userDetails.UserDetails.selectedCourse
-    //let courseId = nextProps.course && nextProps.course.selectedCourse ? nextProps.course.selectedCourse._id : null
-    // if (!courseId) {
-    //   courseId = nextProps.userDetails.UserDetails.selectedCourse
-    // }
     if (!courseId) {
-      // if(nextProps.course && nextProps.course.selectedCourse) {
-      //   console.log('######CLOSE COURSE ACTION ASDASDASDASD ######:' )
-      //   this.props.dispatch(courseActions.close())
-      //   this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
-      //   this.enableCourseSelector()
-      // }
+
       return
     }
-    //console.log('######EEEEEEXTRAAA PONTON######: nextProps.course && nextProps.course.selectedCourse', nextProps.course && nextProps.course.selectedCourse)
-    //console.log('will receive select course courseId', courseId)
+
     const course = nextProps.courses.Courses.find((course) => course._id === courseId)
-    console.log('found course', course)
     this.selectCourse(course)
   }
 
@@ -125,7 +110,6 @@ class Home extends React.Component {
   }
 
   animateCourseSelector = (selectedCourseId) => {
-    // console.log('######EEEEEEXTRAAA PONTON######: selectedCourseId', selectedCourseId)
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
       const scale = 0.75
       const desiredBottomYOffset = 25
@@ -154,9 +138,8 @@ class Home extends React.Component {
   }
 
   selectCourse = async (course) => {
-    console.log('selecting', course)
     if (!this.state.isCourseSelected) {
-      console.log('really selecting')
+      console.log('selecting course', course)
       this.setState({ isCourseSelected: true })
       await this.props.dispatch(courseActions.select(course))
       await this.props.selectCourse({ courseId: course._id })
@@ -178,7 +161,6 @@ class Home extends React.Component {
   }
 
   closeCourse = async () => {
-    console.log('######CLOSE COURSE ACTION######:' )
     this.props.dispatch(courseActions.close())
     this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
     await this.props.closeCourse()

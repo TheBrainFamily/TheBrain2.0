@@ -52,6 +52,7 @@ class MainMenu extends React.Component {
     await AsyncStorage.removeItem('accessTokenFb')
     await AsyncStorage.removeItem('accessToken')
     await AsyncStorage.removeItem('userId')
+    await AsyncStorage.removeItem('userIdFb')
     this.props.logout()
       .then(() => {
         FBLoginManager.getCredentials((error, data) => {
@@ -61,7 +62,6 @@ class MainMenu extends React.Component {
         })
         this.props.client.resetStore()
         this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
-        this.props.toggleMainMenu && this.props.toggleMainMenu()
       })
   }
 
@@ -230,8 +230,8 @@ export default compose(
       logout: () => mutate({
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
+            console.log('Gozdecki: mutationResult logout', mutationResult)
+            console.log('Gozdecki: logout prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logOut
