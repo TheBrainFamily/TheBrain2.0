@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import DeviceInfo from 'react-native-device-info'
 import * as courseActions from '../actions/CourseActions'
 import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
@@ -43,9 +44,10 @@ class Login extends React.Component {
   }
 
   submit = () => {
+    const deviceId = DeviceInfo.getUniqueID()
     this.setState({ error: '' })
     const actionName = this.state.isLogin ? 'login' : 'signup'
-    this.props[actionName]({ username: this.state.username, password: this.state.password })
+    this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId })
       .then( async () => {
         this.props.dispatch(courseActions.close())
         const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
@@ -131,16 +133,16 @@ class Login extends React.Component {
 }
 
 const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!) {
-        setUsernameAndPasswordForGuest(username: $username, password: $password) {
+    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!) {
+        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId) {
             _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
 
 const logIn = gql`
-    mutation logIn($username: String!, $password: String!){
-        logIn(username: $username, password: $password) {
+    mutation logIn($username: String!, $password: String!, $deviceId: String!){
+        logIn(username: $username, password: $password, deviceId: $deviceId) {
             _id, username, activated, facebookId, currentAccessToken
         }
     }
@@ -150,10 +152,11 @@ export default compose(
   connect(),
   graphql(signup, {
     props: ({ ownProps, mutate }) => ({
-      signup: ({ username, password }) => mutate({
+      signup: ({ username, password, deviceId }) => mutate({
         variables: {
           username,
-          password
+          password,
+          deviceId
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
@@ -165,19 +168,17 @@ export default compose(
               }
             })
           }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
+        }
       })
     })
   }),
   graphql(logIn, {
     props: ({ ownProps, mutate }) => ({
-      login: ({ username, password }) => mutate({
+      login: ({ username, password, deviceId }) => mutate({
         variables: {
           username,
-          password
+          password,
+          deviceId
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
@@ -189,10 +190,7 @@ export default compose(
               }
             })
           }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
+        }
       })
     })
   }),

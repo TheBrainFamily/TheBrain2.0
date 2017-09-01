@@ -138,7 +138,7 @@ const resolvers = {
       const parsedResponse = await res.json()
       if(parsedResponse.error) {
         console.error('FBLogin failed:', parsedResponse)
-        return null
+        throw new Error('Facebook token expired')
       }
       if (parsedResponse.id === userIdFb) {
         let user = await context.Users.findByFacebookId(userIdFb)
@@ -157,10 +157,10 @@ const resolvers = {
         context.req.logIn(user, (err) => { if (err) throw err })
         return user
       } else {
-        return null
+        throw new Error('Invalid facebook response')
       }
     },
-    async logIn (root: ?string, args: { username: string, password: string }, context: Object) {
+    async logIn (root: ?string, args: { username: string, password: string, deviceId: string }, context: Object) {
       try {
         const user = await context.Users.findByUsername(args.username)
 
@@ -170,8 +170,7 @@ const resolvers = {
 
         const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
-          user.currentAccessToken = await context.Users.insertNewUserToken(user._id)
-          console.log('######EEEEEEXTRAAA PONTON######: user', user)
+          user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
@@ -180,8 +179,7 @@ const resolvers = {
         throw e
       }
     },
-    async logInWithToken (root: ?string, args: { userId: string, accessToken: string }, context: Object) {
-      console.log('#### LOG IN WITH:', args)
+    async logInWithToken (root: ?string, args: { userId: string, accessToken: string, deviceId: string }, context: Object) {
       try {
         const user = await context.Users.getById(args.userId)
 
@@ -189,7 +187,7 @@ const resolvers = {
           throw new Error('User not found')
         }
 
-        const isMatch = await context.Users.findToken(args.userId, args.accessToken)
+        const isMatch = await context.Users.findToken(args.userId, args.accessToken, args.deviceId)
         if (isMatch) {
           user.currentAccessToken = args.accessToken
           context.req.logIn(user, (err) => { if (err) throw err })
@@ -205,7 +203,6 @@ const resolvers = {
         const userId = context.user._id
         const accessToken = context.user.currentAccessToken
         await context.Users.removeToken(userId, accessToken)
-        console.log('######EEEEEEXTRAAA PONTON######: context.user', context.user.currentAccessToken)
         context.req.logOut()
       }
       return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null, accessToken: null}
@@ -219,7 +216,7 @@ const resolvers = {
     async setUserIsCasual (root: ?string, args: { isCasual: boolean }, context: Object) {
       return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
     },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string, deviceId: string }, context: Object) {
       try {
         const username = args.username.trim()
         if (!username || !args.password) {
@@ -239,7 +236,7 @@ const resolvers = {
         }
         await context.Users.updateUser(user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, {username, password: args.password}, context)
+        return resolvers.Mutation.logIn(root, {username, password: args.password, deviceId: args.deviceId}, context)
       } catch (e) {
         throw e
       }

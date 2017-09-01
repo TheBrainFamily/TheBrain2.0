@@ -3,7 +3,7 @@ import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import { withApollo, graphql, compose } from 'react-apollo'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
@@ -13,11 +13,14 @@ class FBLoginButton extends React.Component {
 
   logInWithFacebook = async (accessTokenFb, userIdFb) => {
     this.props.dispatch(courseActions.close())
-    await this.props.logInWithFacebook({ accessTokenFb, userIdFb})
-    await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
-    await AsyncStorage.setItem('userIdFb', userIdFb)
-    await this.props.userDetails.refetch()
-    this.props.history.push('/')
+    this.props.logInWithFacebook({ accessTokenFb, userIdFb}).then(async () => {
+      await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
+      await AsyncStorage.setItem('userIdFb', userIdFb)
+      await this.props.userDetails.refetch()
+      this.props.history.push('/')
+    }).catch(() => {
+      Alert.alert('Log in failed', 'Please try again later')
+    })
   }
 
   render () {
