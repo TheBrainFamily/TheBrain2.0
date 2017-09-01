@@ -22,8 +22,7 @@ class Login extends React.Component {
       isLogin: true,
       error: '',
       username: '',
-      password: '',
-      waitingForRefetch: false
+      password: ''
     }
 
     this.inputs = {}
@@ -37,19 +36,6 @@ class Login extends React.Component {
     if (nextProps.match.path === '/signup') {
       this.setState({isLogin: false})
     }
-
-    // console.log('this.state.waitingForRefetch', this.state.waitingForRefetch)
-    // console.log('nextProps.userDetails', nextProps.userDetails)
-    // console.log('loading?', nextProps.userDetails.loading)
-    // console.log('############')
-    // console.log('this.props.userDetails', this.props.userDetails)
-    // console.log('this.props.loading?', this.props.userDetails.loading)
-    if(!this.state.waitingForRefetch && nextProps.userDetails && nextProps.userDetails.UserDetails) {
-      if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
-        console.log('going to /')
-        nextProps.history.push('/')
-      }
-    }
   }
 
   toggleSwitch = () => {
@@ -59,26 +45,20 @@ class Login extends React.Component {
   submit = () => {
     this.setState({ error: '' })
     const actionName = this.state.isLogin ? 'login' : 'signup'
-    console.log('>>>>>>> USER', actionName)
-    this.setState({waitingForRefetch: true}, () => {
-      this.props[actionName]({ username: this.state.username, password: this.state.password })
-        .then( async () => {
-          this.props.dispatch(courseActions.close())
-          const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
-          const userId = this.props.currentUser.CurrentUser._id
-          await AsyncStorage.setItem('accessToken', accessToken)
-          await AsyncStorage.setItem('userId', userId)
-          console.log('LOGIN THIS', this)
-          await this.props.userDetails.refetch()
-          console.log('this.props.userDetails', this.props.userDetails)
-          console.log('going to / after refetch')
-          this.props.history.push('/')
-        })
-        .catch((data) => {
-          const error = data.graphQLErrors[0].message
-          this.setState({ error })
-        })
-    })
+    this.props[actionName]({ username: this.state.username, password: this.state.password })
+      .then( async () => {
+        this.props.dispatch(courseActions.close())
+        const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
+        const userId = this.props.currentUser.CurrentUser._id
+        await AsyncStorage.setItem('accessToken', accessToken)
+        await AsyncStorage.setItem('userId', userId)
+        await this.props.userDetails.refetch()
+        this.props.history.push('/')
+      })
+      .catch((data) => {
+        const error = data.graphQLErrors[0].message
+        this.setState({ error })
+      })
   }
 
   focusNextField (key) {
@@ -177,7 +157,7 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult vhjhgjg', mutationResult)
+            console.log('Gozdecki: mutationResult', mutationResult)
             console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
