@@ -18,6 +18,16 @@ class Header extends React.Component {
     }
   }
 
+  componentDidUpdate = () => {
+    this.state.topPosition.setValue(0)
+    if (this.props.hide) {
+      Animated.timing(this.state.topPosition, {
+        toValue: -120,
+        duration: 1000
+      }).start()
+    }
+  }
+
   goHome = () => {
     if (this.state.active) this.toggleMenu()
     this.props.history.push('/questions')
@@ -38,13 +48,6 @@ class Header extends React.Component {
       headerStyle.push({ position: 'absolute', width: '100%' })
     }
 
-    this.state.topPosition.setValue(0)
-    if (this.props.hide) {
-      Animated.timing(this.state.topPosition, {
-        toValue: -120,
-        duration: 1000
-      }).start()
-    }
     const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
 
     return (
