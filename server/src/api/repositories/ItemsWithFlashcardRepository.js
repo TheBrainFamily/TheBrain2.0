@@ -14,16 +14,17 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     this.itemsCollection = this.db.collection('items')
   }
 
-  async getItemsWithFlashcard (userId: string, isCasual: Boolean) {
+  async getItemsWithFlashcard (userId: string, userDetails: Object) {
     let currentItemsQuery = {
       userId: new ObjectId(userId),
+      courseId: userDetails.selectedCourse,
       $or: [
         { actualTimesRepeated: 0 },
         { extraRepeatToday: true },
         { nextRepetition: { $lte: moment().unix() } },
       ]
     }
-    if(isCasual) {
+    if(userDetails.isCasual) {
       currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     // currently changed to fetching only one current item, after testing and approving, code below should be refactored
@@ -38,16 +39,17 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     })
   }
 
-  async getSessionCount (userId: string, isCasual: Boolean) {
+  async getSessionCount (userId: string, userDetails: Object) {
     let currentItemsQuery = {
       userId: new ObjectId(userId),
+      courseId: userDetails.selectedCourse,
       $or: [
         { actualTimesRepeated: 0 },
         { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
         { nextRepetition: { $lte: moment().unix() } }
       ]
     }
-    if(isCasual) {
+    if(userDetails.isCasual) {
       currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     const items = await this.itemsCollection.find(currentItemsQuery).toArray()

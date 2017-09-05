@@ -129,8 +129,8 @@ export const typeDefs = gql`
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
-        setUsernameAndPasswordForGuest(username: String!, password: String!, deviceId: String!): User
-        logIn(username: String!, password: String!, deviceId: String!): User
+        setUsernameAndPasswordForGuest(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
+        logIn(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
         logInWithFacebook(accessTokenFb: String!, userIdFb: String!): User
         logInWithToken(accessToken: String!, userId: String!, deviceId: String!): User
         switchUserIsCasual: UserDetails
