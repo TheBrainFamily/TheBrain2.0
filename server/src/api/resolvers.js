@@ -61,14 +61,14 @@ const resolvers = {
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
-        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
+        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails)
       }
       return []
     },
     async SessionCount (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
-        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails.isCasual)
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails)
       } else {
         return {}
       }
@@ -117,7 +117,7 @@ const resolvers = {
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       flashcards.forEach((flashcard) => {
         if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
-          context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
+          context.Items.create(flashcard._id, userId, args.courseId, !!flashcard.isCasual)
         }
       })
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
@@ -160,7 +160,7 @@ const resolvers = {
         throw new Error('Invalid facebook response')
       }
     },
-    async logIn (root: ?string, args: { username: string, password: string, deviceId: string }, context: Object) {
+    async logIn (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) {
       try {
         const user = await context.Users.findByUsername(args.username)
 
@@ -170,7 +170,9 @@ const resolvers = {
 
         const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
-          user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
+          if(args.saveToken) {
+            user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
+          }
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
@@ -216,7 +218,7 @@ const resolvers = {
     async setUserIsCasual (root: ?string, args: { isCasual: boolean }, context: Object) {
       return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
     },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string, deviceId: string }, context: Object) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) {
       try {
         const username = args.username.trim()
         if (!username || !args.password) {
@@ -236,7 +238,7 @@ const resolvers = {
         }
         await context.Users.updateUser(user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, {username, password: args.password, deviceId: args.deviceId}, context)
+        return resolvers.Mutation.logIn(root, {username, password: args.password, deviceId: args.deviceId, saveToken: args.saveToken}, context)
       } catch (e) {
         throw e
       }
@@ -249,7 +251,7 @@ const resolvers = {
       // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
       const userDetails = await context.UserDetails.getById(context.user._id)
-      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
+      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails)
     },
     async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.resetLevelUpFlag(context.user._id)

@@ -44,10 +44,10 @@ class Login extends React.Component {
   }
 
   submit = () => {
-    const deviceId = DeviceInfo.getUniqueID()
+    const deviceId = DeviceInfo.getUniqueID() || 'defaultMobileClient'
     this.setState({ error: '' })
     const actionName = this.state.isLogin ? 'login' : 'signup'
-    this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId })
+    this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId, saveToken: true })
       .then( async () => {
         this.props.dispatch(courseActions.close())
         const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
@@ -133,16 +133,16 @@ class Login extends React.Component {
 }
 
 const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!) {
-        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId) {
+    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
+        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
             _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
 
 const logIn = gql`
-    mutation logIn($username: String!, $password: String!, $deviceId: String!){
-        logIn(username: $username, password: $password, deviceId: $deviceId) {
+    mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean){
+        logIn(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
             _id, username, activated, facebookId, currentAccessToken
         }
     }
@@ -152,11 +152,12 @@ export default compose(
   connect(),
   graphql(signup, {
     props: ({ ownProps, mutate }) => ({
-      signup: ({ username, password, deviceId }) => mutate({
+      signup: ({ username, password, deviceId, saveToken }) => mutate({
         variables: {
           username,
           password,
-          deviceId
+          deviceId,
+          saveToken
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
@@ -174,11 +175,12 @@ export default compose(
   }),
   graphql(logIn, {
     props: ({ ownProps, mutate }) => ({
-      login: ({ username, password, deviceId }) => mutate({
+      login: ({ username, password, deviceId, saveToken }) => mutate({
         variables: {
           username,
           password,
-          deviceId
+          deviceId,
+          saveToken
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
