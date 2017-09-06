@@ -7,11 +7,11 @@ import update from 'immutability-helper'
 import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
 
 class FBLoginButton extends React.Component {
-  responseFacebook = (response: { accessToken: string, userID: string }) => {
+  responseFacebook = async (response: { accessToken: string, userID: string }) => {
     console.log('logInWithFacebook', response)
     const accessTokenFb = response.accessToken
     const userIdFb = response.userID
-    this.props.logInWithFacebook({ accessTokenFb, userIdFb })
+    await this.props.logInWithFacebook({ accessTokenFb, userIdFb })
     if(userIdFb && accessTokenFb) {
       localStorage.setItem('accessTokenFb', accessTokenFb)
       localStorage.setItem('userIdFb', userIdFb)

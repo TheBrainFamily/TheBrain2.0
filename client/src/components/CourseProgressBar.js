@@ -3,7 +3,7 @@
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
-
+import { withRouter } from 'react-router'
 import ProgressBar from './ProgressBar'
 
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
@@ -11,7 +11,7 @@ import lessonCountQuery from '../../shared/graphql/queries/lessonCount'
 
 class CourseProgressBar extends React.Component {
   render () {
-    if (this.props.currentLesson.loading || this.props.lessonCount.loading) {
+    if (this.props.currentLesson.loading || this.props.lessonCount.loading || !this.props.selectedCourse) {
       return <div />
     }
 
@@ -35,10 +35,11 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  withRouter,
   graphql(currentLessonQuery, {
     name: 'currentLesson',
     options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id
+      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
       return ({
         variables: {courseId: selectedCourse},
         fetchPolicy: 'network-only'

@@ -10,7 +10,6 @@ import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 
-import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
@@ -47,14 +46,13 @@ class Login extends React.Component {
     this.setState({ error: '' })
 
     submitAction({ username: this.refs.username.value, password: this.refs.password.value, deviceId, saveToken })
-      .then(async () => {
+      .then(() => {
         if(saveToken) {
           const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
           const userId = this.props.currentUser.CurrentUser._id
           localStorage.setItem('accessToken', accessToken)
           localStorage.setItem('userId', userId)
         }
-        await this.props.userDetails.refetch()
         this.redirectAfterLogin()
       })
       .catch((data) => {
@@ -64,7 +62,8 @@ class Login extends React.Component {
       })
   }
 
-  redirectAfterLogin = () => {
+  redirectAfterLogin = async () => {
+    await this.props.userDetails.refetch()
     this.props.dispatch(push('/'))
   }
   
@@ -144,10 +143,7 @@ export default compose(
               }
             })
           }
-        },
-        refetchQueries: [{
-          query: currentLessonQuery
-        }]
+        }
       })
     })
   }),

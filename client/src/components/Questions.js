@@ -12,6 +12,8 @@ class Questions extends React.Component {
   render () {
     if (this.props.sessionCount.loading) {
       return <div>Loading...</div>
+    } else if (!this.props.selectedCourse) {
+      return <div>Course not selected</div>
     } else {
       const sessionCount = this.props.sessionCount.SessionCount
       const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
