@@ -20,6 +20,7 @@
     "react-apollo": "^1.0.0",
     "react-native": "0.43.2",
     "react-native-animatable": "^1.2.2",
+    "react-native-device-info": "^0.11.0",
     "react-native-emoji": "^1.2.0",
     "react-native-facebook-login": "^1.5.0",
     "react-native-hamburger": "^0.0.2",
