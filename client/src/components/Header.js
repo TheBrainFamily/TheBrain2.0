@@ -46,27 +46,33 @@ const logOutQuery = gql`
     }
 `
 
-const LoginSwitcherWithGraphQl = connect()(withApollo(graphql(logOutQuery, {
-  props: ({ ownProps, mutate }) => ({
-    logout: () => mutate({
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          console.log('Gozdecki: mutationResult', mutationResult)
-          console.log('Gozdecki: prev', prev)
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logOut
-            }
-          })
+const LoginSwitcherWithGraphQl = compose(
+  withApollo,
+  connect(),
+  graphql(logOutQuery, {
+    props: ({ ownProps, mutate }) => ({
+      logout: () => mutate({
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logOut
+              }
+            })
+          }
         }
-      }
+      })
     })
   })
-})(LoginSwitcher)))
+)(LoginSwitcher)
 
 class AppHeader extends React.Component {
   closeCourse = () => async () => {
+    console.log(this)
     await this.props.closeCourse()
+    this.props.dispatch(course.close())
     this.props.dispatch(push('/'))
   }
 
