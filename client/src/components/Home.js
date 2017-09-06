@@ -59,7 +59,6 @@ class Home extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('im in home')
     if (nextProps.courses.loading || nextProps.userDetails.loading || nextProps.currentUser.loading) {
       return
     }
@@ -69,7 +68,7 @@ class Home extends React.Component {
     }
 
     if (nextProps.userDetails.UserDetails.selectedCourse) {
-      this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)
+      this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)()
     }
   }
 
