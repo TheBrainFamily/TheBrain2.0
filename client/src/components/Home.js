@@ -197,7 +197,6 @@ export default compose(
         },
         updateQueries: {
           UserDetails: (prev, { mutationResult }) => {
-            console.log('select course mutation', mutationResult.data.selectCourse)
             return update(prev, {
               UserDetails: {
                 $set: mutationResult.data.selectCourse

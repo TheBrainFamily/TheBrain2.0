@@ -38,7 +38,7 @@ class Lecture extends React.Component {
       return (<p>Error...</p>)
     }
 
-    const selectedCourse = this.props.selectedCourse._id || this.props.match.params.courseId
+    const selectedCourse = (this.props.selectedCourse && this.props.selectedCourse._id) || this.props.match.params.courseId
 
     return (
       <span>
