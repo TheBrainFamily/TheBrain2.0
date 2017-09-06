@@ -67,7 +67,8 @@ class Home extends React.Component {
       this.logInWithSavedData()
     }
 
-    if (nextProps.userDetails.UserDetails.selectedCourse) {
+    if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.selectedCourse) {
+      console.log('selecting', nextProps.userDetails)
       this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)()
     }
   }
@@ -79,9 +80,6 @@ class Home extends React.Component {
   }
 
   render () {
-    if (this.props.courses.loading || this.props.userDetails.loading) {
-      return (<p>Loading...</p>)
-    }
     const opts = {
       height: '432',
       width: '768',
