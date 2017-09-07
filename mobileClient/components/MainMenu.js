@@ -70,8 +70,9 @@ class MainMenu extends React.Component {
     this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
-  closeCourse = () => {
+  closeCourse = async () => {
     this.props.dispatch(courseActions.close())
+    await this.props.closeCourse()
     this.go('/')()
   }
 

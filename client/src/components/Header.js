@@ -12,6 +12,7 @@ import { course } from '../actions'
 import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import closeCourseMutation from '../../shared/graphql/mutations/closeCourse'
 import Hamburger from './Hamburger'
 import MenuProfile from './MenuProfile'
 
@@ -126,20 +127,6 @@ class AppHeader extends React.Component {
     )
   }
 }
-
-const closeCourseMutation = gql`
-    mutation closeCourse {
-        closeCourse {
-            selectedCourse
-            hasDisabledTutorial
-            isCasual
-            experience {
-              level
-              showLevelUp
-            }
-        }
-    }
-`
 
 const mapStateToProps = (state) => {
   return {
