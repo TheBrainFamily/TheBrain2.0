@@ -164,7 +164,6 @@ class Home extends React.Component {
   }
 
   logoutAction = () => {
-    this.props.dispatch(courseActions.close())
     this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
     this.enableCourseSelector()
   }
@@ -184,7 +183,6 @@ class Home extends React.Component {
     const { isExitAnimationFinished } = this.state
     const { course } = this.props
     const courseColor = _.get(course, 'selectedCourse.color')
-
     return (
       <View style={{
         position: 'relative',

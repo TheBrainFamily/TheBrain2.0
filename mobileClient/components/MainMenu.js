@@ -49,19 +49,22 @@ class MainMenu extends React.Component {
 
   logout = async () => {
     console.log('>>>>>>>>>> LOGOUT')
+    this.props.toggleMainMenu && this.props.toggleMainMenu()
     await AsyncStorage.removeItem('accessTokenFb')
     await AsyncStorage.removeItem('accessToken')
     await AsyncStorage.removeItem('userId')
     await AsyncStorage.removeItem('userIdFb')
     this.props.logout()
-      .then(() => {
+      .then(async () => {
+        await this.props.userDetails.refetch()
+        this.props.dispatch(courseActions.close())
         FBLoginManager.getCredentials((error, data) => {
           if (!error && data && data.credentials) {
             FBLoginManager.logout(() => {}) // any callback is required
           }
         })
         this.props.client.resetStore()
-        this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
+        this.props.logoutAction && this.props.logoutAction()
       })
   }
 
