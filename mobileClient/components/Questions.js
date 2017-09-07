@@ -145,7 +145,8 @@ export default compose(
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true
     }
   }),
   graphql(sessionCountQuery, {

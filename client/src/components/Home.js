@@ -88,7 +88,7 @@ class Home extends React.Component {
     }
 
     const showIntro = !this.props.currentUser.CurrentUser && !this.state.skipIntro
-    if(!this.props.courses || !this.props.courses.Courses) {
+    if (this.props.courses.loading) {
       return <div>Loading...</div>
     }
     return (
@@ -212,5 +212,7 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(coursesQuery, {name: 'courses'})
+  graphql(coursesQuery, {name: 'courses', options: {
+    notifyOnNetworkStatusChange: true
+  }})
 )(Home)
