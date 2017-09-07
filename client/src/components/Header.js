@@ -70,9 +70,10 @@ const LoginSwitcherWithGraphQl = compose(
 
 class AppHeader extends React.Component {
   closeCourse = () => async () => {
-    console.log(this)
-    await this.props.closeCourse()
-    this.props.dispatch(course.close())
+    if(this.props.selectedCourse) {
+      await this.props.closeCourse()
+      this.props.dispatch(course.close())
+    }
     this.props.dispatch(push('/'))
   }
 
@@ -140,8 +141,14 @@ const closeCourseMutation = gql`
     }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   graphql(closeCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       closeCourse: () => mutate({

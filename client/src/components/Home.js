@@ -89,7 +89,9 @@ class Home extends React.Component {
     }
 
     const showIntro = !this.props.currentUser.CurrentUser && !this.state.skipIntro
-
+    if(!this.props.courses || !this.props.courses.Courses) {
+      return <div>Loading...</div>
+    }
     return (
       <FlexibleContentWrapper offset={200}>
         {showIntro ? <div id='video'>
