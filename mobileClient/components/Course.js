@@ -63,13 +63,13 @@ const mapStateToProps = (state) => {
     selectedCourse: state.course.selectedCourse
   }
 }
-
 export default compose(
   connect(mapStateToProps),
   withRouter,
   graphql(currentItemsExistQuery,{
     options: {
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true
     }
   })
 )(Course)
