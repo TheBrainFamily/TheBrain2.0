@@ -68,7 +68,6 @@ class Home extends React.Component {
     }
 
     if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.selectedCourse) {
-      console.log('selecting', nextProps.userDetails)
       this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)()
     }
   }
