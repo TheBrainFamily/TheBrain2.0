@@ -213,6 +213,6 @@ export default compose(
     }
   }),
   graphql(coursesQuery, {name: 'courses', options: {
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
   }})
 )(Home)
