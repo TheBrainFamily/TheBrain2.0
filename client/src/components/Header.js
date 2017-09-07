@@ -32,7 +32,7 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='/logout' onClick={this.logout}>LOG OUT</Link>
+      return <Link to='#' onClick={this.logout}>LOG OUT</Link>
     }
     return <Link to='/login'>LOG IN</Link>
   }
@@ -54,7 +54,7 @@ const LoginSwitcherWithGraphQl = compose(
       logout: () => mutate({
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
+            console.log('Gozdecki: mutationResult LOGOUT', mutationResult)
             console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
