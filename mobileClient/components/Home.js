@@ -24,6 +24,7 @@ import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
 import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
+import closeCourseMutation from '../../client/shared/graphql/mutations/closeCourse'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
@@ -35,10 +36,8 @@ class Home extends React.Component {
     const { height, width } = Dimensions.get('window')
     this.height = height
     this.width = width
-    const isCourseSelected = !!props.course.selectedCourse || false
     this.state = {
-      isCourseSelected,
-      isExitAnimationFinished: isCourseSelected,
+      isExitAnimationFinished: props.course.selectedCourse,
       courseSelectorIsDisabled: false,
       mainMenuActive: false
     }
@@ -149,9 +148,8 @@ class Home extends React.Component {
   }
 
   selectCourse = async (course) => {
-    if (!this.state.isCourseSelected) {
+    if (!this.props.course.selectedCourse) {
       console.log('selecting course', course)
-      this.setState({ isCourseSelected: true })
       await this.props.dispatch(courseActions.select(course))
       await this.props.selectCourse({ courseId: course._id })
       this.animateCourseSelector(course._id)
@@ -167,13 +165,13 @@ class Home extends React.Component {
 
   logoutAction = () => {
     this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
     this.enableCourseSelector()
   }
 
   closeCourse = async () => {
     this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
     await this.props.closeCourse()
     this.enableCourseSelector()
   }
@@ -183,7 +181,7 @@ class Home extends React.Component {
   }
 
   render () {
-    const { isCourseSelected, isExitAnimationFinished } = this.state
+    const { isExitAnimationFinished } = this.state
     const { course } = this.props
     const courseColor = _.get(course, 'selectedCourse.color')
 
@@ -194,8 +192,8 @@ class Home extends React.Component {
         height: '100%',
         backgroundColor: courseColor
       }}>
-        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} toggleMainMenu={this.toggleMainMenu}/>}
-        {isCourseSelected ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
+        {!isExitAnimationFinished && <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        {this.props.course.selectedCourse ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
                                           toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
@@ -269,20 +267,6 @@ class Home extends React.Component {
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
-            selectedCourse
-            hasDisabledTutorial
-            isCasual
-            experience {
-              level
-              showLevelUp
-            }
-        }
-    }
-`
-
-const closeCourseMutation = gql`
-    mutation closeCourse {
-        closeCourse {
             selectedCourse
             hasDisabledTutorial
             isCasual
