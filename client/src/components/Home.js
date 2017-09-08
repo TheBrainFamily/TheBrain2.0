@@ -31,10 +31,16 @@ class Home extends React.Component {
     const userIdFb = localStorage.getItem('userIdFb')
     const accessToken = localStorage.getItem('accessToken')
     const accessTokenFb = localStorage.getItem('accessTokenFb')
+    localStorage.removeItem('accessToken')
 
     if(userId && accessToken) {
       console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId, deviceId }).catch(async () => {
+      await this.props.logInWithToken({ accessToken, userId, deviceId })
+        .then(async () => {
+          const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
+          await localStorage.setItem('accessToken', newAccessToken)
+        })
+        .catch(async () => {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('userId')
         this.props.dispatch(push('/login'))
