@@ -58,7 +58,12 @@ class Home extends React.Component {
 
     if(userId && accessToken) {
       console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId, deviceId }).catch(async () => {
+      await this.props.logInWithToken({ accessToken, userId, deviceId }).
+      then(async () => {
+        const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
+        await AsyncStorage.setItem('accessToken', newAccessToken)
+      }).
+      catch(async () => {
         await AsyncStorage.removeItem('accessToken')
         await AsyncStorage.removeItem('userId')
         Alert.alert( 'You were logged out', 'Please log in again')

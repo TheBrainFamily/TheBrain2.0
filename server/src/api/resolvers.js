@@ -5,6 +5,7 @@ import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
 import { UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
+import { renewTokenOnLogin } from '../configuration/common'
 
 const resolvers = {
   Query: {
@@ -189,9 +190,14 @@ const resolvers = {
           throw new Error('User not found')
         }
 
-        const isMatch = await context.Users.findToken(args.userId, args.accessToken, args.deviceId)
+        const isMatch = await context.Users.findActiveToken(args.userId, args.accessToken, args.deviceId)
         if (isMatch) {
-          user.currentAccessToken = args.accessToken
+          if(renewTokenOnLogin) {
+            await context.Users.removeToken(args.userId, args.accessToken)
+            user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
+          } else {
+            user.currentAccessToken = args.accessToken
+          }
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
