@@ -133,6 +133,7 @@ export const typeDefs = gql`
         logIn(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
         logInWithFacebook(accessTokenFb: String!, userIdFb: String!): User
         logInWithToken(accessToken: String!, userId: String!, deviceId: String!): User
+        isTokenExpired(userId: String, token: String, deviceId: String): Boolean
         switchUserIsCasual: UserDetails
         setUserIsCasual(isCasual: Boolean!): UserDetails
         clearNotCasualItems: Boolean

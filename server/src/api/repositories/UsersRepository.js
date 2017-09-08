@@ -5,6 +5,7 @@ import moment from 'moment'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 import { userDetailsRepository } from './UserDetailsRepository'
+import { tokenExpirationPeriod } from '../../configuration/common'
 
 const SALT_WORK_FACTOR = 1034
 
@@ -107,11 +108,13 @@ export class UsersRepository extends MongoRepository {
     return token
   }
 
-  async findToken (userId: string, token: string, deviceId: string) {
+  async findActiveToken (userId: string, token: string, deviceId: string) {
+    const timestamp = moment().unix()
     const tokenFound = await this.authTokenCollection.findOne({
       userId: new ObjectId(userId),
       token,
-      deviceId
+      deviceId,
+      createdAt: { $gte: timestamp - tokenExpirationPeriod }
     })
     return tokenFound
   }
@@ -121,6 +124,14 @@ export class UsersRepository extends MongoRepository {
       userId: new ObjectId(userId),
       token,
     })
+  }
+
+  async removeExpiredTokens() {
+    console.log('### EXPIRED TOKENS REMOVAL STARTING ###', moment().format())
+    const timestamp = moment().unix()
+    const result = await this.authTokenCollection.removeMany({createdAt: {$lt: timestamp - tokenExpirationPeriod}})
+    console.log(result.result)
+    console.log('### EXPIRED TOKENS REMOVAL ENDED ###', moment().format())
   }
 }
 
