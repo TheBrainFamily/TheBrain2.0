@@ -8,6 +8,7 @@ import { createServer } from 'http'
 import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import session from 'express-session'
+import schedule from 'node-schedule'
 
 import cors from 'cors'
 
@@ -148,6 +149,11 @@ app.use('/graphql', graphqlExpress((req) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
+
+// run scheduled job every at 0:00 every day
+schedule.scheduleJob('0 0 * * *', async () => {
+  await usersRepository.removeExpiredTokens()
+})
 
 const server = createServer(app)
 

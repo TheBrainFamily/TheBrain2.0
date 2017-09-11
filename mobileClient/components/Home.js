@@ -3,9 +3,11 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
+import DeviceInfo from 'react-native-device-info'
+import { FBLoginManager } from 'react-native-facebook-login'
 
 import Header from './Header'
 import CircleButton from './CircleButton'
@@ -21,6 +23,11 @@ import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../../client/shared/graphql/queries/courses'
+import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
+import closeCourseMutation from '../../client/shared/graphql/mutations/closeCourse'
+import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import update from 'immutability-helper'
 import WithData from './WithData'
 
 class Home extends React.Component {
@@ -29,10 +36,8 @@ class Home extends React.Component {
     const { height, width } = Dimensions.get('window')
     this.height = height
     this.width = width
-    const isCourseSelected = !!props.course.selectedCourse || false
     this.state = {
-      isCourseSelected,
-      isExitAnimationFinished: isCourseSelected,
+      isExitAnimationFinished: props.course.selectedCourse,
       courseSelectorIsDisabled: false,
       mainMenuActive: false
     }
@@ -44,14 +49,49 @@ class Home extends React.Component {
     })
   }
 
+  logInWithSavedData = async () => {
+    const deviceId = DeviceInfo.getUniqueID()
+    const userId = await AsyncStorage.getItem('userId')
+    const userIdFb = await AsyncStorage.getItem('userIdFb')
+    const accessToken = await AsyncStorage.getItem('accessToken')
+    const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
+
+    if(userId && accessToken) {
+      console.log('loguje z TOKEN', accessToken, userId)
+      await this.props.logInWithToken({ accessToken, userId, deviceId }).
+      then(async () => {
+        const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
+        await AsyncStorage.setItem('accessToken', newAccessToken)
+      }).
+      catch(async () => {
+        await AsyncStorage.removeItem('accessToken')
+        await AsyncStorage.removeItem('userId')
+        Alert.alert( 'You were logged out', 'Please log in again')
+      })
+    }
+
+    if(userIdFb && accessTokenFb) {
+      console.log('loguje z FB ', accessTokenFb, userIdFb)
+      await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
+        await AsyncStorage.removeItem('accessTokenFb')
+        await AsyncStorage.removeItem('userIdFb')
+        FBLoginManager.logout(() => {})
+        Alert.alert( 'Facebook login expired', 'Please log in again')
+      })
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-      nextProps.courses.loading) {
+      nextProps.courses.loading || !nextProps.currentUser || nextProps.currentUser.loading) {
       return
     }
 
-    const courseId = nextProps.userDetails.UserDetails.selectedCourse
+    if(!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+      this.logInWithSavedData()
+    }
 
+    const courseId = nextProps.userDetails.UserDetails.selectedCourse
     if (!courseId) {
       return
     }
@@ -112,12 +152,11 @@ class Home extends React.Component {
     })
   }
 
-  selectCourse = (course) => async () => {
-    if (!this.state.isCourseSelected) {
-      this.setState({ isCourseSelected: true })
-      this.props.dispatch(courseActions.select(course))
+  selectCourse = async (course) => {
+    if (!this.props.course.selectedCourse) {
+      console.log('selecting course', course)
+      await this.props.dispatch(courseActions.select(course))
       await this.props.selectCourse({ courseId: course._id })
-
       this.animateCourseSelector(course._id)
     }
   }
@@ -130,14 +169,13 @@ class Home extends React.Component {
   }
 
   logoutAction = () => {
-    this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
     this.enableCourseSelector()
   }
 
   closeCourse = async () => {
     this.props.dispatch(courseActions.close())
-    this.setState({ isCourseSelected: false, isExitAnimationFinished: false, mainMenuActive: false })
+    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
     await this.props.closeCourse()
     this.enableCourseSelector()
   }
@@ -147,10 +185,9 @@ class Home extends React.Component {
   }
 
   render () {
-    const { isCourseSelected, isExitAnimationFinished } = this.state
+    const { isExitAnimationFinished } = this.state
     const { course } = this.props
     const courseColor = _.get(course, 'selectedCourse.color')
-
     return (
       <View style={{
         position: 'relative',
@@ -158,8 +195,8 @@ class Home extends React.Component {
         height: '100%',
         backgroundColor: courseColor
       }}>
-        {!isExitAnimationFinished && <Header withShadow dynamic hide={isCourseSelected} toggleMainMenu={this.toggleMainMenu}/>}
-        {isCourseSelected ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
+        {!isExitAnimationFinished && <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        {this.props.course.selectedCourse ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
                                           toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
@@ -192,7 +229,7 @@ class Home extends React.Component {
                         onLayout={() => {}}>
                     <CircleButton
                       color={course.color}
-                      onPress={this.selectCourse(course)}
+                      onPress={() => { this.selectCourse(course) }}
                       disableCourseSelector={this.disableCourseSelector}
                       courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
                     >
@@ -233,45 +270,108 @@ class Home extends React.Component {
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
-            success
-        }
-    }
-`
-
-const userDetailsQuery = gql`
-    query UserDetails {
-        UserDetails {
             selectedCourse
+            hasDisabledTutorial
+            isCasual
+            experience {
+              level
+              showLevelUp
+            }
         }
     }
 `
 
-const closeCourseMutation = gql`
-    mutation closeCourse {
-        closeCourse {
-            success
+const logInWithTokenMutation = gql`
+    mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {
+        logInWithToken(accessToken:$accessToken, userId:$userId, deviceId:$deviceId) {
+            _id, username, activated, email, facebookId, currentAccessToken
         }
     }
 `
 
 export default compose(
   connect(state => state),
+  graphql(logInWithTokenMutation, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
+        variables: {
+          accessToken,
+          userId,
+          deviceId
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithToken
+              }
+            })
+          }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
+  }),
+  graphql(logInWithFacebook, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
+        variables: {
+          accessTokenFb,
+          userIdFb
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithFacebook
+              }
+            })
+          }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
+  }),
   graphql(selectCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
-        }
+        },
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.selectCourse
+              }
+            })
+          }
+        },
       })
     })
   }),
   graphql(closeCourseMutation, {
     props: ({ mutate }) => ({
-      closeCourse: () => mutate()
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
     })
   }),
+  graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
-  graphql(userDetailsQuery, { name: 'userDetails' })
+  graphql(userDetailsQuery, { name: 'userDetails' }),
 )(WithData(Home, ['courses', 'userDetails']))
 
 const style = StyleSheet.create({

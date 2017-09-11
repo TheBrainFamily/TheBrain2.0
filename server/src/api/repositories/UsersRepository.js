@@ -5,14 +5,17 @@ import moment from 'moment'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 import { userDetailsRepository } from './UserDetailsRepository'
+import { tokenExpirationPeriod } from '../../configuration/common'
 
-const SALT_WORK_FACTOR = 1034
+const SALT_WORK_FACTOR = 10
 
 export class UsersRepository extends MongoRepository {
   userCollection: Collection
+  authTokenCollection: Collection
 
   init () {
     this.userCollection = this.db.collection('users')
+    this.authTokenCollection = this.db.collection('authtoken')
   }
 
   async createGuest (courseId: string) {
@@ -89,12 +92,53 @@ export class UsersRepository extends MongoRepository {
   static async comparePassword (passA, passB) {
     return bcrypt.compare(passB, passA)
   }
+
+  async insertNewUserToken (userId: string, deviceId: string) {
+    const timestamp = moment().unix()
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    const random = Math.random() * Math.random()
+    const rawToken = `${userId}_!s@eVc&uM%fG#D$G#$@<D@^H&&;_${timestamp}_${random}_${deviceId}`
+    const token = await bcrypt.hash(rawToken, salt)
+    await this.authTokenCollection.insertOne({
+      userId: new ObjectId(userId),
+      token,
+      deviceId,
+      createdAt: timestamp
+    })
+    return token
+  }
+
+  async findActiveToken (userId: string, token: string, deviceId: string) {
+    const timestamp = moment().unix()
+    const tokenFound = await this.authTokenCollection.findOne({
+      userId: new ObjectId(userId),
+      token,
+      deviceId,
+      createdAt: { $gte: timestamp - tokenExpirationPeriod }
+    })
+    return tokenFound
+  }
+
+  async removeToken (userId: string, token: string) {
+    await this.authTokenCollection.removeOne({
+      userId: new ObjectId(userId),
+      token,
+    })
+  }
+
+  async removeExpiredTokens() {
+    console.log('### EXPIRED TOKENS REMOVAL STARTING ###', moment().format())
+    const timestamp = moment().unix()
+    const result = await this.authTokenCollection.removeMany({createdAt: {$lt: timestamp - tokenExpirationPeriod}})
+    console.log(result.result)
+    console.log('### EXPIRED TOKENS REMOVAL ENDED ###', moment().format())
+  }
 }
 
 const generateResetPasswordToken = async (userId) => {
   const rawToken = `${userId}_W3GojrLkVLKH9l`
   // we are using hashing function as a clean way to generate a random string
-  const salt = await bcrypt.genSalt(Math.random())
+  const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
   return urlencode.encode(await bcrypt.hash(rawToken, salt))
 }
 

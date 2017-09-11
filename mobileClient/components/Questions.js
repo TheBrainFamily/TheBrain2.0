@@ -5,6 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
+import update from 'immutability-helper'
 import {
   Text,
   View,
@@ -31,6 +32,7 @@ import { updateAnswerVisibility } from '../actions/FlashcardActions'
 import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
 import currentItemsQuery from '../../client/shared/graphql/queries/itemsWithFlashcard'
 import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
+import closeCourseMutation from '../../client/shared/graphql/mutations/closeCourse'
 
 class Questions extends React.Component {
   constructor (props) {
@@ -92,9 +94,9 @@ class Questions extends React.Component {
     return windowDimensions.height - this.getHeaderHeight() - this.getFlashcardHeight() - StyleSheet.flatten(styles.flipCardContainer).marginBottom
   }
 
-  closeCourse = () => {
+  closeCourse = async () => {
+    await this.props.closeCourse()
     this.props.dispatch(courseActions.close())
-    this.props.history.push('/')
   }
 
   render () {
@@ -127,7 +129,7 @@ class Questions extends React.Component {
             <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
             {this.state.mainMenuActive &&
-            <MainMenu topMargin={this.props.height} closeCourse={this.props.closeCourse}/>}
+            <MainMenu topMargin={this.props.height} closeCourse={this.closeCourse}/>}
           </View>
         )
       } else {
@@ -143,7 +145,8 @@ export default compose(
   graphql(currentItemsQuery, {
     name: 'currentItems',
     options: {
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   }),
   graphql(sessionCountQuery, {
@@ -151,6 +154,22 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
+  }),
+  graphql(closeCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            console.log('mutation close course: ', mutationResult.data.closeCourse)
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
+    })
   }),
   connect(state => state)
 )(Questions)
