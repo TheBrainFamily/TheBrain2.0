@@ -27,7 +27,7 @@ import { userDetailsRepository } from './api/repositories/UserDetailsRepository'
 import { usersRepository } from './api/repositories/UsersRepository'
 
 const app = express()
-const port = 8080
+
 
 passport.serializeUser((user, cb) => cb(null, user))
 passport.deserializeUser((obj, cb) => cb(null, obj))
@@ -156,6 +156,13 @@ schedule.scheduleJob('0 0 * * *', async () => {
 })
 
 const server = createServer(app)
+let port = 8080
+
+if (process.env.NODE_ENV === 'production') {
+  port = 80
+}
+
+
 
 server.listen(port, undefined, undefined, () => console.log( // eslint-disable-line no-console
     `API Server is now running on http://localhost:${port}/graphql`
