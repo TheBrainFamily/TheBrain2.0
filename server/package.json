@@ -14,7 +14,8 @@
     "startTestingDB": "docker run -d -p 27017:27017 mongo",
     "flow": "flow",
     "standard": "standard",
-    "standardFix": "standard --fix"
+    "standardFix": "standard --fix",
+    "heroku-postbuild": "npm install"
   },
   "author": "",
   "license": "ISC",
