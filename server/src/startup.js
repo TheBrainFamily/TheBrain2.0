@@ -156,13 +156,7 @@ schedule.scheduleJob('0 0 * * *', async () => {
 })
 
 const server = createServer(app)
-let port = 8080
-
-if (process.env.NODE_ENV === 'production') {
-  port = 80
-}
-
-
+const port = process.env.PORT || 8080
 
 server.listen(port, undefined, undefined, () => console.log( // eslint-disable-line no-console
     `API Server is now running on http://localhost:${port}/graphql`
