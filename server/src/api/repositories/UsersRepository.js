@@ -7,7 +7,7 @@ import { MongoRepository } from './MongoRepository'
 import { userDetailsRepository } from './UserDetailsRepository'
 import { tokenExpirationPeriod } from '../../configuration/common'
 
-const SALT_WORK_FACTOR = 1034
+const SALT_WORK_FACTOR = 10
 
 export class UsersRepository extends MongoRepository {
   userCollection: Collection
@@ -95,7 +95,7 @@ export class UsersRepository extends MongoRepository {
 
   async insertNewUserToken (userId: string, deviceId: string) {
     const timestamp = moment().unix()
-    const salt = await bcrypt.genSalt(Math.random() * Math.random())
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
     const random = Math.random() * Math.random()
     const rawToken = `${userId}_!s@eVc&uM%fG#D$G#$@<D@^H&&;_${timestamp}_${random}_${deviceId}`
     const token = await bcrypt.hash(rawToken, salt)
@@ -138,7 +138,7 @@ export class UsersRepository extends MongoRepository {
 const generateResetPasswordToken = async (userId) => {
   const rawToken = `${userId}_W3GojrLkVLKH9l`
   // we are using hashing function as a clean way to generate a random string
-  const salt = await bcrypt.genSalt(Math.random())
+  const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
   return urlencode.encode(await bcrypt.hash(rawToken, salt))
 }
 
