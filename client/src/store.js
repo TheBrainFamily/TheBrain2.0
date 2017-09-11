@@ -11,7 +11,7 @@ const localhostRegexp = /localhost/
 if (localhostRegexp.test(window.location.origin)) {
   uri = 'http://localhost:8080/graphql'
 } else {
-  uri = 'http://sleepy-stream-93575.herokuapp.com/graphql'
+  uri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
 }
 
 console.log('GraphQL uri:', uri)
