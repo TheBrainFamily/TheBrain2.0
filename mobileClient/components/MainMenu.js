@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 
-import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View } from 'react-native'
+import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View, AsyncStorage } from 'react-native'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import * as courseActions from '../actions/CourseActions'
@@ -47,18 +47,25 @@ class MainMenu extends React.Component {
     ).start()
   }
 
-  logout = () => {
+  logout = async () => {
+    console.log('>>>>>>>>>> LOGOUT')
+    this.props.toggleMainMenu && this.props.toggleMainMenu()
+    await AsyncStorage.removeItem('accessTokenFb')
+    await AsyncStorage.removeItem('accessToken')
+    await AsyncStorage.removeItem('userId')
+    await AsyncStorage.removeItem('userIdFb')
     this.props.logout()
-      .then(() => {
+      .then(async () => {
+        await this.props.userDetails.refetch()
+        this.props.dispatch(courseActions.close())
         FBLoginManager.getCredentials((error, data) => {
           if (!error && data && data.credentials) {
             FBLoginManager.logout(() => {}) // any callback is required
           }
         })
         this.props.client.resetStore()
+        this.props.logoutAction && this.props.logoutAction()
       })
-    this.props.logoutAction ? this.props.logoutAction() : this.closeCourse()
-    this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
   go = (path) => () => {
@@ -66,8 +73,9 @@ class MainMenu extends React.Component {
     this.props.toggleMainMenu && this.props.toggleMainMenu()
   }
 
-  closeCourse = () => {
+  closeCourse = async () => {
     this.props.dispatch(courseActions.close())
+    await this.props.closeCourse()
     this.go('/')()
   }
 
@@ -78,7 +86,6 @@ class MainMenu extends React.Component {
     let { fadeAnim } = this.state
 
     const currentUser = this.props.currentUser.CurrentUser
-    const notFacebookUser = this.props.currentUser.CurrentUser && !this.props.currentUser.CurrentUser.facebookId
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
@@ -207,7 +214,7 @@ MainMenu.defaultProps = {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated, facebookId
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
@@ -227,8 +234,8 @@ export default compose(
       logout: () => mutate({
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
+            console.log('Gozdecki: mutationResult logout', mutationResult)
+            console.log('Gozdecki: logout prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logOut

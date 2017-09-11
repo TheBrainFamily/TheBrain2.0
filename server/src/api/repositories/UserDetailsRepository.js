@@ -95,22 +95,22 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async selectCourse (userId: string, courseId: string) {
-    const user = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
-    user.selectedCourse = courseId
-    const course = _.find(user.progress, doc => doc.courseId === courseId)
+    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    userDetails.selectedCourse = courseId
+    const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
     if (!course) {
-      user.progress.push({courseId, lesson: 1})
+      userDetails.progress.push({courseId, lesson: 1})
     }
 
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, user)
-    return {success: true}
+    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, userDetails)
+    return userDetails
   }
 
   async closeCourse (userId: string) {
-    const user = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
-    user.selectedCourse = null
-    await this.userDetailsCollection.save(user)
-    return {success: true}
+    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    userDetails.selectedCourse = null
+    await this.userDetailsCollection.save(userDetails)
+    return userDetails
   }
 }
 

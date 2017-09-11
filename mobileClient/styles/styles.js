@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
       height: 5
     },
     shadowOpacity: 0.4,
-    shadowRadius: 10
+    shadowRadius: 10,
+    backgroundColor: 'white'
   },
   headerTitle: {
     color: 'white',

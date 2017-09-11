@@ -18,8 +18,8 @@
   "dependencies": {
     "aws-sdk": "^2.40.0",
     "babel-cli": "^6.23.0",
-    "babel-eslint": "^7.2.3",
     "babel-core": "^6.23.1",
+    "babel-eslint": "^7.2.3",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
     "bcrypt": "^1.0.2",
@@ -38,6 +38,7 @@
     "mongodb": "^2.2.24",
     "mongoose": "^4.8.6",
     "node-fetch": "^1.6.3",
+    "node-schedule": "^1.2.4",
     "nodemailer": "^4.0.0",
     "optics-agent": "^1.1.1",
     "passport": "^0.3.2",

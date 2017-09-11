@@ -10,13 +10,14 @@ import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 
-import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   state = {
     error: '',
-    isSignup: false
+    isSignup: false,
+    saveToken: false
   }
 
   loginButtonLabels = {
@@ -31,27 +32,27 @@ class Login extends React.Component {
   componentWillReceiveProps (nextProps) {
     if(nextProps.match.path === '/signup') {
       this.setState({isSignup: true})
-
-      if (!nextProps.currentUser || nextProps.currentUser.loading) {
-        return
-      }
-
-      if (!nextProps.currentUser.CurrentUser || nextProps.currentUser.CurrentUser.activated) {
-        nextProps.dispatch(push('/'))
-      }
     }
   }
 
   submit = (e) => {
     e.preventDefault()
+    const deviceId = 'browser'
+    const saveToken = this.state.saveToken
     let submitAction = this.props.login
     if(this.refs.isSignup.checked) {
       submitAction = this.props.signup
     }
     this.setState({ error: '' })
 
-    submitAction({ username: this.refs.username.value, password: this.refs.password.value })
+    submitAction({ username: this.refs.username.value, password: this.refs.password.value, deviceId, saveToken })
       .then(() => {
+        if(saveToken) {
+          const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
+          const userId = this.props.currentUser.CurrentUser._id
+          localStorage.setItem('accessToken', accessToken)
+          localStorage.setItem('userId', userId)
+        }
         this.redirectAfterLogin()
       })
       .catch((data) => {
@@ -60,12 +61,17 @@ class Login extends React.Component {
       })
   }
 
-  redirectAfterLogin = () => {
+  redirectAfterLogin = async () => {
+    await this.props.userDetails.refetch()
     this.props.dispatch(push('/'))
   }
   
   checkboxClick = () => {
     this.setState({isSignup: !this.state.isSignup})
+  }
+
+  checkboxClickSave = () => {
+    this.setState({saveToken: !this.state.saveToken})
   }
 
   render () {
@@ -82,9 +88,14 @@ class Login extends React.Component {
             <input ref='password' type='password' name='password'/>
           </div>
           <div>
+            <input ref='saveToken' type="checkbox" name="saveToken" checked={this.state.saveToken}
+                   onChange={this.checkboxClickSave}/>
+            <label className={'checkbox-label'} onClick={this.checkboxClickSave}>Remember me</label>
+          </div>
+          <div>
             <input ref='isSignup' type="checkbox" name="newAccount" checked={this.state.isSignup}
                    onChange={this.checkboxClick}/>
-            <label onClick={this.checkboxClick}>New account</label>
+            <label className={'checkbox-label'} onClick={this.checkboxClick}>New account</label>
           </div>
           <div className={'login-form-buttons-container'}>
             <FBLoginButton onLogin={this.redirectAfterLogin}/>
@@ -96,17 +107,17 @@ class Login extends React.Component {
   }
 }
 const logIn = gql`
-    mutation logIn($username: String!, $password: String!){
-        logIn(username: $username, password: $password) {
-            _id, username, activated, facebookId
+    mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean){
+        logIn(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
 
 const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!){
-        setUsernameAndPasswordForGuest(username: $username, password: $password) {
-            username, facebookId
+    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean){
+        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
@@ -116,10 +127,12 @@ export default compose(
   withRouter,
   graphql(logIn, {
     props: ({ownProps, mutate}) => ({
-      login: ({username, password}) => mutate({
+      login: ({username, password, deviceId, saveToken}) => mutate({
         variables: {
           username,
-          password
+          password,
+          deviceId,
+          saveToken
         },
         updateQueries: {
           CurrentUser: (prev, {mutationResult}) => {
@@ -129,28 +142,39 @@ export default compose(
               }
             })
           }
-        },
-        refetchQueries: [{
-          query: currentLessonQuery
-        }]
+        }
       })
     })
   }),
   graphql(signup, {
     props: ({ownProps, mutate}) => ({
-      signup: ({username, password}) => mutate({
+      signup: ({username, password, deviceId, saveToken}) => mutate({
         variables: {
           username,
-          password
+          password,
+          deviceId,
+          saveToken
         },
-        refetchQueries: [{
-          query: currentUserQuery
-        }]
+        updateQueries: {
+          CurrentUser: (prev, {mutationResult}) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.setUsernameAndPasswordForGuest
+              }
+            })
+          }
+        }
       })
     })
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
     options: {
       fetchPolicy: 'network-only'
     }

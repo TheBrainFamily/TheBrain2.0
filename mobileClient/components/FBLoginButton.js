@@ -2,11 +2,27 @@ import React from 'react'
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
-import { withApollo, graphql } from 'react-apollo'
+import { withApollo, graphql, compose } from 'react-apollo'
+import { AsyncStorage, Alert } from 'react-native'
+import { connect } from 'react-redux'
 import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
+import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import * as courseActions from '../actions/CourseActions'
 
 class FBLoginButton extends React.Component {
+
+  logInWithFacebook = async (accessTokenFb, userIdFb) => {
+    this.props.dispatch(courseActions.close())
+    this.props.logInWithFacebook({ accessTokenFb, userIdFb}).then(async () => {
+      await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
+      await AsyncStorage.setItem('userIdFb', userIdFb)
+      await this.props.userDetails.refetch()
+      this.props.history.push('/')
+    }).catch(() => {
+      Alert.alert('Log in failed', 'Please try again later')
+    })
+  }
+
   render () {
     return (
       <FBLogin style={{ maxHeight: 40, justifyContent: 'center',}}
@@ -17,18 +33,15 @@ class FBLoginButton extends React.Component {
                loginBehavior={FBLoginManager.LoginBehaviors.Native}
                onLogin={(data) => {
                  console.log('Logged in!', data)
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
-                 this.props.history.push('/')
+                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
                }}
-               onLogout={() => {
-                 console.log('Logged out.')
-                 this.props.client.resetStore()
+               onLogout={async () => {
+                 console.log('Logged out FB.')
                  this.props.history.push('/')
                }}
                onLoginFound={(data) => {
                  console.log('Existing login found.', data)
-                 console.log(data)
-                 this.props.logInWithFacebook({ accessToken: data.credentials.token, userId: data.credentials.userId })
+                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
                }}
                onLoginNotFound={() => {
                  console.log('No user logged in.')
@@ -49,22 +62,31 @@ class FBLoginButton extends React.Component {
   };
 }
 
-export default withRouter(withApollo(graphql(logInWithFacebook, {
-  props: ({ ownProps, mutate }) => ({
-    logInWithFacebook: ({ accessToken, userId }) => mutate({
-      variables: {
-        accessToken,
-        userId
-      },
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logInWithFacebook
-            }
-          })
+export default withRouter(withApollo(compose(
+  connect(),
+  graphql(logInWithFacebook, {
+    props: ({ownProps, mutate}) => ({
+      logInWithFacebook: ({accessTokenFb, userIdFb}) => mutate({
+        variables: {
+          accessTokenFb,
+          userIdFb
+        },
+        updateQueries: {
+          CurrentUser: (prev, {mutationResult}) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithFacebook
+              }
+            })
+          }
         }
-      }
+      })
     })
-  })
-})(FBLoginButton)))
+  }),
+  graphql(userDetailsQuery, {
+    name: 'userDetails',
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }))
+  (FBLoginButton)))

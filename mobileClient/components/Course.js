@@ -63,9 +63,13 @@ const mapStateToProps = (state) => {
     selectedCourse: state.course.selectedCourse
   }
 }
-
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  graphql(currentItemsExistQuery)
+  graphql(currentItemsExistQuery,{
+    options: {
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+    }
+  })
 )(Course)

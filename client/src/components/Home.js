@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { course } from '../actions'
+import update from 'immutability-helper'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -14,13 +15,63 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
 
 class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      skipIntro: false
+      skipIntro: false,
+      loginInProgress: false
     }
+  }
+
+  logInWithSavedData = async () => {
+    const deviceId = 'browser'
+    const userId = localStorage.getItem('userId')
+    const userIdFb = localStorage.getItem('userIdFb')
+    const accessToken = localStorage.getItem('accessToken')
+    const accessTokenFb = localStorage.getItem('accessTokenFb')
+
+    if(this.state.loginInProgress) {
+      return
+    }
+
+    this.setState({
+      loginInProgress: true
+    }, async () => {
+      if(userId && accessToken) {
+        console.log('loguje z TOKEN', accessToken, userId)
+        await this.props.logInWithToken({ accessToken, userId, deviceId })
+          .then(async () => {
+            const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
+            await localStorage.setItem('accessToken', newAccessToken)
+            this.setState({ loginInProgess: false })
+          })
+          .catch(async () => {
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('userId')
+            this.setState({ loginInProgess: false }, () => {
+              this.props.dispatch(push('/login'))
+            })
+          })
+      }
+
+      if(userIdFb && accessTokenFb) {
+        console.log('loguje z FB ', accessTokenFb, userIdFb)
+        this.props.logInWithFacebook({ accessTokenFb, userIdFb })
+          .then(() => {
+            this.setState({ loginInProgess: false })
+          })
+          .catch(async () => {
+            localStorage.removeItem('accessTokenFb')
+            localStorage.removeItem('userIdFb')
+            this.setState({ loginInProgess: false }, () => {
+              this.props.dispatch(push('/login'))
+            })
+        })
+      }
+    })
   }
 
   selectCourse = (courseId) => async () => {
@@ -31,16 +82,16 @@ class Home extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.courses.loading || nextProps.userDetails.loading) {
+    if (nextProps.courses.loading || nextProps.userDetails.loading || nextProps.currentUser.loading) {
       return
     }
 
-    if (nextProps.userDetails.UserDetails.selectedCourse) {
-      const courseId = nextProps.userDetails.UserDetails.selectedCourse
-      const selectedCourse = nextProps.courses.Courses.find(course=>course._id === courseId)
+    if(!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+      this.logInWithSavedData()
+    }
 
-      nextProps.dispatch(course.select(selectedCourse))
-      nextProps.dispatch(push(`/course/${courseId}`))
+    if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.selectedCourse) {
+      this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)()
     }
   }
 
@@ -51,9 +102,6 @@ class Home extends React.Component {
   }
 
   render () {
-    if (this.props.courses.loading || this.props.userDetails.loading) {
-      return (<p>Loading...</p>)
-    }
     const opts = {
       height: '432',
       width: '768',
@@ -63,7 +111,9 @@ class Home extends React.Component {
     }
 
     const showIntro = !this.props.currentUser.CurrentUser && !this.state.skipIntro
-
+    if (this.props.courses.loading) {
+      return <div>Loading...</div>
+    }
     return (
       <FlexibleContentWrapper offset={200}>
         {showIntro ? <div id='video'>
@@ -94,7 +144,21 @@ class Home extends React.Component {
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
         selectCourse(courseId: $courseId) {
-            success
+            selectedCourse
+            hasDisabledTutorial
+            isCasual
+            experience {
+              level
+              showLevelUp
+            }
+        }
+    }
+`
+
+const logInWithTokenMutation = gql`
+    mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {
+        logInWithToken(accessToken:$accessToken, userId:$userId, deviceId:$deviceId) {
+            _id, username, activated, email, facebookId, currentAccessToken
         }
     }
 `
@@ -102,15 +166,66 @@ const selectCourseMutation = gql`
 export default compose(
   connect(),
   graphql(currentUserQuery, {name: 'currentUser'}),
+  graphql(logInWithTokenMutation, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
+        variables: {
+          accessToken,
+          userId,
+          deviceId
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithToken
+              }
+            })
+          }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
+  }),
+  graphql(logInWithFacebook, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
+        variables: {
+          accessTokenFb,
+          userIdFb
+        },
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logInWithFacebook
+              }
+            })
+          }
+        },
+        refetchQueries: [{
+          query: userDetailsQuery
+        }]
+      })
+    })
+  }),
   graphql(selectCourseMutation, {
     props: ({ownProps, mutate}) => ({
       selectCourse: ({courseId}) => mutate({
         variables: {
           courseId
         },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.selectCourse
+              }
+            })
+          }
+        },
       })
     })
   }),
@@ -120,5 +235,7 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(coursesQuery, {name: 'courses'})
+  graphql(coursesQuery, {name: 'courses', options: {
+    notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+  }})
 )(Home)

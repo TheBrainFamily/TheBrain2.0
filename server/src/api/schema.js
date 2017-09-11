@@ -84,6 +84,7 @@ export const typeDefs = gql`
         email: String,
         activated: Boolean!,
         facebookId: String,
+        currentAccessToken: String,
     }
     
     type SessionCount {
@@ -123,14 +124,16 @@ export const typeDefs = gql`
     
     type Mutation {
         changePassword(oldPassword: String!, newPassword: String!): Status,
-        selectCourse(courseId: String!): Status,
-        closeCourse: Status,
+        selectCourse(courseId: String!): UserDetails,
+        closeCourse: UserDetails,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
         addUser: User!
-        setUsernameAndPasswordForGuest(username: String!, password: String!): User
-        logIn(username: String!, password: String!): User
-        logInWithFacebook(accessToken: String!, userId: String!): User
+        setUsernameAndPasswordForGuest(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
+        logIn(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
+        logInWithFacebook(accessTokenFb: String!, userIdFb: String!): User
+        logInWithToken(accessToken: String!, userId: String!, deviceId: String!): User
+        isTokenExpired(userId: String, token: String, deviceId: String): Boolean
         switchUserIsCasual: UserDetails
         setUserIsCasual(isCasual: Boolean!): UserDetails
         clearNotCasualItems: Boolean
