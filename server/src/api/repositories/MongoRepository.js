@@ -9,7 +9,7 @@ let collectionInitQueue = []
 let connectingToDb = false
 let dbInstance = null
 
-switch (process.env.NODE_ENV.toUpperCase()) {
+switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
   case 'TESTING':
     resolvedDBURI = testingDBURI
     break
