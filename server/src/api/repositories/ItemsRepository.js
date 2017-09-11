@@ -24,10 +24,11 @@ class ItemsRepository extends MongoRepository {
     return this.itemsCollection.findOne({_id: new ObjectId(_id), userId: new ObjectId(userId)})
   }
 
-  async create (flashcardId: string, userId: string, isCasual: Boolean) {
+  async create (flashcardId: string, userId: string, courseId: string, isCasual: Boolean) {
     const newItem = {
       flashcardId,
       userId: new ObjectId(userId),
+      courseId,
       actualTimesRepeated: 0,
       easinessFactor: 2.5,
       extraRepeatToday: false,

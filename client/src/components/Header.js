@@ -7,16 +7,23 @@ import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import { course } from '../actions'
 
 import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import closeCourseMutation from '../../shared/graphql/mutations/closeCourse'
 import Hamburger from './Hamburger'
 import MenuProfile from './MenuProfile'
 
 class LoginSwitcher extends React.Component {
   logout = (e) => {
     e.preventDefault()
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('accessTokenFb')
+    localStorage.removeItem('userIdFb')
+    this.props.dispatch(course.close())
     this.props.logout()
       .then( async () => {
         await this.props.client.resetStore()
@@ -26,7 +33,7 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='/logout' onClick={this.logout}>LOG OUT</Link>
+      return <Link to='#' onClick={this.logout}>LOG OUT</Link>
     }
     return <Link to='/login'>LOG IN</Link>
   }
@@ -35,32 +42,39 @@ class LoginSwitcher extends React.Component {
 const logOutQuery = gql`
     mutation logOut {
         logOut {
-            _id, username, activated, facebookId
+            _id, username, activated, facebookId, currentAccessToken
         }
     }
 `
 
-const LoginSwitcherWithGraphQl = connect()(withApollo(graphql(logOutQuery, {
-  props: ({ ownProps, mutate }) => ({
-    logout: () => mutate({
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          console.log('Gozdecki: mutationResult', mutationResult)
-          console.log('Gozdecki: prev', prev)
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logOut
-            }
-          })
+const LoginSwitcherWithGraphQl = compose(
+  withApollo,
+  connect(),
+  graphql(logOutQuery, {
+    props: ({ ownProps, mutate }) => ({
+      logout: () => mutate({
+        updateQueries: {
+          CurrentUser: (prev, { mutationResult }) => {
+            console.log('Gozdecki: mutationResult LOGOUT', mutationResult)
+            console.log('Gozdecki: prev', prev)
+            return update(prev, {
+              CurrentUser: {
+                $set: mutationResult.data.logOut
+              }
+            })
+          }
         }
-      }
+      })
     })
   })
-})(LoginSwitcher)))
+)(LoginSwitcher)
 
 class AppHeader extends React.Component {
   closeCourse = () => async () => {
-    await this.props.closeCourse()
+    if(this.props.selectedCourse) {
+      await this.props.closeCourse()
+      this.props.dispatch(course.close())
+    }
     this.props.dispatch(push('/'))
   }
 
@@ -71,9 +85,7 @@ class AppHeader extends React.Component {
       <div className='App-header-shadow'>
         <div className='App-header-container'>
           <div className='App-header'>
-            <Link to='/'>
-              <img src={logo} className='App-logo' alt='logo' />
-            </Link>
+            <img onClick={this.closeCourse()} src={logo} className='App-logo' alt='logo' style={{cursor: 'pointer'}}/>
             <div className='App-header-right'>
               <Hamburger>
                 {currentUser && currentUser.activated
@@ -116,19 +128,27 @@ class AppHeader extends React.Component {
   }
 }
 
-const closeCourseMutation = gql`
-    mutation closeCourse {
-        closeCourse {
-            success
-        }
-    }
-`
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
 
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   graphql(closeCourseMutation, {
     props: ({ ownProps, mutate }) => ({
-      closeCourse: () => mutate({})
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
     })
   }),
   graphql(currentUserQuery)

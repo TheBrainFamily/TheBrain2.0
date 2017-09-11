@@ -5,6 +5,7 @@ import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 import facebookIds from '../configuration/facebook'
 import { UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
+import { renewTokenOnLogin } from '../configuration/common'
 
 const resolvers = {
   Query: {
@@ -61,14 +62,14 @@ const resolvers = {
     async ItemsWithFlashcard (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
-        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
+        return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails)
       }
       return []
     },
     async SessionCount (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
-        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails.isCasual)
+        return context.ItemsWithFlashcard.getSessionCount(context.user._id, userDetails)
       } else {
         return {}
       }
@@ -117,7 +118,7 @@ const resolvers = {
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       flashcards.forEach((flashcard) => {
         if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
-          context.Items.create(flashcard._id, userId, !!flashcard.isCasual)
+          context.Items.create(flashcard._id, userId, args.courseId, !!flashcard.isCasual)
         }
       })
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
@@ -131,17 +132,17 @@ const resolvers = {
       }
       return true
     },
-    async logInWithFacebook (root: ?string, args: { accessToken: string, userId: string }, context: Object) {
-      const {accessToken, userId} = args
-      const requestUrl = `https://graph.facebook.com/v2.10/${userId}?fields=name,email&access_token=${accessToken}`;
+    async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, context: Object) {
+      const {accessTokenFb, userIdFb} = args
+      const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`;
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
       if(parsedResponse.error) {
         console.error('FBLogin failed:', parsedResponse)
-        return null
+        throw new Error('Facebook token expired')
       }
-      if (parsedResponse.id === userId) {
-        let user = await context.Users.findByFacebookId(userId)
+      if (parsedResponse.id === userIdFb) {
+        let user = await context.Users.findByFacebookId(userIdFb)
         let idToUpdate = null
         if(user) {
           idToUpdate = user._id
@@ -153,14 +154,14 @@ const resolvers = {
             idToUpdate = user._id
           }
         }
-        user = await context.Users.updateFacebookUser(idToUpdate, userId, parsedResponse.name, parsedResponse.email)
+        user = await context.Users.updateFacebookUser(idToUpdate, userIdFb, parsedResponse.name, parsedResponse.email)
         context.req.logIn(user, (err) => { if (err) throw err })
         return user
       } else {
-        return null
+        throw new Error('Invalid facebook response')
       }
     },
-    async logIn (root: ?string, args: { username: string, password: string }, context: Object) {
+    async logIn (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) {
       try {
         const user = await context.Users.findByUsername(args.username)
 
@@ -170,6 +171,9 @@ const resolvers = {
 
         const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
+          if(args.saveToken) {
+            user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
+          }
           context.req.logIn(user, (err) => { if (err) throw err })
           return user
         }
@@ -178,11 +182,38 @@ const resolvers = {
         throw e
       }
     },
+    async logInWithToken (root: ?string, args: { userId: string, accessToken: string, deviceId: string }, context: Object) {
+      try {
+        const user = await context.Users.getById(args.userId)
+
+        if (!user) {
+          throw new Error('User not found')
+        }
+
+        const isMatch = await context.Users.findActiveToken(args.userId, args.accessToken, args.deviceId)
+        if (isMatch) {
+          if(renewTokenOnLogin) {
+            await context.Users.removeToken(args.userId, args.accessToken)
+            user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
+          } else {
+            user.currentAccessToken = args.accessToken
+          }
+          context.req.logIn(user, (err) => { if (err) throw err })
+          return user
+        }
+        throw new Error('Token expired')
+      } catch (e) {
+        throw e
+      }
+    },
     async logOut (root: ?string, args: ?Object, context: Object) {
       if (context.user) {
+        const userId = context.user._id
+        const accessToken = context.user.currentAccessToken
+        await context.Users.removeToken(userId, accessToken)
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null}
+      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null, accessToken: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
@@ -193,7 +224,7 @@ const resolvers = {
     async setUserIsCasual (root: ?string, args: { isCasual: boolean }, context: Object) {
       return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
     },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string }, context: Object) {
+    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) {
       try {
         const username = args.username.trim()
         if (!username || !args.password) {
@@ -213,7 +244,7 @@ const resolvers = {
         }
         await context.Users.updateUser(user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, {username, password: args.password}, context)
+        return resolvers.Mutation.logIn(root, {username, password: args.password, deviceId: args.deviceId, saveToken: args.saveToken}, context)
       } catch (e) {
         throw e
       }
@@ -226,7 +257,7 @@ const resolvers = {
       // TODO move this to repository
       await context.Items.update(args.itemId, newItem, context.user._id)
       const userDetails = await context.UserDetails.getById(context.user._id)
-      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails.isCasual)
+      return context.ItemsWithFlashcard.getItemsWithFlashcard(context.user._id, userDetails)
     },
     async confirmLevelUp (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.resetLevelUpFlag(context.user._id)
