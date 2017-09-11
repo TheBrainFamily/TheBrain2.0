@@ -81,7 +81,9 @@
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
     "flow": "flow",
     "standard": "standard",
-    "standardFix": "standard --fix"
+    "standardFix": "standard --fix",
+    "deploySetup": "./.scripts/deploySetup.sh",
+    "deploy": "./.scripts/deploy.sh"
   },
   "jest": {
     "collectCoverageFrom": [
