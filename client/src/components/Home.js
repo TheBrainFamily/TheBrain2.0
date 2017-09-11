@@ -21,7 +21,8 @@ class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      skipIntro: false
+      skipIntro: false,
+      loginInProgress: false
     }
   }
 
@@ -31,30 +32,46 @@ class Home extends React.Component {
     const userIdFb = localStorage.getItem('userIdFb')
     const accessToken = localStorage.getItem('accessToken')
     const accessTokenFb = localStorage.getItem('accessTokenFb')
-    localStorage.removeItem('accessToken')
 
-    if(userId && accessToken) {
-      console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId, deviceId })
-        .then(async () => {
-          const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
-          await localStorage.setItem('accessToken', newAccessToken)
+    if(this.state.loginInProgress) {
+      return
+    }
+
+    this.setState({
+      loginInProgress: true
+    }, async () => {
+      if(userId && accessToken) {
+        console.log('loguje z TOKEN', accessToken, userId)
+        await this.props.logInWithToken({ accessToken, userId, deviceId })
+          .then(async () => {
+            const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
+            await localStorage.setItem('accessToken', newAccessToken)
+            this.setState({ loginInProgess: false })
+          })
+          .catch(async () => {
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('userId')
+            this.setState({ loginInProgess: false }, () => {
+              this.props.dispatch(push('/login'))
+            })
+          })
+      }
+
+      if(userIdFb && accessTokenFb) {
+        console.log('loguje z FB ', accessTokenFb, userIdFb)
+        this.props.logInWithFacebook({ accessTokenFb, userIdFb })
+          .then(() => {
+            this.setState({ loginInProgess: false })
+          })
+          .catch(async () => {
+            localStorage.removeItem('accessTokenFb')
+            localStorage.removeItem('userIdFb')
+            this.setState({ loginInProgess: false }, () => {
+              this.props.dispatch(push('/login'))
+            })
         })
-        .catch(async () => {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('userId')
-        this.props.dispatch(push('/login'))
-      })
-    }
-
-    if(userIdFb && accessTokenFb) {
-      console.log('loguje z FB ', accessTokenFb, userIdFb)
-      await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
-        localStorage.removeItem('accessTokenFb')
-        localStorage.removeItem('userIdFb')
-        this.props.dispatch(push('/login'))
-      })
-    }
+      }
+    })
   }
 
   selectCourse = (courseId) => async () => {
