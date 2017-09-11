@@ -2,7 +2,6 @@
 import * as MongoClient from 'mongodb'
 
 const dbURI = 'mongodb://localhost/thebrain'
-const productionDBURI = 'mongodb://localhost/thebrain'
 const testingDBURI = 'mongodb://localhost/testing'
 let resolvedDBURI = ''
 
@@ -15,7 +14,7 @@ switch (process.env.NODE_ENV) {
     resolvedDBURI = testingDBURI
     break
   case 'PRODUCTION':
-    resolvedDBURI = productionDBURI
+    resolvedDBURI = process.env.MONGOURL
     break
   case 'DEVELOPMENT':
   default:
