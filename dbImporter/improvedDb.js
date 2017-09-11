@@ -1,5 +1,7 @@
 var chemistry = db.courses.insertOne({ name: 'Chemistry', color: '#662d91' });
 var biology = db.courses.insertOne({ name: 'Biology', color: '#62c46c' });
+var computerScience = db.courses.insertOne({ name: 'Computer Science', color: '#000000', isDisabled: true });
+var history = db.courses.insertOne({ name: 'History', color: '#000000', isDisabled: true });
 
 db.lessons.update({}, {$set: {courseId: chemistry.insertedId.valueOf()}}, {multi: true});
 
