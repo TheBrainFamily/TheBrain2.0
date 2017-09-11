@@ -131,7 +131,7 @@ class Home extends React.Component {
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse}
-                          onClickArgument={course._id}>
+                          onClickArgument={course._id} isDisabled={course.isDisabled}>
                 <div>{course.name}</div>
               </CourseIcon>
           })}
