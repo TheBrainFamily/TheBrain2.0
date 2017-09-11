@@ -67,7 +67,11 @@ const whitelist = [
   'http://localhost:3000',
   'http://localhost:3040',
   'http://new.thebrain.pro',
-  'https://new.thebrain.pro'
+  'https://new.thebrain.pro',
+  'http://sleepy-stream-93575.herokuapp.com',
+  'https://sleepy-stream-93575.herokuapp.com',
+  'https://stark-badlands-16845.herokuapp.com',
+  'https://stark-badlands-16845.herokuapp.com',
 ]
 
 const corsOptions = {
