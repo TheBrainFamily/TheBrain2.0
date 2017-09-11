@@ -19,7 +19,8 @@ export const typeDefs = gql`
     type Course {
         _id: String,
         name: String,
-        color: String
+        color: String,
+        isDisabled: Boolean
     }
     type Lesson {
         _id: String,
