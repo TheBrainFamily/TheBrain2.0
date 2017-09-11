@@ -26,9 +26,8 @@
     "react-youtube": "^7.3.0",
     "resolve-pathname": "^2.0.2",
     "sweetalert2": "^6.6.6",
-    "warning": "^3.0.0"
-  },
-  "devDependencies": {
+    "warning": "^3.0.0",
+
     "autoprefixer": "6.7.2",
     "babel-core": "6.22.1",
     "babel-eslint": "^7.2.3",
@@ -69,6 +68,9 @@
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
     "whatwg-fetch": "2.0.2"
+  },
+  "devDependencies": {
+
   },
   "scripts": {
     "start": "NODE_PATH='src' node scripts/start.js",
