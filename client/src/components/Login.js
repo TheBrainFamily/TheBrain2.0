@@ -56,7 +56,6 @@ class Login extends React.Component {
         this.redirectAfterLogin()
       })
       .catch((data) => {
-      console.log(data)
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
