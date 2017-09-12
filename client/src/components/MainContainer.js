@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
-import { Route, Redirect } from 'react-router'
+import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import { connect } from 'react-redux'
 
@@ -51,23 +51,25 @@ class MainContainer extends React.Component {
             backgroundColor: courseColor
           }}>
           <Header />
-          <Route exact key='Home' path='/' component={Home} />
-          <Route exact key='login' path='/login' component={Login} />
-          <Route exact key='signup' path='/signup' component={Login} />
-          <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
-          <Route key='Lecture' path='/lecture/:courseId' component={Lecture}/>
-          <Route exact key='questions' path='/questions' component={Questions}/>
-          <Route key='Course' path='/course/:courseId' component={Course}/>
-          <Route exact key='contact' path='/contact' component={Contact} />
-          <Route exact key='congratulations' path='/congratulations' component={Congratulations} />
-          {
-            currentUser &&
-            <div>
-              <Route exact key='profile' path='/profile' component={Profile} />
-              <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
-            </div>
-          }
-          <Redirect from='*' to='/' />
+          <Switch>
+            <Route exact key='Home' path='/' component={Home} />
+            <Route exact key='login' path='/login' component={Login} />
+            <Route exact key='signup' path='/signup' component={Login} />
+            <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
+            <Route key='Lecture' path='/lecture/:courseId' component={Lecture}/>
+            <Route exact key='questions' path='/questions' component={Questions}/>
+            <Route key='Course' path='/course/:courseId' component={Course}/>
+            <Route exact key='contact' path='/contact' component={Contact} />
+            <Route exact key='congratulations' path='/congratulations' component={Congratulations} />
+            {
+              currentUser &&
+              <div>
+                <Route exact key='profile' path='/profile' component={Profile} />
+                <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
+              </div>
+            }
+            <Redirect to='/' />
+          </Switch>
         </div>
       </Router>)
   }
