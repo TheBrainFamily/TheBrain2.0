@@ -82,7 +82,7 @@ export default class Card extends React.Component {
         </View>
           : <Image
             style={{ width: 21, height: 19, marginTop: 5, marginRight: 5 }}
-            source={require('../../client/src/img/exclamation.png')}
+            source={require('../images/exclamation.png')}
           />}
       </TouchableOpacity>
 
