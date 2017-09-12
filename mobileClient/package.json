@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --simulator='iPhone 5' --no-packager\"",
+    "startBig": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-ios --simulator='iPhone 7 Plus' --no-packager\"",
     "startAndroid": "concurrently \"./node_modules/react-native/packager/packager.sh --projectRoots `pwd`,`pwd`/../client/\" \"react-native run-android --no-packager\"",
     "test": "jest",
     "flow": "flow",

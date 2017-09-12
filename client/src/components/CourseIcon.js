@@ -50,7 +50,7 @@ export default class CourseIcon extends React.Component {
       imageStyle.cursor = 'default'
       divClass = 'course-icon-disabled'
     }
-    
+
     return (
       <div style={styleBackground}
            className={divClass}

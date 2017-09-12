@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Image } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import SvgUri from 'react-native-svg-uri'
@@ -41,12 +41,18 @@ class Course extends React.Component {
         <Lecture />
         <View style={{position: 'absolute', bottom: 25, alignSelf: 'center'}}>
           <CircleButton radius={45} withStaticCircles>
-            <SvgUri
-              width={logoSize}
-              height={logoSize}
-              source={courseLogo.file}
-              style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-            />
+            { courseLogo.svg ?
+              <SvgUri
+                width={logoSize}
+                height={logoSize}
+                source={courseLogo.file}
+                style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+              /> :
+              <Image
+                source={courseLogo.file}
+                style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+              />
+            }
           </CircleButton>
         </View>
       </View>
