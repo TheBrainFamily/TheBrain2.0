@@ -136,6 +136,9 @@ class Home extends React.Component {
               </CourseIcon>
           })}
         </ul>}
+        <div className='oldBrainLinkContainer'>
+          Looking for the previous version of TheBrain? Click <a href="https://legacy.thebrain.pro">here</a>
+        </div>
       </FlexibleContentWrapper>
     )
   }
