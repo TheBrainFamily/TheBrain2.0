@@ -8,7 +8,7 @@ var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
-
+var findCacheDir = require('find-cache-dir');
 
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -122,9 +122,16 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: paths.appSrc,
+        exclude: /.*node_modules\/((?!thebrain-shared-module).)*$/,
         loader: 'babel',
-        
+        query: {
+          cacheDirectory: findCacheDir({
+            name: 'react-scripts'
+          }),
+          plugins: [
+            'react-hot-loader/babel'
+          ]
+        }
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.
