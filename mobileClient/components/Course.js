@@ -10,7 +10,7 @@ import courseLogos from '../helpers/courseLogos'
 import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
-import currentItemsExistQuery from '../../client/shared/graphql/queries/currentItemsExist'
+import currentItemsExistQuery from '../shared/graphql/queries/currentItemsExist'
 
 class Course extends React.Component {
   componentWillReceiveProps (nextProps) {

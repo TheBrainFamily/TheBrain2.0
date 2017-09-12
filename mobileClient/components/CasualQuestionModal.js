@@ -4,8 +4,8 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import update from 'immutability-helper'
 import styles from '../styles/styles'
-import currentItemsQuery from '../../client/shared/graphql/queries/itemsWithFlashcard'
-import setUserIsCasualMutation from '../../client/shared/graphql/mutations/setUserIsCasual'
+import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
+import setUserIsCasualMutation from '../shared/graphql/mutations/setUserIsCasual'
 
 class CasualQuestionModal extends React.Component {
   constructor (props) {
