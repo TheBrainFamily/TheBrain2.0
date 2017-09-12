@@ -9,7 +9,7 @@ import SwipeBall from './SwipeBall'
 import LevelUpWrapper from './LevelUpWrapper'
 import Tutorial from './Tutorial'
 import CasualQuestionModal from './CasualQuestionModal'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 import styles from '../styles/styles'

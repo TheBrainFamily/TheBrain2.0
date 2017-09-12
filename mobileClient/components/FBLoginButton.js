@@ -5,8 +5,8 @@ import update from 'immutability-helper'
 import { withApollo, graphql, compose } from 'react-apollo'
 import { AsyncStorage, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import logInWithFacebook from '../../client/shared/graphql/mutations/logInWithFacebook'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import logInWithFacebook from '../shared/graphql/mutations/logInWithFacebook'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import * as courseActions from '../actions/CourseActions'
 
 class FBLoginButton extends React.Component {

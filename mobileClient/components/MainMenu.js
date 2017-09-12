@@ -15,11 +15,11 @@ import Separator from './Separator'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
-import levelConfig from '../../client/shared/helpers/levelConfig'
+import levelConfig from '../shared/helpers/levelConfig'
 
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import currentUserQuery from '../shared/graphql/queries/currentUser'
+import sessionCountQuery from '../shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 
 const MenuButton = (props) => (
   <TouchableHighlight
