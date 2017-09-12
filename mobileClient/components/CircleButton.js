@@ -12,6 +12,9 @@ export default class CircleButton extends React.Component {
   }
 
   onPress = () => {
+    if(this.props.isDisabled) {
+      return
+    }
     if (this.props.withStaticCircles) {
       return
     }
@@ -68,8 +71,10 @@ export default class CircleButton extends React.Component {
       height: innerRadius * 2 + maxSmallCircleRadius,
     }
 
+    const componentOpacity = this.props.isDisabled ? 0.5 : 1
+
     return (
-      <TouchableWithoutFeedback onPress={this.onPress} style={{marginTop: 20}}>
+      <TouchableWithoutFeedback onPress={this.onPress} style={{opacity: componentOpacity}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <View style={{
             backgroundColor: this.props.color,
@@ -78,9 +83,10 @@ export default class CircleButton extends React.Component {
             height: this.props.radius * 2,
             borderRadius: this.props.radius,
             borderWidth,
-            borderColor: 'white'
+            borderColor: 'white',
+            opacity: componentOpacity
           }}>
-            <View style={{width: '100%', height: '100%', position: 'absolute', justifyContent: 'center'}}>
+            <View style={{width: '100%', height: '100%', position: 'absolute', justifyContent: 'center', opacity: componentOpacity}}>
               {this.props.children}
             </View>
           </View>

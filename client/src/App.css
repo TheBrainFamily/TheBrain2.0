@@ -234,6 +234,19 @@ a {
     margin-top: 10px;
 }
 
+.course-icon-disabled {
+    display: inline-block;
+    margin: 20px;
+}
+
+.course-icon-disabled img {
+    display: inline-block;
+}
+
+.course-icon-disabled div {
+    margin-top: 10px;
+}
+
 /***********************
 FLASHCARDS
 ***********************/
