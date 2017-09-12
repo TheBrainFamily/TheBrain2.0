@@ -247,6 +247,13 @@ a {
     margin-top: 10px;
 }
 
+.oldBrainLinkContainer {
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+
 /***********************
 FLASHCARDS
 ***********************/
