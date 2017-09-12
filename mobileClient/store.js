@@ -6,8 +6,12 @@ import reducers from './reducers'
 import devTools from 'remote-redux-devtools'
 
 import config from './.config-dev'
-
-const graphqlUri = config.graphqlUri || 'http://localhost:8080/graphql'
+let graphqlUri = ""
+if (__DEV__) {
+  graphqlUri = config.graphqlUri || 'http://localhost:8080/graphql'
+} else {
+  graphqlUri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
+}
 
 const networkInterface = createNetworkInterface({
   uri: graphqlUri,
