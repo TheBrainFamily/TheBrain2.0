@@ -3,7 +3,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert, Image } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import SvgUri from 'react-native-svg-uri'
 import DeviceInfo from 'react-native-device-info'
@@ -127,7 +127,7 @@ class Home extends React.Component {
   animateCourseSelector = (selectedCourseId) => {
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
       const scale = 0.75
-      const desiredBottomYOffset = 25
+      const desiredBottomYOffset = 10
       const newSizeY = height * scale
       const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
       let iPhoneOffset = 0
@@ -209,42 +209,53 @@ class Home extends React.Component {
           <Animatable.View ref='courseSelectorTitle'>
             <Text
               style={[styles.textDefault, {
-                marginBottom: 30,
+                marginBottom: 5,
                 fontSize: 24,
                 fontFamily: 'Kalam-Regular',
-                marginTop: '20%'
+                marginTop: '10%'
               }]}>
               Choose a course:
             </Text>
           </Animatable.View>
           {!this.props.courses.loading &&
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
               const logoSize = courseLogo.scale * 80
+              const onPressAction = course.isDisabled ? () => {} : () => { this.selectCourse(course) }
+              const courseSelectorDisabler = course.isDisabled ? () => {} : this.disableCourseSelector
+              const courseColor = course.isDisabled ? 'transparent' : course.color
+              const textOpacity = course.isDisabled ? 0.5 : 1
               return (
-                <Animatable.View key={course._id} style={{ zIndex: 100, marginHorizontal: '2%' }}
+                <Animatable.View key={course._id} style={{ zIndex: 100, width: "45%"}}
                                  ref={`${course._id}courseSelector`}>
                   <View ref={`${course._id}courseSelectorContainer`}
                         onLayout={() => {}}>
                     <CircleButton
-                      color={course.color}
-                      onPress={() => { this.selectCourse(course) }}
-                      disableCourseSelector={this.disableCourseSelector}
+                      color={courseColor}
+                      onPress={onPressAction}
+                      disableCourseSelector={courseSelectorDisabler}
                       courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
+                      isDisabled={course.isDisabled}
                     >
-                      <SvgUri
-                        width={logoSize}
-                        height={logoSize}
-                        source={courseLogo.file}
-                        style={{ width: logoSize, height: logoSize, alignSelf: 'center' }}
-                      />
+                      { courseLogo.svg ?
+                        <SvgUri
+                          width={logoSize}
+                          height={logoSize}
+                          source={courseLogo.file}
+                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+                        /> :
+                        <Image
+                          source={courseLogo.file}
+                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
+                        />
+                      }
                     </CircleButton>
                   </View>
                   <View style={{
-                    marginHorizontal: 20
+                    marginBottom: 20
                   }}>
-                    <Animatable.Text style={style.courseTitle}
+                    <Animatable.Text style={[style.courseTitle, { opacity: textOpacity }]}
                                      ref={`${course._id}courseSelectorText`}
                     >
                       {course.name}
@@ -377,10 +388,9 @@ export default compose(
 const style = StyleSheet.create({
   courseTitle: {
     color: 'white',
-    marginTop: 15,
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Exo2-Bold'
+    fontFamily: 'Exo2-Bold',
   },
   smallCircle: {
     position: 'absolute',
