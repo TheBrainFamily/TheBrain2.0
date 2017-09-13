@@ -18,12 +18,13 @@ export default class Intro extends React.Component {
     const videoHeight = 200
 
     return (
-      <PageContainer>
+      <PageContainer dontUseKeyboarAware={true}>
         <View style={{
-          height: '100%',
+          flex: 1,
           backgroundColor: '#9050ba',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
-          <View style={{marginVertical: 25}} />
           <Text style={styles.textDefault}>
             Remember for life, not for exams.
           </Text>
@@ -31,8 +32,8 @@ export default class Intro extends React.Component {
             Learn smart and save your time.
           </Text>
 
-          <View style={{ marginVertical: 50, height: videoHeight, width: '100%' }}>
-            <Video height={videoHeight} videoId={'vvYTsbp2CRw'} />
+          <View style={{ marginVertical: 30, height: videoHeight, width: '100%' }}>
+            <Video height={videoHeight} videoId={'vvYTsbp2CRw'}/>
           </View>
 
           <TouchableOpacity onPress={this.skipIntro}>
