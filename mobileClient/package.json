@@ -26,6 +26,7 @@
     "react-native-emoji": "^1.2.0",
     "react-native-facebook-login": "^1.5.0",
     "react-native-hamburger": "^0.0.2",
+    "react-native-keyboard-aware-scroll-view": "0.3.0",
     "react-native-linear-gradient": "^2.0.0",
     "react-native-material-textfield": "^0.6.5",
     "react-native-orientation": "^2.1.0",

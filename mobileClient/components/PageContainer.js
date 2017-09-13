@@ -1,8 +1,10 @@
 import React from 'react'
+
 import { View, BackAndroid } from 'react-native'
 import Header from './Header'
 import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 class PageContainer extends React.Component {
   constructor (props) {
@@ -37,13 +39,18 @@ class PageContainer extends React.Component {
 
   render () {
     return (
-      <View style={{
+      <KeyboardAwareScrollView style={{
         height: '100%',
         backgroundColor: 'white'
       }}>
-        <Header toggleMainMenu={this.toggleMainMenu}/>
-        {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
-      </View>
+        <View style={{
+          height: '100%',
+          backgroundColor: 'white'
+        }}>
+          <Header toggleMainMenu={this.toggleMainMenu}/>
+          {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
+        </View>
+      </KeyboardAwareScrollView>
     )
   }
 }
