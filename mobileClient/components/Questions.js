@@ -29,10 +29,10 @@ import appStyle from '../styles/appStyle'
 
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-import currentItemsQuery from '../../client/shared/graphql/queries/itemsWithFlashcard'
-import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
-import closeCourseMutation from '../../client/shared/graphql/mutations/closeCourse'
+import currentUserQuery from '../shared/graphql/queries/currentUser'
+import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
+import sessionCountQuery from '../shared/graphql/queries/sessionCount'
+import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 
 class Questions extends React.Component {
   constructor (props) {

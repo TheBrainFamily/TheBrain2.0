@@ -29,7 +29,7 @@
     "react-native-linear-gradient": "^2.0.0",
     "react-native-material-textfield": "^0.6.5",
     "react-native-orientation": "^2.1.0",
-    "react-native-svg-uri": "^1.2.0",
+    "react-native-svg-uri": "1.2.0",
     "react-native-youtube": "^1.0.0-beta.2",
     "react-redux": "^5.0.4",
     "react-router-native": "^4.0.0",

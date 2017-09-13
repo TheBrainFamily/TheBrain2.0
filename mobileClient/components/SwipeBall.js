@@ -9,9 +9,9 @@ import styles from '../styles/styles'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
 
-import sessionCountQuery from '../../client/shared/graphql/queries/sessionCount'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
-import submitEval from '../../client/shared/graphql/mutations/processEvaluation'
+import sessionCountQuery from '../shared/graphql/queries/sessionCount'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import submitEval from '../shared/graphql/mutations/processEvaluation'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {

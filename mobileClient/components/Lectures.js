@@ -7,8 +7,8 @@ import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 import Video from './Video'
 
-import lessonsQuery from '../../client/shared/graphql/queries/lessons'
-import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
+import lessonsQuery from '../shared/graphql/queries/lessons'
+import currentLessonQuery from '../shared/graphql/queries/currentLesson'
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
