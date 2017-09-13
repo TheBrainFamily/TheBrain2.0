@@ -83,8 +83,8 @@ class Profile extends React.Component {
 
   render () {
     const { isValid } = this.state
-    const isGuest = this.props.currentUser ? !this.props.currentUser.CurrentUser.activated : true
-    const isFacebookUser = this.props.currentUser ? this.props.currentUser.CurrentUser.facebookId : false
+    const isGuest = this.props.currentUser && this.props.currentUser.CurrentUser ? !this.props.currentUser.CurrentUser.activated : true
+    const isFacebookUser = this.props.currentUser && this.props.currentUser.CurrentUser ? this.props.currentUser.CurrentUser.facebookId : false
 
     return (
       <PageContainer>
