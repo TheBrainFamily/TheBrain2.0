@@ -20,6 +20,7 @@ import levelConfig from '../shared/helpers/levelConfig'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 
 const MenuButton = (props) => (
   <TouchableHighlight
@@ -176,7 +177,7 @@ class MainMenu extends React.Component {
               <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
               <Separator />
               {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
-                                                       onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse} /> : null}
+                                                       onPress={this.closeCourse} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
               {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
               {/*<Separator />*/}
@@ -230,6 +231,21 @@ export default compose(
   withApollo,
   withRouter,
   connect(mapStateToProps),
+  graphql(closeCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
+    })
+  }),
   graphql(logOutQuery, {
     props: ({ ownProps, mutate }) => ({
       logout: () => mutate({
