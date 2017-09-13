@@ -118,7 +118,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
+            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
