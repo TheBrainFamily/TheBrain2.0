@@ -31,35 +31,50 @@ class SwipeBall extends React.Component {
       isEvaluated: false
     }
 
+    const evaluateDragDirection = (gesture) => {
+      const dragLen = getDragLength(gesture.dx, gesture.dy)
+      if (dragLen > 60) {
+        const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
+        const targetPosition = { x: 0, y: 0 }
+        if (isHorizontalMove) {
+          if (dragLen < 80) {
+            return null
+          }
+          targetPosition.x = 140 * Math.sign(gesture.dx)
+        } else {
+          targetPosition.y = 110 * Math.sign(gesture.dy)
+        }
+
+        return { targetPosition, dragDirection: getSwipeDirection(this.state.pan.x._value, this.state.pan.y._value) }
+      }
+      return null
+    }
+
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (e, gesture) => {
         if (this.state.isEvaluated) return
 
         const delta = { dx: 0, dy: 0 }
-        const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
-        if (isHorizontalMove) {
-          delta.dx = this.state.pan.x
-        } else {
-          delta.dy = this.state.pan.y
-        }
+        delta.dx = this.state.pan.x
+        delta.dy = this.state.pan.y
         Animated.event([null, delta])(e, gesture)
+
+        const dragData = evaluateDragDirection(gesture)
+        if (dragData) {
+          const { dragDirection } = dragData
+          this.setState({ ballColors: ballColors[dragDirection] })
+        } else {
+          this.setState({ ballColors: defaultBallColors })
+        }
       },
       onPanResponderRelease: (e, gesture) => {
         if (this.state.isEvaluated) return
 
-        const dragLen = getDragLength(gesture.dx, gesture.dy)
-        if (dragLen > 40) {
-          const isHorizontalMove = Math.abs(gesture.dx) > Math.abs(gesture.dy)
-          const targetPosition = { x: 0, y: 0 }
-          if (isHorizontalMove) {
-            targetPosition.x = 140 * Math.sign(gesture.dx)
-          } else {
-            targetPosition.y = 110 * Math.sign(gesture.dy)
-          }
-
-          const direction = getSwipeDirection(this.state.pan.x._value, this.state.pan.y._value)
-          this.setState({ ballColors: ballColors[direction], isEvaluated: true })
+        const dragData = evaluateDragDirection(gesture)
+        if (dragData) {
+          const { targetPosition, dragDirection } = dragData
+          this.setState({ ballColors: ballColors[dragDirection], isEvaluated: true })
 
           Animated.spring(this.state.pan, {
             toValue: targetPosition,
@@ -101,7 +116,7 @@ class SwipeBall extends React.Component {
       <View style={styles.draggableContainer}>
         <Animated.View
           {...this.panResponder.panHandlers}
-          style={[ styles.answerSwipeBall, this.state.pan.getLayout() ]}
+          style={[styles.answerSwipeBall, this.state.pan.getLayout()]}
         >
           <LinearGradient
             style={styles.answerSwipeBall}
@@ -114,14 +129,14 @@ class SwipeBall extends React.Component {
 }
 
 export default graphql(submitEval, {
-  props: ({ownProps, mutate}) => ({
-    submit: ({itemId, evaluation}) => mutate({
+  props: ({ ownProps, mutate }) => ({
+    submit: ({ itemId, evaluation }) => mutate({
       variables: {
         itemId,
         evaluation
       },
       updateQueries: {
-        CurrentItems: (prev, {mutationResult}) => {
+        CurrentItems: (prev, { mutationResult }) => {
           return update(prev, {
             ItemsWithFlashcard: {
               $set: mutationResult.data.processEvaluation
@@ -132,9 +147,9 @@ export default graphql(submitEval, {
       refetchQueries: [{
         query: sessionCountQuery
       },
-      {
-        query: userDetailsQuery
-      }]
+        {
+          query: userDetailsQuery
+        }]
     })
   })
 })(connect()(SwipeBall))
