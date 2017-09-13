@@ -196,7 +196,7 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished && <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
-        {this.props.course.selectedCourse ? <CourseHeader style={{ position: 'absolute' }} closeCourse={this.closeCourse}
+        {this.props.course.selectedCourse ? <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }} closeCourse={this.closeCourse}
                                           toggleMainMenu={this.toggleMainMenu}>
           <CourseProgressBar />
         </CourseHeader> : <View style={style.courseHeader}/>}
