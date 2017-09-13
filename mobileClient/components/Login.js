@@ -12,8 +12,8 @@ import FBLoginButton from './FBLoginButton'
 
 import styles from '../styles/styles'
 
-import currentUserQuery from '../../client/shared/graphql/queries/currentUser'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import currentUserQuery from '../shared/graphql/queries/currentUser'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   constructor (props) {
