@@ -15,11 +15,12 @@ class Lectures extends React.Component {
     if(!item) {
       return
     }
+    const isWatched = !this.props.currentLesson.Lesson || item.position < this.props.currentLesson.Lesson.position
     return (
       <View style={{ width: '50%',height: 160, paddingHorizontal: 10, paddingVertical:3 }} key={item._id}>
         <View style ={{ height: '75%', width:'100%'}}>
           <Video videoId={item.youtubeId} height='100%'/>
-          <View pointerEvents="none" style={item.position >= this.props.currentLesson.Lesson.position ? style.overlay : {}} />
+          <View pointerEvents="none" style={isWatched ? {} : style.overlay} />
         </View>
         <Text style={style.title}>{item.description}</Text>
       </View>
@@ -32,7 +33,6 @@ class Lectures extends React.Component {
     }
     return (
       <PageContainer>
-
         <PageTitle text='LECTURES LIST' />
         <FlatList
           data={this.props.lessons.Lessons}
@@ -41,6 +41,7 @@ class Lectures extends React.Component {
             paddingHorizontal: 10
           }}
           numColumns={2}
+          keyExtractor={(item, index) => item._id}
         />
       </PageContainer>
     )
