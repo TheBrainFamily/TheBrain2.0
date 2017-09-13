@@ -37,21 +37,27 @@ class PageContainer extends React.Component {
     }
   }
 
-  render () {
-    return (
-      <KeyboardAwareScrollView style={{
+  renderContainer = () => (
+    <View style={{ height: '100%', backgroundColor: 'white' }}>
+      <Header toggleMainMenu={this.toggleMainMenu}/>
+      {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
+    </View>)
+
+  renderKeyboardAwareContainer = () => (
+    <KeyboardAwareScrollView style={{
+      height: '100%',
+      backgroundColor: 'white'
+    }}>
+      <View style={{
         height: '100%',
-        backgroundColor: 'white'
       }}>
-        <View style={{
-          height: '100%',
-          backgroundColor: 'white'
-        }}>
-          <Header toggleMainMenu={this.toggleMainMenu}/>
-          {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
-        </View>
-      </KeyboardAwareScrollView>
-    )
+        <Header toggleMainMenu={this.toggleMainMenu}/>
+        {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
+      </View>
+    </KeyboardAwareScrollView>)
+
+  render () {
+    return this.props.dontUseKeyboarAware ? this.renderContainer() : this.renderKeyboardAwareContainer()
   }
 }
 

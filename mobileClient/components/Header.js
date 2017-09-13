@@ -19,8 +19,8 @@ class Header extends React.Component {
   }
 
   componentDidUpdate = () => {
-    this.state.topPosition.setValue(0)
     if (this.props.hide) {
+      // this.state.topPosition.setValue(0)
       Animated.timing(this.state.topPosition, {
         toValue: -120,
         duration: 1000
@@ -29,6 +29,7 @@ class Header extends React.Component {
   }
 
   goHome = () => {
+    this.state.topPosition.setValue(0)
     if (this.state.active) this.toggleMenu()
     this.props.history.push('/questions')
   }
