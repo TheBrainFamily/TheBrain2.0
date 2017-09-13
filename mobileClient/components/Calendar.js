@@ -16,7 +16,7 @@ class Calendar extends React.Component {
     const year = currentDate.getFullYear()
 
     return (
-      <PageContainer >
+      <PageContainer dontUseKeyboarAware={true}>
 
         <PageTitle text={`REVIEWS - ${month} ${year}`}/>
 
