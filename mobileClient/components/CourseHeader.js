@@ -22,6 +22,12 @@ class CourseHeader extends React.Component {
     this.props.toggleMainMenu()
   }
 
+  closeCourse = () => {
+    if ( this.props.isExitAnimationFinished ) {
+      this.props.closeCourse()
+    }
+  }
+
   render () {
     if (!this.props.currentCourse) {
       return <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]} />
@@ -30,7 +36,7 @@ class CourseHeader extends React.Component {
       <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={this.props.closeCourse}>
+            <TouchableOpacity onPress={this.closeCourse}>
               <SvgUri width='100' height='49' source={require('../images/logo.svg')}/>
             </TouchableOpacity>
             <View style={styles.headerBorder}>
