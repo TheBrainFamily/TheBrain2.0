@@ -12,10 +12,10 @@ import LevelUpWrapper from './LevelUpWrapper'
 
 import styles from '../styles/styles'
 
-import lessonWatchedMutationParams from '../../client/shared/graphql/mutations/lessonWatchedMutationParams'
-import clearNotCasualItems from '../../client/shared/graphql/mutations/clearNotCasualItems'
-import lessonWatchedMutationSchema from '../../client/shared/graphql/queries/lessonWatchedMutationSchema'
-import currentLessonQuery from '../../client/shared/graphql/queries/currentLesson'
+import lessonWatchedMutationParams from '../shared/graphql/mutations/lessonWatchedMutationParams'
+import clearNotCasualItems from '../shared/graphql/mutations/clearNotCasualItems'
+import lessonWatchedMutationSchema from '../shared/graphql/queries/lessonWatchedMutationSchema'
+import currentLessonQuery from '../shared/graphql/queries/currentLesson'
 
 class Lecture extends React.Component {
   state = {

@@ -4,7 +4,7 @@ import styles from '../styles/styles'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
-import userDetailsQuery from '../../client/shared/graphql/queries/userDetails'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 
 class Tutorial extends React.Component {
   constructor (props) {
