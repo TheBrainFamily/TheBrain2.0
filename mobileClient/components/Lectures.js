@@ -77,6 +77,13 @@ export default compose(
   graphql(currentLessonQuery, {
     name: 'currentLesson',
     options: (ownProps) => {
+      if(!ownProps.selectedCourse) {
+        return({
+          variables: {
+            courseId: ''
+          }
+        })
+      }
       const courseId = ownProps.selectedCourse._id
       return ({
         variables: { courseId }
@@ -86,6 +93,13 @@ export default compose(
   graphql(lessonsQuery, {
     name: 'lessons',
     options: (ownProps) => {
+      if(!ownProps.selectedCourse) {
+        return({
+          variables: {
+            courseId: ''
+          }
+        })
+      }
       const courseId = ownProps.selectedCourse._id
       return {
         variables: { courseId }
