@@ -65,6 +65,7 @@ class MainMenu extends React.Component {
         })
         this.props.client.resetStore()
         this.props.logoutAction && this.props.logoutAction()
+        this.props.history.push('/')
       })
   }
 

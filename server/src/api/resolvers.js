@@ -31,6 +31,9 @@ const resolvers = {
       return context.Courses.getCourses()
     },
     async Reviews (root: ?string, args: ?Object, context: Object) {
+      if(!context.user) {
+        return []
+      }
       const userDetails = await context.UserDetails.getById(context.user._id)
       return context.Items.getReviews(context.user._id, userDetails.isCasual)
     },
