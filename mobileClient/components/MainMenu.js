@@ -255,14 +255,8 @@ export default compose(
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   })
 )(MainMenu)

@@ -14,6 +14,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "Orientation.h"
 
 @implementation AppDelegate
 
@@ -37,6 +38,11 @@
   // return YES;
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                       didFinishLaunchingWithOptions:launchOptions];
+}
+
+// react-native-orientation 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+  return [Orientation getOrientation];
 }
 
 // Facebook SDK
