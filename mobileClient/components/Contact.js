@@ -8,7 +8,7 @@ import PageTitle from './PageTitle'
 class Contact extends React.Component {
   render () {
     return (
-      <PageContainer>
+      <PageContainer dontUseKeyboarAware={true}>
 
         <PageTitle text='CONTACT' />
 
