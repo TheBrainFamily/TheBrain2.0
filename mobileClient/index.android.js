@@ -1,6 +1,7 @@
 // @flow
 
 import React, {Component} from 'react'
+import Orientation from 'react-native-orientation';
 import {ApolloProvider} from 'react-apollo'
 import {
   AppRegistry,
@@ -26,6 +27,11 @@ import Contact from './components/Contact'
 import store, { client } from './store'
 
 export default class App extends Component {
+
+  componentDidMount() {
+    Orientation.lockToPortrait()
+  }
+
   render () {
     return (
       <ApolloProvider client={client} store={store}>

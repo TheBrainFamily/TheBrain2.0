@@ -29,7 +29,7 @@ class Congratulations extends React.Component {
     const levelCap = levelConfig.levelCap
     const level = Math.min(userLevel, levelCap)
     return (
-      <PageContainer>
+      <PageContainer dontUseKeyboarAware={true}>
         <View style={{ backgroundColor: '#6905ea', height: '100%', paddingTop: 10 }}>
           <Text style={[styles.textDefault, { fontSize: 26 }]}>
             Congratulations
