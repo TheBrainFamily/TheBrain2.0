@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import SvgUri from 'react-native-svg-uri'
 import * as Animatable from 'react-native-animatable'
 
 import Card from './Card'
@@ -14,7 +13,8 @@ import {
   Dimensions,
   Animated,
   View,
-  Text
+  Text,
+  Image,
 } from 'react-native'
 
 import styles from '../styles/styles'
@@ -145,7 +145,7 @@ class Flashcard extends React.Component {
                     height: '100%',
                     backgroundColor: 'white'
                   }}><Text /></View>
-                  <SvgUri width='200' height='22.5' source={require('../images/pageCorner.svg')}/>
+                  <Image style={{ width:200, height:22.5 }} source={require('../images/pageCorner.png')}/>
                 </View>
               </View>
             </TouchableWithoutFeedback>
