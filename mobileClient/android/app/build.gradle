@@ -85,7 +85,7 @@ def enableProguardInReleaseBuilds = false
 android {
     signingConfigs {
         config {
-            keyAlias 'thebrain'
+            keyAlias 'thebrain2'
             keyPassword '43KurwaCywil21'
             storeFile file('/tmp/thebrain2.keystore')
             storePassword '43KurwaCywil21'
@@ -94,7 +94,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId 'com.thebrain.pro'
+        applicationId 'com.thebrain'
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -142,6 +142,7 @@ dependencies {
     compile project(':react-native-linear-gradient')
     compile project(':react-native-facebook-login')
     compile project(':react-native-youtube')
+    compile project(':react-native-orientation')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.facebook.react:react-native:+'
