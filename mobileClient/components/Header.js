@@ -1,11 +1,9 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Animated, TouchableOpacity, View, Platform} from 'react-native'
-import SvgUri from 'react-native-svg-uri'
-
+import { Animated, TouchableOpacity, View, Platform, Image } from 'react-native'
 import Hamburger from 'react-native-hamburger'
 
-import logoBig from '../images/logoBig.svg'
+import logoBig from '../images/logoBig.png'
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 
@@ -55,12 +53,10 @@ class Header extends React.Component {
       <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle]}>
         <View style={headerStyle}>
           <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
-            <SvgUri
-              style={styles.headerLogo}
-              width='280'
-              height='70'
-              //source={logoBig}
-              svgXmlData={logoBig.default}
+            <Image
+              style={[styles.headerLogo, { width: 180, marginLeft: 20 }]}
+              resizeMode={'contain'}
+              source={logoBig}
             />
           </TouchableOpacity>
 
