@@ -1,4 +1,4 @@
-package com.mobileclient;
+package com.thebrain.pro;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
