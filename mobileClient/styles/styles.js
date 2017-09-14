@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
     margin: 0,
     paddingTop: 20,
     paddingBottom: 27,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    width: '100%',
   },
   headerWithShadow: {
     shadowColor: '#000',
