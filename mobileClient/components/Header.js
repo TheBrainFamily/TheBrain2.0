@@ -59,7 +59,8 @@ class Header extends React.Component {
               style={styles.headerLogo}
               width='280'
               height='70'
-              source={logoBig}
+              //source={logoBig}
+              svgXmlData={logoBig.default}
             />
           </TouchableOpacity>
 
