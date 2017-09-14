@@ -12,6 +12,17 @@ body {
     padding: 0;
 }
 
+.Mobile {
+    text-align: center;
+    color: rgb(12, 108, 203);
+    background-color: rgb(12, 108, 203);
+    min-width: 100%;
+    min-height: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
 .App {
     text-align: center;
     color: white;
