@@ -50,11 +50,11 @@ class Header extends React.Component {
     const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
 
     return (
-      <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle]}>
+      <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle, { width: '100%' }]}>
         <View style={headerStyle}>
-          <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
+          <TouchableOpacity style={{justifyContent: 'center', width: '90%'}} onPress={this.goHome}>
             <Image
-              style={[styles.headerLogo, { width: 180, marginLeft: 20 }]}
+              style={[styles.headerLogo, { height: '100%', width: '80%', marginLeft: 20 }]}
               resizeMode={'contain'}
               source={logoBig}
             />
@@ -65,7 +65,6 @@ class Header extends React.Component {
             color='#62c46c'
             type='spinCross'
             onPress={this.toggleMenu}
-            style={{ flex: 1 }}
           />
         </View>
 
