@@ -2,8 +2,7 @@ import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { Text, TouchableOpacity, View } from 'react-native'
-import SvgUri from 'react-native-svg-uri'
+import { Text, TouchableOpacity, View, Image } from 'react-native'
 import Hamburger from 'react-native-hamburger'
 
 import styles from '../styles/styles'
@@ -37,7 +36,11 @@ class CourseHeader extends React.Component {
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={this.closeCourse}>
-              <SvgUri width='100' height='49' source={require('../images/logo.svg')}/>
+              <Image
+                style={{ width: 100, height: 49 }}
+                source={require('../images/logo.png')}
+                resizeMode={'contain'}
+              />
             </TouchableOpacity>
             <View style={styles.headerBorder}>
               {!this.props.currentCourse.loading &&
