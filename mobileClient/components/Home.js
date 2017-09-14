@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert, Image } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import SvgUri from 'react-native-svg-uri'
 import DeviceInfo from 'react-native-device-info'
 import { FBLoginManager } from 'react-native-facebook-login'
 
@@ -221,14 +220,13 @@ class Home extends React.Component {
           <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
             {this.props.courses.Courses.map(course => {
               const courseLogo = courseLogos[course.name]
-              const logoSize = courseLogo.scale * 80
               const onPressAction = course.isDisabled ? () => {} : () => { this.selectCourse(course) }
               const courseSelectorDisabler = course.isDisabled ? () => {} : this.disableCourseSelector
               const courseColor = course.isDisabled ? 'transparent' : course.color
               const textOpacity = course.isDisabled ? 0.5 : 1
 
               console.log('courseLogo.file', courseLogo.file)
-              
+
               return (
                 <Animatable.View key={course._id} style={{ zIndex: 100, width: "45%"}}
                                  ref={`${course._id}courseSelector`}>
@@ -241,19 +239,10 @@ class Home extends React.Component {
                       courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
                       isDisabled={course.isDisabled}
                     >
-                      { courseLogo.svg ?
-                        <SvgUri
-                          width={logoSize}
-                          height={logoSize}
-                          //source={courseLogo.file}
-                          svgXmlData={courseLogo.file}
-                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-                        /> :
-                        <Image
-                          source={courseLogo.file}
-                          style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-                        />
-                      }
+                    <Image
+                      source={courseLogo.file}
+                      style={{width: courseLogo.width, height: courseLogo.height, alignSelf: 'center'}}
+                    />
                     </CircleButton>
                   </View>
                   <View style={{
