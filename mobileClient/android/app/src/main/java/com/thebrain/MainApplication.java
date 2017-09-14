@@ -1,4 +1,4 @@
-package com.thebrain.pro;
+package com.thebrain;
 
 import android.app.Application;
 
