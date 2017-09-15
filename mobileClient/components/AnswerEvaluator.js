@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
+import Triangle from './Triangle'
 import LevelUpWrapper from './LevelUpWrapper'
 import Tutorial from './Tutorial'
 import CasualQuestionModal from './CasualQuestionModal'
@@ -29,24 +30,28 @@ class AnswerEvaluator extends React.Component {
 
     return (
       <Animatable.View style={[styles.answerEvaluator, {height: this.props.getAnswerEvaluatorHeight()}]} animation='slideInUp'>
+        <Triangle animated={this.props.enabled} line="top" style={styles.triangleTop}/>
         <LinearGradient
           style={styles.answerTopLine}
           colors={['#71b9d3', '#b3b3b3']}
           start={{x: 0, y: 0}}
           end={{x: 0, y: 1}}
         />
+        <Triangle animated={this.props.enabled} line="right" style={styles.triangleRight}/>
         <LinearGradient
           style={styles.answerRightLine}
           colors={['#ff8533', '#b3b3b3']}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 0}}
         />
+        <Triangle animated={this.props.enabled} line="bottom" style={styles.triangleBottom}/>
         <LinearGradient
           style={styles.answerBottomLine}
           colors={['#c1272d', '#b3b3b3']}
           start={{x: 0, y: 1}}
           end={{x: 0, y: 0}}
         />
+        <Triangle animated={this.props.enabled} line="left" style={styles.triangleLeft}/>
         <LinearGradient
           style={styles.answerLeftLine}
           colors={['#62c46c', '#b3b3b3']}
