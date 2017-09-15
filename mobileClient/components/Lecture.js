@@ -38,7 +38,7 @@ class Lecture extends React.Component {
   }
 
   onChangeState = async (event) => {
-    console.log('Gozdecki: event in lecture', event)
+    // console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
       await mutationConnectionHandler(this.props.history, async () => {
         await this.props.clearNotCasual()

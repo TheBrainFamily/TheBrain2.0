@@ -6,10 +6,9 @@ export default (Component, graphqlDataNames) => {
     state = { dataLoaded: false, isLoading: false, showRetry: false }
 
     componentWillReceiveProps = (nextProps) => {
-      console.log('JMOZGAWA: nextProps', nextProps)
       let networkFailure = false
       graphqlDataNames.forEach(dataName => {
-        if (nextProps[dataName].networkStatus === 8) {
+        if (nextProps[dataName] && nextProps[dataName].networkStatus === 8) {
           networkFailure = true
         }
       })
