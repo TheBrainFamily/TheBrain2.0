@@ -13,6 +13,7 @@ import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
 
 import styles from '../styles/styles'
+import WithData from './WithData'
 
 console.disableYellowBox = true
 
@@ -82,4 +83,4 @@ export default compose(
     name: 'userDetails'
   }),
   LevelUpWrapper
-)(connect(state => state)(AnswerEvaluator))
+)(connect(state => state)(WithData(AnswerEvaluator, ['userDetails'])))

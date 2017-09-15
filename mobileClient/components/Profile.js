@@ -3,6 +3,7 @@ import React from 'react'
 import { Text, TouchableOpacity, Switch, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
+import { withRouter } from 'react-router'
 import { TextField } from 'react-native-material-textfield'
 import update from 'immutability-helper'
 
@@ -16,6 +17,7 @@ import switchUserIsCasualMutation from '../shared/graphql/mutations/switchUserIs
 import getPasswordValidationState from '../shared/helpers/getPasswordValidationState'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
+import WithData from './WithData'
 
 class Profile extends React.Component {
   state = {
@@ -54,6 +56,7 @@ class Profile extends React.Component {
       .catch((data) => {
         const oldPasswordError = data.graphQLErrors[0].message
         this.setState({ oldPasswordError })
+        this.props.history.push('/nointernet')
       })
   }
 
@@ -158,6 +161,7 @@ class Profile extends React.Component {
 
 export default compose(
   connect(),
+  withRouter,
   graphql(changePasswordMutation, {
     props: ({ mutate }) => ({
       submit: ({ oldPassword, newPassword }) => mutate({
@@ -195,4 +199,4 @@ export default compose(
       }),
     })
   }),
-)(Profile)
+)(WithData(Profile, ['userDetails', 'currentUser']))
