@@ -3,7 +3,6 @@ package com.thebrain;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.github.yamill.orientation.OrientationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -29,7 +28,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SvgPackage(),
             new RNDeviceInfo(),
             new OrientationPackage(),
             new LinearGradientPackage(),
