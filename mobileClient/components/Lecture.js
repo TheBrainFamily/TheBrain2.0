@@ -54,6 +54,10 @@ class Lecture extends React.Component {
       return (<Text>Error... Check if server is running.</Text>)
     }
 
+    if (this.props.data.loading) {
+      return null
+    }
+
     if (!this.props.data.Lesson) {
       return (
         <View>

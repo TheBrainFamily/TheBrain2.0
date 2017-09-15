@@ -5,10 +5,13 @@ import { compose } from 'react-apollo'
 import { Text, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/styles'
 import Header from './Header'
+import { connect } from 'react-redux'
+import * as courseActions from '../actions/CourseActions'
 
 class NoInternet extends React.Component {
   refetchData = () => {
     client.resetStore()
+    this.props.dispatch(courseActions.close())
     this.props.history.push('/')
   }
 
@@ -41,6 +44,7 @@ class NoInternet extends React.Component {
 }
 
 export default  compose(
+  connect(state => state),
   withRouter
 )(NoInternet)
 

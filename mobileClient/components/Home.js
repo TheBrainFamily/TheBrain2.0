@@ -173,12 +173,11 @@ class Home extends React.Component {
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
       console.log('selecting course', course)
-
       this.props.dispatch(courseActions.select(course))
-      this.animateCourseSelector(course._id)
       await mutationConnectionHandler(this.props.history, async () => {
         await this.props.selectCourse({ courseId: course._id })
       })
+      this.animateCourseSelector(course._id)
     }
   }
 
