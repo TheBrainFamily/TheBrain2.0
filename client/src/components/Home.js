@@ -137,7 +137,8 @@ class Home extends React.Component {
           })}
         </ul>}
         <div className='oldBrainLinkContainer'>
-          Looking for the previous version of TheBrain? Click <a href="https://legacy.thebrain.pro">here</a>
+          Looking for the previous version of TheBrain?
+          Click <a href="https://legacy.thebrain.pro">here</a> | <a href="policy.html">Privacy policy</a>
         </div>
       </FlexibleContentWrapper>
     )
