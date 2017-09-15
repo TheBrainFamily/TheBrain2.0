@@ -10,6 +10,7 @@ import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
 import currentItemsExistQuery from '../shared/graphql/queries/currentItemsExist'
+import WithData from './WithData'
 
 class Course extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -69,4 +70,4 @@ export default compose(
       notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   })
-)(Course)
+)(WithData(Course, ['data']))

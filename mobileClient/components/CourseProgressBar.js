@@ -9,6 +9,7 @@ import ProgressBar from './ProgressBar'
 
 import currentLessonQuery from '../shared/graphql/queries/currentLesson'
 import lessonCountQuery from '../shared/graphql/queries/lessonCount'
+import WithData from './WithData'
 
 class CourseProgressBar extends React.Component {
   render () {
@@ -42,10 +43,10 @@ export default compose(
     options: (ownProps) => {
       const selectedCourse = ownProps.selectedCourse._id
       return ({
-        variables: {courseId: selectedCourse},
+        variables: { courseId: selectedCourse },
         fetchPolicy: 'network-only'
       })
     }
   }),
-  graphql(lessonCountQuery, {name: 'lessonCount'})
-)(CourseProgressBar)
+  graphql(lessonCountQuery, { name: 'lessonCount' })
+)(WithData(CourseProgressBar, ['currentLesson']))
