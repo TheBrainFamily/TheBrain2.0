@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Animated, PanResponder, View } from 'react-native'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
+import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -12,6 +13,7 @@ import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '.
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import submitEval from '../shared/graphql/mutations/processEvaluation'
+import { mutationConnectionHandler } from './NoInternet'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
@@ -102,12 +104,14 @@ class SwipeBall extends React.Component {
 
   onSubmitEvaluation = (value) => {
     this.resetPosition(() => {
-      this.props.submit({
-        itemId: this.props.evalItemId,
-        evaluation: value
+      mutationConnectionHandler(this.props.history, async ()=>{
+        this.props.submit({
+          itemId: this.props.evalItemId,
+          evaluation: value
+        })
+        this.props.dispatch(updateAnswerVisibility(false))
+        this.setState({ ballColors: defaultBallColors, isEvaluated: false })
       })
-      this.props.dispatch(updateAnswerVisibility(false))
-      this.setState({ ballColors: defaultBallColors, isEvaluated: false })
     })
   }
 
@@ -128,28 +132,33 @@ class SwipeBall extends React.Component {
   }
 }
 
-export default graphql(submitEval, {
-  props: ({ ownProps, mutate }) => ({
-    submit: ({ itemId, evaluation }) => mutate({
-      variables: {
-        itemId,
-        evaluation
-      },
-      updateQueries: {
-        CurrentItems: (prev, { mutationResult }) => {
-          return update(prev, {
-            ItemsWithFlashcard: {
-              $set: mutationResult.data.processEvaluation
-            }
-          })
-        }
-      },
-      refetchQueries: [{
-        query: sessionCountQuery
-      },
-        {
-          query: userDetailsQuery
-        }]
+export default compose(
+  withRouter,
+  graphql(submitEval, {
+    props: ({ ownProps, mutate }) => ({
+      submit: ({ itemId, evaluation }) => mutate({
+        variables: {
+          itemId,
+          evaluation
+        },
+        updateQueries: {
+          CurrentItems: (prev, { mutationResult }) => {
+            return update(prev, {
+              ItemsWithFlashcard: {
+                $set: mutationResult.data.processEvaluation
+              }
+            })
+          }
+        },
+        refetchQueries: [{
+          query: sessionCountQuery
+        },
+          {
+            query: userDetailsQuery
+          }]
+      })
     })
-  })
-})(connect()(SwipeBall))
+  }),
+
+  connect()
+)(SwipeBall)

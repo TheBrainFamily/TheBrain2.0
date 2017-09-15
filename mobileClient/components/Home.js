@@ -3,7 +3,17 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
-import { AsyncStorage, StyleSheet, Text, View, InteractionManager, Dimensions, Platform, Alert, Image } from 'react-native'
+import {
+  AsyncStorage,
+  StyleSheet,
+  Text,
+  View,
+  InteractionManager,
+  Dimensions,
+  Platform,
+  Alert,
+  Image
+} from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import DeviceInfo from 'react-native-device-info'
 import { FBLoginManager } from 'react-native-facebook-login'
@@ -28,6 +38,7 @@ import currentUserQuery from '../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
 import WithData from './WithData'
+import { mutationConnectionHandler } from './NoInternet'
 
 class Home extends React.Component {
   constructor (props) {
@@ -55,29 +66,37 @@ class Home extends React.Component {
     const accessToken = await AsyncStorage.getItem('accessToken')
     const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
 
-    if(userId && accessToken) {
+    if (userId && accessToken) {
       console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId, deviceId }).
-      then(async () => {
+      await this.props.logInWithToken({ accessToken, userId, deviceId }).then(async () => {
         const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
         await AsyncStorage.setItem('accessToken', newAccessToken)
-      }).
-      catch(async () => {
+      }).catch(async () => {
         await AsyncStorage.removeItem('accessToken')
         await AsyncStorage.removeItem('userId')
-        Alert.alert( 'You were logged out', 'Please log in again')
+        Alert.alert('You were logged out', 'Please log in again')
       })
     }
 
-    if(userIdFb && accessTokenFb) {
+    if (userIdFb && accessTokenFb) {
       console.log('loguje z FB ', accessTokenFb, userIdFb)
       await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
         await AsyncStorage.removeItem('accessTokenFb')
         await AsyncStorage.removeItem('userIdFb')
         FBLoginManager.logout(() => {})
-        Alert.alert( 'Facebook login expired', 'Please log in again')
+        Alert.alert('Facebook login expired', 'Please log in again')
       })
     }
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
+      nextProps.courses.loading || !nextProps.currentUser || nextProps.currentUser.loading) {
+      return false
+    }
+
+    // console.log("JMOZGAWA: nextProps",nextProps);
+
+    return true
   }
 
   componentWillReceiveProps (nextProps) {
@@ -86,7 +105,7 @@ class Home extends React.Component {
       return
     }
 
-    if(!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+    if (!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
       this.logInWithSavedData()
     }
 
@@ -154,8 +173,10 @@ class Home extends React.Component {
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
       console.log('selecting course', course)
-      await this.props.dispatch(courseActions.select(course))
-      await this.props.selectCourse({ courseId: course._id })
+      this.props.dispatch(courseActions.select(course))
+      await mutationConnectionHandler(this.props.history, async () => {
+        await this.props.selectCourse({ courseId: course._id })
+      })
       this.animateCourseSelector(course._id)
     }
   }
@@ -173,10 +194,12 @@ class Home extends React.Component {
   }
 
   closeCourse = async () => {
-    this.props.dispatch(courseActions.close())
-    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
-    await this.props.closeCourse()
-    this.enableCourseSelector()
+    await mutationConnectionHandler(this.props.history, async () => {
+      this.props.dispatch(courseActions.close())
+      this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
+      await this.props.closeCourse()
+      this.enableCourseSelector()
+    })
   }
 
   toggleMainMenu = () => {
@@ -194,11 +217,14 @@ class Home extends React.Component {
         height: '100%',
         backgroundColor: courseColor
       }}>
-        {!isExitAnimationFinished && <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
-        {this.props.course.selectedCourse ? <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }} closeCourse={this.closeCourse}
-                                          toggleMainMenu={this.toggleMainMenu}>
-          <CourseProgressBar />
-        </CourseHeader> : <View style={style.courseHeader}/>}
+        {!isExitAnimationFinished &&
+        <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        {this.props.course.selectedCourse ?
+          <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }}
+                        closeCourse={this.closeCourse}
+                        toggleMainMenu={this.toggleMainMenu}>
+            <CourseProgressBar />
+          </CourseHeader> : <View style={style.courseHeader}/>}
 
         {!isExitAnimationFinished && <View style={{
           flexGrow: 1,
@@ -224,8 +250,9 @@ class Home extends React.Component {
               const courseSelectorDisabler = course.isDisabled ? () => {} : this.disableCourseSelector
               const courseColor = course.isDisabled ? 'transparent' : course.color
               const textOpacity = course.isDisabled ? 0.5 : 1
+
               return (
-                <Animatable.View key={course._id} style={{ zIndex: 100, width: "45%"}}
+                <Animatable.View key={course._id} style={{ zIndex: 100, width: '45%' }}
                                  ref={`${course._id}courseSelector`}>
                   <View ref={`${course._id}courseSelectorContainer`}
                         onLayout={() => {}}>
@@ -236,10 +263,10 @@ class Home extends React.Component {
                       courseSelectorIsDisabled={this.state.courseSelectorIsDisabled}
                       isDisabled={course.isDisabled}
                     >
-                    <Image
-                      source={courseLogo.file}
-                      style={{width: courseLogo.width, height: courseLogo.height, alignSelf: 'center'}}
-                    />
+                      <Image
+                        source={courseLogo.file}
+                        style={{ width: courseLogo.width, height: courseLogo.height, alignSelf: 'center' }}
+                      />
                     </CircleButton>
                   </View>
                   <View style={{
@@ -262,7 +289,8 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course />}
 
-        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu} logoutAction={this.logoutAction}/>}
+        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}
+                                                logoutAction={this.logoutAction}/>}
       </View>
     )
   }
@@ -275,8 +303,8 @@ const selectCourseMutation = gql`
             hasDisabledTutorial
             isCasual
             experience {
-              level
-              showLevelUp
+                level
+                showLevelUp
             }
         }
     }
@@ -373,7 +401,7 @@ export default compose(
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
   graphql(userDetailsQuery, { name: 'userDetails' }),
-)(WithData(Home, ['courses', 'userDetails']))
+)(WithData(Home, ['currentUser', 'courses', 'userDetails']))
 
 const style = StyleSheet.create({
   courseTitle: {

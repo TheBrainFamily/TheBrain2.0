@@ -51,7 +51,7 @@ class PageContainer extends React.Component {
       <View style={{
         height: '100%',
       }}>
-        <Header toggleMainMenu={this.toggleMainMenu}/>
+        <Header hideHamburger={this.props.hideHamburger} toggleMainMenu={this.toggleMainMenu}/>
         {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
       </View>
     </KeyboardAwareScrollView>)
