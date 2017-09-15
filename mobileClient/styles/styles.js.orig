@@ -294,16 +294,20 @@ const styles = StyleSheet.create({
   answerTopLine: {
     position: 'absolute',
     alignSelf: 'center',
-    top: '12%',
+    top: "12%",
     width: 2,
-    height: '24%',
+<<<<<<< HEAD
+    height: "24%",
+=======
+    height: 59,
+>>>>>>> 908a8910044c056567238a018f20233257500ea6
     backgroundColor: '#71b9d3'
   },
   answerRightLine: {
     position: 'absolute',
     top: '50%',
-    right: '12%',
-    width: '26%',
+    right: "12%",
+    width: "26%",
     height: 2,
     backgroundColor: '#ff8533',
     transform: [{ translateY: -1 }]
@@ -311,16 +315,20 @@ const styles = StyleSheet.create({
   answerBottomLine: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: '11.6%',
+    bottom: "11.6%",
     width: 2,
-    height: '24%',
+<<<<<<< HEAD
+    height: "24%",
+=======
+    height: 59,
+>>>>>>> 908a8910044c056567238a018f20233257500ea6
     backgroundColor: '#c1272d'
   },
   answerLeftLine: {
     position: 'absolute',
     top: '50%',
-    left: '12%',
-    width: '26%',
+    left: "12%",
+    width: "26%",
     height: 2,
     backgroundColor: '#62c46c',
     transform: [{ translateY: -1 }]
@@ -401,9 +409,10 @@ const styles = StyleSheet.create({
   },
   draggableContainer: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -35 }, { translateY: -35 }]
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: "100%",
+    height: "100%",
   },
   answerSwipeBall: {
     alignSelf: 'center',
@@ -443,14 +452,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   triangleTop: {
-    top: '34%',
+    top: 98,
   },
   triangleBottom: {
     borderBottomWidth: 0,
     borderTopWidth: 12,
     borderBottomColor: 'transparent',
     borderTopColor: '#b3b3b3',
-    top: '60%',
+    top: 206,
   },
   triangleRight: {
     borderBottomWidth: 4,
@@ -461,8 +470,8 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: '#b3b3b3',
-    top: '48.75%',
-    left: '60%',
+    top: 153.5,
+    left: 236,
   },
   triangleLeft: {
     borderBottomWidth: 4,
@@ -473,8 +482,8 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderRightColor: '#b3b3b3',
     borderLeftColor: 'transparent',
-    top: '48.75%',
-    left: '38%',
+    top: 153.5,
+    left: 126,
   }
 })
 
