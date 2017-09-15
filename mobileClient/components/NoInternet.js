@@ -48,6 +48,7 @@ const mutationConnectionHandler = async (history, action) => {
   try {
     await action()
   } catch (exception) {
+    console.log("JMOZGAWA: exception",exception);
     history.push('/nointernet')
   }
 }
