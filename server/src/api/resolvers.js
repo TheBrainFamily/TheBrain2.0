@@ -216,7 +216,7 @@ const resolvers = {
         await context.Users.removeToken(userId, accessToken)
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null, accessToken: null}
+      return {_id: 'loggedOut', username: '', activated: false, facebookId: null, accessToken: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
