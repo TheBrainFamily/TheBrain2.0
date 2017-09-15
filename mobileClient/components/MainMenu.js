@@ -20,6 +20,8 @@ import levelConfig from '../shared/helpers/levelConfig'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import WithData from './WithData'
+import { mutationConnectionHandler } from './NoInternet'
 
 const MenuButton = (props) => (
   <TouchableHighlight
@@ -66,6 +68,9 @@ class MainMenu extends React.Component {
         this.props.client.resetStore()
         this.props.logoutAction && this.props.logoutAction()
         this.props.history.push('/')
+      })
+      .catch(() => {
+        this.history.push('/nointernet')
       })
   }
 
@@ -120,71 +125,71 @@ class MainMenu extends React.Component {
             source={levelConfig[level].file}
           />
           {currentUser &&
-            <View style={{
-              width: '70%',
-              padding: 20
-            }}>
-              <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
-                {username}
-              </Text>
-              <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
-                <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
-                  <Text style={style.text}>DUE</Text>
-                  <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
-                  <View style={[style.card, { backgroundColor: '#4ba695' }]} />
-                </View>
-                <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
-                  <View style={{
-                    position: 'absolute',
-                    top: -4,
-                    left: -4,
-                    width: 8,
-                    height: 8,
-                    borderRadius: 8,
-                    backgroundColor: '#999'
-                  }} />
-                  <View style={{
-                    position: 'absolute',
-                    bottom: -4,
-                    left: -4,
-                    width: 8,
-                    height: 8,
-                    borderRadius: 8,
-                    backgroundColor: '#999'
-                  }} />
-                </View>
-                <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
-                  <Text style={style.text}>REVIEW</Text>
-                  <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
-                  <View style={[style.card, { backgroundColor: '#c64f34' }]} />
-                </View>
+          <View style={{
+            width: '70%',
+            padding: 20
+          }}>
+            <Text style={[styles.textDefault, { fontSize: 26, color: '#6905ea' }]}>
+              {username}
+            </Text>
+            <View style={{ width: '100%', marginTop: 5, flexDirection: 'row' }}>
+              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                <Text style={style.text}>DUE</Text>
+                <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
+                <View style={[style.card, { backgroundColor: '#4ba695' }]}/>
+              </View>
+              <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
+                <View style={{
+                  position: 'absolute',
+                  top: -4,
+                  left: -4,
+                  width: 8,
+                  height: 8,
+                  borderRadius: 8,
+                  backgroundColor: '#999'
+                }}/>
+                <View style={{
+                  position: 'absolute',
+                  bottom: -4,
+                  left: -4,
+                  width: 8,
+                  height: 8,
+                  borderRadius: 8,
+                  backgroundColor: '#999'
+                }}/>
+              </View>
+              <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
+                <Text style={style.text}>REVIEW</Text>
+                <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
+                <View style={[style.card, { backgroundColor: '#c64f34' }]}/>
               </View>
             </View>
+          </View>
           }
         </View>
         <View style={{ marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start' }}>
           {activated
-            ? <MenuButton text="LOG OUT" onPress={this.logout} />
-            : <MenuButton text="LOG IN" onPress={this.go('/login')} />
+            ? <MenuButton text="LOG OUT" onPress={this.logout}/>
+            : <MenuButton text="LOG IN" onPress={this.go('/login')}/>
           }
           <Separator />
           {currentUser &&
-            <View>
-              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null}
-              {this.props.selectedCourse ? <Separator /> : null}
+          <View>
+            {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')}/> : null}
+            {this.props.selectedCourse ? <Separator /> : null}
 
-              <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
-              <Separator />
-              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
-                                                       onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse} /> : null}
-              {this.props.selectedCourse ? <Separator /> : null}
-              {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
-              {/*<Separator />*/}
-              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
-              <Separator />
-            </View>
+            <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')}/>
+            <Separator />
+            {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
+                                                     onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse}/> : null}
+            {this.props.selectedCourse ? <Separator /> : null}
+            {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
+            {/*<Separator />*/}
+            <MenuButton text="PROFILE" onPress={this.go('/profile')}/>
+            <Separator />
+          </View>
           }
-          <MenuButton text="CONTACT" onPress={this.go('/contact')} />
+          <MenuButton text="CONTACT" onPress={this.go('/contact')}/>
         </View>
       </Animated.View>
     )
@@ -235,8 +240,6 @@ export default compose(
       logout: () => mutate({
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult logout', mutationResult)
-            console.log('Gozdecki: logout prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logOut
@@ -259,4 +262,4 @@ export default compose(
   graphql(userDetailsQuery, {
     name: 'userDetails',
   })
-)(MainMenu)
+)(WithData(MainMenu, ['currentUser', 'userDetails', 'sessionCount']))
