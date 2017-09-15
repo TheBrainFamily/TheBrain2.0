@@ -11,6 +11,7 @@ import confirmLevelUpMutation from '../shared/graphql/mutations/confirmLevelUp'
 import PageContainer from './PageContainer'
 
 import styles from '../styles/styles'
+import WithData from './WithData'
 
 class Congratulations extends React.Component {
   click = () => {
@@ -85,4 +86,4 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-)(Congratulations)
+)(WithData(Congratulations, ['currentUser', 'userDetails']))

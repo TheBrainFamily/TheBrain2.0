@@ -7,6 +7,7 @@ import Hamburger from 'react-native-hamburger'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
+import WithData from './WithData'
 
 class CourseHeader extends React.Component {
   constructor (props) {
@@ -104,4 +105,4 @@ export default compose(
       }
     }
   }),
-)(CourseHeader)
+)(WithData(CourseHeader,['currentCourse']))
