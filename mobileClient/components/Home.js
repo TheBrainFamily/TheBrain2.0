@@ -224,9 +224,6 @@ class Home extends React.Component {
               const courseSelectorDisabler = course.isDisabled ? () => {} : this.disableCourseSelector
               const courseColor = course.isDisabled ? 'transparent' : course.color
               const textOpacity = course.isDisabled ? 0.5 : 1
-
-              console.log('courseLogo.file', courseLogo.file)
-
               return (
                 <Animatable.View key={course._id} style={{ zIndex: 100, width: "45%"}}
                                  ref={`${course._id}courseSelector`}>
