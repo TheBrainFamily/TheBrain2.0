@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 
 import appStyle from '../styles/appStyle'
+import WithData from './WithData'
 
 function getDaysInMonth (month, year = new Date().getFullYear()) {
   return new Date(year, month, 0).getDate()
@@ -206,4 +207,4 @@ export default compose(
       fetchPolicy: 'cache-and-network'
     }
   })
-)(ReviewsCalendar)
+)(WithData(ReviewsCalendar, ['data']))
