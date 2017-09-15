@@ -16,6 +16,8 @@ import lessonWatchedMutationParams from '../shared/graphql/mutations/lessonWatch
 import clearNotCasualItems from '../shared/graphql/mutations/clearNotCasualItems'
 import lessonWatchedMutationSchema from '../shared/graphql/queries/lessonWatchedMutationSchema'
 import currentLessonQuery from '../shared/graphql/queries/currentLesson'
+import WithData from './WithData'
+import { mutationConnectionHandler } from './NoInternet'
 
 class Lecture extends React.Component {
   state = {
@@ -38,9 +40,11 @@ class Lecture extends React.Component {
   onChangeState = async (event) => {
     console.log('Gozdecki: event in lecture', event)
     if (event.state === 'ended') {
-      await this.props.clearNotCasual()
-      this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
-        this.props.history.push('/questions')
+      await mutationConnectionHandler(this.props.history, async () => {
+        await this.props.clearNotCasual()
+        this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
+          this.props.history.push('/questions')
+        })
       })
     }
   }
@@ -76,7 +80,7 @@ class Lecture extends React.Component {
         </Animated.View>
 
         {this.state.showLecture &&
-        <Animatable.View animation='bounceIn' style={{height: '60%'}}>
+        <Animatable.View animation='bounceIn' style={{ height: '60%' }}>
           <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}
                  loading={this.props.data.loading}/>
         </Animatable.View>
@@ -96,9 +100,8 @@ export default compose(
   connect(mapStateToProps),
   withRouter,
   graphql(clearNotCasualItems, {
-    props: ({ownProps, mutate}) => ({
-      clearNotCasual: () => mutate({
-      }),
+    props: ({ ownProps, mutate }) => ({
+      clearNotCasual: () => mutate({}),
     })
   }),
   graphql(currentLessonQuery, {
@@ -112,4 +115,4 @@ export default compose(
   }),
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   LevelUpWrapper
-)(Lecture)
+)(WithData(Lecture, ['data']))
