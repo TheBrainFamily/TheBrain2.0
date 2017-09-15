@@ -14,6 +14,7 @@ import styles from '../styles/styles'
 
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import WithData from './WithData'
 
 class Login extends React.Component {
   constructor (props) {
@@ -58,6 +59,7 @@ class Login extends React.Component {
         this.props.history.push('/')
       })
       .catch((data) => {
+        this.history.push('/nointernet')
         const error = data.graphQLErrors[0].message
         this.setState({ error })
       })
@@ -208,4 +210,4 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   })
-)(Login)
+)(WithData(Login, ['currentUser', 'userDetails']))

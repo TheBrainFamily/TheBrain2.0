@@ -2,6 +2,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import WithData from './WithData'
 
 export default (Component) => {
 
@@ -26,5 +27,5 @@ export default (Component) => {
     graphql(userDetailsQuery, {
       name: 'userDetails'
     })
-  )(LevelUpWrapper)
+  )(WithData(LevelUpWrapper, ['userDetails']))
 }
