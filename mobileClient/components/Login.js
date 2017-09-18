@@ -9,6 +9,7 @@ import DeviceInfo from 'react-native-device-info'
 import * as courseActions from '../actions/CourseActions'
 import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
+import Loading from './Loading'
 
 import styles from '../styles/styles'
 
@@ -24,7 +25,8 @@ class Login extends React.Component {
       isLogin: true,
       error: '',
       username: '',
-      password: ''
+      password: '',
+      loading: false
     }
 
     this.inputs = {}
@@ -40,13 +42,17 @@ class Login extends React.Component {
     }
   }
 
+  setLoadingState = (loading) => {
+    this.setState({loading})
+  }
+
   toggleSwitch = () => {
     this.setState({ isLogin: !this.state.isLogin })
   }
 
   submit = () => {
     const deviceId = DeviceInfo.getUniqueID() || 'defaultMobileClient'
-    this.setState({ error: '' })
+    this.setState({ error: '', loading: true })
     const actionName = this.state.isLogin ? 'login' : 'signup'
     this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId, saveToken: true })
       .then( async () => {
@@ -57,11 +63,12 @@ class Login extends React.Component {
         await AsyncStorage.setItem('userId', userId)
         await this.props.userDetails.refetch()
         this.props.history.push('/')
+        this.setState({ loading: false })
       })
       .catch((data) => {
         this.history.push('/nointernet')
         const error = data.graphQLErrors[0].message
-        this.setState({ error })
+        this.setState({ error, loading: false })
       })
   }
 
@@ -70,6 +77,9 @@ class Login extends React.Component {
   }
 
   render () {
+    if(this.state.loading || this.props.currentUser.loading || this.props.userDetails.loading) {
+      return <Loading/>
+    }
     return (
       <PageContainer>
 
@@ -79,7 +89,7 @@ class Login extends React.Component {
           </Text>
 
           <View style={{ alignItems: 'center' }}>
-            <FBLoginButton />
+            <FBLoginButton setLoadingState={this.setLoadingState} />
           </View>
 
           <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 15 }]}>OR</Text>
