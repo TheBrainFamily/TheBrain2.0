@@ -104,8 +104,9 @@ class Questions extends React.Component {
   }
 
   render () {
+    const courseColor = _.get(this.props.course, 'selectedCourse.color')
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
-      return <Loading />
+      return <Loading backgroundColor={courseColor} />
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
       const sessionCount = this.props.sessionCount.SessionCount
@@ -117,8 +118,6 @@ class Questions extends React.Component {
         const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
         const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
         const progress = done / total
-
-        const courseColor = _.get(this.props.course, 'selectedCourse.color')
 
         return (
           <View style={{ backgroundColor: courseColor }}>

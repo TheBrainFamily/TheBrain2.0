@@ -62,13 +62,13 @@ class Login extends React.Component {
         await AsyncStorage.setItem('accessToken', accessToken)
         await AsyncStorage.setItem('userId', userId)
         await this.props.userDetails.refetch()
-        this.props.history.push('/')
         this.setState({ loading: false })
+        this.props.history.push('/')
       })
       .catch((data) => {
-        this.history.push('/nointernet')
         const error = data.graphQLErrors[0].message
         this.setState({ error, loading: false })
+        this.history.push('/nointernet')
       })
   }
 
