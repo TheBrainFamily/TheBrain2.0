@@ -70,13 +70,13 @@ class MainMenu extends React.Component {
           this.props.client.resetStore()
           this.props.toggleMainMenu && this.props.toggleMainMenu()
           this.props.logoutAction && this.props.logoutAction()
-          this.props.history.push('/')
           this.setState({loading: false})
+          this.props.history.push('/')
         })
         .catch(() => {
           this.props.toggleMainMenu && this.props.toggleMainMenu()
-          this.history.push('/nointernet')
           this.setState({loading: false})
+          this.history.push('/nointernet')
         })
     })
   }
