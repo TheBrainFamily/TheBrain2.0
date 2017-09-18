@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-export default function ({ message = 'Loading...' }) {
+export default function ({ message = 'Loading...', lightStyle }) {
   return (
     <View style={styles.main}>
       <ActivityIndicator
@@ -9,7 +9,7 @@ export default function ({ message = 'Loading...' }) {
         style={styles.centering}
         size='large'
       />
-      <Text style={styles.loading}>{message}</Text>
+      <Text style={lightStyle ? styles.loadingLight : styles.loading}>{message}</Text>
     </View>
   )
 }
@@ -29,6 +29,12 @@ const styles = StyleSheet.create({
   loading: {
     textAlign: 'center',
     color: 'white',
+    fontFamily: 'Exo2-Bold',
+    marginTop: 10
+  },
+  loadingLight: {
+    textAlign: 'center',
+    color: 'black',
     fontFamily: 'Exo2-Bold',
     marginTop: 10
   }
