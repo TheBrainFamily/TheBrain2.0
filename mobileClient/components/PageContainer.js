@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, BackAndroid } from 'react-native'
+import { View, BackAndroid, Platform } from 'react-native'
 import Header from './Header'
 import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
@@ -57,7 +57,7 @@ class PageContainer extends React.Component {
     </KeyboardAwareScrollView>)
 
   render () {
-    return this.props.dontUseKeyboarAware ? this.renderContainer() : this.renderKeyboardAwareContainer()
+    return this.props.dontUseKeyboarAware || Platform.OS === 'android' ? this.renderContainer() : this.renderKeyboardAwareContainer()
   }
 }
 
