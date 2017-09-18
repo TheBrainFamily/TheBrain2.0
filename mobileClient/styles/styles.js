@@ -400,10 +400,12 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   draggableContainer: {
+    width: '100%',
+    height: '100%',
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -35 }, { translateY: -35 }]
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
   answerSwipeBall: {
     alignSelf: 'center',
