@@ -18,6 +18,7 @@ import lessonWatchedMutationSchema from '../shared/graphql/queries/lessonWatched
 import currentLessonQuery from '../shared/graphql/queries/currentLesson'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
+import Loading from './Loading'
 
 class Lecture extends React.Component {
   state = {
@@ -55,7 +56,7 @@ class Lecture extends React.Component {
     }
 
     if (this.props.data.loading) {
-      return null
+      return <Loading/>
     }
 
     if (!this.props.data.Lesson) {
