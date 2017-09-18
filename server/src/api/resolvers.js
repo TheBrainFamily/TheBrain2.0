@@ -116,8 +116,6 @@ const resolvers = {
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
-      // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(3)
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       flashcards.forEach((flashcard) => {
         if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
