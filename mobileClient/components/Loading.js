@@ -1,9 +1,10 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-export default function ({ message = 'Loading...', lightStyle }) {
+export default function ({ message = 'Loading...', lightStyle, backgroundColor }) {
+  const bgColor = backgroundColor ? { backgroundColor } : {}
   return (
-    <View style={styles.main}>
+    <View style={[styles.main, bgColor]}>
       <ActivityIndicator
         animating
         style={styles.centering}
