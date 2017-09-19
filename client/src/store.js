@@ -15,6 +15,7 @@ if (localhostRegexp.test(window.location.origin)) {
 } else {
   uri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
 }
+// uri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
 
 console.log('GraphQL uri:', uri)
 
