@@ -19,6 +19,15 @@ import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
   render () {
+
+    if (this.props.data.loading) {
+      return (<p>Loading...</p>)
+    }
+
+    if (this.props.data.error) {
+      return (<p>Error...</p>)
+    }
+
     if (!this.props.data.Lesson) {
       return (
         <div>
@@ -28,14 +37,6 @@ class Lecture extends React.Component {
           </p>
         </div>
       )
-    }
-
-    if (this.props.data.loading) {
-      return (<p>Loading...</p>)
-    }
-
-    if (this.props.data.error) {
-      return (<p>Error...</p>)
     }
 
     const selectedCourse = (this.props.selectedCourse && this.props.selectedCourse._id) || this.props.match.params.courseId
