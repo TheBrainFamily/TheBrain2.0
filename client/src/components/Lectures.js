@@ -12,20 +12,24 @@ class Lectures extends React.Component {
 
   render () {
     const opts = {
-      height: '390',
-      width: '640',
+      height: '240',
+      width: '320',
+      opacity: 0.2,
       playerVars: { // https://developers.google.com/youtube/player_parameters
         autoplay: 0
       }
     }
+
     const videosElements = this.props.lessons.Lessons && this.props.lessons.Lessons.map(lesson =>
-        <div>
+        <div style={{
+          display: 'inline-block', margin: '1%',
+          opacity: lesson.position > this.props.currentLesson.Lesson.position ? 0.5 : 1
+        }}>
           <YouTube
             className={'youTube-player'}
             videoId={lesson.youtubeId}
             opts={opts}
           />
-          <hr/>
         </div>
       )
     return (
@@ -78,20 +82,3 @@ export default compose(
   })
 )(Lectures, ['currentLesson', 'lessons'])
 
-const style = {
-  title: {
-    height: '25%',
-    color: '#999',
-    fontSize: 12,
-    fontFamily: 'Exo2-Regular',
-    textAlign: 'center'
-  },
-  overlay: {
-    position: 'absolute',
-    backgroundColor: '#fffc',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0
-  }
-}
