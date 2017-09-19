@@ -474,8 +474,7 @@
 				00E356F21AD99517003FC87E /* TheBrainProTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			name = TheBrainProTests;
-			path = mobileClientTests;
+			path = TheBrainProTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
