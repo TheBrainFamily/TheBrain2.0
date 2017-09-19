@@ -2,6 +2,8 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import createHistory from 'history/createBrowserHistory'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { persistStore, autoRehydrate } from 'redux-persist'
+import { asyncSessionStorage } from 'redux-persist/storages'
 
 import * as reducers from './reducers'
 
@@ -40,9 +42,12 @@ const store = createStore(
   {}, // initial state
   compose(
     applyMiddleware(routerMiddleware(history), client.middleware()),
+    autoRehydrate(),
     devToolsExtension ? devToolsExtension() : f => f
   )
 )
+
+persistStore(store, { storage: asyncSessionStorage })
 
 export { history }
 export { client }

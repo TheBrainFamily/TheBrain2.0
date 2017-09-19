@@ -86,9 +86,12 @@ class Flashcard extends React.Component {
     }
 
     const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
-      This question is marked as <strong>hard</strong>. Set below to see only the easier ones - but not less interesting!
+      <strong>Challenging question!</strong> <br/>
+      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
+          You will still broaden your mind and impress your friends/coworkers!<br/>
+          <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
       <div>You can always change this setting on the <strong>profile</strong> page.</div>
-      <p onClick={() => this.setUserIsCasual(true)}>HIDE HARD QUESTIONS</p>
+      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
       <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
     </div>
 
