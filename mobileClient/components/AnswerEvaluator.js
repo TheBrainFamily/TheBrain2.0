@@ -27,7 +27,6 @@ class AnswerEvaluator extends React.Component {
     if (this.props.userDetails.loading) {
       return <View />
     }
-
     return (
       <Animatable.View style={[styles.answerEvaluator, {height: this.props.getAnswerEvaluatorHeight()}]} animation='slideInUp'>
         <Triangle animated={this.props.enabled} line="top" style={styles.triangleTop}/>
@@ -76,7 +75,7 @@ class AnswerEvaluator extends React.Component {
         {!this.props.enabled && <TouchableWithoutFeedback onPress={this.overlayPress}>
           <View style={styles.answerEvaluatorOverlay}/></TouchableWithoutFeedback>}
         {this.props.enabled && <Tutorial/>}
-        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && <CasualQuestionModal/>}
+        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && !this.props.isQuestionCasual  && <CasualQuestionModal/>}
       </Animatable.View>
     )
   }
