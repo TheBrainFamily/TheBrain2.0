@@ -74,7 +74,8 @@ class Flashcard extends React.Component {
     let question = 'Loading...'
     let answer = 'Loading...'
     let itemId = null
-    let isCasual = false
+    let isCasual = true
+    let userIsCasual = false
 
     if(this.props.currentItems.ItemsWithFlashcard
       && this.props.currentItems.ItemsWithFlashcard[0]) {
@@ -83,6 +84,10 @@ class Flashcard extends React.Component {
       answer = this.props.currentItems.ItemsWithFlashcard[0].flashcard.answer
       itemId = this.props.currentItems.ItemsWithFlashcard[0].item._id
       isCasual = this.props.currentItems.ItemsWithFlashcard[0].flashcard.isCasual
+    }
+
+    if(this.props.userDetails && this.props.userDetails.UserDetails) {
+      userIsCasual = this.props.userDetails.UserDetails.isCasual
     }
 
     const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
@@ -103,7 +108,7 @@ class Flashcard extends React.Component {
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
+              {userIsCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
             </div>
@@ -127,7 +132,7 @@ class Flashcard extends React.Component {
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
+              {userIsCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
             </div>
