@@ -60,7 +60,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-let OPTICS_API_KEY = 'service:lgandecki-9749:4DtEOYhyps-hVz3hiNTxMQ'
+let OPTICS_API_KEY = '***REMOVED***'
 
 // FIXES CORS ERROR
 const whitelist = [
