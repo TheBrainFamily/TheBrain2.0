@@ -3,6 +3,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
+import { graphql, compose } from 'react-apollo'
 
 import Card from './Card'
 import type { Direction } from '../helpers/SwipeHelpers'
@@ -19,6 +20,7 @@ import {
 
 import styles from '../styles/styles'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import userDetailsQuery from '../shared/graphql/queries/userDetails'
 
 class Flashcard extends React.Component {
   state: {
@@ -131,7 +133,8 @@ class Flashcard extends React.Component {
       <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
           <View style={styles.flipCardContainer}>
-            <TouchableWithoutFeedback onPress={() => this.flipCard()}>
+            <TouchableWithoutFeedback onPress={() =>
+              this.props.userDetails.UserDetails.isCasual !== null || this.props.isQuestionCasual ? this.flipCard() : null}>
               <View>
                 <Card dynamicStyles={this.state.dynamicStyles}
                       question={this.props.question} answer={this.props.answer}
@@ -145,7 +148,7 @@ class Flashcard extends React.Component {
                     height: '100%',
                     backgroundColor: 'white'
                   }}><Text /></View>
-                  <Image style={{ width:200, height:22.5 }} source={require('../images/pageCorner.png')}/>
+                  <Image style={{ width: 200, height: 22.5 }} source={require('../images/pageCorner.png')}/>
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -156,4 +159,7 @@ class Flashcard extends React.Component {
   }
 }
 
-export default (connect(state => state)(Flashcard))
+export default compose(
+  graphql(userDetailsQuery, { name: 'userDetails' }),
+)
+(connect(state => state)(Flashcard))
