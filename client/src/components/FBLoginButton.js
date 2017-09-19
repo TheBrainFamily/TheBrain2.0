@@ -27,7 +27,7 @@ class FBLoginButton extends React.Component {
     return (
       <FacebookLogin
         cssClass={'login-button-fb'}
-        appId='***REMOVED***'
+        appId='1621044308126388'
         autoLoad={false}
         callback={this.responseFacebook}
       />
