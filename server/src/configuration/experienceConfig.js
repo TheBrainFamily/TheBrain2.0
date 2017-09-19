@@ -1,5 +1,5 @@
 const experienceGained = {
-  processEvaluation: 5
+  processEvaluation: 2
 }
 
 export function getExperienceForAction(action) {
