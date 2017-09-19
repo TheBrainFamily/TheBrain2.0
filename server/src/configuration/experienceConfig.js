@@ -13,5 +13,5 @@ export function getExperienceForAction(action) {
 }
 
 export function calculateUserLevel(xp: Number) {
-  return Math.floor(0.2 * Math.sqrt(xp)) + 1
+  return Math.floor(0.13 * Math.sqrt(xp*2)) + 1
 }
