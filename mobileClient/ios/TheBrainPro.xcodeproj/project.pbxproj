@@ -50,6 +50,7 @@
 		995C630DE8FA4752845EFF0E /* Kalam-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E5DFE973A5C457FA9075FF6 /* Kalam-Light.ttf */; };
 		9A27A00B9A5D442FA7236718 /* YTPlayerView-iframe-player.html in Resources */ = {isa = PBXBuildFile; fileRef = 3EE0827C208B44DA871C4956 /* YTPlayerView-iframe-player.html */; };
 		A31E92B6852946F798F33A36 /* Exo2-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB78628495F8487AAA8AE6FC /* Exo2-Regular.ttf */; };
+		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B98EC7647BF84BAFA15C8E29 /* libRCTYouTube.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74EF51EE9222497B88ED0F26 /* libRCTYouTube.a */; };
 		D4A4F258C53843B7ADB7AE85 /* Kalam-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C97F726C6DFA4F83B793A6AE /* Kalam-Regular.ttf */; };
 		D9EE2A0C1F69392D00BBCB07 /* thebrainprologosplashmain.png in Resources */ = {isa = PBXBuildFile; fileRef = D9EE2A0B1F69392D00BBCB07 /* thebrainprologosplashmain.png */; };
@@ -270,6 +271,20 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
+			remoteInfo = RCTBlob;
+		};
+		D908FC541F710BDB009D6AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADD01A681E09402E00F6D226;
+			remoteInfo = "RCTBlob-tvOS";
+		};
 		D9160AAE1F68480200F6D513 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 551F27A3EA324ADB95D53E37 /* RNDeviceInfo.xcodeproj */;
@@ -356,6 +371,7 @@
 		943B53FF2E8B4A1B875C5C8D /* Exo2.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Exo2.ttf; path = ../fonts/Exo2.ttf; sourceTree = "<group>"; };
 		9C65D7DB4DC244DFB53E9AF4 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		A2E90BF8F4D14F869ED95046 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
+		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		C35EBE6F7A69468E981645D5 /* Exo2-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Light.ttf"; path = "../fonts/Exo2-Light.ttf"; sourceTree = "<group>"; };
 		C97F726C6DFA4F83B793A6AE /* Kalam-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Kalam-Regular.ttf"; path = "../fonts/Kalam-Regular.ttf"; sourceTree = "<group>"; };
 		D9EE2A0B1F69392D00BBCB07 /* thebrainprologosplashmain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thebrainprologosplashmain.png; sourceTree = "<group>"; };
@@ -379,8 +395,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				019CA3D31EAF7D5E001A95F0 /* libRCTFBLogin.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
+				019CA3D31EAF7D5E001A95F0 /* libRCTFBLogin.a in Frameworks */,
+				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
+				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				019CA3D91EAF8378001A95F0 /* FBSDKLoginKit.framework in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -472,6 +490,7 @@
 			isa = PBXGroup;
 			children = (
 				00E356F21AD99517003FC87E /* TheBrainProTests.m */,
+				00E356F11AD99517003FC87E /* Info.plist */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
 			path = TheBrainProTests;
@@ -480,7 +499,6 @@
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -615,6 +633,7 @@
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
+				ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
 				00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */,
 				78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */,
@@ -653,6 +672,7 @@
 			indentWidth = 2;
 			sourceTree = "<group>";
 			tabWidth = 2;
+			usesTabs = 0;
 		};
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
@@ -661,6 +681,15 @@
 				00E356EE1AD99517003FC87E /* mobileClientTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* TheBrainPro-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* TheBrainPro-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADBDB9201DFEBF0600ED6528 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */,
+				D908FC551F710BDB009D6AF5 /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -807,6 +836,10 @@
 				{
 					ProductGroup = 5E91572E1DD0AC6500FF2AA8 /* Products */;
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
+				},
+				{
+					ProductGroup = ADBDB9201DFEBF0600ED6528 /* Products */;
+					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
 				},
 				{
 					ProductGroup = 019CA3B41EAF7D2F001A95F0 /* Products */;
@@ -1068,6 +1101,20 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTBlob.a;
+			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D908FC551F710BDB009D6AF5 /* libRCTBlob-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTBlob-tvOS.a";
+			remoteRef = D908FC541F710BDB009D6AF5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D9160AAF1F68480200F6D513 /* libRNDeviceInfo.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1172,7 +1219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1186,7 +1233,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1256,7 +1303,7 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
-				INFOPLIST_FILE = mobileClientTests/Info.plist;
+				INFOPLIST_FILE = TheBrainProTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -1281,7 +1328,7 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
-				INFOPLIST_FILE = mobileClientTests/Info.plist;
+				INFOPLIST_FILE = TheBrainProTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
