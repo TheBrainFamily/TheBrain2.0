@@ -465,6 +465,7 @@ FLASHCARDS
     background-image: url('img/bg-shadow-bottom.png');
     background-repeat: repeat-x;
     background-position: top;
+    overflow: hidden;
 }
 
 .answer-button {
@@ -473,6 +474,13 @@ FLASHCARDS
     cursor: pointer;
     width: 120px;
     height: 120px;
+    position: relative;
+    top: -10px;
+    transition: all 0.2s;
+}
+
+.answer-button:hover {
+    top: 0;
 }
 
 .levelUpImage {
