@@ -460,6 +460,7 @@ FLASHCARDS
     position: absolute;
     width: 100%;
     height: 100px;
+    opacity: 0;
 }
 
 .slide-in {
