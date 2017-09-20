@@ -47,7 +47,7 @@ const store = createStore(
   )
 )
 
-persistStore(store, { storage: asyncSessionStorage })
+persistStore(store, { storage: asyncSessionStorage, whitelist: ['course'] })
 
 export { history }
 export { client }
