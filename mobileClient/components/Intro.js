@@ -1,12 +1,27 @@
 import React from 'react'
-import { AsyncStorage, Text, TouchableOpacity, View } from 'react-native'
-
+import { AsyncStorage, Text, TouchableOpacity, View, BackAndroid } from 'react-native'
 import PageContainer from './PageContainer'
 import Video from './Video'
 
 import styles from '../styles/styles'
 
 export default class Intro extends React.Component {
+  componentDidMount = () => {
+    // BackAndroid will be deprec after react-native update!
+    if(BackAndroid) {
+      BackAndroid.addEventListener('hardwareBackPress', () => {
+        BackAndroid.exitApp()
+      })
+    }
+  }
+
+  componentWillUnmount = () => {
+    // BackAndroid will be deprec after react-native update!
+    if(BackAndroid) {
+      BackAndroid.removeEventListener('hardwareBackPress')
+    }
+  }
+
   skipIntro = () => {
     const isIntroDisabled = JSON.stringify(true)
     AsyncStorage.setItem('isIntroDisabled', isIntroDisabled, () => {

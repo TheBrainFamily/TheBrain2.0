@@ -74,7 +74,8 @@ class Flashcard extends React.Component {
     let question = 'Loading...'
     let answer = 'Loading...'
     let itemId = null
-    let isCasual = false
+    let isCasual = true
+    let userIsCasual = false
 
     if(this.props.currentItems.ItemsWithFlashcard
       && this.props.currentItems.ItemsWithFlashcard[0]) {
@@ -85,10 +86,17 @@ class Flashcard extends React.Component {
       isCasual = this.props.currentItems.ItemsWithFlashcard[0].flashcard.isCasual
     }
 
+    if(this.props.userDetails && this.props.userDetails.UserDetails) {
+      userIsCasual = this.props.userDetails.UserDetails.isCasual
+    }
+
     const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
-      This question is marked as <strong>hard</strong>. Set below to see only the easier ones - but not less interesting!
+      <strong>Challenging question!</strong> <br/>
+      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
+          You will still broaden your mind and impress your friends/coworkers!<br/>
+          <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
       <div>You can always change this setting on the <strong>profile</strong> page.</div>
-      <p onClick={() => this.setUserIsCasual(true)}>HIDE HARD QUESTIONS</p>
+      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
       <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
     </div>
 
@@ -100,7 +108,7 @@ class Flashcard extends React.Component {
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
+              {userIsCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
             </div>
@@ -124,7 +132,7 @@ class Flashcard extends React.Component {
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
+              {userIsCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
             </div>

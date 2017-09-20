@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Image } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
-import SvgUri from 'react-native-svg-uri'
 import { withRouter } from 'react-router-native'
 
 import courseLogos from '../helpers/courseLogos'
@@ -11,6 +10,7 @@ import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
 import currentItemsExistQuery from '../shared/graphql/queries/currentItemsExist'
+import WithData from './WithData'
 
 class Course extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -30,7 +30,7 @@ class Course extends React.Component {
       return null
     }
     const courseLogo = courseLogos[this.props.selectedCourse.name]
-    const logoSize = courseLogo.scale * 60
+    const logoScale = 0.75
 
     return (
       <View style={{
@@ -41,18 +41,10 @@ class Course extends React.Component {
         <Lecture />
         <View style={{position: 'absolute', bottom: 25, alignSelf: 'center'}}>
           <CircleButton radius={45} withStaticCircles>
-            { courseLogo.svg ?
-              <SvgUri
-                width={logoSize}
-                height={logoSize}
-                source={courseLogo.file}
-                style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-              /> :
-              <Image
-                source={courseLogo.file}
-                style={{width: logoSize, height: logoSize, alignSelf: 'center'}}
-              />
-            }
+            <Image
+              source={courseLogo.file}
+              style={{width: courseLogo.width * logoScale, height: courseLogo.height * logoScale, alignSelf: 'center'}}
+            />
           </CircleButton>
         </View>
       </View>
@@ -78,4 +70,4 @@ export default compose(
       notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   })
-)(Course)
+)(WithData(Course, ['data']))

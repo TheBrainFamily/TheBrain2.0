@@ -1,6 +1,6 @@
 export default {
-  'Chemistry': { file: require(`../images/chemistry.svg`), scale: 1, svg: 1 },
-  'Biology': { file: require(`../images/biology.svg`), scale: 0.75, svg: 1 },
-  'Computer Science': { file: require(`../images/coming-soon-icon-inside.png`), scale: 1.5 },
-  'History': { file: require(`../images/coming-soon-icon-inside.png`), scale: 1.5 }
+  'Chemistry': { file: require(`../images/chemistry.png`), width: 40, height: 80 },
+  'Biology': { file: require(`../images/biology.png`), width: 35, height: 70 },
+  'Computer Science': { file: require(`../images/coming-soon-icon-inside.png`), width: 120, height: 120 },
+  'History': { file: require(`../images/coming-soon-icon-inside.png`), width: 120, height: 120 }
 }
