@@ -51,6 +51,7 @@ export default class App extends Component {
               <Route exact path='/achievements' component={Achievements} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/contact' component={Contact} />
+              <Route exact path='/nointernet' component={Home} />
             </Page>
           </View>
         </NativeRouter>

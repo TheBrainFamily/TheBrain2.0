@@ -60,7 +60,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-let OPTICS_API_KEY
+let OPTICS_API_KEY = '***REMOVED***'
 
 // FIXES CORS ERROR
 const whitelist = [
@@ -102,6 +102,10 @@ app.get('/auth/facebook/callback',
       res.redirect('/')
     }
 )
+
+OpticsAgent.configureAgent({ apiKey: OPTICS_API_KEY })
+
+OpticsAgent.instrumentSchema(schema);
 
 if (OPTICS_API_KEY) {
   app.use('/graphql', OpticsAgent.middleware())

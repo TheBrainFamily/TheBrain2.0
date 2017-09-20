@@ -12,13 +12,16 @@ import * as courseActions from '../actions/CourseActions'
 class FBLoginButton extends React.Component {
 
   logInWithFacebook = async (accessTokenFb, userIdFb) => {
+    this.props.setLoadingState(true)
     this.props.dispatch(courseActions.close())
     this.props.logInWithFacebook({ accessTokenFb, userIdFb}).then(async () => {
       await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
       await AsyncStorage.setItem('userIdFb', userIdFb)
       await this.props.userDetails.refetch()
       this.props.history.push('/')
+      this.props.setLoadingState(false)
     }).catch(() => {
+      this.props.setLoadingState(false)
       Alert.alert('Log in failed', 'Please try again later')
     })
   }

@@ -6,6 +6,8 @@ import update from 'immutability-helper'
 import styles from '../styles/styles'
 import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
 import setUserIsCasualMutation from '../shared/graphql/mutations/setUserIsCasual'
+import { mutationConnectionHandler } from './NoInternet'
+import { withRouter } from 'react-router'
 
 class CasualQuestionModal extends React.Component {
   constructor (props) {
@@ -15,28 +17,30 @@ class CasualQuestionModal extends React.Component {
     }
   }
 
-  setUserIsCasual = (isCasual) => {
-    if(!isCasual) {
-      this.setState({hidden: true})
+  setUserIsCasual = async (isCasual) => {
+    if (!isCasual) {
+      this.setState({ hidden: true })
     }
     console.log('casual = ', isCasual)
-    this.props.setUserIsCasual(isCasual)
+    await mutationConnectionHandler(this.props.history, async () => {
+      this.props.setUserIsCasual(isCasual)
+    })
   }
 
   render () {
-    if(this.state.hidden) {
+    if (this.state.hidden) {
       return null
     }
     return (
       <View style={styles.answerEvaluatorOverlay}>
         <Text style={styles.infoText}>
-        This question is marked as hard. Set below to see only the easier ones - but not less interesting!</Text>
+          This question is marked as hard. Set below to see only the easier ones - but not less interesting!</Text>
         <Text style={styles.infoText}>You can always change this setting on the profile page.</Text>
         <View style={{ flexDirection: 'row' }}>
-        <Text onPress={() => this.setUserIsCasual(true)}
-              style={[styles.button, { backgroundColor: '#662d91' }]}>Hide hard questions</Text>
-        <Text onPress={() => this.setUserIsCasual(false)}
-              style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Don't show it again</Text>
+          <Text onPress={() => this.setUserIsCasual(true)}
+                style={[styles.button, { backgroundColor: '#662d91' }]}>Hide hard questions</Text>
+          <Text onPress={() => this.setUserIsCasual(false)}
+                style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Don't show it again</Text>
         </View>
       </View>
     )
@@ -45,14 +49,15 @@ class CasualQuestionModal extends React.Component {
 
 export default compose(
   connect(),
+  withRouter,
   graphql(setUserIsCasualMutation, {
-    props: ({ownProps, mutate}) => ({
+    props: ({ ownProps, mutate }) => ({
       setUserIsCasual: (isCasual) => mutate({
         variables: {
           isCasual
         },
         updateQueries: {
-          UserDetails: (prev, {mutationResult}) => {
+          UserDetails: (prev, { mutationResult }) => {
             return update(prev, {
               UserDetails: {
                 $set: mutationResult.data.setUserIsCasual

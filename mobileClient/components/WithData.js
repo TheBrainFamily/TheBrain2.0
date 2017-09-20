@@ -1,57 +1,28 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import styles from '../styles/styles'
+import { withRouter } from 'react-router'
 
 export default (Component, graphqlDataNames) => {
-  return class DataContainer extends React.Component {
+  return withRouter(class extends React.Component {
     state = { dataLoaded: false, isLoading: false, showRetry: false }
 
-    componentWillReceiveProps = (nextPros) => {
+    componentWillReceiveProps = (nextProps) => {
       let networkFailure = false
       graphqlDataNames.forEach(dataName => {
-        if (this.props[dataName].networkStatus === 8) {
+        if (nextProps[dataName] && nextProps[dataName].networkStatus === 8) {
           networkFailure = true
         }
       })
 
       if (networkFailure !== this.state.showRetry) {
+        if (this.props.history.location.pathname !== '/nointernet') {
+          this.props.history.push('/nointernet')
+        }
         this.setState({ showRetry: networkFailure })
       }
     }
 
-    refetchData = () => {
-      graphqlDataNames.forEach(dataName => this.props[dataName].refetch())
-      this.setState({
-        showRetry: false
-      })
-    }
-
     render () {
-      if (this.state.showRetry) {
-        return (
-          <View style={style.container}>
-            <Text style={[styles.textDefault]}>
-              No Internet connection
-            </Text>
-            <TouchableOpacity onPress={this.refetchData}>
-              <Text style={[styles.button, { backgroundColor: '#68b888', paddingHorizontal: 50 }]}>
-                Retry
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )
-      }
-      return (<Component {...this.props} />)
+      return ( !this.state.showRetry && (<Component {...this.props} />))
     }
-  }
+  })
 }
-
-const style = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 60
-  }
-})

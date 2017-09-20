@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, BackAndroid } from 'react-native'
+import { View, BackAndroid, Platform } from 'react-native'
 import Header from './Header'
 import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
@@ -51,13 +51,13 @@ class PageContainer extends React.Component {
       <View style={{
         height: '100%',
       }}>
-        <Header toggleMainMenu={this.toggleMainMenu}/>
+        <Header hideHamburger={this.props.hideHamburger} toggleMainMenu={this.toggleMainMenu}/>
         {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
       </View>
     </KeyboardAwareScrollView>)
 
   render () {
-    return this.props.dontUseKeyboarAware ? this.renderContainer() : this.renderKeyboardAwareContainer()
+    return this.props.dontUseKeyboarAware || Platform.OS === 'android' ? this.renderContainer() : this.renderKeyboardAwareContainer()
   }
 }
 

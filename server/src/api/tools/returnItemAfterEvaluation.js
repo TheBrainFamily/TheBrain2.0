@@ -4,7 +4,6 @@ import _ from 'lodash'
 import moment from 'moment'
 
 const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
-  const currentDate = moment()
   const nextRepetitionDate = item.nextRepetition
 
   const evaluatedItem = _.cloneDeep(item)
@@ -20,8 +19,8 @@ const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
   } else {
     const newParameters = processEvaluation(evaluation, item.easinessFactor, item.timesRepeated, item.previousDaysChange)
 
-    // nextRepetition is to 18 hours earlier than it should be
-    evaluatedItem.nextRepetition = moment(currentDate).add(newParameters.daysChange - 1, 'days').add(6, 'hours').unix()
+    // set the next repetition to the 6 am of the day of the repetition
+    evaluatedItem.nextRepetition = moment(new Date()).add(newParameters.daysChange, 'days').startOf('day').add(6, 'hours').unix()
     evaluatedItem.easinessFactor = newParameters.easinessFactor
 
     if (newParameters.resetTimesRepeated) {

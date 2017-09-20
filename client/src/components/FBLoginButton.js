@@ -9,6 +9,10 @@ import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
 class FBLoginButton extends React.Component {
   responseFacebook = async (response: { accessToken: string, userID: string }) => {
     console.log('logInWithFacebook', response)
+    if(response.status === 'unknown') {
+      console.log('logInWithFacebook status', response.status)
+      return
+    }
     const accessTokenFb = response.accessToken
     const userIdFb = response.userID
     await this.props.logInWithFacebook({ accessTokenFb, userIdFb })
@@ -23,7 +27,7 @@ class FBLoginButton extends React.Component {
     return (
       <FacebookLogin
         cssClass={'login-button-fb'}
-        appId='***REMOVED***'
+        appId='1621044308126388'
         autoLoad={false}
         callback={this.responseFacebook}
       />

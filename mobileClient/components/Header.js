@@ -1,11 +1,9 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Animated, TouchableOpacity, View, Platform} from 'react-native'
-import SvgUri from 'react-native-svg-uri'
-
+import { Animated, TouchableOpacity, View, Platform, Image } from 'react-native'
 import Hamburger from 'react-native-hamburger'
 
-import logoBig from '../images/logoBig.svg'
+import logoBig from '../images/logoBig.png'
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 
@@ -29,9 +27,11 @@ class Header extends React.Component {
   }
 
   goHome = () => {
-    this.state.topPosition.setValue(0)
-    if (this.state.active) this.toggleMenu()
-    this.props.history.push('/questions')
+    if (!this.props.hideHamburger) {
+      this.state.topPosition.setValue(0)
+      if (this.state.active) this.toggleMenu()
+      this.props.history.push('/questions')
+    }
   }
 
   toggleMenu = () => {
@@ -49,27 +49,24 @@ class Header extends React.Component {
       headerStyle.push({ position: 'absolute', width: '100%' })
     }
 
-    const dynamicHeaderStyle = Platform.OS === 'ios' ? {zIndex: 1000} : {}
+    const dynamicHeaderStyle = Platform.OS === 'ios' ? { zIndex: 1000 } : {}
 
     return (
-      <Animated.View style={[{top: this.state.topPosition}, dynamicHeaderStyle]}>
+      <Animated.View style={[{ top: this.state.topPosition }, dynamicHeaderStyle, { width: '100%' }]}>
         <View style={headerStyle}>
-          <TouchableOpacity style={{justifyContent: 'center'}} onPress={this.goHome}>
-            <SvgUri
-              style={styles.headerLogo}
-              width='280'
-              height='70'
+          <TouchableOpacity style={{ justifyContent: 'center', width: '90%' }} onPress={this.goHome}>
+            <Image
+              style={[styles.headerLogo, { height: '100%', width: '80%', marginLeft: 20 }]}
+              resizeMode={'contain'}
               source={logoBig}
             />
           </TouchableOpacity>
-
-          <Hamburger
+          {!this.props.hideHamburger ? <Hamburger
             active={this.state.active}
             color='#62c46c'
             type='spinCross'
             onPress={this.toggleMenu}
-            style={{ flex: 1 }}
-          />
+          /> : null}
         </View>
 
       </Animated.View>
