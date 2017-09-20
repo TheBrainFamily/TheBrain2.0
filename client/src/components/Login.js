@@ -9,6 +9,7 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
+import TextField from 'material-ui/TextField';
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -21,8 +22,8 @@ class Login extends React.Component {
   }
 
   loginButtonLabels = {
-    login: 'Login',
-    signup: 'Signup'
+    login: 'LOGIN',
+    signup: 'SIGNUP'
   }
 
   getLoginButtonLabel = (isSignup) => {
@@ -37,6 +38,9 @@ class Login extends React.Component {
 
   submit = (e) => {
     e.preventDefault()
+
+    console.log('* LOG * this.refs.username', this.refs.username.input.value, this.refs.password.input.value)
+
     const deviceId = 'browser'
     const saveToken = this.state.saveToken
     let submitAction = this.props.login
@@ -45,7 +49,7 @@ class Login extends React.Component {
     }
     this.setState({ error: '' })
 
-    submitAction({ username: this.refs.username.value, password: this.refs.password.value, deviceId, saveToken })
+    submitAction({ username: this.refs.username.input.value, password: this.refs.password.input.value, deviceId, saveToken })
       .then(() => {
         if(saveToken) {
           const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
@@ -65,7 +69,7 @@ class Login extends React.Component {
     await this.props.userDetails.refetch()
     this.props.dispatch(push('/'))
   }
-  
+
   checkboxClick = () => {
     this.setState({isSignup: !this.state.isSignup})
   }
@@ -77,17 +81,29 @@ class Login extends React.Component {
   render () {
     return (
       <FlexibleContentWrapper>
+        <h1>{ this.state.isSignup ? 'Sign up' : 'Sign in' } and stay educated</h1>
         <form className={'login-form'} onSubmit={this.submit}>
-          <div className='text-error'>{ this.state.error }</div>
+          <FBLoginButton onLogin={this.redirectAfterLogin}/>
+          <p>
+            OR
+          </p>
+          {this.state.error && <div className='text-error'>{ this.state.error }</div>}
           <div>
-            <label>Username:</label>
-            <input ref='username' type='text' name='username'/>
+            <TextField
+              ref='username'
+              hintText="Username"
+              floatingLabelText="Username"
+            />
           </div>
           <div>
-            <label>Password:</label>
-            <input ref='password' type='password' name='password'/>
+            <TextField
+              ref='password'
+              hintText="Password"
+              floatingLabelText="Password"
+              type="password"
+            />
           </div>
-          <div>
+          <div className='mt-1'>
             <input ref='saveToken' type="checkbox" name="saveToken" checked={this.state.saveToken}
                    onChange={this.checkboxClickSave}/>
             <label className={'checkbox-label'} onClick={this.checkboxClickSave}>Remember me</label>
@@ -98,7 +114,6 @@ class Login extends React.Component {
             <label className={'checkbox-label'} onClick={this.checkboxClick}>New account</label>
           </div>
           <div className={'login-form-buttons-container'}>
-            <FBLoginButton onLogin={this.redirectAfterLogin}/>
             <input className={'login-button'} type='submit' value={this.getLoginButtonLabel(this.state.isSignup)}/>
           </div>
         </form>
