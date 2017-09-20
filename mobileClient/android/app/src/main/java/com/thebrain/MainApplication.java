@@ -29,10 +29,10 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNDeviceInfo(),
-            new OrientationPackage(),
             new LinearGradientPackage(),
             new FacebookLoginPackage(),
-            new ReactNativeYouTube()
+            new ReactNativeYouTube(),
+              new OrientationPackage()
       );
     }
   };
