@@ -33,11 +33,13 @@ class Flashcard extends React.Component {
   }
 
   onSubmitEvaluation = (value, itemId) => {
-    if(itemId) {
+    if(itemId && this.props.isAnswerVisible) {
       this.props.submit({
         itemId,
         evaluation: value
       })
+    } else {
+      this.showQuestion(true)
     }
   }
 
