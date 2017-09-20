@@ -41,7 +41,7 @@ class MainContainer extends React.Component {
       if (selectedCourse) {
         courseColor = selectedCourse.color
       } else {
-        courseColor = '#0c6ccb'
+        courseColor = '#6920aa'
       }
     }
     return (
