@@ -742,9 +742,9 @@ CONTACT
 
 .login-form {
     margin: auto;
-    padding-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     color: black;
-    height: 255px;
     width: 400px;
     background-color: white;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.29);
@@ -783,15 +783,14 @@ CONTACT
 
 .login-button {
     margin: 5px;
-    padding: 0 !important;
+    padding: 10px 50px !important;
     border: 0 !important;
     font-size: 15px !important;
     font-family: 'Exo 2', sans-serif;
-    background-color: black !important;
+    background-color: #68b788 !important;
     color: white;
-    height: 28px !important;
-    width: 130px !important;
-    border-radius: 5px;
+    height: auto !important;
+    border-radius: 50px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.20);
 }
 
@@ -801,7 +800,7 @@ CONTACT
     border: 0;
     font-size: 15px;
     font-family: 'Exo 2', sans-serif;
-    background-color: #0074D9 !important;
+    background-color: #415dae !important;
     color: white;
     height: 28px !important;
     width: 170px;
@@ -816,6 +815,10 @@ CONTACT
 .text-error {
     height: 20px;
     color: #D00;
+}
+
+.mt-1 {
+    margin-top: 10px;
 }
 
 /***********************
