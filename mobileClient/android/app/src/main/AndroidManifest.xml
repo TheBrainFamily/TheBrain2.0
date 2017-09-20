@@ -1,18 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.mobileclient"
+          package="com.thebrain"
           android:versionCode="1"
           android:versionName="1.0">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <uses-sdk
             android:minSdkVersion="16"
             android:targetSdkVersion="22"/>
 
     <application
-            android:name=".MainApplication"
+            android:name="com.thebrain.MainApplication"
             android:allowBackup="true"
             android:label="@string/app_name"
             android:icon="@mipmap/ic_launcher"
@@ -34,6 +35,16 @@
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/fb_app_id"/>

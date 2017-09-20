@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
     margin: 0,
     paddingTop: 20,
     paddingBottom: 27,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    width: '100%',
   },
   headerWithShadow: {
     shadowColor: '#000',
@@ -293,16 +294,16 @@ const styles = StyleSheet.create({
   answerTopLine: {
     position: 'absolute',
     alignSelf: 'center',
-    top: "12%",
+    top: '12%',
     width: 2,
-    height: "24%",
+    height: '24%',
     backgroundColor: '#71b9d3'
   },
   answerRightLine: {
     position: 'absolute',
     top: '50%',
-    right: "12%",
-    width: "26%",
+    right: '12%',
+    width: '26%',
     height: 2,
     backgroundColor: '#ff8533',
     transform: [{ translateY: -1 }]
@@ -310,16 +311,16 @@ const styles = StyleSheet.create({
   answerBottomLine: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: "11.6%",
+    bottom: '11.6%',
     width: 2,
-    height: "24%",
+    height: '24%',
     backgroundColor: '#c1272d'
   },
   answerLeftLine: {
     position: 'absolute',
     top: '50%',
-    left: "12%",
-    width: "26%",
+    left: '12%',
+    width: '26%',
     height: 2,
     backgroundColor: '#62c46c',
     transform: [{ translateY: -1 }]
@@ -399,11 +400,12 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   draggableContainer: {
+    width: '100%',
+    height: '100%',
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: "100%",
-    height: "100%",
+
   },
   answerSwipeBall: {
     alignSelf: 'center',
@@ -427,6 +429,54 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Exo2-Regular',
     fontSize: 17
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 4,
+    borderRightWidth: 4,
+    borderBottomWidth: 12,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#b3b3b3',
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  triangleTop: {
+    top: '34%',
+  },
+  triangleBottom: {
+    borderBottomWidth: 0,
+    borderTopWidth: 12,
+    borderBottomColor: 'transparent',
+    borderTopColor: '#b3b3b3',
+    top: '60%',
+  },
+  triangleRight: {
+    borderBottomWidth: 4,
+    borderTopWidth: 4,
+    borderRightWidth: 0,
+    borderLeftWidth: 12,
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: '#b3b3b3',
+    top: '48.75%',
+    left: '60%',
+  },
+  triangleLeft: {
+    borderBottomWidth: 4,
+    borderTopWidth: 4,
+    borderRightWidth: 12,
+    borderLeftWidth: 0,
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderRightColor: '#b3b3b3',
+    borderLeftColor: 'transparent',
+    top: '48.75%',
+    left: '38%',
   }
 })
 

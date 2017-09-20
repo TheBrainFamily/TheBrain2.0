@@ -9,11 +9,13 @@ import DeviceInfo from 'react-native-device-info'
 import * as courseActions from '../actions/CourseActions'
 import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
+import Loading from './Loading'
 
 import styles from '../styles/styles'
 
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import WithData from './WithData'
 
 class Login extends React.Component {
   constructor (props) {
@@ -23,7 +25,8 @@ class Login extends React.Component {
       isLogin: true,
       error: '',
       username: '',
-      password: ''
+      password: '',
+      loading: false
     }
 
     this.inputs = {}
@@ -39,13 +42,17 @@ class Login extends React.Component {
     }
   }
 
+  setLoadingState = (loading) => {
+    this.setState({loading})
+  }
+
   toggleSwitch = () => {
     this.setState({ isLogin: !this.state.isLogin })
   }
 
   submit = () => {
     const deviceId = DeviceInfo.getUniqueID() || 'defaultMobileClient'
-    this.setState({ error: '' })
+    this.setState({ error: '', loading: true })
     const actionName = this.state.isLogin ? 'login' : 'signup'
     this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId, saveToken: true })
       .then( async () => {
@@ -55,11 +62,13 @@ class Login extends React.Component {
         await AsyncStorage.setItem('accessToken', accessToken)
         await AsyncStorage.setItem('userId', userId)
         await this.props.userDetails.refetch()
+        this.setState({ loading: false })
         this.props.history.push('/')
       })
       .catch((data) => {
         const error = data.graphQLErrors[0].message
-        this.setState({ error })
+        this.setState({ error, loading: false })
+        this.history.push('/nointernet')
       })
   }
 
@@ -68,6 +77,9 @@ class Login extends React.Component {
   }
 
   render () {
+    if(this.state.loading || this.props.currentUser.loading || this.props.userDetails.loading) {
+      return <Loading/>
+    }
     return (
       <PageContainer>
 
@@ -77,7 +89,7 @@ class Login extends React.Component {
           </Text>
 
           <View style={{ alignItems: 'center' }}>
-            <FBLoginButton />
+            <FBLoginButton setLoadingState={this.setLoadingState} />
           </View>
 
           <Text style={[styles.infoText, { fontWeight: 'bold', color: '#ccc', fontSize: 12, marginTop: 15 }]}>OR</Text>
@@ -161,8 +173,8 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
+            // console.log('Gozdecki: mutationResult', mutationResult)
+            // console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.setUsernameAndPasswordForGuest
@@ -184,8 +196,8 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            console.log('Gozdecki: mutationResult', mutationResult)
-            console.log('Gozdecki: prev', prev)
+            // console.log('Gozdecki: mutationResult', mutationResult)
+            // console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logIn
@@ -208,4 +220,4 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   })
-)(Login)
+)(WithData(Login, ['currentUser', 'userDetails']))
