@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import Home from './Home'
 import Course from './Course'
@@ -37,7 +38,7 @@ class MainContainer extends React.Component {
     const currentUser = this.props.data.CurrentUser
     let courseColor = null
     if (this.props.userDetails.UserDetails && this.props.courses.Courses) {
-      const selectedCourse = this.props.courses.Courses.find(course => course._id === this.props.userDetails.UserDetails.selectedCourse)
+      const selectedCourse = _.find(this.props.courses.Courses, course => course._id === this.props.userDetails.UserDetails.selectedCourse)
       if (selectedCourse) {
         courseColor = selectedCourse.color
       } else {
