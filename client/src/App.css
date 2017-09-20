@@ -106,8 +106,7 @@ body {
 }
 
 .dropdown .dd-menu-items a:hover {
-    color: white;
-    background-color: #5ebf8e;
+    color: black;
 }
 
 .menu-separator {
