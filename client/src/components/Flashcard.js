@@ -23,7 +23,12 @@ import answerButtonImage4 from '../img/button-veryhard.png'
 import LevelUpWrapper from './LevelUpWrapper'
 
 class Flashcard extends React.Component {
+  state = {
+    shouldAnimate: false
+  }
+
   showQuestion = (isVisible) => {
+    this.setState({ shouldAnimate: true })
     this.props.dispatch(flashcard.showAnswer(isVisible))
   }
 
@@ -102,27 +107,40 @@ class Flashcard extends React.Component {
 
     if (!this.props.isAnswerVisible) {
       return (
-        <FlexibleContentWrapper offset={300}>
-          <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
-            <div className='flashcard-title'>QUESTION
-              { !isCasual ? <div className={'flashcard-title-not-casual'}>
-                <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
-              </div> : null }
-              {userIsCasual === null && !isCasual ?
-                casualSwitchPopup : null
-              }
-            </div>
-            <div className='flashcard-content'>
-              <div className='flashcard-content-text'>
-                <div className='scrollable-text'>
-                  {image && <ResizableImage image={image}/>}
-                  {question}
+        <div>
+          <FlexibleContentWrapper offset={300}>
+            <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
+              <div className='flashcard-title'>QUESTION
+                { !isCasual ? <div className={'flashcard-title-not-casual'}>
+                  <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
+                </div> : null }
+                {userIsCasual === null && !isCasual ?
+                  casualSwitchPopup : null
+                }
+              </div>
+              <div className='flashcard-content'>
+                <div className='flashcard-content-text'>
+                  <div className='scrollable-text'>
+                    {image && <ResizableImage image={image}/>}
+                    {question}
+                  </div>
                 </div>
               </div>
+              <div className='flashcard-footer'>Click the card to see the answer!</div>
             </div>
-            <div className='flashcard-footer'>Click the card to see the answer!</div>
+          </FlexibleContentWrapper>
+          <div className={`answer-buttons-container slide-animation ${this.state.shouldAnimate ? 'slide-out' : ''}`}>
+            <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(6, itemId)}/>
+            <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
+            <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
+            <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(1, itemId)}/>
           </div>
-        </FlexibleContentWrapper>)
+        </div>
+      )
     }
     return (
       <div>
@@ -144,7 +162,7 @@ class Flashcard extends React.Component {
             <div className='flashcard-footer'>How would you describe experience answering this question?</div>
           </div>
         </FlexibleContentWrapper>
-        <div className="answer-buttons-container">
+        <div className='answer-buttons-container slide-animation slide-in'>
           <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
                onClick={() => this.onSubmitEvaluation(6, itemId)}/>
           <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
@@ -154,7 +172,8 @@ class Flashcard extends React.Component {
           <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
                onClick={() => this.onSubmitEvaluation(1, itemId)}/>
         </div>
-      </div>)
+      </div>
+    )
   }
 }
 
