@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -21,7 +21,7 @@ var getProcessForPort = require('react-dev-utils/getProcessForPort');
 var openBrowser = require('react-dev-utils/openBrowser');
 var prompt = require('react-dev-utils/prompt');
 var fs = require('fs');
-var config = require('../config/webpack.config.prod');
+var config = require('../config/webpack.config.dev');
 var paths = require('../config/paths');
 
 var useYarn = fs.existsSync(paths.yarnLockFile);

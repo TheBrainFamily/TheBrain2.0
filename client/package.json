@@ -75,6 +75,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "./.scripts/startProd.sh",
+    "dev": "NODE_PATH='src' node scripts/start.js",
     "build": "NODE_PATH='src' node scripts/build.js",
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
     "flow": "flow",
