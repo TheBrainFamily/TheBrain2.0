@@ -33,6 +33,8 @@ import currentUserQuery from '../shared/graphql/queries/currentUser'
 import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
+import WithData from './WithData'
+import { mutationConnectionHandler } from './NoInternet'
 
 class Questions extends React.Component {
   constructor (props) {
@@ -61,12 +63,12 @@ class Questions extends React.Component {
     if (nextProps.currentItems.loading || !itemsWithFlashcard || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
       return
     }
-    console.log(nextProps.currentItems)
+    // console.log(nextProps.currentItems)
     if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
-      console.log('redirecting / ')
+      // console.log('redirecting / ')
       nextProps.history.push('/')
     } else {
-      console.log('redirecting /login ')
+      // console.log('redirecting /login ')
       nextProps.history.push('/login')
     }
   }
@@ -95,13 +97,16 @@ class Questions extends React.Component {
   }
 
   closeCourse = async () => {
-    await this.props.closeCourse()
-    this.props.dispatch(courseActions.close())
+    await mutationConnectionHandler(this.props.history, async () => {
+      await this.props.closeCourse()
+      this.props.dispatch(courseActions.close())
+    })
   }
 
   render () {
+    const courseColor = _.get(this.props.course, 'selectedCourse.color')
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
-      return <Loading />
+      return <Loading backgroundColor={courseColor} />
     } else {
       const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
       const sessionCount = this.props.sessionCount.SessionCount
@@ -114,11 +119,10 @@ class Questions extends React.Component {
         const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
         const progress = done / total
 
-        const courseColor = _.get(this.props.course, 'selectedCourse.color')
-
         return (
           <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}>
+            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse}
+                          toggleMainMenu={this.toggleMainMenu}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
@@ -126,7 +130,8 @@ class Questions extends React.Component {
                        evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}
                        getFlashcardWidth={this.getFlashcardWidth}
                        isQuestionCasual={flashcard.isCasual}/>
-            <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer} evalItemId={evalItem._id}
+            <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer}
+                             evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
             {this.state.mainMenuActive &&
             <MainMenu topMargin={this.props.height} closeCourse={this.closeCourse}/>}
@@ -160,7 +165,7 @@ export default compose(
       closeCourse: () => mutate({
         updateQueries: {
           UserDetails: (prev, { mutationResult }) => {
-            console.log('mutation close course: ', mutationResult.data.closeCourse)
+            // console.log('mutation close course: ', mutationResult.data.closeCourse)
             return update(prev, {
               UserDetails: {
                 $set: mutationResult.data.closeCourse
@@ -172,4 +177,4 @@ export default compose(
     })
   }),
   connect(state => state)
-)(Questions)
+)(WithData(Questions, ['currentUser', 'currentItems', 'sessionCount']))

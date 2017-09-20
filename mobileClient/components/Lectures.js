@@ -9,6 +9,7 @@ import Video from './Video'
 
 import lessonsQuery from '../shared/graphql/queries/lessons'
 import currentLessonQuery from '../shared/graphql/queries/currentLesson'
+import WithData from './WithData'
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
@@ -106,4 +107,4 @@ export default compose(
       }
     }
   })
-)(Lectures)
+)(WithData(Lectures, ['currentLesson', 'lessons']))

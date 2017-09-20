@@ -116,8 +116,6 @@ const resolvers = {
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
-      // TODO THIS SPLICE HAS TO GO
-      flashcardIds.splice(3)
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
       flashcards.forEach((flashcard) => {
         if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
@@ -216,7 +214,7 @@ const resolvers = {
         await context.Users.removeToken(userId, accessToken)
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: 'loggedOut', activated: false, facebookId: null, accessToken: null}
+      return {_id: 'loggedOut', username: '', activated: false, facebookId: null, accessToken: null}
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
