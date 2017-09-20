@@ -18,6 +18,7 @@ const getRawData = (lineStr) => {
     isHardcoreQuestion: parseInt(elements[2]) > 0,
     questionContent: elements[3],
     answer: elements[4],
+    youtubeId: elements[5]
   }
 }
 
@@ -100,7 +101,9 @@ const getClasses = (strLines, youtubeLinksArray, courseId, images) => {
   strLines.forEach((line) => {
 
     const rawData = getRawData(line)
-    rawData.youtubeId = youtubeLinksArray[rawData.movieId - 1]
+    if (youtubeLinksArray) {
+      rawData.youtubeId = youtubeLinksArray[rawData.movieId - 1]
+    }
     rawData.courseId = courseId
 
     const lesson = getLessonFor(rawData)
@@ -110,7 +113,7 @@ const getClasses = (strLines, youtubeLinksArray, courseId, images) => {
     } else {
       const flashcard = getFlashCard(rawData)
       if (tryAddImageToFlashcard(rawData.movieId, rawData.questionLocalId, flashcard, images)) {
-        if(flashcard.answerImage) {
+        if (flashcard.answerImage) {
           // skip flashcards with images as an answer
           return
         }
@@ -127,15 +130,6 @@ const getClasses = (strLines, youtubeLinksArray, courseId, images) => {
   }
 }
 
-const onCSVLoaded = (csvRaw) => {
-
-  const lines = getLines(csvRaw)
-  const images = getFlashcardImages('/Users/jmozgawa/Projects/TheBrain2.0/client/public/img/chemistry', 'chemistry')
-  const parsedCsv = getClasses(lines, chemistryYoutubeLinks, '59c006d7e7fcb5110c2dc5a7', images)
-
-  saveResultsToMongo(parsedCsv)
-}
-
 const saveResultsToMongo = (data) => {
   const db = new Db('thebrain', new Server('localhost', 27017))
   db.open(async (err, db) => {
@@ -147,12 +141,33 @@ const saveResultsToMongo = (data) => {
 
     db.close()
   })
-
 }
 
-fs.readFile('/Users/jmozgawa/Projects/TheBrain2.0/assets/crashcourse chemistry poprawione.csv', 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err)
-  }
-  onCSVLoaded(data)
-})
+const onCSVLoaded = (csvRaw, imagesPath, courseName, courseId, youtubeLinks = null) => {
+  const lines = getLines(csvRaw)
+  const images = getFlashcardImages(imagesPath, courseName)
+  const parsedCsv = getClasses(lines, youtubeLinks, courseId, images)
+
+  // saveResultsToMongo(parsedCsv)
+}
+
+const importChemistry = () => {
+  fs.readFile('/Users/jmozgawa/Projects/TheBrain2.0/assets/crashcourse chemistry poprawione.csv', 'utf8', function (err, data) {
+    if (err) {
+      return console.log(err)
+    }
+    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/client/public/img/chemistry', 'chemistry', '59c006d7e7fcb5110c2dc5a7', chemistryYoutubeLinks)
+  })
+}
+
+const importBiology = () => {
+  fs.readFile('/Users/jmozgawa/Projects/TheBrain2.0/assets/crashcourse biology complete poprawione.csv', 'utf8', function (err, data) {
+    if (err) {
+      return console.log(err)
+    }
+    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/client/public/img/biology', 'biology', '59b6aecade3d69efc0253b6c')
+  })
+}
+
+importBiology()
+
