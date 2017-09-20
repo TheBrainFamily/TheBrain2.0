@@ -81,7 +81,8 @@
     "standard": "standard",
     "standardFix": "standard --fix",
     "deploySetup": "./.scripts/deploySetup.sh",
-    "deploy": "./.scripts/deploy.sh"
+    "deploy": "./.scripts/deploy.sh",
+    "postinstall": "npm run build"
   },
   "jest": {
     "collectCoverageFrom": [
