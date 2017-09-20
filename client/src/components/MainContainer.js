@@ -4,6 +4,7 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
+import _ from 'lodash'
 import Home from './Home'
 import Course from './Course'
 import Lecture from './Lecture'
@@ -39,7 +40,7 @@ class AirplaneWrapper extends React.Component {
   render() {
     let courseColor = null
     if (this.props.userDetails.UserDetails && this.props.courses.Courses) {
-      const selectedCourse = this.props.courses.Courses.find(course => course._id === this.props.userDetails.UserDetails.selectedCourse)
+      const selectedCourse = _.find(this.props.courses.Courses, course => course._id === this.props.userDetails.UserDetails.selectedCourse)
       if (selectedCourse) {
         courseColor = selectedCourse.color
       } else {
