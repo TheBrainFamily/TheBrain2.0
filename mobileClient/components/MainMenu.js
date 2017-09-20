@@ -21,6 +21,7 @@ import levelConfig from '../shared/helpers/levelConfig'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
 
@@ -183,27 +184,27 @@ class MainMenu extends React.Component {
         </View>
         <View style={{ marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start' }}>
           {activated
-            ? <MenuButton text="LOG OUT" onPress={this.logout}/>
-            : <MenuButton text="LOG IN" onPress={this.go('/login')}/>
+            ? <MenuButton text="LOG OUT" onPress={this.logout} />
+            : <MenuButton text="LOG IN" onPress={this.go('/login')} />
           }
           <Separator />
           {currentUser &&
-          <View>
-            {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')}/> : null}
-            {this.props.selectedCourse ? <Separator /> : null}
+            <View>
+              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null}
+              {this.props.selectedCourse ? <Separator /> : null}
 
-            <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')}/>
-            <Separator />
-            {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
-                                                     onPress={this.props.closeCourse ? this.props.closeCourse : this.closeCourse}/> : null}
-            {this.props.selectedCourse ? <Separator /> : null}
-            {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
-            {/*<Separator />*/}
-            <MenuButton text="PROFILE" onPress={this.go('/profile')}/>
-            <Separator />
-          </View>
+              <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
+              <Separator />
+              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
+                                                       onPress={this.closeCourse} /> : null}
+              {this.props.selectedCourse ? <Separator /> : null}
+              {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
+              {/*<Separator />*/}
+              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+              <Separator />
+            </View>
           }
-          <MenuButton text="CONTACT" onPress={this.go('/contact')}/>
+          <MenuButton text="CONTACT" onPress={this.go('/contact')} />
         </View>
       </Animated.View>
     )
@@ -249,6 +250,21 @@ export default compose(
   withApollo,
   withRouter,
   connect(mapStateToProps),
+  graphql(closeCourseMutation, {
+    props: ({ ownProps, mutate }) => ({
+      closeCourse: () => mutate({
+        updateQueries: {
+          UserDetails: (prev, { mutationResult }) => {
+            return update(prev, {
+              UserDetails: {
+                $set: mutationResult.data.closeCourse
+              }
+            })
+          }
+        },
+      })
+    })
+  }),
   graphql(logOutQuery, {
     props: ({ ownProps, mutate }) => ({
       logout: () => mutate({
