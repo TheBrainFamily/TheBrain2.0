@@ -60,7 +60,6 @@ class ReviewsCalendar extends React.Component {
         <a onClick={() => this.props.dispatch(push('/'))}>Click here </a> to do so.
       </div>
     }
-    console.log('######EEEEEEXTRAAA PONTON######: this.props', this.props)
 
     const currentDate = new Date()
     const month = currentDate.toLocaleString('en-us', { month: 'long' }).toUpperCase()
