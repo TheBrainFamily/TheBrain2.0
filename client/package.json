@@ -74,14 +74,15 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "NODE_PATH='src' node scripts/start.js",
+    "start": "./.scripts/startProd.sh",
     "build": "NODE_PATH='src' node scripts/build.js",
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
     "flow": "flow",
     "standard": "standard",
     "standardFix": "standard --fix",
     "deploySetup": "./.scripts/deploySetup.sh",
-    "deploy": "./.scripts/deploy.sh"
+    "deploy": "./.scripts/deploy.sh",
+    "postinstall": "npm run build"
   },
   "jest": {
     "collectCoverageFrom": [
