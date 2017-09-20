@@ -11,7 +11,6 @@ export default class ProgressBar extends React.Component {
   render () {
     let progress = Math.min(Math.max(this.props.progress, 0), 1)
     if(!progress) {
-      console.warn('ProgressBar progress is', progress)
       progress = 0
     }
 
