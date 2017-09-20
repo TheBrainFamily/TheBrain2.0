@@ -34,6 +34,7 @@ class Lectures extends React.Component {
       )
     return (
       <div>
+        <h1>LECTURES LIST - {this.props.selectedCourse.name.toUpperCase()}</h1>
         {videosElements}
       </div>
 
