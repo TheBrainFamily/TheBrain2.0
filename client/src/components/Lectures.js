@@ -3,12 +3,17 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 import YouTube from 'react-youtube'
 
 import lessonsQuery from '../../shared/graphql/queries/lessons'
 import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
 class Lectures extends React.Component {
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !!nextProps.selectedCourse
+  }
 
   render () {
     const opts = {
@@ -20,7 +25,7 @@ class Lectures extends React.Component {
       }
     }
 
-    const videosElements = this.props.lessons.Lessons && this.props.lessons.Lessons.map(lesson =>
+    const videosElements = this.props.currentLesson.Lesson && this.props.lessons.Lessons && this.props.lessons.Lessons.map(lesson =>
         <div style={{
           display: 'inline-block', margin: '1%',
           opacity: lesson.position > this.props.currentLesson.Lesson.position ? 0.5 : 1
@@ -34,7 +39,7 @@ class Lectures extends React.Component {
       )
     return (
       <div>
-        <h1>LECTURES LIST - {this.props.selectedCourse.name.toUpperCase()}</h1>
+        <h1>LECTURES LIST - {this.props.selectedCourse && this.props.selectedCourse.name.toUpperCase()}</h1>
         {videosElements}
       </div>
 
