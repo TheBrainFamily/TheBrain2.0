@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react'
 import { ApolloProvider } from 'react-apollo'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import store, { client } from './store'
 import MainContainer from './components/MainContainer'
 import './App.css'
@@ -18,9 +19,11 @@ class App extends Component {
 
   render () {
     return (
-      <ApolloProvider client={client} store={store}>
-        {this.mobilecheck() ? <MobileContainer/>: <MainContainer/> }
-      </ApolloProvider>
+      <MuiThemeProvider>
+        <ApolloProvider client={client} store={store}>
+          {this.mobilecheck() ? <MobileContainer/>: <MainContainer/> }
+        </ApolloProvider>
+      </MuiThemeProvider>
     )
   }
 }
