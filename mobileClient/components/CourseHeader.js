@@ -62,7 +62,6 @@ class CourseHeader extends React.Component {
 
 const style = {
   courseHeader: {
-    // zIndex: 500,
     margin: 0,
     height: appStyle.header.height,
     width: '100%',
