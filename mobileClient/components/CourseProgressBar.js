@@ -14,7 +14,7 @@ import WithData from './WithData'
 class CourseProgressBar extends React.Component {
   render () {
     if (this.props.currentLesson.loading || this.props.lessonCount.loading) {
-      return <View />
+      return <ProgressBar progress={0}/>
     }
 
     const lessonsTotal = this.props.lessonCount.LessonCount.count
