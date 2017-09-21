@@ -104,8 +104,8 @@ class AppHeader extends React.Component {
                 }
                 {currentUser &&
                 <div>
-                  <a>LECTURES LIST</a>
-                  <div className={'menu-separator menu-separator-visible'} />
+                  {/*<a>LECTURES LIST</a>*/}
+                  {/*<div className={'menu-separator menu-separator-visible'} />*/}
                   <a onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
                   <div className={'menu-separator menu-separator-visible'} />
                   <a onClick={this.closeCourse()}>CHANGE THE COURSE</a>
