@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { course } from '../actions'
 import update from 'immutability-helper'
+import _ from 'lodash'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -75,7 +76,7 @@ class Home extends React.Component {
   }
 
   selectCourse = (courseId) => async () => {
-    const selectedCourse = this.props.courses.Courses.find(course=>course._id === courseId)
+    const selectedCourse = _.find(this.props.courses.Courses, course=>course._id === courseId)
     this.props.dispatch(course.select(selectedCourse))
     await this.props.selectCourse({courseId})
     this.props.dispatch(push(`/course/${courseId}`))

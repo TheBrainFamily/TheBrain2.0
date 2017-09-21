@@ -43,6 +43,7 @@
     "jest": "18.1.0",
     "json-loader": "0.5.4",
     "lodash": "^4.17.4",
+    "material-ui": "^0.19.2",
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
@@ -74,14 +75,16 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "NODE_PATH='src' node scripts/start.js",
+    "start": "./.scripts/startProd.sh",
+    "dev": "NODE_PATH='src' node scripts/start.js",
     "build": "NODE_PATH='src' node scripts/build.js",
     "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
     "flow": "flow",
     "standard": "standard",
     "standardFix": "standard --fix",
     "deploySetup": "./.scripts/deploySetup.sh",
-    "deploy": "./.scripts/deploy.sh"
+    "deploy": "./.scripts/deploy.sh",
+    "postinstall": "npm run build"
   },
   "jest": {
     "collectCoverageFrom": [
