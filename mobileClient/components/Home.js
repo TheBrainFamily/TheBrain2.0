@@ -94,8 +94,6 @@ class Home extends React.Component {
       return false
     }
 
-    // console.log("JMOZGAWA: nextProps",nextProps);
-
     return true
   }
 
@@ -143,6 +141,9 @@ class Home extends React.Component {
   }
 
   animateCourseSelector = (selectedCourseId) => {
+    if(!this.refs[`${selectedCourseId}courseSelectorContainer`]) {
+      return
+    }
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
       const scale = 0.75
       const desiredBottomYOffset = 10
@@ -252,7 +253,7 @@ class Home extends React.Component {
               const textOpacity = course.isDisabled ? 0.5 : 1
 
               return (
-                <Animatable.View key={course._id} style={{ zIndex: 100, width: '45%' }}
+                <Animatable.View key={course._id} style={{ elevation: 100, width: '45%' }}
                                  ref={`${course._id}courseSelector`}>
                   <View ref={`${course._id}courseSelectorContainer`}
                         onLayout={() => {}}>
