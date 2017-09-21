@@ -4,6 +4,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
+  const currentDate = moment()
   const nextRepetitionDate = item.nextRepetition
 
   const evaluatedItem = _.cloneDeep(item)
