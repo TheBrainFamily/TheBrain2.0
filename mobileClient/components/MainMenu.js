@@ -89,7 +89,7 @@ class MainMenu extends React.Component {
 
   closeCourse = async () => {
     this.props.dispatch(courseActions.close())
-    await this.props.closeCourse()
+    await this.props.closeCourseMutation()
     this.go('/')()
   }
 
@@ -153,7 +153,7 @@ class MainMenu extends React.Component {
                 <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
                 <View style={[style.card, { backgroundColor: '#4ba695' }]}/>
               </View>
-              <View style={{ position: 'relative', width: 1, backgroundColor: '#999', zIndex: 1000 }}>
+              <View style={{ position: 'relative', width: 1, backgroundColor: '#999', elevation: 1000 }}>
                 <View style={{
                   position: 'absolute',
                   top: -4,
@@ -196,7 +196,9 @@ class MainMenu extends React.Component {
               <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
               <Separator />
               {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
-                                                       onPress={this.closeCourse} /> : null}
+                                                       onPress={() => {
+                                                         this.props.closeCourse ? this.props.closeCourse() : this.closeCourse()
+                                                       }} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
               {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
               {/*<Separator />*/}
@@ -252,7 +254,7 @@ export default compose(
   connect(mapStateToProps),
   graphql(closeCourseMutation, {
     props: ({ ownProps, mutate }) => ({
-      closeCourse: () => mutate({
+      closeCourseMutation: () => mutate({
         updateQueries: {
           UserDetails: (prev, { mutationResult }) => {
             return update(prev, {
