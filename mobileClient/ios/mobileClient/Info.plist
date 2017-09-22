@@ -25,16 +25,16 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb794881630542767</string>
+				<string>fb1621044308126388</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>7</string>
 	<key>FacebookAppID</key>
-	<string>794881630542767</string>
+	<string>1621044308126388</string>
 	<key>FacebookDisplayName</key>
-	<string>thebrainTest</string>
+	<string>TheBrain.Pro</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -58,7 +58,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Exo2-Bold.ttf</string>
