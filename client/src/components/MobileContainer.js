@@ -3,7 +3,6 @@ import React from 'react'
 import logo from '../img/logo.svg'
 import androidIcon from '../img/google_play_en.svg'
 import iosIcon from '../img/app_store_en.svg'
-import iosSoonIcon from '../img/app-store-soon.png'
 
 export default class MobileContainer extends React.Component {
   render () {
@@ -22,9 +21,9 @@ export default class MobileContainer extends React.Component {
           <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
             <img alt={'Google Play'} src={androidIcon} style={{ width: '80%', margin: '10px' }}/>
           </a>
-          {/*<a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>*/}
-            <img alt={'Apple App Store'} src={iosSoonIcon} style={{ width: '80%', margin: '10px', opacity: 0.4 }}/>
-          {/*</a>*/}
+          <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+            <img alt={'Apple App Store'} src={iosIcon} style={{ width: '80%', margin: '10px'}}/>
+          </a>
         </div>
       </div>
     )
