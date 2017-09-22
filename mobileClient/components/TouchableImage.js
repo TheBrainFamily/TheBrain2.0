@@ -1,34 +1,23 @@
 // @flow
 
 import React from 'react';
-import {
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import Animator from './Animator'
+import { View, TouchableWithoutFeedback } from 'react-native';
 import NetworkImage from './NetworkImage'
+import * as fullscreenActions from '../actions/FullscreenActions'
+import { connect } from 'react-redux'
+import { compose } from 'react-apollo'
 
-export default class TouchableImage extends React.Component {
-  state: Object
-
-  constructor(props: Object) {
-    super(props)
-
-    this.state = {
-      animator: new Animator(this.props.animator)
-    }
-  }
-
-  componentWillReceiveProps(nextProps: Object) {
-    this.setState({animator: new Animator(nextProps.animator)})
-    this.state.animator.resetAnimations()
-  }
-
+class TouchableImage extends React.Component {
   render = () => {
     return (
-      <Animated.View style={[this.props.style, this.state.animator.getStyle()]}>
+      <View style={this.props.style}>
         <TouchableWithoutFeedback onPress={() => {
-          this.state.animator.startAnimations()
+          this.props.dispatch(fullscreenActions.setOverlay({
+            visible: true,
+            image: {
+              src: this.props.imageProperties.source
+            }
+          }))
         }}>
           <NetworkImage
             style={{width: '100%', height: '100%'}}
@@ -36,7 +25,11 @@ export default class TouchableImage extends React.Component {
             resizeMode={ this.props.imageProperties.resizeMode }
           />
         </TouchableWithoutFeedback>
-      </Animated.View>
+      </View>
     )
   }
 }
+
+export default compose(
+  connect(state => state)
+)(TouchableImage)
