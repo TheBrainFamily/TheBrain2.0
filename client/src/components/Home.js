@@ -14,6 +14,8 @@ import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
+import androidIcon from '../img/google_play_en.svg'
+import iosIcon from '../img/app_store_en.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
@@ -138,6 +140,14 @@ class Home extends React.Component {
           })}
         </ul>}
         <div className='oldBrainLinkContainer'>
+          <div >
+            <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
+              <img alt={'Google Play'} src={androidIcon} style={{ width: '150px', margin: '10px' }}/>
+            </a>
+            <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '150px', margin: '10px'}}/>
+            </a>
+          </div>
           Looking for the previous version of TheBrain?
           Click <a href="https://legacy.thebrain.pro">here</a> | <a href="policy.html">Privacy policy</a>
         </div>
