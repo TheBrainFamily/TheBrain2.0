@@ -213,15 +213,37 @@ export default compose(
           itemId,
           evaluation
         },
-        updateQueries: {
-          CurrentItems: (prev, {mutationResult}) => {
-            const updateResults = update(prev, {
-              ItemsWithFlashcard: {
-                $set: mutationResult.data.processEvaluation
-              }
-            })
-            return updateResults
+        optimisticResponse: {
+          processEvaluation: {
+            //With this fake data we get warnings in the client on every evaluation :-(
+            "item": {
+              "_id": "-1",
+              "flashcardId": "",
+              "extraRepeatToday": false,
+              "actualTimesRepeated": 0,
+              "__typename": "Item"
+            },
+            "flashcard": {
+              "_id": "-1",
+              "question": "",
+              "answer": "",
+              "isCasual": true,
+              "image": null,
+              "__typename": "Flashcard"
+            },
+            "__typename": "ItemWithFlashcard",
+            switchFlashcards: true,
+          },
+        },
+        update: (proxy, { data: { processEvaluation } }) => {
+          const data = proxy.readQuery({ query: currentItemsQuery });
+          if (processEvaluation.switchFlashcards) {
+            const newFlashcards = [_.last(data.ItemsWithFlashcard)]
+            data.ItemsWithFlashcard = newFlashcards
+          } else {
+            data.ItemsWithFlashcard = processEvaluation
           }
+          proxy.writeQuery({ query: currentItemsQuery, data });
         },
         refetchQueries: [{
           query: sessionCountQuery
