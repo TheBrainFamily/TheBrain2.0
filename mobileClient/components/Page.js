@@ -68,7 +68,7 @@ class FullscreenOverlay extends React.Component {
       return null
     }
     if(!this.props.fullscreen.image) {
-      return
+      return null
     }
     return (
       <TouchableWithoutFeedback onPress={() => {this.changeVisibility()}}>
