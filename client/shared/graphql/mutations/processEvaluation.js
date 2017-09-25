@@ -16,6 +16,10 @@ export default gql`
                   url
                   hasAlpha
                 }
+                answerImage {
+                  url
+                  hasAlpha
+                }
             }
         }
     }
