@@ -208,17 +208,14 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   cardImage: {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     backgroundColor: 'white',
     shadowColor: 'black',
     shadowOffset: { width: 4, height: 4 },
     shadowRadius: 4,
     shadowOpacity: 0.5,
-    borderWidth: 1,
-    borderRadius: 5,
     alignSelf: 'center',
-    position: 'absolute'
   },
   form: {
     marginTop: 5,
