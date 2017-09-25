@@ -180,9 +180,6 @@ export default compose(
   }),
   graphql(currentUserQuery, {
     name: 'currentUser',
-    options: {
-      fetchPolicy: 'network-only'
-    }
   }),
   graphql(switchUserIsCasualMutation, {
     props: ({ownProps, mutate}) => ({

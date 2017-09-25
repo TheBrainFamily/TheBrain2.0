@@ -23,7 +23,6 @@ import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 import WithData from './WithData'
-import { mutationConnectionHandler } from './NoInternet'
 
 const MenuButton = (props) => (
   <TouchableHighlight
@@ -285,7 +284,7 @@ export default compose(
   graphql(sessionCountQuery, {
     name: 'sessionCount',
     options: {
-      fetchPolicy: 'network-only'
+      //fetchPolicy: 'network-only'
     }
   }),
   graphql(currentUserQuery, {
