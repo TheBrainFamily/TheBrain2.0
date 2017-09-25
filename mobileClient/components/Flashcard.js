@@ -136,6 +136,7 @@ class Flashcard extends React.Component {
                 <Card dynamicStyles={this.state.dynamicStyles}
                       question={this.props.question} answer={this.props.answer}
                       image={this.props.image}
+                      answerImage={this.props.answerImage}
                       visibleAnswer={this.props.flashcard.visibleAnswer}
                       isCasualFlashcard={this.props.isQuestionCasual}/>
                 <View

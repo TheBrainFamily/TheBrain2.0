@@ -1,7 +1,9 @@
 import FlashcardReducer from './FlashcardReducer'
 import CourseReducer from './CourseReducer'
+import FullscreenReducer from './FullscreenReducer'
 
 export default {
   flashcard: FlashcardReducer,
-  course: CourseReducer
+  course: CourseReducer,
+  fullscreen: FullscreenReducer
 }
