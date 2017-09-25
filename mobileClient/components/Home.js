@@ -177,7 +177,7 @@ class Home extends React.Component {
       console.log('selecting course', course)
       this.props.dispatch(courseActions.select(course))
       await mutationConnectionHandler(this.props.history, () => {
-        this.props.selectCourse({ courseId: course._id, deviceId }).then( async () => {
+        this.props.selectCourseSaveToken({ courseId: course._id, deviceId }).then( async () => {
           if(this.props.currentUser.CurrentUser) {
             return
           } else {
@@ -310,9 +310,9 @@ class Home extends React.Component {
   }
 }
 
-const selectCourseMutation = gql`
-    mutation selectCourse($courseId: String!, $deviceId: String) {
-        selectCourse(courseId: $courseId, deviceId: $deviceId) {
+const selectCourseSaveTokenMutation = gql`
+    mutation selectCourseSaveToken($courseId: String!, $deviceId: String) {
+        selectCourseSaveToken(courseId: $courseId, deviceId: $deviceId) {
             selectedCourse
             hasDisabledTutorial
             isCasual
@@ -379,9 +379,9 @@ export default compose(
       })
     })
   }),
-  graphql(selectCourseMutation, {
+  graphql(selectCourseSaveTokenMutation, {
     props: ({ ownProps, mutate }) => ({
-      selectCourse: ({ courseId, deviceId }) => mutate({
+      selectCourseSaveToken: ({ courseId, deviceId }) => mutate({
         variables: {
           courseId,
           deviceId
@@ -390,7 +390,7 @@ export default compose(
           UserDetails: (prev, { mutationResult }) => {
             return update(prev, {
               UserDetails: {
-                $set: mutationResult.data.selectCourse
+                $set: mutationResult.data.selectCourseSaveToken
               }
             })
           }
