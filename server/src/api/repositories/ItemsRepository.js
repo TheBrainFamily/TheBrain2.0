@@ -43,10 +43,8 @@ class ItemsRepository extends MongoRepository {
   }
 
   async getReviews (userId: string, isCasual: Boolean) {
-    const currentDayTimestamp = moment().utc().startOf('day').unix()
     let itemsQuery = {
       userId: new ObjectId(userId),
-      nextRepetition: { $gte: currentDayTimestamp },
     }
     if(isCasual) {
       itemsQuery = _.extend({}, itemsQuery, {isCasual: true})
