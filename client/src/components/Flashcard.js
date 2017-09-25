@@ -133,14 +133,14 @@ class Flashcard extends React.Component {
             </div>
           </FlexibleContentWrapper>
           <div className={`answer-buttons-container slide-animation ${this.state.shouldAnimate ? 'slide-out' : ''}`}>
+            <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(1, itemId)}/>
+            <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
+            <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
             <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
                  onClick={() => this.onSubmitEvaluation(6, itemId)}/>
-            <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
-                 onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
-            <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
-                 onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
-            <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
-                 onClick={() => this.onSubmitEvaluation(1, itemId)}/>
           </div>
         </div>
       )
@@ -166,14 +166,14 @@ class Flashcard extends React.Component {
           </div>
         </FlexibleContentWrapper>
         <div className='answer-buttons-container slide-animation slide-in'>
+          <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(1, itemId)}/>
+          <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
+          <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
           <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
                onClick={() => this.onSubmitEvaluation(6, itemId)}/>
-          <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
-          <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
-          <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(1, itemId)}/>
         </div>
       </div>
     )
