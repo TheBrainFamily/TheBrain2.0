@@ -68,7 +68,7 @@ class Home extends React.Component {
 
     if (userId && accessToken) {
       console.log('loguje z TOKEN', accessToken, userId)
-      await this.props.logInWithToken({ accessToken, userId, deviceId }).then(async () => {
+      this.props.logInWithToken({ accessToken, userId, deviceId }).then(async () => {
         const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
         await AsyncStorage.setItem('accessToken', newAccessToken)
       }).catch(async () => {
@@ -103,7 +103,7 @@ class Home extends React.Component {
       return
     }
 
-    if (!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+    if (!nextProps.currentUser.CurrentUser) {
       this.logInWithSavedData()
     }
 
@@ -173,10 +173,23 @@ class Home extends React.Component {
 
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
+      const deviceId = DeviceInfo.getUniqueID()
       console.log('selecting course', course)
       this.props.dispatch(courseActions.select(course))
-      await mutationConnectionHandler(this.props.history, async () => {
-        await this.props.selectCourse({ courseId: course._id })
+      await mutationConnectionHandler(this.props.history, () => {
+        this.props.selectCourse({ courseId: course._id, deviceId }).then( async () => {
+          if(this.props.currentUser.CurrentUser) {
+            return
+          } else {
+            await this.props.currentUser.refetch()
+          }
+          const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
+          const userId = this.props.currentUser.CurrentUser._id
+          if(userId && accessToken) {
+            await AsyncStorage.setItem('accessToken', accessToken)
+            await AsyncStorage.setItem('userId', userId)
+          }
+        })
       })
       this.animateCourseSelector(course._id)
     }
@@ -298,8 +311,8 @@ class Home extends React.Component {
 }
 
 const selectCourseMutation = gql`
-    mutation selectCourse($courseId: String!) {
-        selectCourse(courseId: $courseId) {
+    mutation selectCourse($courseId: String!, $deviceId: String) {
+        selectCourse(courseId: $courseId, deviceId: $deviceId) {
             selectedCourse
             hasDisabledTutorial
             isCasual
@@ -368,9 +381,10 @@ export default compose(
   }),
   graphql(selectCourseMutation, {
     props: ({ ownProps, mutate }) => ({
-      selectCourse: ({ courseId }) => mutate({
+      selectCourse: ({ courseId, deviceId }) => mutate({
         variables: {
-          courseId
+          courseId,
+          deviceId
         },
         updateQueries: {
           UserDetails: (prev, { mutationResult }) => {
