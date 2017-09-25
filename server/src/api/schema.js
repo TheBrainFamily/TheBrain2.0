@@ -122,7 +122,7 @@ export const typeDefs = gql`
     
     type Mutation {
         changePassword(oldPassword: String!, newPassword: String!): Status,
-        selectCourse(courseId: String!): UserDetails,
+        selectCourse(courseId: String!, deviceId: String): UserDetails,
         closeCourse: UserDetails,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
