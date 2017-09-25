@@ -81,7 +81,7 @@ class SwipeBall extends React.Component {
 
           Animated.spring(this.state.pan, {
             toValue: targetPosition,
-            tension: 80
+            speed:30
           }).start(this.submitEvaluation)
         } else {
           this.resetPosition()
@@ -91,10 +91,11 @@ class SwipeBall extends React.Component {
   }
 
   resetPosition = (cb = () => {}) => {
+    cb()
     Animated.spring(this.state.pan, {
       toValue: { x: 0, y: 0 },
-      tension: 80
-    }).start(cb)
+      speed:30
+    }).start()
   }
 
   submitEvaluation = () => {
