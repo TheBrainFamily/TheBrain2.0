@@ -89,7 +89,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    async selectCourse (root: ?string, args: { courseId: string }, context: Object) {
+    async selectCourse (root: ?string, args: { courseId: string, deviceId: string }, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
         const guestUser = await loginWithGuest(root, args, context)
@@ -361,7 +361,7 @@ const resolvers = {
 }
 
 const loginWithGuest = async (root: ?string, args: ?Object, context: Object) => {
-  const guestUser = await context.Users.createGuest(args.courseId)
+  const guestUser = await context.Users.createGuest(args.courseId, args.deviceId)
   context.req.logIn(guestUser, (err) => { if (err) throw err })
   return guestUser
 }

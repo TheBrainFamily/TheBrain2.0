@@ -18,7 +18,7 @@ export class UsersRepository extends MongoRepository {
     this.authTokenCollection = this.db.collection('authtoken')
   }
 
-  async createGuest (courseId: string) {
+  async createGuest (courseId: string, deviceId: string) {
     const newUser = {
       username: 'guest',
       password: 'notSet',
@@ -30,7 +30,9 @@ export class UsersRepository extends MongoRepository {
 
     const newUserId = addedUser._id.toString()
     await new userDetailsRepository.create(newUserId, courseId)
-
+    if(deviceId) {
+      addedUser.currentAccessToken = await this.insertNewUserToken(newUserId, deviceId)
+    }
     return addedUser
   }
 
