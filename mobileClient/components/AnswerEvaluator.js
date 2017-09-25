@@ -61,7 +61,7 @@ class AnswerEvaluator extends React.Component {
           <Text style={styles.answerText}>Easy</Text>
         </View>
         <View style={styles.answerFieldRight}>
-          <Text style={[styles.answerText, { transform: [{ rotate: '90deg' }] }]}>Good</Text>
+          <Text style={[styles.answerText, { transform: [{ rotate: '90deg' }] }]}>Correct</Text>
         </View>
         <View style={styles.answerFieldBottom}>
           <Text style={styles.answerText}>No clue</Text>
