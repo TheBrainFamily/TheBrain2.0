@@ -14,6 +14,8 @@ import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
+import androidIcon from '../img/google_play_en.svg'
+import iosIcon from '../img/app_store_en.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
@@ -34,14 +36,14 @@ class Home extends React.Component {
     const accessToken = localStorage.getItem('accessToken')
     const accessTokenFb = localStorage.getItem('accessTokenFb')
 
-    if(this.state.loginInProgress) {
+    if (this.state.loginInProgress) {
       return
     }
 
     this.setState({
       loginInProgress: true
     }, async () => {
-      if(userId && accessToken) {
+      if (userId && accessToken) {
         console.log('loguje z TOKEN', accessToken, userId)
         await this.props.logInWithToken({ accessToken, userId, deviceId })
           .then(async () => {
@@ -58,7 +60,7 @@ class Home extends React.Component {
           })
       }
 
-      if(userIdFb && accessTokenFb) {
+      if (userIdFb && accessTokenFb) {
         console.log('loguje z FB ', accessTokenFb, userIdFb)
         this.props.logInWithFacebook({ accessTokenFb, userIdFb })
           .then(() => {
@@ -70,15 +72,15 @@ class Home extends React.Component {
             this.setState({ loginInProgess: false }, () => {
               this.props.dispatch(push('/login'))
             })
-        })
+          })
       }
     })
   }
 
   selectCourse = (courseId) => async () => {
-    const selectedCourse = _.find(this.props.courses.Courses, course=>course._id === courseId)
+    const selectedCourse = _.find(this.props.courses.Courses, course => course._id === courseId)
     this.props.dispatch(course.select(selectedCourse))
-    await this.props.selectCourse({courseId})
+    await this.props.selectCourse({ courseId })
     this.props.dispatch(push(`/course/${courseId}`))
   }
 
@@ -87,7 +89,7 @@ class Home extends React.Component {
       return
     }
 
-    if(!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
+    if (!nextProps.currentUser.CurrentUser || !nextProps.currentUser.CurrentUser.activated) {
       this.logInWithSavedData()
     }
 
@@ -132,12 +134,21 @@ class Home extends React.Component {
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse}
-                          onClickArgument={course._id} isDisabled={course.isDisabled}>
-                <div>{course.name}</div>
-              </CourseIcon>
+                               onClickArgument={course._id} isDisabled={course.isDisabled}>
+              <div>{course.name}</div>
+            </CourseIcon>
           })}
         </ul>}
+        <div style={{ height: '100px' }}/>
         <div className='oldBrainLinkContainer'>
+          <div >
+            <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
+              <img alt={'Google Play'} src={androidIcon} style={{ width: '150px', margin: '10px' }}/>
+            </a>
+            <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '150px', margin: '10px' }}/>
+            </a>
+          </div>
           Looking for the previous version of TheBrain?
           Click <a href="https://legacy.thebrain.pro">here</a> | <a href="policy.html">Privacy policy</a>
         </div>
@@ -153,8 +164,8 @@ const selectCourseMutation = gql`
             hasDisabledTutorial
             isCasual
             experience {
-              level
-              showLevelUp
+                level
+                showLevelUp
             }
         }
     }
@@ -170,7 +181,7 @@ const logInWithTokenMutation = gql`
 
 export default compose(
   connect(),
-  graphql(currentUserQuery, {name: 'currentUser'}),
+  graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(logInWithTokenMutation, {
     props: ({ ownProps, mutate }) => ({
       logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
@@ -217,8 +228,8 @@ export default compose(
     })
   }),
   graphql(selectCourseMutation, {
-    props: ({ownProps, mutate}) => ({
-      selectCourse: ({courseId}) => mutate({
+    props: ({ ownProps, mutate }) => ({
+      selectCourse: ({ courseId }) => mutate({
         variables: {
           courseId
         },
@@ -240,7 +251,9 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(coursesQuery, {name: 'courses', options: {
-    notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
-  }})
+  graphql(coursesQuery, {
+    name: 'courses', options: {
+      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+    }
+  })
 )(Home)

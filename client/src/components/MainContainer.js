@@ -5,6 +5,10 @@ import { compose, graphql } from 'react-apollo'
 import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import _ from 'lodash'
+import Intercom from 'react-intercom';
+import smartlookClient from 'smartlook-client'
+
+
 import Home from './Home'
 import Course from './Course'
 import Lecture from './Lecture'
@@ -16,6 +20,7 @@ import Header from './Header'
 import ResetPassword from './ResetPassword'
 import ReviewsCalendar from './ReviewsCalendar'
 import Congratulations from './Congratulations'
+import Lectures from './Lectures'
 
 import { history } from '../store'
 
@@ -60,9 +65,22 @@ class AirplaneWrapper extends React.Component {
 }
 
 class MainContainer extends React.Component {
+  componentDidMount() {
+    smartlookClient.init('071bd1e673b85c528487b73918514edbc7b978b0')
+  }
   render () {
     const currentUser = this.props.data.CurrentUser
-
+    let intercomUser
+    if (currentUser) {
+      intercomUser = {
+        user_id: currentUser._id,
+        email: currentUser.email,
+        name: currentUser.username
+      }
+      smartlookClient.tag('email', currentUser.email)
+      smartlookClient.tag('name', currentUser.username)
+      smartlookClient.tag('websiteName', 'thebrain.pro')
+    }
     return (
       <Router history={history}>
         <AirplaneWrapperWithData>
@@ -82,10 +100,12 @@ class MainContainer extends React.Component {
               <div>
                 <Route exact key='profile' path='/profile' component={Profile} />
                 <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
+                <Route exact key='lectures' path='/lectures' component={Lectures} />
               </div>
             }
             <Redirect to='/' />
           </Switch>
+          <Intercom appID="yndcllpy" { ...intercomUser } />
         </AirplaneWrapperWithData>
       </Router>)
   }
