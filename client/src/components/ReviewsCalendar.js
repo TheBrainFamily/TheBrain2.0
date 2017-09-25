@@ -1,11 +1,13 @@
 import _ from 'lodash'
 import React from 'react'
+import { push } from 'react-router-redux'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import cs from 'classnames'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 
 function getDaysInMonth (month, year = new Date().getFullYear()) {
   return new Date(year, month, 0).getDate()
@@ -51,6 +53,12 @@ class ReviewsCalendar extends React.Component {
   render () {
     if (this.props.data.loading) {
       return <div />
+    }
+
+    if(!this.props.selectedCourse) {
+      return <div>Please select course to see your scheduled reviews for this month.
+        <a onClick={() => this.props.dispatch(push('/'))}>Click here </a> to do so.
+      </div>
     }
 
     const currentDate = new Date()
@@ -131,9 +139,30 @@ const reviewsQuery = gql`
         }
     }
 `
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
 
 export default compose(
-  connect(),
+  connect(mapStateToProps),
+  graphql(currentLessonQuery, {
+    name: 'currentLesson',
+    options: (ownProps) => {
+      if (!ownProps.selectedCourse) {
+        return ({
+          variables: {
+            courseId: ''
+          }
+        })
+      }
+      const courseId = ownProps.selectedCourse._id
+      return ({
+        variables: { courseId }
+      })
+    }
+  }),
   graphql(reviewsQuery, {
     options: {
       fetchPolicy: 'cache-and-network'

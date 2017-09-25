@@ -299,6 +299,7 @@ describe('query.ItemsWithFlashcard', () => {
   })
 
   it('returns 0 items if no user exists', async () => {
+    //XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
     const context = { ItemsWithFlashcard: itemsWithFlashcardRepository }
 
     const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
@@ -307,28 +308,37 @@ describe('query.ItemsWithFlashcard', () => {
   })
 
   it('returns 0 items for a new user without any lessons watched', async () => {
+    //XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
+    await mongoose.connection.db.collection('userdetails').insert({
+      userId,
+      casual: false,
+    })
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository, UserDetails: userDetailsRepository }
 
     const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
 
     expect(items.length).toBe(0)
   })
 
-  it('returns all available items for a new user after watching the first lesson', async () => {
+  it('returns one item for a new user after watching the first lesson', async () => {
     const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({
+      userId,
+      casual: false,
+    })
     const flashcard = await mongoose.connection.db.collection('flashcards').insert({ question: '?', answer: '!' })
     const flashcardId = flashcard.insertedIds[0].toString()
+    const flashcardNew = await mongoose.connection.db.collection('flashcards').insert({ question: '?', answer: '!' })
+    const flashcardIdNew = flashcardNew.insertedIds[0].toString()
 
-    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository, UserDetails: userDetailsRepository }
     const itemsToExtend = [
-      { userId, flashcardId }, { userId }
+      { userId, flashcardId: flashcardIdNew }, { userId, flashcardId },
     ]
     await makeItems({ itemsToExtend })
-
     const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
-
-    expect(items.length).toBe(itemsToExtend.length)
+    expect(items.length).toBe(1)
   })
 })
 
@@ -346,8 +356,12 @@ describe('query.SessionCount', () => {
   })
   it('returns a session count', async () => {
     const userId = mongoose.Types.ObjectId()
+    await mongoose.connection.db.collection('userdetails').insert({
+      userId,
+      casual: false,
+    })
     await mongoose.connection.db.collection('items').insertOne({ userId, actualTimesRepeated: 0 })
-    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository }
+    const context = { user: { _id: userId }, ItemsWithFlashcard: itemsWithFlashcardRepository, UserDetails: userDetailsRepository }
 
     const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
 
@@ -466,7 +480,8 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     const userId = mongoose.Types.ObjectId()
     await mongoose.connection.db.collection('userdetails').insert({
       userId,
-      progress: [{ courseId: 'testCourseId', lesson: 1 }]
+      progress: [{ courseId: 'testCourseId', lesson: 1 }],
+      casual: false
     })
     context.user = { _id: userId }
 
@@ -572,7 +587,7 @@ describe('query.Reviews', () => {
 
   it('returns empty list by default', async () => {
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, Items: itemsRepository }
+    const context = { user: { _id: userId }, Items: itemsRepository, UserDetails: userDetailsRepository }
 
     const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
 
@@ -581,7 +596,7 @@ describe('query.Reviews', () => {
 
   it('returns list of reviews grouped by day timestamp', async () => {
     const userId = mongoose.Types.ObjectId()
-    const context = { user: { _id: userId }, Items: itemsRepository }
+    const context = { user: { _id: userId }, Items: itemsRepository, UserDetails: userDetailsRepository }
     const tomorrowDate = moment().add(1, 'day')
     const dayAfterTomorrowDate = moment().add(2, 'day')
     const itemsToExtend = [
