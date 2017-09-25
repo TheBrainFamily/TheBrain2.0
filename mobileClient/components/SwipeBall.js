@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Animated, PanResponder, View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
-import update from 'immutability-helper'
 import LinearGradient from 'react-native-linear-gradient'
+import _ from 'lodash'
 
 import styles from '../styles/styles'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
@@ -13,6 +13,7 @@ import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '.
 import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import submitEval from '../shared/graphql/mutations/processEvaluation'
+import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
 import { mutationConnectionHandler } from './NoInternet'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
@@ -141,14 +142,38 @@ export default compose(
           itemId,
           evaluation
         },
-        updateQueries: {
-          CurrentItems: (prev, { mutationResult }) => {
-            return update(prev, {
-              ItemsWithFlashcard: {
-                $set: mutationResult.data.processEvaluation
-              }
-            })
+        optimisticResponse: {
+          processEvaluation: {
+            //With this fake data we get warnings in the client on every evaluation :-(
+            "item": {
+              "_id": "-1",
+              "flashcardId": "",
+              "extraRepeatToday": false,
+              "actualTimesRepeated": 0,
+              "__typename": "Item"
+            },
+            "flashcard": {
+              "_id": "-1",
+              "question": "",
+              "answer": "",
+              "isCasual": true,
+              "image": null,
+              "answerImage" : null,
+              "__typename": "Flashcard"
+            },
+            "__typename": "ItemWithFlashcard",
+            switchFlashcards: true,
+          },
+        },
+        update: (proxy, { data: { processEvaluation } }) => {
+          const data = proxy.readQuery({ query: currentItemsQuery });
+          if (processEvaluation.switchFlashcards) {
+            const newFlashcards = [_.last(data.ItemsWithFlashcard)]
+            data.ItemsWithFlashcard = newFlashcards
+          } else {
+            data.ItemsWithFlashcard = processEvaluation
           }
+          proxy.writeQuery({ query: currentItemsQuery, data });
         },
         refetchQueries: [{
           query: sessionCountQuery
