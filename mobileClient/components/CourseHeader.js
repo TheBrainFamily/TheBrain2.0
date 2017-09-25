@@ -35,7 +35,7 @@ class CourseHeader extends React.Component {
     return (
       <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity onPress={this.closeCourse}>
               <Image
                 style={{ width: 100, height: 49 }}
