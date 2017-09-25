@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: appStyle.colors.bgAlt,
   },
   textDefault: {
+    letterSpacing: -1,
     fontSize: 18,
     textAlign: 'center',
     color: appStyle.colors.text,
