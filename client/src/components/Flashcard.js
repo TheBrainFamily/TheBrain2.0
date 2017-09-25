@@ -230,6 +230,7 @@ export default compose(
               "answer": "",
               "isCasual": true,
               "image": null,
+              "answerImage": null,
               "__typename": "Flashcard"
             },
             "__typename": "ItemWithFlashcard",
