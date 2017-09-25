@@ -89,7 +89,15 @@ const resolvers = {
     }
   },
   Mutation: {
-    async selectCourse (root: ?string, args: { courseId: string, deviceId: string }, context: Object) {
+    async selectCourse (root: ?string, args: { courseId: string }, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        const guestUser = await loginWithGuest(root, args, context)
+        userId = guestUser._id
+      }
+      return context.UserDetails.selectCourse(userId, args.courseId)
+    },
+    async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
         const guestUser = await loginWithGuest(root, args, context)
