@@ -10,7 +10,7 @@ import devTools from 'remote-redux-devtools'
 // if (__DEV__) {
 //   graphqlUri = config.graphqlUri || 'http://localhost:8080/graphql'
 // } else {
-const graphqlUri = 'http://192.168.0.142:8080/graphql' //https://sleepy-stream-93575.herokuapp.com/graphql'
+const graphqlUri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
 // }
 
 const networkInterface = createNetworkInterface({
