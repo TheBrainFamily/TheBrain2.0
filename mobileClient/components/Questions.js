@@ -126,8 +126,12 @@ class Questions extends React.Component {
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
-            <Flashcard question={flashcard.question} answer={flashcard.answer} image={flashcard.image}
-                       evalItemId={evalItem._id} getFlashcardHeight={this.getFlashcardHeight}
+            <Flashcard question={flashcard.question}
+                       answer={flashcard.answer}
+                       image={flashcard.image}
+                       answerImage={flashcard.answerImage}
+                       evalItemId={evalItem._id}
+                       getFlashcardHeight={this.getFlashcardHeight}
                        getFlashcardWidth={this.getFlashcardWidth}
                        isQuestionCasual={flashcard.isCasual}/>
             <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer}
