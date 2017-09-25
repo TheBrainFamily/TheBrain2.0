@@ -23,56 +23,13 @@ export default class Card extends React.Component {
   }
 
   render = () => {
-
     const displayStyleQuestion = { display: this.props.visibleAnswer ? 'none' : 'flex', flex: this.props.image ? 0 : 1 }
     const displayStyleQuestionImage = { opacity: this.props.visibleAnswer ? 0 : 1 }
-    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none', flex: 1 }
+    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none', flex: this.props.answerImage ? 0 : 1  }
+    const displayStyleAnswerImage = { opacity: this.props.visibleAnswer ? 1 : 0 }
 
-    const imageThumbnailSize = this.props.dynamicStyles.content.height < 180 ? 50 : 100
     const questionFontSizeStyle = { fontSize: this.props.image && this.props.dynamicStyles.content.height < 180 ? 12 : 16 }
-
-    const animationSettings = {
-      width: {
-        initial: imageThumbnailSize,
-        final: this.props.dynamicStyles.content.width,
-        friction: 7,
-      },
-      height: {
-        initial: imageThumbnailSize,
-        final: this.props.dynamicStyles.content.height,
-        friction: 7,
-      },
-      bottom: {
-        initial: 10,
-        final: 0,
-        friction: 7,
-      },
-      shadowRadius: {
-        initial: 4,
-        final: 0,
-        friction: 7,
-      },
-      shadowOpacity: {
-        initial: 0.5,
-        final: 1,
-        friction: 7,
-      },
-      borderRadius: {
-        initial: 5,
-        final: 0,
-        friction: 7,
-      },
-      borderWidth: {
-        initial: 1,
-        final: 0,
-        friction: 7,
-      },
-      marginVertical: {
-        initial: 0,
-        final: 1000,
-        friction: 7,
-      }
-    }
+    const answerFontSizeStyle = { fontSize: this.props.answerImage && this.props.dynamicStyles.content.height < 180 ? 12 : 16 }
 
     const isNotCasualIndicator =
       !this.props.isCasualFlashcard && <TouchableOpacity onPress={this.notCasualOnPress}>
@@ -101,7 +58,6 @@ export default class Card extends React.Component {
           </View>
           {this.props.image ?
             <TouchableImage style={[styles.cardImage, displayStyleQuestionImage]}
-                            animator={animationSettings}
                             imageProperties={{
               source: this.props.image.url,
               resizeMode: 'contain',
@@ -114,8 +70,15 @@ export default class Card extends React.Component {
             { this.props.visibleAnswer && isNotCasualIndicator }
           </View>
           <View style={[styles.flipCardBody, displayStyleAnswer]}>
-            <Text style={styles.cardText}>{this.props.visibleAnswer && this.props.answer}</Text>
+            <Text style={[styles.cardText, answerFontSizeStyle]}>{this.props.visibleAnswer && this.props.answer}</Text>
           </View>
+          {this.props.answerImage ?
+            <TouchableImage style={[styles.cardImage, displayStyleAnswerImage]}
+                            imageProperties={{
+                              source: this.props.answerImage.url,
+                              resizeMode: 'contain',
+                            }}
+            /> : null}
         </View>
       </View>
     )
