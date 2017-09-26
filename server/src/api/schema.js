@@ -121,6 +121,7 @@ export const typeDefs = gql`
     }
     
     type Mutation {
+        clearToken(userId: String!, token: String!): Boolean
         changePassword(oldPassword: String!, newPassword: String!): Status,
         selectCourse(courseId: String!): UserDetails,
         selectCourseSaveToken(courseId: String!, deviceId: String): UserDetails,
