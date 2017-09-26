@@ -38,9 +38,6 @@ class Login extends React.Component {
 
   submit = (e) => {
     e.preventDefault()
-
-    console.log('* LOG * this.refs.username', this.refs.username.input.value, this.refs.password.input.value)
-
     const deviceId = 'browser'
     const saveToken = this.state.saveToken
     let submitAction = this.props.login
