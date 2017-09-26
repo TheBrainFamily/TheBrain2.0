@@ -39,7 +39,7 @@ class AnswerEvaluator extends React.Component {
         <Triangle animated={this.props.enabled} line="right" style={styles.triangleRight}/>
         <LinearGradient
           style={styles.answerRightLine}
-          colors={['#ff8533', '#b3b3b3']}
+          colors={['#62c46c', '#b3b3b3']}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 0}}
         />
@@ -53,7 +53,7 @@ class AnswerEvaluator extends React.Component {
         <Triangle animated={this.props.enabled} line="left" style={styles.triangleLeft}/>
         <LinearGradient
           style={styles.answerLeftLine}
-          colors={['#62c46c', '#b3b3b3']}
+          colors={['#ff8533', '#b3b3b3']}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
         />
