@@ -299,7 +299,8 @@ const resolvers = {
         let user = context.user
 
         if (!user) {
-          user = await loginWithGuest(root, args, context)
+          // not passing device id skips unnecessary creation of access token (created at logIn below)
+          user = await loginWithGuest(root, { courseId: args.courseId }, context)
         }
         await context.Users.updateUser(user._id, username, args.password)
 
@@ -312,6 +313,10 @@ const resolvers = {
       } catch (e) {
         throw e
       }
+    },
+    async clearToken (root: ?string, args: { userId: string, token: string}, context: Object) {
+      await context.Users.removeToken(args.userId, args.token)
+      return true
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
       await context.UserDetails.updateUserXp(context.user._id, 'processEvaluation')
