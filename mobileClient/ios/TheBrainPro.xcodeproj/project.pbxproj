@@ -676,6 +676,7 @@
 				00E356EF1AD99517003FC87E /* TheBrainProTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				713C15C0F0C64131BA2686DE /* Resources */,
+				D9C0AAAA1F7951EA00F59C74 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -708,6 +709,17 @@
 				D9160AAF1F68480200F6D513 /* libRNDeviceInfo.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D9C0AAAA1F7951EA00F59C74 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				74EF51EE9222497B88ED0F26 /* libRCTYouTube.a */,
+				E08A1048D3B34AE69292A99A /* libBVLinearGradient.a */,
+				9C65D7DB4DC244DFB53E9AF4 /* libRCTOrientation.a */,
+				0CBAF3C5B364456AB192EF87 /* libRNDeviceInfo.a */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		FFF87EB71E96E2F600757603 /* Products */ = {
