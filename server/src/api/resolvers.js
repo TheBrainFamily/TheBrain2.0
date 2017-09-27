@@ -97,6 +97,14 @@ const resolvers = {
       }
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
+    async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        const guestUser = await loginWithGuest(root, args, context)
+        userId = guestUser._id
+      }
+      return context.UserDetails.selectCourse(userId, args.courseId)
+    },
     async closeCourse (root: ?string, args: ?Object, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
@@ -291,7 +299,8 @@ const resolvers = {
         let user = context.user
 
         if (!user) {
-          user = await loginWithGuest(root, args, context)
+          // not passing device id skips unnecessary creation of access token (created at logIn below)
+          user = await loginWithGuest(root, { courseId: args.courseId }, context)
         }
         await context.Users.updateUser(user._id, username, args.password)
 
@@ -304,6 +313,10 @@ const resolvers = {
       } catch (e) {
         throw e
       }
+    },
+    async clearToken (root: ?string, args: { userId: string, token: string}, context: Object) {
+      await context.Users.removeToken(args.userId, args.token)
+      return true
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
       await context.UserDetails.updateUserXp(context.user._id, 'processEvaluation')
@@ -361,7 +374,7 @@ const resolvers = {
 }
 
 const loginWithGuest = async (root: ?string, args: ?Object, context: Object) => {
-  const guestUser = await context.Users.createGuest(args.courseId)
+  const guestUser = await context.Users.createGuest(args.courseId, args.deviceId)
   context.req.logIn(guestUser, (err) => { if (err) throw err })
   return guestUser
 }
