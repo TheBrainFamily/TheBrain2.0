@@ -50,10 +50,17 @@ class Login extends React.Component {
     this.setState({ isLogin: !this.state.isLogin })
   }
 
-  submit = () => {
+  submit = async () => {
     const deviceId = DeviceInfo.getUniqueID() || 'defaultMobileClient'
     this.setState({ error: '', loading: true })
     const actionName = this.state.isLogin ? 'login' : 'signup'
+
+    if(this.props.currentUser.CurrentUser) {
+      const userId = this.props.currentUser.CurrentUser._id
+      const token = this.props.currentUser.CurrentUser.currentAccessToken
+      await this.props.clearToken({ userId, token })
+    }
+
     this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId, saveToken: true })
       .then( async () => {
         this.props.dispatch(courseActions.close())
@@ -159,9 +166,24 @@ const logIn = gql`
         }
     }
 `
+const clearTokenMutation = gql`
+    mutation clearToken($userId: String!, $token: String!){
+        clearToken(userId: $userId, token: $token)
+    }
+`
 
 export default compose(
   connect(),
+  graphql(clearTokenMutation, {
+    props: ({ownProps, mutate}) => ({
+      clearToken: ({userId, token}) => mutate({
+        variables: {
+          userId,
+          token
+        }
+      }),
+    })
+  }),
   graphql(signup, {
     props: ({ ownProps, mutate }) => ({
       signup: ({ username, password, deviceId, saveToken }) => mutate({

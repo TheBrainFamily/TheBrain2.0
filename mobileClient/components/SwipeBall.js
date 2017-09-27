@@ -19,9 +19,9 @@ import { mutationConnectionHandler } from './NoInternet'
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
   top: ['#71b9d3', '#5a9ab4'],
-  right: ['#ff8533', '#e17132'],
+  left: ['#ff8533', '#e17132'],
   bottom: ['#c1272d', '#972326'],
-  left: ['#62c46c', '#3f873f']
+  right: ['#62c46c', '#3f873f']
 }
 
 class SwipeBall extends React.Component {
