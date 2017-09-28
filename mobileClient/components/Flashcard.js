@@ -68,23 +68,23 @@ class Flashcard extends React.Component {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = false
           this.props.dispatch(updateAnswerVisibility(false))
-          this.updateFlashcardContent()
+          this.updateFlashcardContent(this.props)
         }
       } else {
         if(value > 90.0) {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = true
           this.props.dispatch(updateAnswerVisibility(true))
-          this.updateFlashcardContent()
+          this.updateFlashcardContent(this.props)
         }
       }
     }
   }
 
-  updateFlashcardContent = () => {
+  updateFlashcardContent = (props) => {
     this.setState({
-      currentQuestion: this.props.question,
-      currentAnswer: this.props.answer
+      currentQuestion: props.question,
+      currentAnswer: props.answer
     })
   }
 
@@ -120,6 +120,18 @@ class Flashcard extends React.Component {
     if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
       this.currentlyVisibleAnswer = this.props.flashcard.visibleAnswer
       this.flipCard()
+    }
+
+    if (nextProps.question !== this.props.question) {
+      // currently we simulate delays of props update by launching events on animation listener actions
+      // (it takes about 120ms to rotate the card 90 deg and then update the flashcard
+      // but passed props may become out of sync with the state (which is passed to children).
+      // Instead of handling all those situations everywhere (eg. setUserIsCasualMutation and Items refetch)
+      // we make sure it comes in sync after 300ms - in typical use cases it is invisible to user and
+      // patches all other use cases where props come out of sync.
+      setTimeout(() => {
+        this.updateFlashcardContent(nextProps)
+      }, 300)
     }
   }
 
