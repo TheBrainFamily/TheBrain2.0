@@ -12,6 +12,7 @@ import { course } from '../actions'
 import logo from '../img/logo.svg'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
 import closeCourseMutation from '../../shared/graphql/mutations/closeCourse'
 import Hamburger from './Hamburger'
 import MenuProfile from './MenuProfile'
@@ -80,7 +81,6 @@ class AppHeader extends React.Component {
 
   render () {
     const currentUser = this.props.data.CurrentUser
-
     return (
       <div className='App-header-shadow'>
         <div className='App-header-container'>
@@ -104,14 +104,14 @@ class AppHeader extends React.Component {
                 }
                 {currentUser &&
                 <div>
-                  <a>LECTURES LIST</a>
-                  <div className={'menu-separator menu-separator-visible'} />
+                  { this.props.selectedCourse && <a onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
+                  { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
                   <a onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
                   <div className={'menu-separator menu-separator-visible'} />
-                  <a onClick={this.closeCourse()}>CHANGE THE COURSE</a>
-                  <div className={'menu-separator menu-separator-visible'} />
-                  <a>ACHIEVEMENTS LIST</a>
-                  <div className={'menu-separator menu-separator-visible'} />
+                  { this.props.selectedCourse && <a onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
+                  { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
+                  {/*<a>ACHIEVEMENTS LIST</a>*/}
+                  {/*<div className={'menu-separator menu-separator-visible'} />*/}
                   <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
                   < div className={'menu-separator menu-separator-visible'} />
                 </div>
@@ -136,6 +136,22 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(currentLessonQuery, {
+    name: 'currentLesson',
+    options: (ownProps) => {
+      if (!ownProps.selectedCourse) {
+        return ({
+          variables: {
+            courseId: ''
+          }
+        })
+      }
+      const courseId = ownProps.selectedCourse._id
+      return ({
+        variables: { courseId }
+      })
+    }
+  }),
   graphql(closeCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       closeCourse: () => mutate({

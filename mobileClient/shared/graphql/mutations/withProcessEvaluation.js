@@ -16,6 +16,9 @@ const submitEval = gql`
                 _id question answer image {
                     url hasAlpha
                 }
+                answerImage {
+                    url hasAlpha
+                }
             }
         }
     }

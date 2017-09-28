@@ -8,9 +8,9 @@ import devTools from 'remote-redux-devtools'
 // import config from './.config-dev'
 // let graphqlUri = ""
 // if (__DEV__) {
-//   graphqlUri = config.graphqlUri || 'http://localhost:8080/graphql'
+//   const graphqlUri = 'http://10.0.0.4:8080/graphql'
 // } else {
-const graphqlUri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
+const graphqlUri = 'https://api.thebrain.pro/graphql'
 // }
 
 const networkInterface = createNetworkInterface({

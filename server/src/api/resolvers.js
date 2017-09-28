@@ -31,7 +31,7 @@ const resolvers = {
       return context.Courses.getCourses()
     },
     async Reviews (root: ?string, args: ?Object, context: Object) {
-      if(!context.user) {
+      if (!context.user) {
         return []
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
@@ -97,6 +97,14 @@ const resolvers = {
       }
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
+    async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, context: Object) {
+      let userId = context.user && context.user._id
+      if (!userId) {
+        const guestUser = await loginWithGuest(root, args, context)
+        userId = guestUser._id
+      }
+      return context.UserDetails.selectCourse(userId, args.courseId)
+    },
     async closeCourse (root: ?string, args: ?Object, context: Object) {
       let userId = context.user && context.user._id
       if (!userId) {
@@ -117,8 +125,58 @@ const resolvers = {
       const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
+
+      const shuffle = (array) => {
+        let m = array.length, t, i
+
+        // While there remain elements to shuffle…
+        while (m) {
+
+          // Pick a remaining element…
+          i = Math.floor(Math.random() * m--)
+
+          // And swap it with the current element.
+          t = array[m]
+          array[m] = array[i]
+          array[i] = t
+        }
+
+        return array
+      }
+
+      const ensureNoHardQuestionAtTheBeginning = (flashcards, casualsInRow = 3) => {
+        const getCasualFlashcard = () => {
+          for (let i = flashcards.length - 1; i >= 0; --i) {
+            if (flashcards[i].isCasual) {
+              return { flashcard: flashcards[i], index: i }
+            }
+          }
+          return null
+        }
+        for (let i = 0; i < flashcards.length && i < casualsInRow; ++i) {
+          const firstFlashcard = flashcards[i]
+          if(!firstFlashcard.isCasual) {
+            const casualLookup = getCasualFlashcard()
+
+            if (casualLookup === null) {
+              // there is no, casual flashcards
+              break
+            }
+
+            const {flashcard:casualFlashcard, index} = casualLookup
+            if(index !== i) {
+              flashcards[index] = firstFlashcard
+              flashcards[i] = casualFlashcard
+            }
+          }
+        }
+      }
+
+      shuffle(flashcards)
+      ensureNoHardQuestionAtTheBeginning(flashcards)
+
       flashcards.forEach((flashcard) => {
-        if(!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
+        if (!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
           context.Items.create(flashcard._id, userId, args.courseId, !!flashcard.isCasual)
         }
       })
@@ -128,27 +186,27 @@ const resolvers = {
     },
     async clearNotCasualItems(root: ?string, args: ?Object, context: Object) {
       const userDetails = await context.UserDetails.getById(context.user._id)
-      if(userDetails.isCasual) {
+      if (userDetails.isCasual) {
         context.Items.clearNotCasualItems(context.user._id)
       }
       return true
     },
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, context: Object) {
-      const {accessTokenFb, userIdFb} = args
-      const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`;
+      const { accessTokenFb, userIdFb } = args
+      const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
-      if(parsedResponse.error) {
+      if (parsedResponse.error) {
         console.error('FBLogin failed:', parsedResponse)
         throw new Error('Facebook token expired')
       }
       if (parsedResponse.id === userIdFb) {
         let user = await context.Users.findByFacebookId(userIdFb)
         let idToUpdate = null
-        if(user) {
+        if (user) {
           idToUpdate = user._id
-        } else  {
-          if(context.user && context.user._id) {
+        } else {
+          if (context.user && context.user._id) {
             idToUpdate = context.user._id
           } else {
             user = await context.Users.createGuest()
@@ -172,7 +230,7 @@ const resolvers = {
 
         const isMatch = await UsersRepository.comparePassword(user.password, args.password)
         if (isMatch) {
-          if(args.saveToken) {
+          if (args.saveToken) {
             user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
           }
           context.req.logIn(user, (err) => { if (err) throw err })
@@ -193,7 +251,7 @@ const resolvers = {
 
         const isMatch = await context.Users.findActiveToken(args.userId, args.accessToken, args.deviceId)
         if (isMatch) {
-          if(renewTokenOnLogin) {
+          if (renewTokenOnLogin) {
             await context.Users.removeToken(args.userId, args.accessToken)
             user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
           } else {
@@ -214,7 +272,7 @@ const resolvers = {
         await context.Users.removeToken(userId, accessToken)
         context.req.logOut()
       }
-      return {_id: 'loggedOut', username: '', activated: false, facebookId: null, accessToken: null}
+      return { _id: 'loggedOut', username: '', activated: false, facebookId: null, accessToken: null }
     },
     async hideTutorial (root: ?string, args: ?Object, context: Object) {
       return context.UserDetails.disableTutorial(context.user._id)
@@ -241,14 +299,24 @@ const resolvers = {
         let user = context.user
 
         if (!user) {
-          user = await loginWithGuest(root, args, context)
+          // not passing device id skips unnecessary creation of access token (created at logIn below)
+          user = await loginWithGuest(root, { courseId: args.courseId }, context)
         }
         await context.Users.updateUser(user._id, username, args.password)
 
-        return resolvers.Mutation.logIn(root, {username, password: args.password, deviceId: args.deviceId, saveToken: args.saveToken}, context)
+        return resolvers.Mutation.logIn(root, {
+          username,
+          password: args.password,
+          deviceId: args.deviceId,
+          saveToken: args.saveToken
+        }, context)
       } catch (e) {
         throw e
       }
+    },
+    async clearToken (root: ?string, args: { userId: string, token: string}, context: Object) {
+      await context.Users.removeToken(args.userId, args.token)
+      return true
     },
     async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, context: Object) {
       await context.UserDetails.updateUserXp(context.user._id, 'processEvaluation')
@@ -273,9 +341,9 @@ const resolvers = {
         //     subject: 'logInWithFacebook',
         //     text: 'THIS IS TEST MESSAGE'
         // });
-        return {success: true}
+        return { success: true }
       } else {
-        return {success: false}
+        return { success: false }
       }
     },
     async changePassword (root: ?string, args: { oldPassword: string, newPassword: string }, context: Object) {
@@ -294,9 +362,9 @@ const resolvers = {
 
         const updatedUser = await context.Users.changePassword(context.user._id, args.newPassword)
         if (updatedUser) {
-          return {success: true}
+          return { success: true }
         } else {
-          return {success: false}
+          return { success: false }
         }
       } catch (e) {
         throw e
@@ -306,7 +374,7 @@ const resolvers = {
 }
 
 const loginWithGuest = async (root: ?string, args: ?Object, context: Object) => {
-  const guestUser = await context.Users.createGuest(args.courseId)
+  const guestUser = await context.Users.createGuest(args.courseId, args.deviceId)
   context.req.logIn(guestUser, (err) => { if (err) throw err })
   return guestUser
 }
