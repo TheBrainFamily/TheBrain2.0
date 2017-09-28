@@ -40,12 +40,9 @@ export const typeDefs = gql`
         _id: String,
         question: String!,
         answer: String!,
-        image: FlashcardImage,
+        image: Image,
+        answerImage: Image,
         isCasual: Boolean,
-    }
-    type FlashcardImage {
-        url: String,
-        hasAlpha: Boolean,
     }
     type Item {
         _id: String,
@@ -124,8 +121,10 @@ export const typeDefs = gql`
     }
     
     type Mutation {
+        clearToken(userId: String!, token: String!): Boolean
         changePassword(oldPassword: String!, newPassword: String!): Status,
         selectCourse(courseId: String!): UserDetails,
+        selectCourseSaveToken(courseId: String!, deviceId: String): UserDetails,
         closeCourse: UserDetails,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
         processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,

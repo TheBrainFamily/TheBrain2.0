@@ -30,7 +30,7 @@ export default class
       isOpen: this.state.isMenuOpen,
       close: this.close.bind(this),
       toggle: <img className={'menu-icon'} src={hamburger} alt={'MENU'} onClick={this.toggle.bind(this)}/>,
-      animate: true,
+      animate: navigator.userAgent.indexOf("Trident") <= 0,
       enterTimeout: 0,
       leaveTimeout: 0,
       animAlign: 'right',

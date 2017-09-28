@@ -2,6 +2,8 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import createHistory from 'history/createBrowserHistory'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { persistStore, autoRehydrate } from 'redux-persist'
+import { asyncSessionStorage } from 'redux-persist/storages'
 
 import * as reducers from './reducers'
 
@@ -11,7 +13,7 @@ const localhostRegexp = /localhost/
 if (localhostRegexp.test(window.location.origin)) {
   uri = 'http://localhost:8080/graphql'
 } else {
-  uri = 'https://sleepy-stream-93575.herokuapp.com/graphql'
+  uri = 'https://api.thebrain.pro/graphql'
 }
 
 console.log('GraphQL uri:', uri)
@@ -40,9 +42,12 @@ const store = createStore(
   {}, // initial state
   compose(
     applyMiddleware(routerMiddleware(history), client.middleware()),
+    autoRehydrate(),
     devToolsExtension ? devToolsExtension() : f => f
   )
 )
+
+persistStore(store, { storage: asyncSessionStorage, whitelist: ['course'] })
 
 export { history }
 export { client }
