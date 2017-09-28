@@ -66,20 +66,20 @@ class Flashcard extends React.Component {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = false
           this.props.dispatch(updateAnswerVisibility(false))
-          this.syncQuestionAndAnswerWithProps()
+          this.updateFlashcardContent()
         }
       } else {
         if(value > 90.0) {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = true
           this.props.dispatch(updateAnswerVisibility(true))
-          this.syncQuestionAndAnswerWithProps()
+          this.updateFlashcardContent()
         }
       }
     }
   }
 
-  syncQuestionAndAnswerWithProps = () => {
+  updateFlashcardContent = () => {
     this.setState({
       currentQuestion: this.props.question,
       currentAnswer: this.props.answer
