@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, BackAndroid, Platform } from 'react-native'
+import { View, BackHandler, Platform } from 'react-native'
 import Header from './Header'
 import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
@@ -19,17 +19,17 @@ class PageContainer extends React.Component {
   }
 
   componentDidMount = () => {
-    BackAndroid.addEventListener('hardwareBackPress', this.handleBack)
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack)
   }
 
   componentWillUnmount = () => {
-    BackAndroid.removeEventListener('hardwareBackPress', this.handleBack)
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBack)
   }
 
   handleBack = () => {
     const { history } = this.props
     if (history.index === 0) {
-      BackAndroid.exitApp()
+      BackHandler.exitApp()
       return true
     } else {
       history.goBack()

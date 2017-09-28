@@ -28,7 +28,7 @@ class ItemsWithFlashcardRepository extends MongoRepository {
       currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     // currently changed to fetching only one current item, after testing and approving, code below should be refactored
-    const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 1, sort: {lastRepetition: 1} }).toArray()
+    const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 2, sort: {lastRepetition: 1} }).toArray()
     const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
 
     return currentItems.map(item => {

@@ -18,7 +18,7 @@ class Congratulations extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     if(!nextProps.userDetails.UserDetails.experience.showLevelUp) {
-      this.props.history.push('/')
+      this.props.history.push('/questions')
     }
   }
 

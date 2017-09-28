@@ -11,7 +11,7 @@ class MenuProfile extends React.Component {
     const dueValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueDone
     const dueAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
     const reviewValue = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.reviewDone
-    const reviewAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.dueTotal
+    const reviewAll = this.props.sessionCount.loading ? 0 : this.props.sessionCount.SessionCount.reviewTotal
     const name = this.props.currentUser.username.split("@")[0]
     const userLevel = this.props.userDetails.loading || !this.props.userDetails.UserDetails.experience ? 0 : this.props.userDetails.UserDetails.experience.level
     const levelCap = levelConfig.levelCap
@@ -21,7 +21,7 @@ class MenuProfile extends React.Component {
 
     return (
       <div className={'menu-profile-container'}>
-        <img className={'menu-profile-image'} src={profileImage} alt={levelName}/>
+        { cappedLevel > 0 ? <img className={'menu-profile-image'} src={profileImage} alt={levelName}/> : null }
         <div className={'menu-profile-info'}>
           <p className={'menu-profile-name'}>{name}</p>
           <div className={'menu-profile-stats'}>

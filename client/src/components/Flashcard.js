@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo'
 import update from 'immutability-helper'
 import { withRouter } from 'react-router'
 import { push } from 'react-router-redux'
+import _ from 'lodash'
 import { flashcard } from '../actions'
 import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -17,22 +18,29 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 import ResizableImage from './ResizableImage'
 
 import answerButtonImage1 from '../img/button-easy.png'
-import answerButtonImage2 from '../img/button-medium.png'
-import answerButtonImage3 from '../img/button-hard.png'
-import answerButtonImage4 from '../img/button-veryhard.png'
+import answerButtonImage2 from '../img/button-correct.png'
+import answerButtonImage3 from '../img/button-wrong.png'
+import answerButtonImage4 from '../img/button-noClue.png'
 import LevelUpWrapper from './LevelUpWrapper'
 
 class Flashcard extends React.Component {
+  state = {
+    shouldAnimate: false
+  }
+
   showQuestion = (isVisible) => {
+    this.setState({ shouldAnimate: true })
     this.props.dispatch(flashcard.showAnswer(isVisible))
   }
 
   onSubmitEvaluation = (value, itemId) => {
-    if(itemId) {
+    if(itemId && this.props.isAnswerVisible) {
       this.props.submit({
         itemId,
         evaluation: value
       })
+    } else {
+      this.showQuestion(true)
     }
   }
 
@@ -74,7 +82,8 @@ class Flashcard extends React.Component {
     let question = 'Loading...'
     let answer = 'Loading...'
     let itemId = null
-    let isCasual = false
+    let isCasual = true
+    let userIsCasual = false
 
     if(this.props.currentItems.ItemsWithFlashcard
       && this.props.currentItems.ItemsWithFlashcard[0]) {
@@ -83,6 +92,10 @@ class Flashcard extends React.Component {
       answer = this.props.currentItems.ItemsWithFlashcard[0].flashcard.answer
       itemId = this.props.currentItems.ItemsWithFlashcard[0].item._id
       isCasual = this.props.currentItems.ItemsWithFlashcard[0].flashcard.isCasual
+    }
+
+    if(this.props.userDetails && this.props.userDetails.UserDetails) {
+      userIsCasual = this.props.userDetails.UserDetails.isCasual
     }
 
     const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
@@ -97,27 +110,40 @@ class Flashcard extends React.Component {
 
     if (!this.props.isAnswerVisible) {
       return (
-        <FlexibleContentWrapper offset={300}>
-          <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
-            <div className='flashcard-title'>QUESTION
-              { !isCasual ? <div className={'flashcard-title-not-casual'}>
-                <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
-              </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
-                casualSwitchPopup : null
-              }
-            </div>
-            <div className='flashcard-content'>
-              <div className='flashcard-content-text'>
-                <div className='scrollable-text'>
-                  {image && <ResizableImage image={image}/>}
-                  {question}
+        <div>
+          <FlexibleContentWrapper offset={300}>
+            <div className='flashcard' style={{cursor: 'pointer'}} onClick={() => this.showQuestion(true)}>
+              <div className='flashcard-title'>QUESTION
+                { !isCasual ? <div className={'flashcard-title-not-casual'}>
+                  <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
+                </div> : null }
+                {userIsCasual === null && !isCasual ?
+                  casualSwitchPopup : null
+                }
+              </div>
+              <div className='flashcard-content'>
+                <div className='flashcard-content-text'>
+                  <div className='scrollable-text'>
+                    {image && <ResizableImage image={image}/>}
+                    {question}
+                  </div>
                 </div>
               </div>
+              <div className='flashcard-footer'>Click the card to see the answer!</div>
             </div>
-            <div className='flashcard-footer'>Click the card to see the answer!</div>
+          </FlexibleContentWrapper>
+          <div className={`answer-buttons-container slide-animation ${this.state.shouldAnimate ? 'slide-out' : ''}`}>
+            <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(1, itemId)}/>
+            <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
+            <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
+            <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
+                 onClick={() => this.onSubmitEvaluation(6, itemId)}/>
           </div>
-        </FlexibleContentWrapper>)
+        </div>
+      )
     }
     return (
       <div>
@@ -127,7 +153,7 @@ class Flashcard extends React.Component {
               { !isCasual ? <div className={'flashcard-title-not-casual'}>
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
-              {this.props.userDetails.UserDetails.isCasual === null && !isCasual ?
+              {userIsCasual === null && !isCasual ?
                 casualSwitchPopup : null
               }
             </div>
@@ -139,17 +165,18 @@ class Flashcard extends React.Component {
             <div className='flashcard-footer'>How would you describe experience answering this question?</div>
           </div>
         </FlexibleContentWrapper>
-        <div className="answer-buttons-container">
+        <div className='answer-buttons-container slide-animation slide-in'>
+          <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(1, itemId)}/>
+          <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
+          <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+               onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
           <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
                onClick={() => this.onSubmitEvaluation(6, itemId)}/>
-          <img alt={'Medium'} src={answerButtonImage2} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(4.5, itemId)}/>
-          <img alt={'Hard'} src={answerButtonImage3} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(2.5, itemId)}/>
-          <img alt={'Very hard'} src={answerButtonImage4} className='answer-button'
-               onClick={() => this.onSubmitEvaluation(1, itemId)}/>
         </div>
-      </div>)
+      </div>
+    )
   }
 }
 
@@ -187,15 +214,38 @@ export default compose(
           itemId,
           evaluation
         },
-        updateQueries: {
-          CurrentItems: (prev, {mutationResult}) => {
-            const updateResults = update(prev, {
-              ItemsWithFlashcard: {
-                $set: mutationResult.data.processEvaluation
-              }
-            })
-            return updateResults
+        optimisticResponse: {
+          processEvaluation: {
+            //With this fake data we get warnings in the client on every evaluation :-(
+            "item": {
+              "_id": "-1",
+              "flashcardId": "",
+              "extraRepeatToday": false,
+              "actualTimesRepeated": 0,
+              "__typename": "Item"
+            },
+            "flashcard": {
+              "_id": "-1",
+              "question": "",
+              "answer": "",
+              "isCasual": true,
+              "image": null,
+              "answerImage": null,
+              "__typename": "Flashcard"
+            },
+            "__typename": "ItemWithFlashcard",
+            switchFlashcards: true,
+          },
+        },
+        update: (proxy, { data: { processEvaluation } }) => {
+          const data = proxy.readQuery({ query: currentItemsQuery });
+          if (processEvaluation.switchFlashcards) {
+            const newFlashcards = [_.last(data.ItemsWithFlashcard)]
+            data.ItemsWithFlashcard = newFlashcards
+          } else {
+            data.ItemsWithFlashcard = processEvaluation
           }
+          proxy.writeQuery({ query: currentItemsQuery, data });
         },
         refetchQueries: [{
           query: sessionCountQuery

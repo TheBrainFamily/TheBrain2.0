@@ -15,11 +15,15 @@ export default class MobileContainer extends React.Component {
           paddingBottom: '10px',
           boxSizing: 'border-box'
         }}>
-          <img src={logo} style={{ width: '100%' }}/>
+          <img alt={'The Brain Logo'} src={logo} style={{ width: '100%' }}/>
         </div>
         <div style={{ marginTop: '100px' }}>
-          <a href=''><img src={androidIcon} style={{ width: '80%', margin: '10px' }}/></a>
-          <a href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'><img src={iosIcon} style={{ width: '80%', margin: '10px' }}/></a>
+          <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
+            <img alt={'Google Play'} src={androidIcon} style={{ width: '80%', margin: '10px' }}/>
+          </a>
+          <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+            <img alt={'Apple App Store'} src={iosIcon} style={{ width: '80%', margin: '10px'}}/>
+          </a>
         </div>
       </div>
     )
