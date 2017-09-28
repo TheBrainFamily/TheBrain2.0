@@ -45,12 +45,44 @@ class Flashcard extends React.Component {
         content: { height: this.props.getFlashcardHeight(), width: this.props.getFlashcardWidth() }
       },
       swipeDirection: DIRECTIONS.left,
-      dragLen: 0
+      dragLen: 0,
+      currentQuestion: props.question,
+      currentAnswer: props.answer
     }
     this.animatedValue = new Animated.Value(0)
+    this.animatedValue.addListener(({value}) => this.eventLauncher(value))
     this.frontInterpolate = this.interpolateWrapper({
       inputRange: [0, 180],
       outputRange: ['0deg', '180deg']
+    })
+    this.flipEventLaunched = false
+    this.currentlyVisibleAnswer = false
+  }
+
+  eventLauncher = (value) => {
+    if(!this.flipEventLaunched) {
+      if(this.currentlyVisibleAnswer) {
+        if(value < 90.0) {
+          this.flipEventLaunched = true
+          this.currentlyVisibleAnswer = false
+          this.props.dispatch(updateAnswerVisibility(false))
+          this.syncQuestionAndAnswerWithProps()
+        }
+      } else {
+        if(value > 90.0) {
+          this.flipEventLaunched = true
+          this.currentlyVisibleAnswer = true
+          this.props.dispatch(updateAnswerVisibility(true))
+          this.syncQuestionAndAnswerWithProps()
+        }
+      }
+    }
+  }
+
+  syncQuestionAndAnswerWithProps = () => {
+    this.setState({
+      currentQuestion: this.props.question,
+      currentAnswer: this.props.answer
     })
   }
 
@@ -61,14 +93,10 @@ class Flashcard extends React.Component {
     })
   }
 
-  // componentWillMount = () => {
-  //   this.animatedValue = new Animated.Value(0)
-  // };
-
   animate = () => {
     const toAnswerSide = 180
     const toQuestionSide = 0
-    const value = this.props.flashcard.visibleAnswer ? toQuestionSide : toAnswerSide
+    const value = this.currentlyVisibleAnswer ? toQuestionSide : toAnswerSide
     Animated.spring(this.animatedValue, {
       toValue: value,
       friction: 8,
@@ -77,14 +105,8 @@ class Flashcard extends React.Component {
   }
 
   flipCard = () => {
-    let answerWillBeVisible = false
-    if (this.props.flashcard.visibleAnswer) {
-      answerWillBeVisible = false
-      this.props.dispatch(updateAnswerVisibility(answerWillBeVisible))
-    } else {
-      answerWillBeVisible = true
-      this.props.dispatch(updateAnswerVisibility(answerWillBeVisible))
-    }
+    this.flipEventLaunched = false
+    this.animate()
     this.setState({
       dynamicStyles: {
         content: { height: this.props.getFlashcardHeight(), width: this.props.getFlashcardWidth() }
@@ -92,16 +114,10 @@ class Flashcard extends React.Component {
     })
   }
 
-  updateSwipeState = (swipeDirection, dragLen) => {
-    this.setState({
-      swipeDirection,
-      dragLen
-    })
-  }
-
   componentWillUpdate = (nextProps) => {
     if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
-      this.animate()
+      this.currentlyVisibleAnswer = this.props.flashcard.visibleAnswer
+      this.flipCard()
     }
   }
 
@@ -125,8 +141,6 @@ class Flashcard extends React.Component {
       ]
     }
 
-    // const backStyle = this.props.flashcard.visibleAnswer ? {height: 200} : {};
-
     return (
       <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
         <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
@@ -134,10 +148,10 @@ class Flashcard extends React.Component {
             <TouchableWithoutFeedback onPress={() => this.flipCard()}>
               <View>
                 <Card dynamicStyles={this.state.dynamicStyles}
-                      question={this.props.question} answer={this.props.answer}
+                      question={this.state.currentQuestion} answer={this.state.currentAnswer}
                       image={this.props.image}
                       answerImage={this.props.answerImage}
-                      visibleAnswer={this.props.flashcard.visibleAnswer}
+                      visibleAnswer={this.currentlyVisibleAnswer}
                       isCasualFlashcard={this.props.isQuestionCasual}/>
                 <View
                   style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
