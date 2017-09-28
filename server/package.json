@@ -9,6 +9,7 @@
   "scripts": {
     "test": "NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
     "dev": "NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
+    "startProdDb": "NODE_ENV='production' MONGOURL='mongodb://server:***REMOVED***@ds133394-a0.mlab.com:33394,ds133394-a1.mlab.com:33394/thebrain?replicaSet=rs-ds133394' NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker stop mongo_instance_001 && docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain && sleep 5 && mongo localhost:27017/thebrain < ../dbImporter/improvedDb.js",
     "startTestingDB": "docker run -d -p 27017:27017 mongo",

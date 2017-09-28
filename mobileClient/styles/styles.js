@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: appStyle.colors.bgAlt,
   },
   textDefault: {
+    letterSpacing: -1,
     fontSize: 18,
     textAlign: 'center',
     color: appStyle.colors.text,
@@ -208,17 +209,14 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   cardImage: {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     backgroundColor: 'white',
     shadowColor: 'black',
     shadowOffset: { width: 4, height: 4 },
     shadowRadius: 4,
     shadowOpacity: 0.5,
-    borderWidth: 1,
-    borderRadius: 5,
     alignSelf: 'center',
-    position: 'absolute'
   },
   form: {
     marginTop: 5,
@@ -345,7 +343,7 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -85 }],
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ff8533',
+    backgroundColor: '#62c46c',
     width: "12%",
     height: 170,
     borderRadius: 35,
@@ -373,7 +371,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#62c46c',
+    backgroundColor: '#ff8533',
     width: "12%",
     height: 170,
     borderRadius: 35,

@@ -39,7 +39,7 @@ class AnswerEvaluator extends React.Component {
         <Triangle animated={this.props.enabled} line="right" style={styles.triangleRight}/>
         <LinearGradient
           style={styles.answerRightLine}
-          colors={['#ff8533', '#b3b3b3']}
+          colors={['#62c46c', '#b3b3b3']}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 0}}
         />
@@ -53,7 +53,7 @@ class AnswerEvaluator extends React.Component {
         <Triangle animated={this.props.enabled} line="left" style={styles.triangleLeft}/>
         <LinearGradient
           style={styles.answerLeftLine}
-          colors={['#62c46c', '#b3b3b3']}
+          colors={['#ff8533', '#b3b3b3']}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
         />
@@ -61,7 +61,7 @@ class AnswerEvaluator extends React.Component {
           <Text style={styles.answerText}>Easy</Text>
         </View>
         <View style={styles.answerFieldRight}>
-          <Text style={[styles.answerText, { transform: [{ rotate: '90deg' }] }]}>Good</Text>
+          <Text style={[styles.answerText, { transform: [{ rotate: '90deg' }] }]}>Correct</Text>
         </View>
         <View style={styles.answerFieldBottom}>
           <Text style={styles.answerText}>No clue</Text>

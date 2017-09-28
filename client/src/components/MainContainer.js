@@ -4,7 +4,10 @@ import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
-import { connect } from 'react-redux'
+import _ from 'lodash'
+import Intercom from 'react-intercom';
+import smartlookClient from 'smartlook-client'
+
 
 import Home from './Home'
 import Course from './Course'
@@ -17,6 +20,7 @@ import Header from './Header'
 import ResetPassword from './ResetPassword'
 import ReviewsCalendar from './ReviewsCalendar'
 import Congratulations from './Congratulations'
+import Lectures from './Lectures'
 
 import { history } from '../store'
 
@@ -24,32 +28,62 @@ import coursesQuery from '../../shared/graphql/queries/courses'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 
-class MainContainer extends React.Component {
+class AirplaneWrapper extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      backgroundColor: null,
-      backgroundImage: null
+    this.routesWithAirplane = ['/']
+  }
+
+  getBackgroundImage = () => {
+    if (this.routesWithAirplane.indexOf(history.location.pathname) > -1) {
+      return null
+    } else {
+      return 'none'
     }
   }
 
-  render () {
-    const currentUser = this.props.data.CurrentUser
+  render() {
     let courseColor = null
     if (this.props.userDetails.UserDetails && this.props.courses.Courses) {
-      const selectedCourse = this.props.courses.Courses.find(course => course._id === this.props.userDetails.UserDetails.selectedCourse)
+      const selectedCourse = _.find(this.props.courses.Courses, course => course._id === this.props.userDetails.UserDetails.selectedCourse)
       if (selectedCourse) {
         courseColor = selectedCourse.color
       } else {
-        courseColor = '#0c6ccb'
+        courseColor = '#6920aa'
       }
+    }
+    return(
+      <div className='App'
+         style={{
+           backgroundColor: courseColor,
+           backgroundImage: this.getBackgroundImage()
+         }}>
+        {this.props.children}
+      </div>
+    )
+  }
+}
+
+class MainContainer extends React.Component {
+  componentDidMount() {
+    smartlookClient.init('071bd1e673b85c528487b73918514edbc7b978b0')
+  }
+  render () {
+    const currentUser = this.props.data.CurrentUser
+    let intercomUser
+    if (currentUser) {
+      intercomUser = {
+        user_id: currentUser._id,
+        email: currentUser.email,
+        name: currentUser.username
+      }
+      smartlookClient.tag('email', currentUser.email)
+      smartlookClient.tag('name', currentUser.username)
+      smartlookClient.tag('websiteName', 'thebrain.pro')
     }
     return (
       <Router history={history}>
-        <div className='App'
-          style={{
-            backgroundColor: courseColor
-          }}>
+        <AirplaneWrapperWithData>
           <Header />
           <Switch>
             <Route exact key='Home' path='/' component={Home} />
@@ -66,17 +100,18 @@ class MainContainer extends React.Component {
               <div>
                 <Route exact key='profile' path='/profile' component={Profile} />
                 <Route exact key='calendar' path='/calendar' component={ReviewsCalendar} />
+                <Route exact key='lectures' path='/lectures' component={Lectures} />
               </div>
             }
             <Redirect to='/' />
           </Switch>
-        </div>
+          <Intercom appID="yndcllpy" { ...intercomUser } />
+        </AirplaneWrapperWithData>
       </Router>)
   }
 }
 
-export default compose(
-  connect(),
+const AirplaneWrapperWithData = compose(
   graphql(userDetailsQuery, {
     name: 'userDetails',
     options: {
@@ -84,5 +119,8 @@ export default compose(
     }
   }),
   graphql(coursesQuery, { name: 'courses' }),
+)(AirplaneWrapper)
+
+export default compose(
   graphql(currentUserQuery)
 )(MainContainer)
