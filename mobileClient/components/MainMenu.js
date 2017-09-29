@@ -94,6 +94,7 @@ class MainMenu extends React.Component {
   }
 
   closeCourse = async () => {
+    this.closeMenu()
     this.props.dispatch(courseActions.close())
     await this.props.closeCourseMutation()
     this.go('/')()

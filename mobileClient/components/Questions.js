@@ -53,9 +53,12 @@ class Questions extends React.Component {
   }
 
   handleBack = () => {
-    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
-      visible: false
-    }))
+    if(this.props.mainMenu.visible) {
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
+      return true
+    }
     this.closeCourse()
     return true
   }
@@ -109,6 +112,9 @@ class Questions extends React.Component {
 
   closeCourse = async () => {
     await mutationConnectionHandler(this.props.history, async () => {
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
       await this.props.closeCourse()
       this.props.dispatch(courseActions.close())
     })
