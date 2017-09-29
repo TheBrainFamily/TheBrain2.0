@@ -12,7 +12,8 @@ import {
   Dimensions,
   Platform,
   Alert,
-  Image
+  Image,
+  BackHandler
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import DeviceInfo from 'react-native-device-info'
@@ -39,6 +40,7 @@ import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
+import * as mainMenuActions from '../actions/MainMenuActions'
 
 class Home extends React.Component {
   constructor (props) {
@@ -48,8 +50,7 @@ class Home extends React.Component {
     this.width = width
     this.state = {
       isExitAnimationFinished: props.course.selectedCourse,
-      courseSelectorIsDisabled: false,
-      mainMenuActive: false
+      courseSelectorIsDisabled: false
     }
 
     AsyncStorage.getItem('isIntroDisabled').then((isIntroDisabled) => {
@@ -57,6 +58,26 @@ class Home extends React.Component {
         props.history.push('/intro')
       }
     })
+  }
+
+  componentDidMount = () => {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  componentWillUnmount = () => {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  handleBack = () => {
+    if(this.props.mainMenu.visible) {
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
+      return true
+    }
+
+    BackHandler.exitApp()
+    return true
   }
 
   logInWithSavedData = async () => {
@@ -203,21 +224,25 @@ class Home extends React.Component {
   }
 
   logoutAction = () => {
-    this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
+    this.closeMenu()
+    this.setState({ isExitAnimationFinished: false })
     this.enableCourseSelector()
   }
 
   closeCourse = async () => {
     await mutationConnectionHandler(this.props.history, async () => {
       this.props.dispatch(courseActions.close())
-      this.setState({ isExitAnimationFinished: false, mainMenuActive: false })
+      this.setState({ isExitAnimationFinished: false })
+      this.closeMenu()
       await this.props.closeCourse()
       this.enableCourseSelector()
     })
   }
 
-  toggleMainMenu = () => {
-    this.setState({ mainMenuActive: !this.state.mainMenuActive })
+  closeMenu = () => {
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: false
+    }))
   }
 
   render () {
@@ -232,11 +257,10 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished &&
-        <Header withShadow dynamic hide={this.props.course.selectedCourse} toggleMainMenu={this.toggleMainMenu}/>}
+        <Header withShadow dynamic hide={this.props.course.selectedCourse}/>}
         {this.props.course.selectedCourse ?
           <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }}
-                        closeCourse={this.closeCourse}
-                        toggleMainMenu={this.toggleMainMenu}>
+                        closeCourse={this.closeCourse}>
             <CourseProgressBar />
           </CourseHeader> : <View style={style.courseHeader}/>}
 
@@ -303,8 +327,7 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course />}
 
-        {this.state.mainMenuActive && <MainMenu closeCourse={this.closeCourse} toggleMainMenu={this.toggleMainMenu}
-                                                logoutAction={this.logoutAction}/>}
+        {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction}/>}
       </View>
     )
   }
