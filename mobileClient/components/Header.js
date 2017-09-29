@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { Animated, TouchableOpacity, View, Platform, Image } from 'react-native'
-import Hamburger from 'react-native-hamburger'
+import Hamburger from './Hamburger'
 
 import logoBig from '../images/logoBig.png'
 import styles from '../styles/styles'
@@ -68,7 +68,6 @@ class Header extends React.Component {
           {!this.props.hideHamburger ? <Hamburger
             active={this.props.mainMenu.visible}
             color='#62c46c'
-            type='cross'
             onPress={this.toggleMenu}
           /> : null}
         </View>
