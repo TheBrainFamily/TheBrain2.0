@@ -11,7 +11,7 @@ import ProgressBar from './ProgressBar'
 class Questions extends React.Component {
   render () {
     if (this.props.sessionCount.loading) {
-      return <div>Loading...</div>
+      return <p>Loading...</p>
     } else if (!this.props.selectedCourse) {
       return <div>Course not selected</div>
     } else {

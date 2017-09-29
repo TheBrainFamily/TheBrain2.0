@@ -113,10 +113,9 @@ class Home extends React.Component {
         autoplay: 0
       }
     }
-
     const showIntro = !this.props.currentUser.CurrentUser && !this.state.skipIntro
-    if (this.props.courses.loading) {
-      return <div>Loading...</div>
+    if (this.props.courses.loading || this.props.currentUser.loading || this.props.userDetails.loading || this.props.selectedCourse) {
+      return <p>Loading...</p>
     }
     return (
       <FlexibleContentWrapper offset={200}>
@@ -180,8 +179,14 @@ const logInWithTokenMutation = gql`
     }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(logInWithTokenMutation, {
     props: ({ ownProps, mutate }) => ({
