@@ -3,7 +3,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { Text, TouchableOpacity, View, Image } from 'react-native'
-import Hamburger from 'react-native-hamburger'
+import Hamburger from './Hamburger'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
@@ -50,7 +50,6 @@ class CourseHeader extends React.Component {
           </View>
           <View style={{marginRight: 15}}>
             <Hamburger active={this.props.mainMenu.visible} color='#ffffff'
-                       type='cross'
                        onPress={this.toggleMenu}/>
           </View>
         </View>
