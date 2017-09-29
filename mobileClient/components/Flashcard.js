@@ -156,12 +156,11 @@ class Flashcard extends React.Component {
     }
 
     return (
-      <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
-        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-          <View style={styles.flipCardContainer}>
-            <TouchableWithoutFeedback onPress={() =>
-              this.props.userDetails.UserDetails.isCasual !== null || this.props.isQuestionCasual ? this.flipCard() : null}>
-              <View>
+      <TouchableWithoutFeedback onPress={() =>
+        this.props.userDetails.UserDetails.isCasual !== null || this.props.isQuestionCasual ? this.flipCard() : null}>
+        <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
+          <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+            <View style={styles.flipCardContainer}>
                 <Card dynamicStyles={this.state.dynamicStyles}
                       question={this.state.currentQuestion} answer={this.state.currentAnswer}
                       image={this.props.image}
@@ -177,11 +176,10 @@ class Flashcard extends React.Component {
                   }}><Text /></View>
                   <Image style={{ width: 200, height: 22.5 }} source={require('../images/pageCorner.png')}/>
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </Animated.View>
-      </Animatable.View>
+            </View>
+          </Animated.View>
+        </Animatable.View>
+      </TouchableWithoutFeedback>
     )
   }
 }
