@@ -5,19 +5,11 @@ import Header from './Header'
 import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
+import { compose } from 'react-apollo'
+import * as mainMenuActions from '../actions/MainMenuActions'
 
 class PageContainer extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      mainMenuActive: false
-    }
-  }
-
-  toggleMainMenu = () => {
-    this.setState({ mainMenuActive: !this.state.mainMenuActive })
-  }
-
   componentDidMount = () => {
     BackHandler.addEventListener('hardwareBackPress', this.handleBack)
   }
@@ -27,6 +19,12 @@ class PageContainer extends React.Component {
   }
 
   handleBack = () => {
+    if(this.props.mainMenu.visible) {
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
+      return true
+    }
     const { history } = this.props
     if (history.index === 0) {
       BackHandler.exitApp()
@@ -39,8 +37,8 @@ class PageContainer extends React.Component {
 
   renderContainer = () => (
     <View style={{ height: '100%', backgroundColor: 'white' }}>
-      <Header toggleMainMenu={this.toggleMainMenu}/>
-      {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
+      <Header/>
+      {this.props.mainMenu.visible ? <MainMenu/> : this.props.children}
     </View>)
 
   renderKeyboardAwareContainer = () => (
@@ -51,8 +49,8 @@ class PageContainer extends React.Component {
       <View style={{
         height: '100%',
       }}>
-        <Header hideHamburger={this.props.hideHamburger} toggleMainMenu={this.toggleMainMenu}/>
-        {this.state.mainMenuActive ? <MainMenu toggleMainMenu={this.toggleMainMenu}/> : this.props.children}
+        <Header hideHamburger={this.props.hideHamburger}/>
+        {this.props.mainMenu.visible ? <MainMenu/> : this.props.children}
       </View>
     </KeyboardAwareScrollView>)
 
@@ -61,4 +59,7 @@ class PageContainer extends React.Component {
   }
 }
 
-export default withRouter(PageContainer)
+export default compose(
+  connect(state => state),
+  withRouter
+)(PageContainer)

@@ -6,19 +6,20 @@ import Hamburger from 'react-native-hamburger'
 import logoBig from '../images/logoBig.png'
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
+import * as mainMenuActions from '../actions/MainMenuActions'
+import { connect } from 'react-redux'
+import { compose } from 'react-apollo'
 
 class Header extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      active: false,
       topPosition: new Animated.Value(0)
     }
   }
 
   componentDidUpdate = () => {
     if (this.props.hide) {
-      // this.state.topPosition.setValue(0)
       Animated.timing(this.state.topPosition, {
         toValue: -120,
         duration: 1000
@@ -29,14 +30,17 @@ class Header extends React.Component {
   goHome = () => {
     if (!this.props.hideHamburger) {
       this.state.topPosition.setValue(0)
-      if (this.state.active) this.toggleMenu()
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
       this.props.history.push('/questions')
     }
   }
 
   toggleMenu = () => {
-    this.setState({ active: !this.state.active })
-    this.props.toggleMainMenu()
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: !this.props.mainMenu.visible
+    }))
   }
 
   render () {
@@ -62,9 +66,9 @@ class Header extends React.Component {
             />
           </TouchableOpacity>
           {!this.props.hideHamburger ? <Hamburger
-            active={this.state.active}
+            active={this.props.mainMenu.visible}
             color='#62c46c'
-            type='spinCross'
+            type='cross'
             onPress={this.toggleMenu}
           /> : null}
         </View>
@@ -74,4 +78,7 @@ class Header extends React.Component {
   }
 }
 
-export default withRouter(Header)
+export default compose(
+  connect(state => state),
+  withRouter
+)(Header)

@@ -9,20 +9,19 @@ import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
 import WithData from './WithData'
 
-class CourseHeader extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      active: false
-    }
-  }
+import * as mainMenuActions from '../actions/MainMenuActions'
 
+class CourseHeader extends React.Component {
   toggleMenu = () => {
-    this.setState({active: !this.state.active})
-    this.props.toggleMainMenu()
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: !this.props.mainMenu.visible
+    }))
   }
 
   closeCourse = () => {
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: false
+    }))
     if ( this.props.isExitAnimationFinished ) {
       this.props.closeCourse()
     }
@@ -50,7 +49,9 @@ class CourseHeader extends React.Component {
             </View>
           </View>
           <View style={{marginRight: 15}}>
-            <Hamburger active={this.state.active} color='#ffffff' type='spinCross' onPress={this.toggleMenu}/>
+            <Hamburger active={this.props.mainMenu.visible} color='#ffffff'
+                       type='cross'
+                       onPress={this.toggleMenu}/>
           </View>
         </View>
 
@@ -91,6 +92,7 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  connect(state => state),
   graphql(currentCourseQuery, {
     name: 'currentCourse',
     skip: props => !props.selectedCourse,

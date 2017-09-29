@@ -10,6 +10,7 @@ import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View, 
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import * as courseActions from '../actions/CourseActions'
+import * as mainMenuActions from '../actions/MainMenuActions'
 
 import Separator from './Separator'
 import Loading from './Loading'
@@ -68,22 +69,28 @@ class MainMenu extends React.Component {
             }
           })
           this.props.client.resetStore()
-          this.props.toggleMainMenu && this.props.toggleMainMenu()
+          this.closeMenu()
           this.props.logoutAction && this.props.logoutAction()
           this.setState({loading: false})
           this.props.history.push('/')
         })
         .catch(() => {
-          this.props.toggleMainMenu && this.props.toggleMainMenu()
+          this.closeMenu()
           this.setState({loading: false})
           this.history.push('/nointernet')
         })
     })
   }
 
+  closeMenu = () => {
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: false
+    }))
+  }
+
   go = (path) => () => {
     this.props.history.push(path)
-    this.props.toggleMainMenu && this.props.toggleMainMenu()
+    this.closeMenu()
   }
 
   closeCourse = async () => {
@@ -251,6 +258,7 @@ export default compose(
   withApollo,
   withRouter,
   connect(mapStateToProps),
+  connect(state => state),
   graphql(closeCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       closeCourseMutation: () => mutate({

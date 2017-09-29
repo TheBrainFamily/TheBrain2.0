@@ -12,7 +12,8 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
-  Platform
+  Platform,
+  BackHandler
 } from 'react-native'
 
 import MainMenu from './MainMenu'
@@ -35,18 +36,28 @@ import sessionCountQuery from '../shared/graphql/queries/sessionCount'
 import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
+import * as mainMenuActions from '../actions/MainMenuActions'
 
 class Questions extends React.Component {
   constructor (props) {
     super(props)
     props.dispatch(updateAnswerVisibility(false))
-    this.state = {
-      mainMenuActive: false
-    }
   }
 
-  toggleMainMenu = () => {
-    this.setState({ mainMenuActive: !this.state.mainMenuActive })
+  componentDidMount = () => {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  componentWillUnmount = () => {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  handleBack = () => {
+    this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+      visible: false
+    }))
+    this.closeCourse()
+    return true
   }
 
   componentWillReceiveProps (nextProps) {
@@ -121,8 +132,7 @@ class Questions extends React.Component {
 
         return (
           <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse}
-                          toggleMainMenu={this.toggleMainMenu}>
+            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse}>
               <ProgressBar progress={progress}/>
             </CourseHeader>
 
@@ -137,7 +147,7 @@ class Questions extends React.Component {
             <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer}
                              evalItemId={evalItem._id}
                              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
-            {this.state.mainMenuActive &&
+            {this.props.mainMenu.visible &&
             <MainMenu topMargin={this.props.height} closeCourse={this.closeCourse}/>}
           </View>
         )
@@ -149,6 +159,7 @@ class Questions extends React.Component {
 }
 
 export default compose(
+  connect(state => state),
   withRouter,
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(currentItemsQuery, {
