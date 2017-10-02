@@ -232,10 +232,10 @@ class Home extends React.Component {
 
   closeCourse = async () => {
     await mutationConnectionHandler(this.props.history, async () => {
+      await this.props.closeCourse()
       this.props.dispatch(courseActions.close())
       this.setState({ isExitAnimationFinished: false })
       this.closeMenu()
-      await this.props.closeCourse()
       this.enableCourseSelector()
     })
   }
@@ -326,7 +326,7 @@ class Home extends React.Component {
 
         </View>}
 
-        {isExitAnimationFinished && <Course />}
+        {isExitAnimationFinished && <Course closeCourse={this.closeCourse}/>}
 
         {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction}/>}
       </View>
