@@ -181,8 +181,9 @@ class Home extends React.Component {
       const centeredLeftXOffset = (this.width - newSizeX) / 2
       const elementWidthChangeAfterScaling = (width - newSizeX) / 2
       const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
+      const courseLogoIsRendered = width && height
 
-      if (Platform.OS === 'ios') {
+      if (Platform.OS === 'ios' && courseLogoIsRendered) {
         this.refs[`${selectedCourseId}courseSelector`].transitionTo({ transform: [{ translateX: translateXValue }, { translateY: translateYValue }, { scale }] }, 2000)
       } else {
         this.refs[`${selectedCourseId}courseSelector`].bounceOut(1000)
