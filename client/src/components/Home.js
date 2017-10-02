@@ -77,8 +77,9 @@ class Home extends React.Component {
     })
   }
 
-  selectCourse = (courseId) => async () => {
-    const selectedCourse = _.find(this.props.courses.Courses, course => course._id === courseId)
+  selectCourse = (courseId, courses = null) => async () => {
+    const coursesToProcess = courses === null ? this.props.courses.Courses : courses
+    const selectedCourse = _.find(coursesToProcess, course => course._id === courseId)
     this.props.dispatch(course.select(selectedCourse))
     await this.props.selectCourse({ courseId })
     this.props.dispatch(push(`/course/${courseId}`))
@@ -94,7 +95,7 @@ class Home extends React.Component {
     }
 
     if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.selectedCourse) {
-      this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse)()
+      this.selectCourse(nextProps.userDetails.UserDetails.selectedCourse, nextProps.courses.Courses)()
     }
   }
 
@@ -112,10 +113,9 @@ class Home extends React.Component {
         autoplay: 0
       }
     }
-
     const showIntro = !this.props.currentUser.CurrentUser && !this.state.skipIntro
-    if (this.props.courses.loading) {
-      return <div>Loading...</div>
+    if (this.props.courses.loading || this.props.currentUser.loading || this.props.userDetails.loading || this.props.selectedCourse) {
+      return <p>Loading...</p>
     }
     return (
       <FlexibleContentWrapper offset={200}>
@@ -141,7 +141,7 @@ class Home extends React.Component {
         </ul>}
         <div style={{ height: '100px' }}/>
         <div className='oldBrainLinkContainer'>
-          <div >
+          <div>
             <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
               <img alt={'Google Play'} src={androidIcon} style={{ width: '150px', margin: '10px' }}/>
             </a>
@@ -179,8 +179,14 @@ const logInWithTokenMutation = gql`
     }
 `
 
+const mapStateToProps = (state) => {
+  return {
+    selectedCourse: state.course.selectedCourse
+  }
+}
+
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(logInWithTokenMutation, {
     props: ({ ownProps, mutate }) => ({
