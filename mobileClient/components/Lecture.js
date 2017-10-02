@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View } from 'react-native'
+import { Animated, Easing, Text, View, BackHandler} from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
@@ -19,6 +19,7 @@ import currentLessonQuery from '../shared/graphql/queries/currentLesson'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
 import Loading from './Loading'
+import * as mainMenuActions from '../actions/MainMenuActions'
 
 class Lecture extends React.Component {
   state = {
@@ -31,11 +32,27 @@ class Lecture extends React.Component {
   }
 
   componentDidMount () {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack)
     Animated.timing(this.infoScale, {
       toValue: 1,
       duration: 500,
       easing: Easing.elastic(1)
     }).start(() => this.setState({ showLecture: true }))
+  }
+
+  componentWillUnmount = () => {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBack)
+  }
+
+  handleBack = () => {
+    if(this.props.mainMenu.visible) {
+      this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
+        visible: false
+      }))
+      return true
+    }
+    this.props.closeCourse()
+    return true
   }
 
   onChangeState = async (event) => {
@@ -103,6 +120,7 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  connect(state => state),
   withRouter,
   graphql(clearNotCasualItems, {
     props: ({ ownProps, mutate }) => ({

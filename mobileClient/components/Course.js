@@ -38,7 +38,7 @@ class Course extends React.Component {
         backgroundColor: this.props.backgroundColor,
         alignItems: 'center'
       }}>
-        <Lecture />
+        <Lecture closeCourse={this.props.closeCourse}/>
         <View style={{position: 'absolute', bottom: 25, alignSelf: 'center'}}>
           <CircleButton radius={45} withStaticCircles>
             <Image
