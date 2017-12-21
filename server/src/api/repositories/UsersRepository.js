@@ -26,7 +26,8 @@ export class UsersRepository extends MongoRepository {
       createdAt: moment().unix()
     }
 
-    const addedUser = (await this.userCollection.insertOne(newUser)).ops[0]
+    const addedUser = (await this.userCollection.insert(newUser))[0]
+
 
     const newUserId = addedUser._id.toString()
     await new userDetailsRepository.create(newUserId, courseId)

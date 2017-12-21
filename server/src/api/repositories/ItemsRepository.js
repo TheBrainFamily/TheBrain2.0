@@ -5,7 +5,7 @@ import moment from 'moment'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 
-class ItemsRepository extends MongoRepository {
+export class ItemsRepository extends MongoRepository {
   itemsCollection: Collection
 
   init () {

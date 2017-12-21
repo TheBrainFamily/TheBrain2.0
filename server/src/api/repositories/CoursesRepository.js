@@ -2,7 +2,7 @@
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 
-class CoursesRepository extends MongoRepository {
+export class CoursesRepository extends MongoRepository {
   coursesCollection: Collection
 
   init () {

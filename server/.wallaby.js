@@ -21,6 +21,8 @@
 //     }
 // };
 
+process.env.BABEL_ENV="test"
+
 module.exports = (wallaby) => {
     const path = require('path');
     process.env.NODE_PATH = `${path.join(wallaby.localProjectDir, 'src')}`;
@@ -45,7 +47,6 @@ module.exports = (wallaby) => {
             }
         },
         // workers: {recycle: tru}
-        workers: {initial: 1, regular: 1, recycle: false},
         // preprocessors: {
         //     'modules/**/*.js': file => '!global.$_$wp && (global.$_$wp = global.$_$wpe = global.$_$w = global.$_$wf = () => {});' + file.content
         // },
