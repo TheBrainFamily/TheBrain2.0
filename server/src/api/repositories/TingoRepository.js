@@ -1,5 +1,5 @@
 // @flow
-const collection = require('./tingo-promise')
+const collection = require('tingodb-promise')
 
 export class MongoRepository {
   db: any
