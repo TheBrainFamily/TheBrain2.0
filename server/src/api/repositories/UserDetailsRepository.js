@@ -4,7 +4,7 @@ import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 import { calculateUserLevel, getExperienceForAction } from '../../configuration/experienceConfig'
 
-class UserDetailsRepository extends MongoRepository {
+export class UserDetailsRepository extends MongoRepository {
   userDetailsCollection: Collection
 
   init () {
@@ -80,10 +80,23 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async updateNextLessonPosition (courseId: string, userId: string) {
+    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const newProgress = userDetails.progress.map(p => {
+      if (p.courseId === courseId) {
+        return {...p, lesson: p.lesson + 1}
+      }
+      return p
+    })
     await this.userDetailsCollection.update({
-      userId: new ObjectId(userId),
-      'progress.courseId': courseId
-    }, {$inc: {'progress.$.lesson': 1}})
+      userId: new ObjectId(userId)}, {$set: {progress: newProgress}}
+      )
+
+    //TODO fix positional operators in tingodb -
+    // https://github.com/sergeyksv/tingodb/issues/34
+
+    // userId: new ObjectId(userId),
+    //   'progress.courseId': courseId
+    // }, {$inc: {'progress.$.lesson': 1}})
   }
 
   async updateCollectedAchievements (userId: string, collectedAchievementIds) {
@@ -91,7 +104,8 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async disableTutorial (userId: string) {
-    return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}}, {returnOriginal: false})).value
+    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}});
+    return this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
   }
 
   async selectCourse (userId: string, courseId: string) {

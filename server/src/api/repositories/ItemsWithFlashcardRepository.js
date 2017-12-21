@@ -5,7 +5,7 @@ import moment from 'moment'
 import { MongoRepository } from './MongoRepository'
 import getItemsWithFlashcardsByCount from '../tools/getItemsWithFlashcardsByCount'
 
-class ItemsWithFlashcardRepository extends MongoRepository {
+export class ItemsWithFlashcardRepository extends MongoRepository {
   flashcardsCollection: Collection
   itemsCollection: Collection
 

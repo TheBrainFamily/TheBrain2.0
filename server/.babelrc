@@ -4,5 +4,12 @@
     "es2015",
     "stage-2",
     "flow"
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        ["module-rewrite", { "replaceFunc": "./src/testHelpers/replace-for-testing.js" }]
+      ]
+    }
+  }
 }

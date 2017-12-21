@@ -15,15 +15,7 @@ import cors from 'cors'
 import schema from './api/schema'
 
 import facebookConfig from './configuration/facebook'
-import { flashcardRepository } from './api/repositories/FlashcardsRepository'
-import {
-  itemsWithFlashcardRepository
-} from './api/repositories/ItemsWithFlashcardRepository'
-import { itemsRepository } from './api/repositories/ItemsRepository'
-import { coursesRepository } from './api/repositories/CoursesRepository'
-import { lessonsRepository } from './api/repositories/LessonsRepository'
-import { achievementsRepository } from './api/repositories/AchievementsRepository'
-import { userDetailsRepository } from './api/repositories/UserDetailsRepository'
+
 import { usersRepository } from './api/repositories/UsersRepository'
 
 const app = express()
@@ -144,14 +136,6 @@ app.use('/graphql', graphqlExpress((req) => {
       opticsContext,
       user: req.user,
       req,
-      Flashcards: flashcardRepository,
-      Courses: coursesRepository,
-      Lessons: lessonsRepository,
-      Items: itemsRepository,
-      ItemsWithFlashcard: itemsWithFlashcardRepository,
-      UserDetails: userDetailsRepository,
-      Users: usersRepository,
-      Achievements: achievementsRepository,
     }
   }
 }))
