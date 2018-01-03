@@ -16,7 +16,7 @@ class Course extends React.Component {
 
     const courseId = nextProps.match.params.courseId
 
-    if (nextProps.data.ItemsWithFlashcard.length > 0) {
+    if (nextProps.data.Items.length > 0) {
       nextProps.dispatch(push('/questions'))
     } else {
       nextProps.dispatch(push(`/lecture/${courseId}`))

@@ -22,7 +22,6 @@ import ReviewsCalendar from './ReviewsCalendar'
 import Congratulations from './Congratulations'
 import Lectures from './Lectures'
 
-import { history } from '../store'
 
 import coursesQuery from '../../shared/graphql/queries/courses'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -35,7 +34,7 @@ class AirplaneWrapper extends React.Component {
   }
 
   getBackgroundImage = () => {
-    if (this.routesWithAirplane.indexOf(history.location.pathname) > -1) {
+    if (this.routesWithAirplane.indexOf(this.props.history.location.pathname) > -1) {
       return null
     } else {
       return 'none'
@@ -82,8 +81,8 @@ class MainContainer extends React.Component {
       smartlookClient.tag('websiteName', 'thebrain.pro')
     }
     return (
-      <Router history={history}>
-        <AirplaneWrapperWithData>
+      <Router history={this.props.history}>
+        <AirplaneWrapperWithData history={this.props.history}>
           <Header />
           <Switch>
             <Route exact key='Home' path='/' component={Home} />

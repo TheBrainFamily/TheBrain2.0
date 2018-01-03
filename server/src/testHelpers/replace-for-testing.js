@@ -5,10 +5,13 @@ module.exports = function replaceImport (originalPath) {
     return newPath;
   }
 
+  if (originalPath.indexOf('graphql-tools') !== -1) {
+    const newPath = originalPath.replace('graphql-tools', `apollo-test-utils-with-context`);
+    return newPath;
+  }
+  //TODO it would be great (probably much faster) if we could not load the whole mongodb dependencies when testing - but there is a problem with new new ObjectId() all around our repositories, and tingodb doesn't provide that for us.
   // if (originalPath.indexOf('mongodb') !== -1) {
-  //   console.log("found mongodb")
-  //   const newPath = originalPath.replace('mongodb', `../src/testHelpers/mongo`);
-  //   return newPath;
+  //   return 'tingodb';
   // }
 
 };

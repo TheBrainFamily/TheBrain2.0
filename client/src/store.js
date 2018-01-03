@@ -1,29 +1,13 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
-import createHistory from 'history/createBrowserHistory'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
 import { persistStore, autoRehydrate } from 'redux-persist'
 import { asyncSessionStorage } from 'redux-persist/storages'
+import { networkInterface } from './networkInterface';
+import createHistory from 'history/createBrowserHistory'
 
 import * as reducers from './reducers'
 
-let uri
-const localhostRegexp = /localhost/
-
-if (localhostRegexp.test(window.location.origin)) {
-  uri = 'http://localhost:8080/graphql'
-} else {
-  uri = 'https://api.thebrain.pro/graphql'
-}
-
-console.log('GraphQL uri:', uri)
-
-const networkInterface = createNetworkInterface({
-  uri,
-  opts: {
-    credentials: 'include'
-  }
-})
 
 const client = new ApolloClient({
   networkInterface

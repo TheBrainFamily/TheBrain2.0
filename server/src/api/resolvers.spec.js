@@ -35,6 +35,7 @@ extendExpect()
 // }
 
 const mongoObjectId = function () {
+
   const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
   return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
     return (Math.random() * 16 | 0).toString(16)
@@ -43,7 +44,7 @@ const mongoObjectId = function () {
 
 casual.define('flashcard', function () {
   return {
-    // _id: mongoObjectId(),
+    _id: mongoObjectId(),
     question: casual.sentence,
     answer: casual.sentence
   }
@@ -51,6 +52,7 @@ casual.define('flashcard', function () {
 
 casual.define('item', function () {
   return {
+    _id: mongoObjectId(),
     flashcardId: mongoObjectId(),
     userId: mongoObjectId(),
     actualTimesRepeated: 0,
@@ -104,7 +106,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
     }
     addedItems.push(newFlashcard)
   })
-  console.log("Gandecki addedItems", addedItems);
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
@@ -124,7 +125,7 @@ describe('query.Courses', () => {
 describe('query.Course', () => {
   it('returns a specific course', async () => {
     let coursesRepository = new CoursesRepository()
-    await coursesRepository.coursesCollection.insert({name: 'testCourseName'})
+    await coursesRepository.coursesCollection.insert({_id: "id", name: 'testCourseName'})
 
     const secondCourseId = mongoObjectId()
     await coursesRepository.coursesCollection.insert({_id: secondCourseId, name: 'testCourseName2'})
@@ -258,7 +259,8 @@ describe('query.Lesson', () => {
 })
 
 describe('query.Item', () => {
-  it('returns a specific item', async () => {
+  //TODO is this used on the frontend?
+  it.skip('returns a specific item', async () => {
     const userId = mongoObjectId()
     const itemsRepository = new ItemsRepository()
     await itemsRepository.itemsCollection.insert({userId, extraRepeatToday: true})
@@ -272,13 +274,15 @@ describe('query.Item', () => {
   })
 })
 
-describe('query.ItemsWithFlashcard', () => {
+
+
+describe('query.Items', () => {
 
   it('returns 0 items if no user exists', async () => {
     //XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
-    const context = {ItemsWithFlashcard: new ItemsWithFlashcardRepository()}
+    const context = {Items: new ItemsRepository()}
 
-    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
+    const items = await resolvers.Query.Items(undefined, undefined, context)
 
     expect(items.length).toBe(0)
   })
@@ -294,57 +298,20 @@ describe('query.ItemsWithFlashcard', () => {
     const context = {
       user: {_id: userId},
       UserDetails: userDetailsRepository,
-      ItemsWithFlashcard: new ItemsWithFlashcardRepository()
+      Items: new ItemsRepository()
     }
 
-    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
+    const items = await resolvers.Query.Items(undefined, undefined, context)
 
     expect(items.length).toBe(0)
-  })
-
-  it('returns two items for a new user after watching the first lesson', async () => {
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      selectedCourse: 'selectedCourse',
-      casual: false,
-    })
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardId = mongoObjectId()
-    await flashcardRepository.flashcardsCollection.insert({_id: flashcardId, question: 'firstQuestion', answer: '!'})
-    const secondFlashcardId = mongoObjectId()
-    await flashcardRepository.flashcardsCollection.insert({
-      _id: secondFlashcardId,
-      question: 'secondQuestion',
-      answer: '!'
-    })
-
-    const itemsWithFlashcardRepository = new ItemsWithFlashcardRepository()
-    const itemsRepository = new ItemsRepository()
-
-    const context = {
-      user: {_id: userId},
-      ItemsWithFlashcard: itemsWithFlashcardRepository,
-      UserDetails: userDetailsRepository,
-      Items: itemsRepository
-    }
-    const itemsToExtend = [
-      {userId, flashcardId: secondFlashcardId, courseId: 'selectedCourse'}, {userId, flashcardId, courseId: 'selectedCourse'},
-    ]
-    const returnedFromItems = makeItems({itemsToExtend, itemsCollection: itemsWithFlashcardRepository.itemsCollection})
-
-    await returnedFromItems;
-    const items = await resolvers.Query.ItemsWithFlashcard(undefined, undefined, context)
-    expect(items.length).toBe(2)
   })
 })
 
 describe('query.SessionCount', () => {
   it('returns an empty object if no user exists', async () => {
-    const itemsWithFlashcardRepository = new ItemsWithFlashcardRepository()
+    const itemsRepository = new ItemsRepository()
 
-    const context = {ItemsWithFlashcard: itemsWithFlashcardRepository}
+    const context = {Items: itemsRepository}
 
     const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
 
@@ -358,12 +325,12 @@ describe('query.SessionCount', () => {
       casual: false,
       selectedCourse: "selectedCourse"
     })
-    const itemsWithFlashcardRepository = new ItemsWithFlashcardRepository()
+    const itemsRepository = new ItemsRepository()
 
-    await itemsWithFlashcardRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: "selectedCourse"})
+    await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: "selectedCourse"})
     const context = {
       user: {_id: userId},
-      ItemsWithFlashcard: itemsWithFlashcardRepository,
+      Items: itemsRepository,
       UserDetails: userDetailsRepository
     }
 
@@ -392,6 +359,7 @@ describe('query.CurrentUser', () => {
 
 describe('query.UserDetails', () => {
   it('returns an empty object if no user exists', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
     const context = {
       user: {},
       UserDetails: userDetailsRepository
@@ -402,6 +370,8 @@ describe('query.UserDetails', () => {
     expect(userDetails).toEqual(Promise.resolve({}))
   })
   it('returns user details by user id', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
+
     const userId = mongoObjectId()
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
@@ -510,33 +480,36 @@ describe('mutation.hideTutorial', () => {
   })
 })
 
-describe.skip('mutation.processEvaluation', () => {
+describe('mutation.processEvaluation', () => {
   it('returns a correct item after "Wrong" evaluation', async () => {
     const itemsRepository = new ItemsRepository()
+    const flashcardsRepository = new FlashcardsRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    const userId = mongoObjectId()
+
+    const courseId = "courseId"
+    await userDetailsRepository.create(userId, courseId)
+
     const context = {
-      user: {_id: mongoObjectId()},
+      user: {_id: userId},
       Items: itemsRepository,
-      //TODO repository should be for one entity type I believe, if we need to combine data do that in a service
-      // this way also we improve the testability, for now we can't test this
-      ItemsWithFlashcard: itemsWithFlashcardRepository,
+      Flashcards: flashcardsRepository,
       UserDetails: userDetailsRepository
     }
-    const userId = context.user._id
     const itemsToExtend = [
-      {userId, _id: mongoObjectId()},
-      {userId, _id: mongoObjectId()}
+      {userId, _id: mongoObjectId(), courseId},
+      {userId, _id: mongoObjectId(), courseId}
     ]
 
-    await makeItems({itemsToExtend})
+    await makeItems({itemsToExtend, itemsCollection: itemsRepository.itemsCollection})
 
     const args = {
       itemId: itemsToExtend[1]._id,
       evaluation: 2.5
     }
-    const itemsWithFlashcard = await resolvers.Mutation.processEvaluation(undefined, args, context)
-    const itemWithFlashcard = _.find(itemsWithFlashcard, (doc) => _.isEqual(doc.item._id.toString(), args.itemId.toString()))
-
-    expect(itemWithFlashcard.item.actualTimesRepeated).toEqual(1)
+    const items = await resolvers.Mutation.processEvaluation(undefined, args, context)
+    const item = _.find(items, (item) => item._id === args.itemId)
+    expect(item.actualTimesRepeated).toEqual(1)
   })
 })
 

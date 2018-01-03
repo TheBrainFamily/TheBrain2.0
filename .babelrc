@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-react-jsx"
+  ],
+  "presets": [
+    "es2015",
+    "stage-2",
+    "flow"
+  ]
+}

@@ -54,6 +54,7 @@ class MainMenu extends React.Component {
 
   logout = () => {
     console.log('>>>>>>>>>> LOGOUT')
+    //TODO this is a weird pattern, double check it
     this.setState({ loading: true }, async () => {
       await AsyncStorage.removeItem('accessTokenFb')
       await AsyncStorage.removeItem('accessToken')
@@ -121,7 +122,10 @@ class MainMenu extends React.Component {
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
     const levelCap = levelConfig.levelCap
+    //TODO extract this to a separate component
     const level = Math.min(userLevel, levelCap)
+
+    //TODO in general split this up into different components
 
     Keyboard.dismiss()
 

@@ -13,9 +13,11 @@ export class UserDetailsRepository extends MongoRepository {
 
   create = async (userId: string, courseId: string) => {
     const newUserDetailsItem = {
-      userId: new ObjectId(userId),
+      _id: (new ObjectId()).toString(),
+      userId,
       hasDisabledTutorial: false,
-      selectedCourse: '',
+      selectedCourse: courseId,
+      //TODO selected course was set to empty string originally -double check that we are not braking anything by adding it here
       progress: [{courseId, lesson: 1}],
       collectedAchievements: [],
       achievementStats: {
@@ -27,16 +29,16 @@ export class UserDetailsRepository extends MongoRepository {
         level: 0
       }
     }
-    await this.userDetailsCollection.insertOne(newUserDetailsItem)
+    await this.userDetailsCollection.insert(newUserDetailsItem)
     return newUserDetailsItem
   }
 
   async getById (userId: string) {
-    return this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    return this.userDetailsCollection.findOne({userId})
   }
 
   async getNextLessonPosition (courseId: string, userId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
 
     if (!course) {
@@ -48,48 +50,47 @@ export class UserDetailsRepository extends MongoRepository {
 
   async updateUserXp (userId: string, action: string) {
     let xpGained = getExperienceForAction(action)
-    const userDetails = (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$inc: {'experience.value': xpGained}}, {
+    await this.userDetailsCollection.update({userId}, {$inc: {'experience.value': xpGained}}, {
       upsert: true,
-      returnOriginal: false
-    })).value
+    })
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     const prevLevel = calculateUserLevel(userDetails.experience.value - xpGained)
     const newLevel = calculateUserLevel(userDetails.experience.value)
     const levelUp = (prevLevel && prevLevel < newLevel) || userDetails.experience.showLevelUp
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {'experience.level': newLevel, 'experience.showLevelUp': levelUp}})
+    await this.userDetailsCollection.update({userId}, {$set: {'experience.level': newLevel, 'experience.showLevelUp': levelUp}})
   }
 
   async resetLevelUpFlag (userId: string) {
+    //TODO this requires a test, and a rewrite to work witn tingodb
     return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {'experience.showLevelUp': false}}, {
       upsert: true,
     })).value
   }
 
   async switchUserIsCasual (userId: string) {
-    const currentUserDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const currentUserDetails = await this.userDetailsCollection.findOne({userId})
     const isCasualToSet = !currentUserDetails.isCasual
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: { isCasual: isCasualToSet}})
+    await this.userDetailsCollection.update({userId}, {$set: { isCasual: isCasualToSet}})
     currentUserDetails.isCasual = isCasualToSet
     return currentUserDetails
   }
 
   async setUserIsCasual (userId: string, isCasual: boolean) {
-    const currentUserDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: { isCasual }})
+    const currentUserDetails = await this.userDetailsCollection.findOne({userId})
+    await this.userDetailsCollection.update({userId}, {$set: { isCasual }})
     currentUserDetails.isCasual = isCasual
     return currentUserDetails
   }
 
   async updateNextLessonPosition (courseId: string, userId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     const newProgress = userDetails.progress.map(p => {
       if (p.courseId === courseId) {
         return {...p, lesson: p.lesson + 1}
       }
       return p
     })
-    await this.userDetailsCollection.update({
-      userId: new ObjectId(userId)}, {$set: {progress: newProgress}}
-      )
+    await this.userDetailsCollection.update({userId}, {$set: {progress: newProgress}})
 
     //TODO fix positional operators in tingodb -
     // https://github.com/sergeyksv/tingodb/issues/34
@@ -100,28 +101,29 @@ export class UserDetailsRepository extends MongoRepository {
   }
 
   async updateCollectedAchievements (userId: string, collectedAchievementIds) {
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {'collectedAchievements': collectedAchievementIds}})
+    await this.userDetailsCollection.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
   }
 
   async disableTutorial (userId: string) {
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, {$set: {hasDisabledTutorial: true}});
-    return this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    await this.userDetailsCollection.update({userId}, {$set: {hasDisabledTutorial: true}});
+    return this.userDetailsCollection.findOne({userId})
   }
 
   async selectCourse (userId: string, courseId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     userDetails.selectedCourse = courseId
     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
     if (!course) {
       userDetails.progress.push({courseId, lesson: 1})
     }
 
-    await this.userDetailsCollection.update({userId: new ObjectId(userId)}, userDetails)
+    await this.userDetailsCollection.update({userId}, userDetails)
     return userDetails
   }
 
   async closeCourse (userId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     userDetails.selectedCourse = null
     await this.userDetailsCollection.save(userDetails)
     return userDetails

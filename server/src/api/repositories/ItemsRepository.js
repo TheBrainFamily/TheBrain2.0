@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
+import getItemsWithFlashcardsByCount from '../tools/getItemsWithFlashcardsByCount'
 
 export class ItemsRepository extends MongoRepository {
   itemsCollection: Collection
@@ -12,22 +13,38 @@ export class ItemsRepository extends MongoRepository {
     this.itemsCollection = this.db.collection('items')
   }
 
-  async getItems (lessonPosition: number) {
+  async getItems (userDetails) {
+    let currentItemsQuery = {
+      userId: userDetails.userId,
+      courseId: userDetails.selectedCourse,
+      $or: [
+        { actualTimesRepeated: 0 },
+        { extraRepeatToday: true },
+        { nextRepetition: { $lte: moment().unix() } },
+      ]
+    }
+    if(userDetails.isCasual) {
+      currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
+    }
+    // currently changed to fetching two items, after testing and approving, code below should be refactored
 
+    const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 2, sort: {lastRepetition: 1} }).toArray()
+    return currentItems
   }
 
-  async update (id: string, item: Object, userId: string) {
-    return this.itemsCollection.update({_id: new ObjectId(id), userId: new ObjectId(userId)}, {$set: item})
+  async update (_id: string, item: Object, userId: string) {
+    return this.itemsCollection.update({_id, userId}, {$set: item})
   }
 
   async getItemById (_id: string, userId: string) {
-    return this.itemsCollection.findOne({_id: new ObjectId(_id), userId: new ObjectId(userId)})
+    return this.itemsCollection.findOne({_id, userId})
   }
 
   async create (flashcardId: string, userId: string, courseId: string, isCasual: Boolean) {
     const newItem = {
+      _id: (new ObjectId()).toString(),
       flashcardId,
-      userId: new ObjectId(userId),
+      userId,
       courseId,
       actualTimesRepeated: 0,
       easinessFactor: 2.5,
@@ -38,13 +55,13 @@ export class ItemsRepository extends MongoRepository {
       timesRepeated: 0,
       isCasual: !!isCasual
     }
-    await this.itemsCollection.insertOne(newItem)
+    await this.itemsCollection.insert(newItem)
     return newItem
   }
 
   async getReviews (userId: string, isCasual: Boolean) {
     let itemsQuery = {
-      userId: new ObjectId(userId),
+      userId,
     }
     if(isCasual) {
       itemsQuery = _.extend({}, itemsQuery, {isCasual: true})
@@ -64,7 +81,25 @@ export class ItemsRepository extends MongoRepository {
   }
 
   async clearNotCasualItems (userId: string) {
-    return await this.itemsCollection.removeMany({userId: new ObjectId(userId), isCasual: false})
+    return await this.itemsCollection.removeMany({userId, isCasual: false})
+  }
+
+  async getSessionCount (userId: string, userDetails: Object) {
+    let currentItemsQuery = {
+      userId,
+      courseId: userDetails.selectedCourse,
+      $or: [
+        { actualTimesRepeated: 0 },
+        { lastRepetition: { $gte: moment().subtract(3, 'hours').unix() } },
+        { nextRepetition: { $lte: moment().unix() } }
+      ]
+    }
+    if(userDetails.isCasual) {
+      currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
+    }
+    const items = await this.itemsCollection.find(currentItemsQuery).toArray()
+
+    return getItemsWithFlashcardsByCount(items)
   }
 }
 

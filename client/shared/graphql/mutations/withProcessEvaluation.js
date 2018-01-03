@@ -5,17 +5,16 @@ import update from 'immutability-helper'
 const submitEval = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Int!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
+            _id
+            flashcardId
+            extraRepeatToday
+            actualTimesRepeated
+            
             flashcard
             {
                 _id question answer image {
-                    url hasAlpha
-                }
+                url hasAlpha
+            }
                 answerImage {
                     url hasAlpha
                 }
@@ -35,7 +34,7 @@ export default function () {
         updateQueries: {
           CurrentItems: (prev, {mutationResult}) => {
             const updateResults = update(prev, {
-              ItemsWithFlashcard: {
+              Items: {
                 $set: mutationResult.data.processEvaluation
               }
             })

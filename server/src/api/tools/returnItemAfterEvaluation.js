@@ -39,7 +39,6 @@ const returnItemAfterEvaluation = function (evaluation: number, item: Object) {
   }
 
   evaluatedItem.lastRepetition = moment().unix()
-
   return evaluatedItem
 }
 

@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import store, { client } from './store'
+import store, { client, history } from './store'
 import MainContainer from './components/MainContainer'
 import './App.css'
 import MobileContainer from './components/MobileContainer'
@@ -21,7 +21,7 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <ApolloProvider client={client} store={store}>
-          {this.mobilecheck() ? <MobileContainer/>: <MainContainer/> }
+          {this.mobilecheck() ? <MobileContainer/>: <MainContainer history={history}/> }
         </ApolloProvider>
       </MuiThemeProvider>
     )
