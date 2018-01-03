@@ -20,14 +20,14 @@ export class UsersRepository extends MongoRepository {
 
   async createGuest (courseId: string, deviceId: string) {
     const newUser = {
+      _id: (new ObjectId()).toString(),
       username: 'guest',
       password: 'notSet',
       activated: false,
       createdAt: moment().unix()
     }
 
-    const addedUser = (await this.userCollection.insert(newUser))[0]
-
+    const addedUser = (await this.userCollection.insert(newUser)).ops[0]
 
     const newUserId = addedUser._id.toString()
     await new userDetailsRepository.create(newUserId, courseId)
@@ -38,7 +38,7 @@ export class UsersRepository extends MongoRepository {
   }
 
   async updateUser (userId: string, username: string, password: string) {
-    const userToBeUpdated = await this.userCollection.findOne({_id: new ObjectId(userId)})
+    const userToBeUpdated = await this.userCollection.findOne({_id: userId})
 
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
     const hash = await bcrypt.hash(password, salt)
@@ -52,7 +52,7 @@ export class UsersRepository extends MongoRepository {
   }
 
   async updateFacebookUser (userId: string, facebookId: string, username: string, email: string) {
-    const userToBeUpdated = await this.userCollection.findOne({_id: new ObjectId(userId)})
+    const userToBeUpdated = await this.userCollection.findOne({_id: userId})
     userToBeUpdated.facebookId = facebookId
     userToBeUpdated.username = username
     userToBeUpdated.email = email
@@ -67,7 +67,7 @@ export class UsersRepository extends MongoRepository {
   }
 
   async getById (userId: string) {
-    return this.userCollection.findOne({_id: new ObjectId(userId)})
+    return this.userCollection.findOne({_id: userId})
   }
 
   async findByFacebookId (facebookId: string) {
@@ -89,7 +89,7 @@ export class UsersRepository extends MongoRepository {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
     const password = await bcrypt.hash(newPassword, salt)
 
-    return this.userCollection.update({_id: new ObjectId(userId)}, {$set: { password }})
+    return this.userCollection.update({_id: userId}, {$set: { password }})
   }
 
   static async comparePassword (passA, passB) {
@@ -102,8 +102,9 @@ export class UsersRepository extends MongoRepository {
     const random = Math.random() * Math.random()
     const rawToken = `${userId}_!s@eVc&uM%fG#D$G#$@<D@^H&&;_${timestamp}_${random}_${deviceId}`
     const token = await bcrypt.hash(rawToken, salt)
-    await this.authTokenCollection.insertOne({
-      userId: new ObjectId(userId),
+    await this.authTokenCollection.insert({
+      _id: (new ObjectId()).toString(),
+      userId,
       token,
       deviceId,
       createdAt: timestamp
@@ -114,7 +115,7 @@ export class UsersRepository extends MongoRepository {
   async findActiveToken (userId: string, token: string, deviceId: string) {
     const timestamp = moment().unix()
     const tokenFound = await this.authTokenCollection.findOne({
-      userId: new ObjectId(userId),
+      userId,
       token,
       deviceId,
       createdAt: { $gte: timestamp - tokenExpirationPeriod }
@@ -124,7 +125,7 @@ export class UsersRepository extends MongoRepository {
 
   async removeToken (userId: string, token: string) {
     await this.authTokenCollection.removeOne({
-      userId: new ObjectId(userId),
+      userId,
       token,
     })
   }

@@ -14,7 +14,7 @@ export class CoursesRepository extends MongoRepository {
   }
 
   async getCourse (_id: string) {
-    return this.coursesCollection.findOne({_id: new ObjectId(_id)})
+    return this.coursesCollection.findOne({_id})
   }
 }
 

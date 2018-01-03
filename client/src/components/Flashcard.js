@@ -50,8 +50,8 @@ class Flashcard extends React.Component {
     }
 
     if (nextProps.currentItems.loading === false
-      && nextProps.currentItems.ItemsWithFlashcard
-      && nextProps.currentItems.ItemsWithFlashcard.length === 0) {
+      && nextProps.currentItems.Items
+      && nextProps.currentItems.Items.length === 0) {
       if(nextProps.currentUser.CurrentUser) {
         if (nextProps.currentUser.CurrentUser.activated) {
           nextProps.dispatch(push('/'))
@@ -61,9 +61,10 @@ class Flashcard extends React.Component {
       }
     }
 
-    if (nextProps.currentItems.ItemsWithFlashcard && this.props.currentItems.ItemsWithFlashcard
-      && nextProps.currentItems.ItemsWithFlashcard[0] && this.props.currentItems.ItemsWithFlashcard[0]
-      && nextProps.currentItems.ItemsWithFlashcard[0].flashcard.question !== this.props.currentItems.ItemsWithFlashcard[0].flashcard.question) {
+    //TODO lodash get
+    if (nextProps.currentItems.Items && this.props.currentItems.Items
+      && nextProps.currentItems.Items[0] && this.props.currentItems.Items[0]
+      && nextProps.currentItems.Items[0].flashcard.question !== this.props.currentItems.Items[0].flashcard.question) {
       this.props.dispatch(flashcard.showAnswer(false))
     }
   }
@@ -85,13 +86,13 @@ class Flashcard extends React.Component {
     let isCasual = true
     let userIsCasual = false
 
-    if(this.props.currentItems.ItemsWithFlashcard
-      && this.props.currentItems.ItemsWithFlashcard[0]) {
-      image = this.props.currentItems.ItemsWithFlashcard[0].flashcard.image
-      question = this.props.currentItems.ItemsWithFlashcard[0].flashcard.question
-      answer = this.props.currentItems.ItemsWithFlashcard[0].flashcard.answer
-      itemId = this.props.currentItems.ItemsWithFlashcard[0].item._id
-      isCasual = this.props.currentItems.ItemsWithFlashcard[0].flashcard.isCasual
+    if(this.props.currentItems.Items
+      && this.props.currentItems.Items[0]) {
+      image = this.props.currentItems.Items[0].flashcard.image
+      question = this.props.currentItems.Items[0].flashcard.question
+      answer = this.props.currentItems.Items[0].flashcard.answer
+      itemId = this.props.currentItems.Items[0]._id
+      isCasual = this.props.currentItems.Items[0].flashcard.isCasual
     }
 
     if(this.props.userDetails && this.props.userDetails.UserDetails) {
@@ -217,33 +218,31 @@ export default compose(
         optimisticResponse: {
           processEvaluation: {
             //With this fake data we get warnings in the client on every evaluation :-(
-            "item": {
-              "_id": "-1",
-              "flashcardId": "",
-              "extraRepeatToday": false,
-              "actualTimesRepeated": 0,
-              "__typename": "Item"
+            '_id': '-1',
+            'flashcardId': '',
+            'extraRepeatToday': false,
+            'actualTimesRepeated': 0,
+            '__typename': 'Item',
+            'flashcard': {
+              '_id': '-1',
+              'question': '',
+              'answer': '',
+              'isCasual': true,
+              'image': null,
+              'answerImage': null,
+              '__typename': 'Flashcard'
             },
-            "flashcard": {
-              "_id": "-1",
-              "question": "",
-              "answer": "",
-              "isCasual": true,
-              "image": null,
-              "answerImage": null,
-              "__typename": "Flashcard"
-            },
-            "__typename": "ItemWithFlashcard",
+            "__typename": "Items",
             switchFlashcards: true,
           },
         },
         update: (proxy, { data: { processEvaluation } }) => {
           const data = proxy.readQuery({ query: currentItemsQuery });
           if (processEvaluation.switchFlashcards) {
-            const newFlashcards = [_.last(data.ItemsWithFlashcard)]
-            data.ItemsWithFlashcard = newFlashcards
+            const newFlashcards = [_.last(data.Items)]
+            data.Items = newFlashcards
           } else {
-            data.ItemsWithFlashcard = processEvaluation
+            data.Items = processEvaluation
           }
           proxy.writeQuery({ query: currentItemsQuery, data });
         },

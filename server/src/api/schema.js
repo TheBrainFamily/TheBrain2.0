@@ -55,6 +55,7 @@ export const typeDefs = gql`
         previousDaysChange: Int,
         timesRepeated: Int,
         isCasual: Boolean,
+        flashcard: Flashcard!
     }
     
     type ItemWithFlashcard {
@@ -109,7 +110,7 @@ export const typeDefs = gql`
         Flashcards: [Flashcard],        
         Flashcard(_id: String!): Flashcard
         Item: Item,
-        ItemsWithFlashcard: [ItemWithFlashcard]!
+        Items: [Item],
         SessionCount: SessionCount
         LessonCount: LessonCount
         CurrentUser: User,
@@ -127,7 +128,7 @@ export const typeDefs = gql`
         selectCourseSaveToken(courseId: String!, deviceId: String): UserDetails,
         closeCourse: UserDetails,
         createItemsAndMarkLessonAsWatched(courseId: String!): Lesson,
-        processEvaluation(itemId: String!, evaluation: Int!): [ItemWithFlashcard]!,
+        processEvaluation(itemId: String!, evaluation: Float!): [Item]!,
         addUser: User!
         setUsernameAndPasswordForGuest(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
         logIn(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
