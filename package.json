@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/lgandecki/TheBrain2.0#readme",
   "devDependencies": {
+    "@cypress/browserify-preprocessor": "^1.0.2",
     "apollo-client": "^1.8.1",
     "apollo-test-utils-with-context": "^0.3.5",
+    "babel-plugin-get-rid-of-async-await": "0.0.2",
     "babel-plugin-module-rewrite": "^0.2.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
@@ -26,6 +28,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "casual": "^1.5.19",
+    "cypress": "^1.4.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.5",
     "jest": "^22.0.4",

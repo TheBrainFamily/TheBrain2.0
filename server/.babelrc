@@ -1,5 +1,7 @@
 {
-  "plugins": ["transform-async-to-generator"],
+  "plugins": [
+    "transform-async-to-generator"
+  ],
   "presets": [
     "es2015",
     "stage-2",
@@ -8,7 +10,39 @@
   "env": {
     "test": {
       "plugins": [
-        ["module-rewrite", { "replaceFunc": "./src/testHelpers/replace-for-testing.js" }]
+        [
+          "module-rewrite",
+          {
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
+            "optionalRoot": "server/"
+          }
+        ]
+      ]
+    },
+    "development": {
+      "plugins": [
+        [
+          "module-rewrite",
+          {
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
+            "optionalRoot": "server/"
+          }
+        ]
+      ]
+    },
+    "cypressTest": {
+      "presets": [
+        "es2015",
+        "stage-2",
+        "flow"
+      ],
+      "plugins": [
+        [
+          "module-rewrite",
+          {
+            "replaceFunc": "./server/src/testHelpers/replace-for-testing.js"
+          }
+        ]
       ]
     }
   }

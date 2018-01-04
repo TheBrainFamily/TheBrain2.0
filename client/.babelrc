@@ -1,5 +1,18 @@
 {
   "presets": [
     "react-app"
-  ]
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        [
+          "module-rewrite",
+          {
+            "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
+            "optionalRoot": "client/"
+          }
+        ]
+      ]
+    }
+  }
 }
