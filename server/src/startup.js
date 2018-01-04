@@ -38,8 +38,7 @@ passport.use(new FacebookStrategy({
 ))
 
 app.use(session({
-    // TODO this should come from the environment settings
-  secret: '***REMOVED***',
+  secret: process.env.SESSION_SECRET || 'development secret',
   resave: false,
   saveUninitialized: false,
 }))
@@ -52,7 +51,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-let OPTICS_API_KEY = '***REMOVED***'
+let OPTICS_API_KEY = process.env.OPTICS_API_KEY
 
 // FIXES CORS ERROR
 const whitelist = [
