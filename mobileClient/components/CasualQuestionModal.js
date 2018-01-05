@@ -38,9 +38,9 @@ class CasualQuestionModal extends React.Component {
         <Text style={styles.infoText}>You can always change this setting on the profile page.</Text>
         <View style={{ flexDirection: 'row' }}>
           <Text onPress={() => this.setUserIsCasual(true)}
-                style={[styles.button, { backgroundColor: '#662d91' }]}>Hide hard questions</Text>
+            style={[styles.button, { backgroundColor: '#662d91' }]}>Hide hard questions</Text>
           <Text onPress={() => this.setUserIsCasual(false)}
-                style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Don't show it again</Text>
+            style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Don't show it again</Text>
         </View>
       </View>
     )
@@ -68,7 +68,7 @@ export default compose(
         refetchQueries: [{
           query: currentItemsQuery
         }]
-      }),
+      })
     })
-  }),
+  })
 )(CasualQuestionModal)

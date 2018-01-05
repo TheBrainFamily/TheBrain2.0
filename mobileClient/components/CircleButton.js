@@ -12,7 +12,7 @@ export default class CircleButton extends React.Component {
   }
 
   onPress = () => {
-    if(this.props.isDisabled) {
+    if (this.props.isDisabled) {
       return
     }
     if (this.props.withStaticCircles) {
@@ -63,12 +63,12 @@ export default class CircleButton extends React.Component {
     const borderWidth = this.props.radius / 30
     const innerRadius = this.props.radius - borderWidth
     const maxSmallCircleRadius = this.props.radius / 3
-    const halfOfSmallCircleRadius = maxSmallCircleRadius /2
+    const halfOfSmallCircleRadius = maxSmallCircleRadius / 2
 
     const animationCircleStyle = {
       position: 'absolute',
       width: innerRadius * 2 + maxSmallCircleRadius,
-      height: innerRadius * 2 + maxSmallCircleRadius,
+      height: innerRadius * 2 + maxSmallCircleRadius
     }
 
     const componentOpacity = this.props.isDisabled ? 0.5 : 1
@@ -78,7 +78,7 @@ export default class CircleButton extends React.Component {
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <View style={{
             backgroundColor: this.props.color,
-            margin: halfOfSmallCircleRadius ,
+            margin: halfOfSmallCircleRadius,
             width: this.props.radius * 2,
             height: this.props.radius * 2,
             borderRadius: this.props.radius,
@@ -95,27 +95,27 @@ export default class CircleButton extends React.Component {
               style.smallCircle,
               this.getSize(this.state.radius),
               this.getTranslation(translateDiff),
-              {left: innerRadius + halfOfSmallCircleRadius, top: halfOfSmallCircleRadius }
-            ]}/>
+              {left: innerRadius + halfOfSmallCircleRadius, top: halfOfSmallCircleRadius}
+            ]} />
             <Animated.View style={[
               style.smallCircle,
               this.getSize(this.state.radius),
               this.getTranslation(translateDiff),
               {left: innerRadius * 2 + halfOfSmallCircleRadius, top: innerRadius + halfOfSmallCircleRadius}
-            ]}/>
+            ]} />
             <Animated.View style={[
               style.smallCircle,
               this.getSize(this.state.radius),
               this.getTranslation(translateDiff),
               {left: innerRadius + halfOfSmallCircleRadius, top: innerRadius * 2 + halfOfSmallCircleRadius}
-            ]}/>
+            ]} />
             <Animated.View style={[
               style.smallCircle,
               this.getSize(this.state.radius),
               this.getTranslation(translateDiff),
               {
                 left: halfOfSmallCircleRadius, top: innerRadius + halfOfSmallCircleRadius
-              }]}/>
+              }]} />
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

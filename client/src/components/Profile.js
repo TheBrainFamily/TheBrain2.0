@@ -20,7 +20,7 @@ class Profile extends React.Component {
   state = {
     oldPasswordError: '',
     confirmationError: '',
-    isValid: false,
+    isValid: false
   }
 
   goHome = () => {
@@ -62,37 +62,37 @@ class Profile extends React.Component {
     return (
       <FlexibleContentWrapper offset={400}>
         <form className={'form'}>
-          <input type="checkbox" checked={this.props.userDetails.UserDetails.isCasual}
-                 onChange={this.casualSwitchClick}/>
+          <input type='checkbox' checked={this.props.userDetails.UserDetails.isCasual}
+            onChange={this.casualSwitchClick} />
           <label className={'user-casual-label'} onClick={this.casualSwitchClick}>Do not show hard questions</label>
         </form>
-        { isFacebookUser || isGuest ? null :
-        <form className='form' onSubmit={this.submit}>
+        { isFacebookUser || isGuest ? null
+        : <form className='form' onSubmit={this.submit}>
           <div className={!error ? 'hidden' : null}>
             <p className='alert-error'>{ error }</p>
           </div>
           <div>
             <label>Old Password:</label>
-            <input className={!!this.state.oldPasswordError ? 'error' : null} ref='oldPassword'
-                   type='password'
-                   name='oldPassword'
-                   onChange={this.validatePasswords}
+            <input className={this.state.oldPasswordError ? 'error' : null} ref='oldPassword'
+              type='password'
+              name='oldPassword'
+              onChange={this.validatePasswords}
             />
           </div>
           <div>
             <label>New Password:</label>
-            <input ref='newPassword' type='password' name='newPassword' onChange={this.validatePasswords}/>
+            <input ref='newPassword' type='password' name='newPassword' onChange={this.validatePasswords} />
           </div>
           <div>
             <label>Confirm New Password:</label>
-            <input className={!!this.state.confirmationError ? 'error' : null} ref='newPasswordConfirmation'
-                   type='password'
-                   name='newPasswordConfirmation'
-                   onChange={this.validatePasswords}
+            <input className={this.state.confirmationError ? 'error' : null} ref='newPasswordConfirmation'
+              type='password'
+              name='newPasswordConfirmation'
+              onChange={this.validatePasswords}
             />
           </div>
           <div>
-            <input type='submit' value='Change Password' disabled={!this.state.isValid || !!error}/>
+            <input type='submit' value='Change Password' disabled={!this.state.isValid || !!error} />
           </div>
         </form> }
       </FlexibleContentWrapper>
@@ -136,7 +136,7 @@ export default compose(
             })
           }
         }
-      }),
+      })
     })
-  }),
+  })
 )(Profile)

@@ -29,28 +29,28 @@ class AnswerEvaluator extends React.Component {
     }
     return (
       <Animatable.View style={[styles.answerEvaluator, {height: this.props.getAnswerEvaluatorHeight()}]} animation='slideInUp'>
-        <Triangle animated={this.props.enabled} line="top" style={styles.triangleTop}/>
+        <Triangle animated={this.props.enabled} line='top' style={styles.triangleTop} />
         <LinearGradient
           style={styles.answerTopLine}
           colors={['#71b9d3', '#b3b3b3']}
           start={{x: 0, y: 0}}
           end={{x: 0, y: 1}}
         />
-        <Triangle animated={this.props.enabled} line="right" style={styles.triangleRight}/>
+        <Triangle animated={this.props.enabled} line='right' style={styles.triangleRight} />
         <LinearGradient
           style={styles.answerRightLine}
           colors={['#62c46c', '#b3b3b3']}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 0}}
         />
-        <Triangle animated={this.props.enabled} line="bottom" style={styles.triangleBottom}/>
+        <Triangle animated={this.props.enabled} line='bottom' style={styles.triangleBottom} />
         <LinearGradient
           style={styles.answerBottomLine}
           colors={['#c1272d', '#b3b3b3']}
           start={{x: 0, y: 1}}
           end={{x: 0, y: 0}}
         />
-        <Triangle animated={this.props.enabled} line="left" style={styles.triangleLeft}/>
+        <Triangle animated={this.props.enabled} line='left' style={styles.triangleLeft} />
         <LinearGradient
           style={styles.answerLeftLine}
           colors={['#ff8533', '#b3b3b3']}
@@ -73,9 +73,9 @@ class AnswerEvaluator extends React.Component {
         <SwipeBall evalItemId={this.props.evalItemId} />
 
         {!this.props.enabled && <TouchableWithoutFeedback onPress={this.overlayPress}>
-          <View style={styles.answerEvaluatorOverlay}/></TouchableWithoutFeedback>}
-        {this.props.enabled && <Tutorial/>}
-        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && !this.props.isQuestionCasual  && <CasualQuestionModal/>}
+          <View style={styles.answerEvaluatorOverlay} /></TouchableWithoutFeedback>}
+        {this.props.enabled && <Tutorial />}
+        {!this.props.enabled && this.props.userDetails.UserDetails.isCasual === null && !this.props.isQuestionCasual && <CasualQuestionModal />}
       </Animatable.View>
     )
   }

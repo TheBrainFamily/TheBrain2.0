@@ -1,7 +1,7 @@
 // @flow
 
-import React from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import React from 'react'
+import { View, TouchableWithoutFeedback } from 'react-native'
 import NetworkImage from './NetworkImage'
 import * as fullscreenActions from '../actions/FullscreenActions'
 import { connect } from 'react-redux'
@@ -22,7 +22,7 @@ class TouchableImage extends React.Component {
           <NetworkImage
             style={{width: '100%', height: '100%'}}
             source={{uri: this.props.imageProperties.source}}
-            resizeMode={ this.props.imageProperties.resizeMode }
+            resizeMode={this.props.imageProperties.resizeMode}
           />
         </TouchableWithoutFeedback>
       </View>

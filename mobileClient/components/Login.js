@@ -55,14 +55,14 @@ class Login extends React.Component {
     this.setState({ error: '', loading: true })
     const actionName = this.state.isLogin ? 'login' : 'signup'
 
-    if(this.props.currentUser.CurrentUser) {
+    if (this.props.currentUser.CurrentUser) {
       const userId = this.props.currentUser.CurrentUser._id
       const token = this.props.currentUser.CurrentUser.currentAccessToken
       await this.props.clearToken({ userId, token })
     }
 
     this.props[actionName]({ username: this.state.username, password: this.state.password, deviceId, saveToken: true })
-      .then( async () => {
+      .then(async () => {
         this.props.dispatch(courseActions.close())
         const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
         const userId = this.props.currentUser.CurrentUser._id
@@ -84,8 +84,8 @@ class Login extends React.Component {
   }
 
   render () {
-    if(this.state.loading || this.props.currentUser.loading || this.props.userDetails.loading) {
-      return <Loading/>
+    if (this.state.loading || this.props.currentUser.loading || this.props.userDetails.loading) {
+      return <Loading />
     }
     return (
       <PageContainer>
@@ -122,7 +122,7 @@ class Login extends React.Component {
 
             <TextField
               underlineColorAndroid='transparent'
-              ref={ input => {
+              ref={input => {
                 this.inputs['password'] = input
               }}
               secureTextEntry
@@ -135,7 +135,7 @@ class Login extends React.Component {
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
               <Text>New account?</Text>
-              <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin}/>
+              <Switch onValueChange={this.toggleSwitch} value={!this.state.isLogin} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.submit}>
@@ -181,7 +181,7 @@ export default compose(
           userId,
           token
         }
-      }),
+      })
     })
   }),
   graphql(signup, {

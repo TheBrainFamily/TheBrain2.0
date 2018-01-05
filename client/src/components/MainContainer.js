@@ -5,9 +5,8 @@ import { compose, graphql } from 'react-apollo'
 import { Route, Redirect, Switch } from 'react-router'
 import { ConnectedRouter as Router } from 'react-router-redux'
 import _ from 'lodash'
-import Intercom from 'react-intercom';
+import Intercom from 'react-intercom'
 import smartlookClient from 'smartlook-client'
-
 
 import Home from './Home'
 import Course from './Course'
@@ -21,7 +20,6 @@ import ResetPassword from './ResetPassword'
 import ReviewsCalendar from './ReviewsCalendar'
 import Congratulations from './Congratulations'
 import Lectures from './Lectures'
-
 
 import coursesQuery from '../../shared/graphql/queries/courses'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -41,7 +39,7 @@ class AirplaneWrapper extends React.Component {
     }
   }
 
-  render() {
+  render () {
     let courseColor = null
     if (this.props.userDetails.UserDetails && this.props.courses.Courses) {
       const selectedCourse = _.find(this.props.courses.Courses, course => course._id === this.props.userDetails.UserDetails.selectedCourse)
@@ -51,12 +49,12 @@ class AirplaneWrapper extends React.Component {
         courseColor = '#6920aa'
       }
     }
-    return(
+    return (
       <div className='App'
-         style={{
-           backgroundColor: courseColor,
-           backgroundImage: this.getBackgroundImage()
-         }}>
+        style={{
+          backgroundColor: courseColor,
+          backgroundImage: this.getBackgroundImage()
+        }}>
         {this.props.children}
       </div>
     )
@@ -64,7 +62,7 @@ class AirplaneWrapper extends React.Component {
 }
 
 class MainContainer extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     smartlookClient.init('071bd1e673b85c528487b73918514edbc7b978b0')
   }
   render () {
@@ -89,9 +87,9 @@ class MainContainer extends React.Component {
             <Route exact key='login' path='/login' component={Login} />
             <Route exact key='signup' path='/signup' component={Login} />
             <Route exact key='resetpassword' path='/resetpassword' component={ResetPassword} />
-            <Route key='Lecture' path='/lecture/:courseId' component={Lecture}/>
-            <Route exact key='questions' path='/questions' component={Questions}/>
-            <Route key='Course' path='/course/:courseId' component={Course}/>
+            <Route key='Lecture' path='/lecture/:courseId' component={Lecture} />
+            <Route exact key='questions' path='/questions' component={Questions} />
+            <Route key='Course' path='/course/:courseId' component={Course} />
             <Route exact key='contact' path='/contact' component={Contact} />
             <Route exact key='congratulations' path='/congratulations' component={Congratulations} />
             {
@@ -104,7 +102,7 @@ class MainContainer extends React.Component {
             }
             <Redirect to='/' />
           </Switch>
-          <Intercom appID="yndcllpy" { ...intercomUser } />
+          <Intercom appID='yndcllpy' {...intercomUser} />
         </AirplaneWrapperWithData>
       </Router>)
   }
@@ -117,7 +115,7 @@ const AirplaneWrapperWithData = compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(coursesQuery, { name: 'courses' }),
+  graphql(coursesQuery, { name: 'courses' })
 )(AirplaneWrapper)
 
 export default compose(

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     position: 'absolute',
-    elevation: 9999,
+    elevation: 9999
   }
 })
 
@@ -39,7 +39,7 @@ class FullscreenOverlay extends React.Component {
       this.state.fadeValue, {
         toValue: 1,
         duration: 250
-      }).start();
+      }).start()
   }
 
   startFadeOut = (cb) => {
@@ -48,7 +48,7 @@ class FullscreenOverlay extends React.Component {
       this.state.fadeValue, {
         toValue: 0,
         duration: 250
-      }).start(cb);
+      }).start(cb)
   }
 
   changeVisibility = () => {
@@ -58,25 +58,25 @@ class FullscreenOverlay extends React.Component {
   }
 
   componentWillUpdate = (nextProps) => {
-    if(nextProps.fullscreen.visible) {
+    if (nextProps.fullscreen.visible) {
       this.startFadeIn()
     }
   }
 
-  render() {
-    if(!this.props.fullscreen.visible) {
+  render () {
+    if (!this.props.fullscreen.visible) {
       return null
     }
-    if(!this.props.fullscreen.image) {
+    if (!this.props.fullscreen.image) {
       return null
     }
     return (
-      <TouchableWithoutFeedback onPress={() => {this.changeVisibility()}}>
+      <TouchableWithoutFeedback onPress={() => { this.changeVisibility() }}>
         <Animated.View style={[styles.fullscreen, { opacity: this.state.fadeValue }]}>
           <NetworkImage
             style={{width: '100%', height: '90%'}}
-            source={{uri: this.props.fullscreen.image.src }}
-            resizeMode={ 'contain' }
+            source={{uri: this.props.fullscreen.image.src}}
+            resizeMode={'contain'}
           />
           <Text style={{color: 'white', fontWeight: 'bold', textAlign: 'center'}}>Click anywhere to hide</Text>
         </Animated.View>
@@ -96,7 +96,7 @@ const Page = props => (
     }]}
   >
     {props.children}
-    <FullscreenOverlayWithState/>
+    <FullscreenOverlayWithState />
   </View>
 )
 

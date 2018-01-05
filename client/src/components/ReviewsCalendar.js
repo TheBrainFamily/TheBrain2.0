@@ -55,7 +55,7 @@ class ReviewsCalendar extends React.Component {
       return <div />
     }
 
-    if(!this.props.selectedCourse) {
+    if (!this.props.selectedCourse) {
       return <div>Please select course to see your scheduled reviews for this month.
         <a onClick={() => this.props.dispatch(push('/'))}>Click here </a> to do so.
       </div>

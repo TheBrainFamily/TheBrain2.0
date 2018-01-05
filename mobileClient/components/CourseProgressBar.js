@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react'
-import { View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 
@@ -14,7 +13,7 @@ import WithData from './WithData'
 class CourseProgressBar extends React.Component {
   render () {
     if (this.props.currentLesson.loading || this.props.lessonCount.loading) {
-      return <ProgressBar progress={0}/>
+      return <ProgressBar progress={0} />
     }
 
     const lessonsTotal = this.props.lessonCount.LessonCount.count
@@ -24,7 +23,7 @@ class CourseProgressBar extends React.Component {
     const progress = currentLesson / lessonsTotal
 
     return (
-      <ProgressBar progress={progress}/>
+      <ProgressBar progress={progress} />
     )
   }
 }

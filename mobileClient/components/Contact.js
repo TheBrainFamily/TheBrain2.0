@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, Text, TouchableOpacity, View } from 'react-native'
+import { Linking, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
 import PageContainer from './PageContainer'
@@ -8,7 +8,7 @@ import PageTitle from './PageTitle'
 class Contact extends React.Component {
   render () {
     return (
-      <PageContainer dontUseKeyboarAware={true}>
+      <PageContainer dontUseKeyboarAware>
 
         <PageTitle text='CONTACT' />
 

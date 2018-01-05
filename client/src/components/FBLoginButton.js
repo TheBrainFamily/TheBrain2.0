@@ -1,4 +1,5 @@
 // @flow
+/* eslint-env browser */
 
 import React from 'react'
 import { graphql } from 'react-apollo'
@@ -9,14 +10,14 @@ import logInWithFacebook from '../../shared/graphql/mutations/logInWithFacebook'
 class FBLoginButton extends React.Component {
   responseFacebook = async (response: { accessToken: string, userID: string }) => {
     console.log('logInWithFacebook', response)
-    if(response.status === 'unknown') {
+    if (response.status === 'unknown') {
       console.log('logInWithFacebook status', response.status)
       return
     }
     const accessTokenFb = response.accessToken
     const userIdFb = response.userID
     await this.props.logInWithFacebook({ accessTokenFb, userIdFb })
-    if(userIdFb && accessTokenFb) {
+    if (userIdFb && accessTokenFb) {
       localStorage.setItem('accessTokenFb', accessTokenFb)
       localStorage.setItem('userIdFb', userIdFb)
     }
@@ -40,7 +41,7 @@ export default graphql(logInWithFacebook, {
     logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
       variables: {
         accessTokenFb,
-        userIdFb,
+        userIdFb
       },
       updateQueries: {
         CurrentUser: (prev, { mutationResult }) => {

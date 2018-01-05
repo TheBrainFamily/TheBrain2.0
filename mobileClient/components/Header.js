@@ -1,3 +1,5 @@
+// eslint-env browser
+
 import React from 'react'
 import { withRouter } from 'react-router'
 import { Animated, TouchableOpacity, View, Platform, Image } from 'react-native'

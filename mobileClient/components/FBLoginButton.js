@@ -10,11 +10,10 @@ import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import * as courseActions from '../actions/CourseActions'
 
 class FBLoginButton extends React.Component {
-
   logInWithFacebook = async (accessTokenFb, userIdFb) => {
     this.props.setLoadingState(true)
     this.props.dispatch(courseActions.close())
-    this.props.logInWithFacebook({ accessTokenFb, userIdFb}).then(async () => {
+    this.props.logInWithFacebook({accessTokenFb, userIdFb}).then(async () => {
       await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
       await AsyncStorage.setItem('userIdFb', userIdFb)
       await this.props.userDetails.refetch()
@@ -28,38 +27,38 @@ class FBLoginButton extends React.Component {
 
   render () {
     return (
-      <FBLogin style={{ maxHeight: 40, justifyContent: 'center',}}
-               ref={(fbLogin) => {
-                 this.fbLogin = fbLogin
-               }}
-               permissions={['email']}
-               loginBehavior={FBLoginManager.LoginBehaviors.Native}
-               onLogin={(data) => {
-                 console.log('Logged in!', data)
-                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
-               }}
-               onLogout={async () => {
-                 console.log('Logged out FB.')
-                 this.props.history.push('/')
-               }}
-               onLoginFound={(data) => {
-                 console.log('Existing login found.', data)
-                 this.logInWithFacebook(data.credentials.token, data.credentials.userId)
-               }}
-               onLoginNotFound={() => {
-                 console.log('No user logged in.')
-               }}
-               onError={(data) => {
-                 console.log('ERROR')
-                 console.log(data)
-               }}
-               onCancel={() => {
-                 console.log('User cancelled.')
-               }}
-               onPermissionsMissing={(data) => {
-                 console.log('Check permissions!')
-                 console.log(data)
-               }}
+      <FBLogin style={{maxHeight: 40, justifyContent: 'center'}}
+        ref={(fbLogin) => {
+          this.fbLogin = fbLogin
+        }}
+        permissions={['email']}
+        loginBehavior={FBLoginManager.LoginBehaviors.Native}
+        onLogin={(data) => {
+          console.log('Logged in!', data)
+          this.logInWithFacebook(data.credentials.token, data.credentials.userId)
+        }}
+        onLogout={async () => {
+          console.log('Logged out FB.')
+          this.props.history.push('/')
+        }}
+        onLoginFound={(data) => {
+          console.log('Existing login found.', data)
+          this.logInWithFacebook(data.credentials.token, data.credentials.userId)
+        }}
+        onLoginNotFound={() => {
+          console.log('No user logged in.')
+        }}
+        onError={(data) => {
+          console.log('ERROR')
+          console.log(data)
+        }}
+        onCancel={() => {
+          console.log('User cancelled.')
+        }}
+        onPermissionsMissing={(data) => {
+          console.log('Check permissions!')
+          console.log(data)
+        }}
       />
     )
   };
@@ -91,5 +90,5 @@ export default withRouter(withApollo(compose(
     options: {
       fetchPolicy: 'network-only'
     }
-  }))
-  (FBLoginButton)))
+  })
+)(FBLoginButton)))

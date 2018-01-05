@@ -22,7 +22,7 @@ export default (Component, graphqlDataNames) => {
     }
 
     render () {
-      return ( !this.state.showRetry && (<Component {...this.props} />))
+      return (!this.state.showRetry && (<Component {...this.props} />))
     }
   })
 }

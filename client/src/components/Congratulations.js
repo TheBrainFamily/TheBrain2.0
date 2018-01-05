@@ -17,7 +17,7 @@ class Congratulations extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if(!nextProps.userDetails.UserDetails.experience.showLevelUp) {
+    if (!nextProps.userDetails.UserDetails.experience.showLevelUp) {
       this.props.history.push('/questions')
     }
   }
@@ -34,11 +34,11 @@ class Congratulations extends React.Component {
         <h2>Congratulations {username}!</h2>
 
         <img className={'levelUpImage'}
-             src={levelConfig[level].file}
-             alt={levelConfig[level].name}
+          src={levelConfig[level].file}
+          alt={levelConfig[level].name}
         />
 
-        <h2>You've just became<br/>
+        <h2>You've just became<br />
 
           {levelConfig[level].name} (level {userLevel})</h2>
         <div className={'confirm-level-up-button'} onClick={this.click}>Continue learning!</div>
@@ -69,5 +69,5 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
-  }),
+  })
 )(Congratulations)

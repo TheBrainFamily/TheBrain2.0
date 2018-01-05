@@ -29,14 +29,14 @@ export default class
     let menuOptions = {
       isOpen: this.state.isMenuOpen,
       close: this.close.bind(this),
-      toggle: <img className={'menu-icon'} src={hamburger} alt={'MENU'} onClick={this.toggle.bind(this)}/>,
-      animate: navigator.userAgent.indexOf("Trident") <= 0,
+      toggle: <img className={'menu-icon'} src={hamburger} alt={'MENU'} onClick={this.toggle.bind(this)} />,
+      animate: navigator.userAgent.indexOf('Trident') <= 0,
       enterTimeout: 0,
       leaveTimeout: 0,
       animAlign: 'right',
       size: 'lg',
       align: 'right',
-      className: 'dropdown',
+      className: 'dropdown'
     }
     return (
       <DropdownMenu {...menuOptions}>

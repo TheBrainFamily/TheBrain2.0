@@ -15,7 +15,7 @@ import {
   Animated,
   View,
   Text,
-  Image,
+  Image
 } from 'react-native'
 
 import styles from '../styles/styles'
@@ -62,16 +62,16 @@ class Flashcard extends React.Component {
   }
 
   eventLauncher = (value) => {
-    if(!this.flipEventLaunched) {
-      if(this.currentlyVisibleAnswer) {
-        if(value < 90.0) {
+    if (!this.flipEventLaunched) {
+      if (this.currentlyVisibleAnswer) {
+        if (value < 90.0) {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = false
           this.props.dispatch(updateAnswerVisibility(false))
           this.updateFlashcardContent(this.props)
         }
       } else {
-        if(value > 90.0) {
+        if (value > 90.0) {
           this.flipEventLaunched = true
           this.currentlyVisibleAnswer = true
           this.props.dispatch(updateAnswerVisibility(true))
@@ -161,21 +161,21 @@ class Flashcard extends React.Component {
         <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
           <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
             <View style={styles.flipCardContainer}>
-                <Card dynamicStyles={this.state.dynamicStyles}
-                      question={this.state.currentQuestion} answer={this.state.currentAnswer}
-                      image={this.props.image}
-                      answerImage={this.props.answerImage}
-                      visibleAnswer={this.currentlyVisibleAnswer}
-                      isCasualFlashcard={this.props.isQuestionCasual}/>
-                <View
-                  style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
-                  <View style={{
-                    width: (this.state.windowDimensions.width * 0.9) - 200,
-                    height: '100%',
-                    backgroundColor: 'white'
-                  }}><Text /></View>
-                  <Image style={{ width: 200, height: 22.5 }} source={require('../images/pageCorner.png')}/>
-                </View>
+              <Card dynamicStyles={this.state.dynamicStyles}
+                question={this.state.currentQuestion} answer={this.state.currentAnswer}
+                image={this.props.image}
+                answerImage={this.props.answerImage}
+                visibleAnswer={this.currentlyVisibleAnswer}
+                isCasualFlashcard={this.props.isQuestionCasual} />
+              <View
+                style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>
+                <View style={{
+                  width: (this.state.windowDimensions.width * 0.9) - 200,
+                  height: '100%',
+                  backgroundColor: 'white'
+                }}><Text /></View>
+                <Image style={{ width: 200, height: 22.5 }} source={require('../images/pageCorner.png')} />
+              </View>
             </View>
           </Animated.View>
         </Animatable.View>
@@ -185,6 +185,5 @@ class Flashcard extends React.Component {
 }
 
 export default compose(
-  graphql(userDetailsQuery, { name: 'userDetails' }),
-)
-(connect(state => state)(Flashcard))
+  graphql(userDetailsQuery, { name: 'userDetails' })
+)(connect(state => state)(Flashcard))

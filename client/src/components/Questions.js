@@ -22,10 +22,10 @@ class Questions extends React.Component {
 
       return (
         <span>
-        <ProgressBar progress={progress} label={'TODAY\'S PROGRESS'} width={1024}
-                     category={this.props.selectedCourse.name}/>
-        <Flashcard/>
-      </span>)
+          <ProgressBar progress={progress} label={'TODAY\'S PROGRESS'} width={1024}
+            category={this.props.selectedCourse.name} />
+          <Flashcard />
+        </span>)
     }
   }
 }

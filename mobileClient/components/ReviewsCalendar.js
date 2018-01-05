@@ -88,7 +88,7 @@ class ReviewsCalendar extends React.Component {
 
     return (
       <View style={{ height }}>
-        <CalendarHeader currentDate={currentDate}/>
+        <CalendarHeader currentDate={currentDate} />
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
@@ -115,13 +115,13 @@ class ReviewsCalendar extends React.Component {
                 isToday ? { backgroundColor: '#662d91' } : {}
               ]}>
                 {!isMonday && !firstRow &&
-                <View style={[style.circle, style.leftTopCircle]}/>}
+                <View style={[style.circle, style.leftTopCircle]} />}
                 {!isSunday && !firstRow &&
-                <View style={[style.circle, style.rightTopCircle]}/>}
+                <View style={[style.circle, style.rightTopCircle]} />}
                 {!isMonday && !lastRow &&
-                <View style={[style.circle, style.leftBottomCircle]}/>}
+                <View style={[style.circle, style.leftBottomCircle]} />}
                 {!isSunday && !lastRow &&
-                <View style={[style.circle, style.rightBottomCircle]}/>}
+                <View style={[style.circle, style.rightBottomCircle]} />}
                 <Text style={[
                   style.smallText,
                   isSunday ? { color: '#a00' } : {},
@@ -164,23 +164,23 @@ const style = {
     width: 6,
     height: 6,
     borderRadius: 6,
-    backgroundColor: '#ccc',
+    backgroundColor: '#ccc'
   },
   leftTopCircle: {
     top: -3,
-    left: -3,
+    left: -3
   },
   rightTopCircle: {
     top: -3,
-    right: -3,
+    right: -3
   },
   leftBottomCircle: {
     bottom: -3,
-    left: -3,
+    left: -3
   },
   rightBottomCircle: {
     bottom: -3,
-    right: -3,
+    right: -3
   },
   calendarDay: {
     width: `${100 / 7 - 0.01}%`, // -0.01 is needed to display calendar properly on some devices
@@ -188,7 +188,7 @@ const style = {
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderRightWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ccc'
   }
 }
 

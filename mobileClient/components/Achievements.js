@@ -8,11 +8,11 @@ import PageTitle from './PageTitle'
 import styles from '../styles/styles'
 
 class Achievements extends React.Component {
-  render() {
+  render () {
     return (
       <PageContainer >
         <View >
-          <PageTitle text='ACHIEVEMENTS LIST'/>
+          <PageTitle text='ACHIEVEMENTS LIST' />
           <View style={{
             flexDirection: 'row',
             flexWrap: 'wrap',

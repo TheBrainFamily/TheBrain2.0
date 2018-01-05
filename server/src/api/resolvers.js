@@ -2,8 +2,9 @@
 
 import fetch from 'node-fetch'
 import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
-import facebookIds from '../configuration/facebook'
-//TODO Most probably the UsersRepository shouldnt be used directly here. Repository should be from the context.
+// TODO we are not using the facebookIds, how come?
+// import facebookIds from '../configuration/facebook'
+// TODO Most probably the UsersRepository shouldnt be used directly here. Repository should be from the context.
 import { usersRepository, UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
 import { renewTokenOnLogin } from '../configuration/common'
@@ -21,10 +22,10 @@ const repositoriesContext = {
   Items: itemsRepository,
   UserDetails: userDetailsRepository,
   Users: usersRepository,
-  Achievements: achievementsRepository,
+  Achievements: achievementsRepository
 }
-//TODO split up the resolvers
-//TODO Split up repositories to actions?
+// TODO split up the resolvers
+// TODO Split up repositories to actions?
 
 const resolvers = {
   Query: {
@@ -95,7 +96,7 @@ const resolvers = {
 
       return context.Lessons.getLessonCount()
     },
-    async Items(root: ?string, args: ?Object, passedContext: Object) {
+    async Items (root: ?string, args: ?Object, passedContext: Object) {
       const context = {...repositoriesContext, ...passedContext}
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
@@ -127,7 +128,7 @@ const resolvers = {
     }
   },
   Item: {
-    flashcard(parentItem, input, passedContext) {
+    flashcard (parentItem, input, passedContext) {
       const context = {...repositoriesContext, ...passedContext}
       return context.Flashcards.getFlashcard(parentItem.flashcardId)
     }
@@ -138,11 +139,11 @@ const resolvers = {
 
       let userId = context.user && context.user._id
       if (!userId) {
-        console.log("user not found")
+        console.log('user not found')
         const guestUser = await loginWithGuest(root, args, context)
         userId = guestUser._id
       }
-      console.log("select course")
+      console.log('select course')
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
     async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, passedContext: Object) {
@@ -163,7 +164,7 @@ const resolvers = {
       }
       return context.UserDetails.closeCourse(userId)
     },
-    //TODO move this to a service?
+    // TODO move this to a service?
     async createItemsAndMarkLessonAsWatched (root: ?string, args: { courseId: string }, passedContext: Object) {
       const context = {...repositoriesContext, ...passedContext}
       let userId = context.user && context.user._id
@@ -177,15 +178,17 @@ const resolvers = {
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
-      console.log("Gandecki lesson", lesson);
+      console.log('Gandecki lesson', lesson)
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
 
+      // TODO this shouldn't be part of resolver, and also, we need to improve the code, get rid of m t i etc
       const shuffle = (array) => {
-        let m = array.length, t, i
+        let m = array.length
+        let t
+        let i
 
         // While there remain elements to shuffle…
         while (m) {
-
           // Pick a remaining element…
           i = Math.floor(Math.random() * m--)
 
@@ -397,7 +400,7 @@ const resolvers = {
       await context.UserDetails.updateUserXp(context.user._id, 'processEvaluation')
       const item = await context.Items.getItemById(args.itemId, context.user._id)
 
-      //TODO should this be inside a service?
+      // TODO should this be inside a service?
       const newItem = returnItemAfterEvaluation(args.evaluation, item)
       await context.Items.update(args.itemId, newItem, context.user._id)
       const userDetails = await context.UserDetails.getById(context.user._id)

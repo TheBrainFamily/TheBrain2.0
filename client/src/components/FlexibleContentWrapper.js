@@ -8,7 +8,7 @@ export default class FlexibleContentWrapper extends React.Component {
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
-      childHeight: 0,
+      childHeight: 0
     }
   }
 
@@ -31,10 +31,10 @@ export default class FlexibleContentWrapper extends React.Component {
 
   calcComponentWidth = (height, childHeight) => {
     let offset = 200
-    if(this.props.offset) {
+    if (this.props.offset) {
       offset = this.props.offset
     }
-    if(height < childHeight) {
+    if (height < childHeight) {
       return childHeight - offset
     }
     return height - offset
@@ -42,7 +42,7 @@ export default class FlexibleContentWrapper extends React.Component {
 
   getHeight = (element) => {
     if (element && !this.state.elementHeight) {
-      this.setState({ childHeight: element.clientHeight });
+      this.setState({ childHeight: element.clientHeight })
     }
   }
 

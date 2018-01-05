@@ -34,7 +34,6 @@ extendExpect()
 // }
 
 const mongoObjectId = function () {
-
   const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
   return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
     return (Math.random() * 16 | 0).toString(16)
@@ -72,16 +71,16 @@ type MakeFlashcardsData = {
 async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
   const addedFlashcards = []
   _.times(number, (index) => {
-      let newFlashcard = casual.flashcard
-      if (flashcardsToExtend[index]) {
-        newFlashcard = {
-          ...newFlashcard,
-          ...flashcardsToExtend[index]
-        }
+    let newFlashcard = casual.flashcard
+    if (flashcardsToExtend[index]) {
+      newFlashcard = {
+        ...newFlashcard,
+        ...flashcardsToExtend[index]
       }
-      addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
     }
+    addedFlashcards.push(newFlashcard)
+      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
+  }
   )
   await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
 
@@ -110,7 +109,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
 
 describe('query.Courses', () => {
   it('returns all courses', async () => {
-
     let coursesRepository = new CoursesRepository()
     coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
     coursesRepository.coursesCollection.insert({_id: 'testCourse2Id', name: 'testCourseName2'})
@@ -124,7 +122,7 @@ describe('query.Courses', () => {
 describe('query.Course', () => {
   it('returns a specific course', async () => {
     let coursesRepository = new CoursesRepository()
-    await coursesRepository.coursesCollection.insert({_id: "id", name: 'testCourseName'})
+    await coursesRepository.coursesCollection.insert({_id: 'id', name: 'testCourseName'})
 
     const secondCourseId = mongoObjectId()
     await coursesRepository.coursesCollection.insert({_id: secondCourseId, name: 'testCourseName2'})
@@ -208,7 +206,6 @@ describe('query.flashcard', () => {
 })
 
 describe('query.Lesson', () => {
-
   const generateContext = async () => {
     const lessonsRepository = new LessonsRepository()
 
@@ -258,7 +255,7 @@ describe('query.Lesson', () => {
 })
 
 describe('query.Item', () => {
-  //TODO is this used on the frontend?
+  // TODO is this used on the frontend?
   it.skip('returns a specific item', async () => {
     const userId = mongoObjectId()
     const itemsRepository = new ItemsRepository()
@@ -273,12 +270,9 @@ describe('query.Item', () => {
   })
 })
 
-
-
 describe('query.Items', () => {
-
   it('returns 0 items if no user exists', async () => {
-    //XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
+    // XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
     const context = {Items: new ItemsRepository()}
 
     const items = await resolvers.Query.Items(undefined, undefined, context)
@@ -287,12 +281,12 @@ describe('query.Items', () => {
   })
 
   it('returns 0 items for a new user without any lessons watched', async () => {
-    //XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
+    // XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
     const userId = mongoObjectId()
     const userDetailsRepository = new UserDetailsRepository()
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
-      casual: false,
+      casual: false
     })
     const context = {
       user: {_id: userId},
@@ -322,11 +316,11 @@ describe('query.SessionCount', () => {
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
       casual: false,
-      selectedCourse: "selectedCourse"
+      selectedCourse: 'selectedCourse'
     })
     const itemsRepository = new ItemsRepository()
 
-    await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: "selectedCourse"})
+    await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: 'selectedCourse'})
     const context = {
       user: {_id: userId},
       Items: itemsRepository,
@@ -404,7 +398,7 @@ describe('mutation.selectCourse', () => {
       }
     }
   })
-  //TODO mock the mongodb ObjectID so it doesn't require the 12 bytes for the next two
+  // TODO mock the mongodb ObjectID so it doesn't require the 12 bytes for the next two
   it.skip('saves info about a course selected if no user exists', async () => {
     const result = await resolvers.Mutation.selectCourse(undefined, {courseId: 'testCourseId'}, context)
     expect(result.userId).toBeDefined()
@@ -442,7 +436,8 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
     })
 
     const context = {
-      UserDetails, Lessons,
+      UserDetails,
+      Lessons,
       user: {_id: userId},
       req: {
         logIn: jest.fn()
@@ -456,7 +451,6 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
 })
 
 describe('mutation.hideTutorial', () => {
-
   it('saves info that a tutorial should be disabled for a specific user', async () => {
     const userDetailsRepository = new UserDetailsRepository()
 
@@ -486,7 +480,7 @@ describe('mutation.processEvaluation', () => {
     const userDetailsRepository = new UserDetailsRepository()
     const userId = mongoObjectId()
 
-    const courseId = "courseId"
+    const courseId = 'courseId'
     await userDetailsRepository.create(userId, courseId)
 
     const context = {
@@ -518,7 +512,8 @@ describe('mutation.processEvaluation', () => {
 
 describe.skip('login with facebook', async () => {
   it('returns user if it already exists', async () => {
-
+    const userDetailsRepository = new UserDetailsRepository()
+    const usersRepository = new UsersRepository()
     const {logInWithFacebook} = resolvers.Mutation
     const userId = mongoObjectId()
     await mongoose.connection.db.collection('user').insert({
@@ -527,7 +522,7 @@ describe.skip('login with facebook', async () => {
     })
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}],
+      progress: [{courseId: 'testCourseId', lesson: 1}]
     })
     const args = {
       accessToken: 'TOKEN',
@@ -550,7 +545,6 @@ describe.skip('login with facebook', async () => {
 })
 
 describe('query.Reviews', () => {
-
   it('returns empty list by default', async () => {
     const itemsRepository = new ItemsRepository()
     const userDetailsRepository = new UserDetailsRepository()

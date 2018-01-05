@@ -23,11 +23,11 @@ class NoInternet extends React.Component {
         height: '100%',
         backgroundColor: '#9050ba'
       }}>
-        <Header withShadow dynamic hideHamburger={true}/>
+        <Header withShadow dynamic hideHamburger />
         <View style={{
           flexGrow: 1,
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'center'
         }}>
           <Text style={[styles.textDefault]}>
             No Internet connection
@@ -43,7 +43,7 @@ class NoInternet extends React.Component {
   }
 }
 
-export default  compose(
+export default compose(
   connect(state => state),
   withRouter
 )(NoInternet)
@@ -52,10 +52,9 @@ const mutationConnectionHandler = async (history, action) => {
   try {
     await action()
   } catch (exception) {
-    console.log("JMOZGAWA: exception",exception);
+    console.log('JMOZGAWA: exception', exception)
     history.push('/nointernet')
   }
 }
 
 export { mutationConnectionHandler }
-

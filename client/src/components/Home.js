@@ -1,4 +1,5 @@
 // @flow
+/* eslint-env browser */
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
@@ -120,7 +121,7 @@ class Home extends React.Component {
     return (
       <FlexibleContentWrapper offset={200}>
         {showIntro ? <div id='video'>
-          <h2>Remember for life, not for exams.<br/>
+          <h2>Remember for life, not for exams.<br />
             Learn smart and save your time.</h2>
           <YouTube
             className={'youTube-player'}
@@ -128,29 +129,29 @@ class Home extends React.Component {
             opts={opts}
             onEnd={this._onIntroEnd}
           />
-          <br/>
-          <div className="skip-tutorial-button" onClick={this._onIntroEnd}>Skip intro and start learning</div>
+          <br />
+          <div className='skip-tutorial-button' onClick={this._onIntroEnd}>Skip intro and start learning</div>
         </div> : <ul className='course-selector'>
           <h2>Choose a course:</h2>
           {this.props.courses.Courses.map(course => {
             return <CourseIcon size={150} key={course._id} name={course.name} onClick={this.selectCourse}
-                               onClickArgument={course._id} isDisabled={course.isDisabled}>
+              onClickArgument={course._id} isDisabled={course.isDisabled}>
               <div>{course.name}</div>
             </CourseIcon>
           })}
         </ul>}
-        <div style={{ height: '100px' }}/>
+        <div style={{ height: '100px' }} />
         <div className='oldBrainLinkContainer'>
           <div>
             <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
-              <img alt={'Google Play'} src={androidIcon} style={{ width: '150px', margin: '10px' }}/>
+              <img alt={'Google Play'} src={androidIcon} style={{ width: '150px', margin: '10px' }} />
             </a>
-            <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
-              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '150px', margin: '10px' }}/>
+            <a disabled href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '150px', margin: '10px' }} />
             </a>
           </div>
           Looking for the previous version of TheBrain?
-          Click <a href="https://legacy.thebrain.pro">here</a> | <a href="policy.html">Privacy policy</a>
+          Click <a href='https://legacy.thebrain.pro'>here</a> | <a href='policy.html'>Privacy policy</a>
         </div>
       </FlexibleContentWrapper>
     )
@@ -247,7 +248,7 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),
@@ -258,8 +259,9 @@ export default compose(
     }
   }),
   graphql(coursesQuery, {
-    name: 'courses', options: {
-      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+    name: 'courses',
+    options: {
+      notifyOnNetworkStatusChange: true // workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   })
 )(Home)

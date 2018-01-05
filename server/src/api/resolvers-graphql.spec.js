@@ -1,19 +1,19 @@
+import casual from 'casual'
+import gql from 'graphql-tag'
+import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
+import _ from 'lodash'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
-import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 import schema from './schema'
-import casual from "casual"
-import gql from 'graphql-tag'
 
-//TODO extract the common functionality to a test helper
+// TODO extract the common functionality to a test helper
 const mongoObjectId = function () {
   const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
   return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
     return (Math.random() * 16 | 0).toString(16)
   }).toLowerCase()
 }
-
 
 casual.define('flashcard', function () {
   return {
@@ -37,7 +37,6 @@ casual.define('item', function () {
   }
 })
 
-
 type MakeItemsData = {
   number?: number,
   itemsToExtend?: Array<Object>
@@ -58,15 +57,14 @@ function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: M
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-
-describe("Items query", async() => {
+describe('Items query', async() => {
   it('returns two items with flashcards attached for a new user after watching the first lesson', async () => {
     const userId = mongoObjectId()
     const userDetailsRepository = new UserDetailsRepository()
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
       selectedCourse: 'selectedCourse',
-      casual: false,
+      casual: false
     })
 
     const flashcardsRepository = new FlashcardsRepository()
@@ -85,14 +83,13 @@ describe("Items query", async() => {
       user: {_id: userId},
       UserDetails: userDetailsRepository,
       Items: itemsRepository,
-      Flashcards: flashcardsRepository,
+      Flashcards: flashcardsRepository
 
     }
     const itemsToExtend = [
-      {userId, flashcardId: secondFlashcardId, courseId: 'selectedCourse'}, {userId, flashcardId, courseId: 'selectedCourse'},
+      {userId, flashcardId: secondFlashcardId, courseId: 'selectedCourse'}, {userId, flashcardId, courseId: 'selectedCourse'}
     ]
-    const returnedFromItems = await makeItems({itemsToExtend, itemsCollection: itemsRepository.itemsCollection})
-
+    await makeItems({itemsToExtend, itemsCollection: itemsRepository.itemsCollection})
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
     .query({

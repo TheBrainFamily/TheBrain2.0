@@ -73,5 +73,5 @@ export default compose(
   }),
   graphql(userDetailsQuery, {
     name: 'userDetails'
-  }),
+  })
 )(WithData(Tutorial, ['userDetails']))

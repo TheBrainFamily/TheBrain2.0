@@ -2,14 +2,13 @@
 
 import React, { Component } from 'react'
 import { ApolloProvider } from 'react-apollo'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import store, { client, history } from './store'
 import MainContainer from './components/MainContainer'
 import './App.css'
 import MobileContainer from './components/MobileContainer'
 
 class App extends Component {
-
   mobilecheck = () => {
     var check = false;
     // eslint-disable-next-line
@@ -21,7 +20,7 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <ApolloProvider client={client} store={store}>
-          {this.mobilecheck() ? <MobileContainer/>: <MainContainer history={history}/> }
+          {this.mobilecheck() ? <MobileContainer /> : <MainContainer history={history} /> }
         </ApolloProvider>
       </MuiThemeProvider>
     )

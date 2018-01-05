@@ -81,7 +81,7 @@ class SwipeBall extends React.Component {
 
           Animated.spring(this.state.pan, {
             toValue: targetPosition,
-            speed:30
+            speed: 30
           }).start(this.submitEvaluation)
         } else {
           this.resetPosition()
@@ -94,7 +94,7 @@ class SwipeBall extends React.Component {
     cb()
     Animated.spring(this.state.pan, {
       toValue: { x: 0, y: 0 },
-      speed:30
+      speed: 30
     }).start()
   }
 
@@ -106,7 +106,7 @@ class SwipeBall extends React.Component {
 
   onSubmitEvaluation = (value) => {
     this.resetPosition(() => {
-      mutationConnectionHandler(this.props.history, async ()=>{
+      mutationConnectionHandler(this.props.history, async () => {
         this.props.submit({
           itemId: this.props.evalItemId,
           evaluation: value
@@ -145,43 +145,43 @@ export default compose(
         },
         optimisticResponse: {
           processEvaluation: {
-            //With this fake data we get warnings in the client on every evaluation :-(
-            "item": {
-              "_id": "-1",
-              "flashcardId": "",
-              "extraRepeatToday": false,
-              "actualTimesRepeated": 0,
-              "__typename": "Item"
+            // With this fake data we get warnings in the client on every evaluation :-(
+            'item': {
+              '_id': '-1',
+              'flashcardId': '',
+              'extraRepeatToday': false,
+              'actualTimesRepeated': 0,
+              '__typename': 'Item'
             },
-            "flashcard": {
-              "_id": "-1",
-              "question": "",
-              "answer": "",
-              "isCasual": true,
-              "image": null,
-              "answerImage" : null,
-              "__typename": "Flashcard"
+            'flashcard': {
+              '_id': '-1',
+              'question': '',
+              'answer': '',
+              'isCasual': true,
+              'image': null,
+              'answerImage': null,
+              '__typename': 'Flashcard'
             },
-            "__typename": "ItemWithFlashcard",
-            switchFlashcards: true,
-          },
+            '__typename': 'ItemWithFlashcard',
+            switchFlashcards: true
+          }
         },
         update: (proxy, { data: { processEvaluation } }) => {
-          const data = proxy.readQuery({ query: currentItemsQuery });
+          const data = proxy.readQuery({ query: currentItemsQuery })
           if (processEvaluation.switchFlashcards) {
             const newFlashcards = [_.last(data.ItemsWithFlashcard)]
             data.ItemsWithFlashcard = newFlashcards
           } else {
             data.ItemsWithFlashcard = processEvaluation
           }
-          proxy.writeQuery({ query: currentItemsQuery, data });
+          proxy.writeQuery({ query: currentItemsQuery, data })
         },
         refetchQueries: [{
           query: sessionCountQuery
         },
-          {
-            query: userDetailsQuery
-          }]
+        {
+          query: userDetailsQuery
+        }]
       })
     })
   }),

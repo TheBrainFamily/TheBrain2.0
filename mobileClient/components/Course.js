@@ -26,7 +26,7 @@ class Course extends React.Component {
   }
 
   render () {
-    if(!this.props.selectedCourse) {
+    if (!this.props.selectedCourse) {
       return null
     }
     const courseLogo = courseLogos[this.props.selectedCourse.name]
@@ -38,7 +38,7 @@ class Course extends React.Component {
         backgroundColor: this.props.backgroundColor,
         alignItems: 'center'
       }}>
-        <Lecture closeCourse={this.props.closeCourse}/>
+        <Lecture closeCourse={this.props.closeCourse} />
         <View style={{position: 'absolute', bottom: 25, alignSelf: 'center'}}>
           <CircleButton radius={45} withStaticCircles>
             <Image
@@ -64,10 +64,10 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  graphql(currentItemsExistQuery,{
+  graphql(currentItemsExistQuery, {
     options: {
       fetchPolicy: 'network-only',
-      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+      notifyOnNetworkStatusChange: true // workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   })
 )(WithData(Course, ['data']))

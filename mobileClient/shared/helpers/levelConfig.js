@@ -1,5 +1,5 @@
 export default {
-  0: { file: require('../../images/TB_level1.png'), name: 'Infant' }, //level undefined Number bulletproofing
+  0: { file: require('../../images/TB_level1.png'), name: 'Infant' }, // level undefined Number bulletproofing
   1: { file: require('../../images/TB_level1.png'), name: 'Infant' },
   2: { file: require('../../images/TB_level2.png'), name: 'Baby' },
   3: { file: require('../../images/TB_level3.png'), name: 'Youngster' },

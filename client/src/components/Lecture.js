@@ -19,7 +19,6 @@ import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
   render () {
-
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
     }
@@ -43,14 +42,14 @@ class Lecture extends React.Component {
 
     return (
       <span>
-        <CourseProgressBar/>
+        <CourseProgressBar />
         <FlexibleContentWrapper>
           <div id='video'>
-            <h2>Watch the video<br/>
+            <h2>Watch the video<br />
               and wait for the questions.</h2>
-            <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse}/>
-            <br/>
-            <CourseIcon simple={true} size={100} name={this.props.courseData.Course.name}/>
+            <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
+            <br />
+            <CourseIcon simple size={100} name={this.props.courseData.Course.name} />
           </div>
         </FlexibleContentWrapper>
       </span>
@@ -84,7 +83,6 @@ export class LectureVideo extends React.Component {
     this.props.lessonWatchedMutation({courseId: this.props.courseId}).then(() => {
       this.props.dispatch(push('/questions'))
     })
-
   }
 }
 
@@ -93,11 +91,11 @@ const LectureVideoWithRouter = compose(
   graphql(clearNotCasualItems, {
     props: ({ownProps, mutate}) => ({
       clearNotCasual: () => mutate({
-      }),
+      })
     })
   }),
   withRouter,
-  connect(),
+  connect()
 )(LectureVideo)
 
 const mapStateToProps = (state) => {
@@ -119,7 +117,7 @@ export default compose(
   }),
   graphql(courseById, {
     options: (ownProps) => {
-      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id ) || ownProps.match.params.courseId
+      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
       return ({
         variables: {_id: selectedCourse},
         fetchPolicy: 'network-only'

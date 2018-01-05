@@ -13,15 +13,15 @@ import WithData from './WithData'
 
 class Lectures extends React.Component {
   renderLecture = ({ item }) => {
-    if(!item) {
+    if (!item) {
       return
     }
     const isWatched = !this.props.currentLesson.Lesson || item.position < this.props.currentLesson.Lesson.position
     return (
-      <View style={{ width: '50%',height: 160, paddingHorizontal: 10, paddingVertical:3 }} key={item._id}>
-        <View style ={{ height: '75%', width:'100%'}}>
-          <Video videoId={item.youtubeId} height='100%'/>
-          <View pointerEvents="none" style={isWatched ? {} : style.overlay} />
+      <View style={{ width: '50%', height: 160, paddingHorizontal: 10, paddingVertical: 3 }} key={item._id}>
+        <View style={{ height: '75%', width: '100%' }}>
+          <Video videoId={item.youtubeId} height='100%' />
+          <View pointerEvents='none' style={isWatched ? {} : style.overlay} />
         </View>
         <Text style={style.title}>{item.description}</Text>
       </View>
@@ -78,8 +78,8 @@ export default compose(
   graphql(currentLessonQuery, {
     name: 'currentLesson',
     options: (ownProps) => {
-      if(!ownProps.selectedCourse) {
-        return({
+      if (!ownProps.selectedCourse) {
+        return ({
           variables: {
             courseId: ''
           }
@@ -94,8 +94,8 @@ export default compose(
   graphql(lessonsQuery, {
     name: 'lessons',
     options: (ownProps) => {
-      if(!ownProps.selectedCourse) {
-        return({
+      if (!ownProps.selectedCourse) {
+        return ({
           variables: {
             courseId: ''
           }

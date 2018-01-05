@@ -6,7 +6,6 @@ import TouchableImage from './TouchableImage'
 import styles from '../styles/styles'
 
 export default class Card extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -25,7 +24,7 @@ export default class Card extends React.Component {
   render = () => {
     const displayStyleQuestion = { display: this.props.visibleAnswer ? 'none' : 'flex', flex: this.props.image ? 0 : 1 }
     const displayStyleQuestionImage = { opacity: this.props.visibleAnswer ? 0 : 1 }
-    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none', flex: this.props.answerImage ? 0 : 1  }
+    const displayStyleAnswer = { display: this.props.visibleAnswer ? 'flex' : 'none', flex: this.props.answerImage ? 0 : 1 }
     const displayStyleAnswerImage = { opacity: this.props.visibleAnswer ? 1 : 0 }
 
     const questionFontSizeStyle = { fontSize: this.props.image && this.props.dynamicStyles.content.height < 180 ? 12 : 16 }
@@ -56,12 +55,12 @@ export default class Card extends React.Component {
             <Text
               style={[styles.cardText, questionFontSizeStyle]}>{!this.props.visibleAnswer && this.props.question}</Text>
           </View>
-          {this.props.image ?
-            <TouchableImage style={[styles.cardImage, displayStyleQuestionImage]}
-                            imageProperties={{
-              source: this.props.image.url,
-              resizeMode: 'contain',
-            }}
+          {this.props.image
+            ? <TouchableImage style={[styles.cardImage, displayStyleQuestionImage]}
+              imageProperties={{
+                source: this.props.image.url,
+                resizeMode: 'contain'
+              }}
             /> : null}
         </View>
         <View style={[{ transform: [{ rotateY: '180deg' }] }, displayStyleAnswer]}>
@@ -72,12 +71,12 @@ export default class Card extends React.Component {
           <View style={[styles.flipCardBody, displayStyleAnswer]}>
             <Text style={[styles.cardText, answerFontSizeStyle]}>{this.props.visibleAnswer && this.props.answer}</Text>
           </View>
-          {this.props.answerImage ?
-            <TouchableImage style={[styles.cardImage, displayStyleAnswerImage]}
-                            imageProperties={{
-                              source: this.props.answerImage.url,
-                              resizeMode: 'contain',
-                            }}
+          {this.props.answerImage
+            ? <TouchableImage style={[styles.cardImage, displayStyleAnswerImage]}
+              imageProperties={{
+                source: this.props.answerImage.url,
+                resizeMode: 'contain'
+              }}
             /> : null}
         </View>
       </View>

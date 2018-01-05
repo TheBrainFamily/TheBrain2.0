@@ -19,7 +19,7 @@ class PageContainer extends React.Component {
   }
 
   handleBack = () => {
-    if(this.props.mainMenu.visible) {
+    if (this.props.mainMenu.visible) {
       this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
         visible: false
       }))
@@ -37,8 +37,8 @@ class PageContainer extends React.Component {
 
   renderContainer = () => (
     <View style={{ height: '100%', backgroundColor: 'white' }}>
-      <Header/>
-      {this.props.mainMenu.visible ? <MainMenu/> : this.props.children}
+      <Header />
+      {this.props.mainMenu.visible ? <MainMenu /> : this.props.children}
     </View>)
 
   renderKeyboardAwareContainer = () => (
@@ -47,10 +47,10 @@ class PageContainer extends React.Component {
       backgroundColor: 'white'
     }}>
       <View style={{
-        height: '100%',
+        height: '100%'
       }}>
-        <Header hideHamburger={this.props.hideHamburger}/>
-        {this.props.mainMenu.visible ? <MainMenu/> : this.props.children}
+        <Header hideHamburger={this.props.hideHamburger} />
+        {this.props.mainMenu.visible ? <MainMenu /> : this.props.children}
       </View>
     </KeyboardAwareScrollView>)
 

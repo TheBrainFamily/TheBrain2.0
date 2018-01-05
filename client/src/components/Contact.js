@@ -25,10 +25,10 @@ export class Contact extends React.Component {
           Mobile version:
           <div >
             <a href='https://play.google.com/store/apps/details?id=com.thebrain'>
-              <img alt={'Google Play'} src={androidIcon} style={{ width: '200px', margin: '10px' }}/>
+              <img alt={'Google Play'} src={androidIcon} style={{ width: '200px', margin: '10px' }} />
             </a>
-            <a disabled={true} href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
-              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '200px', margin: '10px' }}/>
+            <a disabled href='https://itunes.apple.com/us/app/the-brain-pro/id1281958932'>
+              <img alt={'Apple App Store'} src={iosIcon} style={{ width: '200px', margin: '10px' }} />
             </a>
           </div>
         </div>

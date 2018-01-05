@@ -22,7 +22,7 @@ class CourseHeader extends React.Component {
     this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
       visible: false
     }))
-    if ( this.props.isExitAnimationFinished ) {
+    if (this.props.isExitAnimationFinished) {
       this.props.closeCourse()
     }
   }
@@ -50,7 +50,7 @@ class CourseHeader extends React.Component {
           </View>
           <View style={{marginRight: 15}}>
             <Hamburger active={this.props.mainMenu.visible} color='#ffffff'
-                       onPress={this.toggleMenu}/>
+              onPress={this.toggleMenu} />
           </View>
         </View>
 
@@ -96,13 +96,13 @@ export default compose(
     name: 'currentCourse',
     skip: props => !props.selectedCourse,
     options: (ownProps) => {
-      if(!ownProps.selectedCourse) {
+      if (!ownProps.selectedCourse) {
         return false
       }
       const selectedCourse = ownProps.selectedCourse._id
       return {
-        variables: {_id: selectedCourse},
+        variables: {_id: selectedCourse}
       }
     }
-  }),
-)(WithData(CourseHeader,['currentCourse']))
+  })
+)(WithData(CourseHeader, ['currentCourse']))

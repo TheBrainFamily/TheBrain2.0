@@ -1,5 +1,5 @@
 // @flow
-import { Collection, ObjectId } from 'mongodb'
+import { Collection } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 
 export class CoursesRepository extends MongoRepository {
