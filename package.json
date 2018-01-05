@@ -4,7 +4,11 @@
   "description": "Wrapper for all-thing TheBrain, mostly for testing purposes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run cypressTestCI && npm run enzymeTest",
+    "cypressTest": "BABEL_ENV=development cypress open",
+    "cypressTestCI": "BABEL_ENV cypress run",
+    "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest cypress/integration/landingPage.test.js",
+    "enzymeTest:watch": "npm run enzymeTest -- --watch"
   },
   "repository": {
     "type": "git",

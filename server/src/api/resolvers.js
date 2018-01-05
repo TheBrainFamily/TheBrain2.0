@@ -466,6 +466,11 @@ const loginWithGuest = async (root: ?string, args: ?Object, passedContext: Objec
 //
 process.on('unhandledRejection', (reason, p) => {
   console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+  if (reason.graphQLErrors) {
+    reason.graphQLErrors.forEach(err => {
+      console.log("Graphql err", err)
+    })
+  }
 })
 
 export default resolvers
