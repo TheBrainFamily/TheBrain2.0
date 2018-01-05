@@ -95,6 +95,7 @@
     "apollo-test-utils-with-context": "^0.3.5",
     "babel-plugin-module-rewrite-with-root": "^0.3.0",
     "graphql": "^0.11.7",
+    "graphql-tag": "^2.6.1",
     "module-resolver": "^1.0.0",
     "thenify": "^3.3.0",
     "tingodb-promise": "0.0.1"
