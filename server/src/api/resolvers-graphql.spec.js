@@ -1,6 +1,4 @@
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
-import { ItemsWithFlashcardRepository } from './repositories/ItemsWithFlashcardRepository'
-import resolvers from './resolvers'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
