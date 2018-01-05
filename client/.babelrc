@@ -3,10 +3,21 @@
     "react-app"
   ],
   "env": {
+    "test": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
+            "optionalRoot": "client/"
+          }
+        ]
+      ]
+    },
     "development": {
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
             "optionalRoot": "client/"

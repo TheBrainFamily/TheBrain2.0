@@ -55,6 +55,7 @@ let OPTICS_API_KEY = process.env.OPTICS_API_KEY
 // FIXES CORS ERROR
 const whitelist = [
   'http://localhost:3000',
+  'http://localhost:9000',
   'http://localhost:3040',
   'http://new.thebrain.pro',
   'https://new.thebrain.pro',
