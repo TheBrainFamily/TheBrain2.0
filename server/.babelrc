@@ -11,7 +11,7 @@
     "test": {
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./src/testHelpers/replace-for-testing.js",
             "optionalRoot": "server/"
@@ -22,7 +22,7 @@
     "development": {
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./src/testHelpers/replace-for-testing.js",
             "optionalRoot": "server/"
@@ -38,7 +38,7 @@
       ],
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./server/src/testHelpers/replace-for-testing.js"
           }
