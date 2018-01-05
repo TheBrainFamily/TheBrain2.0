@@ -8,18 +8,18 @@ export default class ResizableImage extends React.Component {
       imageSourceWidth: null,
       imageSourceHeight: null,
       imageHeight: null,
-      imageWidth: null,
+      imageWidth: null
     }
   }
 
   changeImageSize = (e) => {
     e.stopPropagation()
-    if(this.state.enlarged) {
+    if (this.state.enlarged) {
       this.setState({
         imageSourceWidth: null,
         imageSourceHeight: null,
         imageHeight: null,
-        imageWidth: null,
+        imageWidth: null
       })
     }
     this.setState({enlarged: !this.state.enlarged})
@@ -28,9 +28,9 @@ export default class ResizableImage extends React.Component {
 
   onImageLoad = (e) => {
     this.setState({
-        imageSourceHeight: e.target.offsetHeight,
-        imageSourceWidth: e.target.offsetWidth,
-      },
+      imageSourceHeight: e.target.offsetHeight,
+      imageSourceWidth: e.target.offsetWidth
+    },
       this.updateImageDimensions
     )
   }
@@ -51,7 +51,7 @@ export default class ResizableImage extends React.Component {
 
     this.setState({
       imageHeight: this.state.imageSourceHeight * ratio,
-      imageWidth: this.state.imageSourceWidth * ratio,
+      imageWidth: this.state.imageSourceWidth * ratio
     })
   }
 

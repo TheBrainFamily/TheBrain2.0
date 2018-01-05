@@ -20,7 +20,6 @@ import { usersRepository } from './api/repositories/UsersRepository'
 
 const app = express()
 
-
 passport.serializeUser((user, cb) => cb(null, user))
 passport.deserializeUser((obj, cb) => cb(null, obj))
 
@@ -40,7 +39,7 @@ passport.use(new FacebookStrategy({
 app.use(session({
   secret: process.env.SESSION_SECRET || 'development secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false
 }))
 
 app.use(passport.initialize())
@@ -64,7 +63,7 @@ const whitelist = [
   'http://sleepy-stream-93575.herokuapp.com',
   'https://sleepy-stream-93575.herokuapp.com',
   'https://stark-badlands-16845.herokuapp.com',
-  'https://stark-badlands-16845.herokuapp.com',
+  'https://stark-badlands-16845.herokuapp.com'
 ]
 
 const corsOptions = {
@@ -96,7 +95,7 @@ app.get('/auth/facebook/callback',
 
 OpticsAgent.configureAgent({ apiKey: OPTICS_API_KEY })
 
-OpticsAgent.instrumentSchema(schema);
+OpticsAgent.instrumentSchema(schema)
 
 if (OPTICS_API_KEY) {
   app.use('/graphql', OpticsAgent.middleware())
@@ -134,7 +133,7 @@ app.use('/graphql', graphqlExpress((req) => {
     context: {
       opticsContext,
       user: req.user,
-      req,
+      req
     }
   }
 }))

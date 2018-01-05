@@ -2,7 +2,7 @@
 
 import React from 'react'
 import YouTube from 'react-native-youtube'
-import { Image, Platform, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Text, TouchableWithoutFeedback, View } from 'react-native'
 import Orientation from 'react-native-orientation'
 
 import Loading from './Loading'
@@ -31,7 +31,6 @@ export default class Video extends React.Component {
     this.props.onChangeState && this.props.onChangeState(event)
   }
   onChangeFullscreen = (event: Object) => {
-
     if (event.isFullscreen) {
       Orientation.unlockAllOrientations()
     } else {
@@ -71,8 +70,8 @@ export default class Video extends React.Component {
             </View>
               : <View style={styles.videoPlaceholder}>
                 <Image resizemode={'cover'}
-                       style={{ height: this.props.height, width: '100%', justifyContent: 'center' }}
-                       source={{ uri: `https://img.youtube.com/vi/${this.props.videoId}/0.jpg` }}
+                  style={{ height: this.props.height, width: '100%', justifyContent: 'center' }}
+                  source={{ uri: `https://img.youtube.com/vi/${this.props.videoId}/0.jpg` }}
                 >
                   <Text style={[styles.textDefault, styles.videoPlaceholderText]}>Tap to play video</Text>
                 </Image>

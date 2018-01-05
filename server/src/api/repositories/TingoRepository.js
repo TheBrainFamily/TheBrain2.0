@@ -5,7 +5,7 @@ export class MongoRepository {
   db: any
 
   constructor () {
-    this.db = { collection };
+    this.db = { collection }
     this.init()
   }
 

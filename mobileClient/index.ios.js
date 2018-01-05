@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react'
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation'
 import {ApolloProvider} from 'react-apollo'
 import {
     AppRegistry,
@@ -28,8 +28,7 @@ import store, { client } from './store'
 import NoInternet from './components/NoInternet'
 
 export default class App extends Component {
-
-  componentDidMount() {
+  componentDidMount () {
     Orientation.lockToPortrait()
   }
 

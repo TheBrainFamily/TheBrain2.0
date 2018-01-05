@@ -7,7 +7,7 @@ import styles from '../styles/styles'
 
 export default class Intro extends React.Component {
   componentDidMount = () => {
-    if(BackHandler) {
+    if (BackHandler) {
       BackHandler.addEventListener('hardwareBackPress', () => {
         BackHandler.exitApp()
       })
@@ -15,7 +15,7 @@ export default class Intro extends React.Component {
   }
 
   componentWillUnmount = () => {
-    if(BackHandler) {
+    if (BackHandler) {
       BackHandler.removeEventListener('hardwareBackPress')
     }
   }
@@ -31,7 +31,7 @@ export default class Intro extends React.Component {
     const videoHeight = 200
 
     return (
-      <PageContainer dontUseKeyboarAware={true}>
+      <PageContainer dontUseKeyboarAware>
         <View style={{
           flex: 1,
           backgroundColor: '#9050ba',
@@ -46,7 +46,7 @@ export default class Intro extends React.Component {
           </Text>
 
           <View style={{ marginVertical: 30, height: videoHeight, width: '100%' }}>
-            <Video height={videoHeight} videoId={'vvYTsbp2CRw'}/>
+            <Video height={videoHeight} videoId={'vvYTsbp2CRw'} />
           </View>
 
           <TouchableOpacity onPress={this.skipIntro}>

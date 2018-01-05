@@ -69,7 +69,7 @@ class Home extends React.Component {
   }
 
   handleBack = () => {
-    if(this.props.mainMenu.visible) {
+    if (this.props.mainMenu.visible) {
       this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
         visible: false
       }))
@@ -162,7 +162,7 @@ class Home extends React.Component {
   }
 
   animateCourseSelector = (selectedCourseId) => {
-    if(!this.refs[`${selectedCourseId}courseSelectorContainer`]) {
+    if (!this.refs[`${selectedCourseId}courseSelectorContainer`]) {
       return
     }
     this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
@@ -199,15 +199,15 @@ class Home extends React.Component {
       console.log('selecting course', course)
       this.props.dispatch(courseActions.select(course))
       await mutationConnectionHandler(this.props.history, () => {
-        this.props.selectCourseSaveToken({ courseId: course._id, deviceId }).then( async () => {
-          if(this.props.currentUser.CurrentUser) {
+        this.props.selectCourseSaveToken({ courseId: course._id, deviceId }).then(async () => {
+          if (this.props.currentUser.CurrentUser) {
             return
           } else {
             await this.props.currentUser.refetch()
           }
           const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
           const userId = this.props.currentUser.CurrentUser._id
-          if(userId && accessToken) {
+          if (userId && accessToken) {
             await AsyncStorage.setItem('accessToken', accessToken)
             await AsyncStorage.setItem('userId', userId)
           }
@@ -258,17 +258,17 @@ class Home extends React.Component {
         backgroundColor: courseColor
       }}>
         {!isExitAnimationFinished &&
-        <Header withShadow dynamic hide={this.props.course.selectedCourse}/>}
-        {this.props.course.selectedCourse ?
-          <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }}
-                        closeCourse={this.closeCourse}>
+        <Header withShadow dynamic hide={this.props.course.selectedCourse} />}
+        {this.props.course.selectedCourse
+          ? <CourseHeader isExitAnimationFinished={isExitAnimationFinished} style={{ position: 'absolute' }}
+            closeCourse={this.closeCourse}>
             <CourseProgressBar />
-          </CourseHeader> : <View style={style.courseHeader}/>}
+          </CourseHeader> : <View style={style.courseHeader} />}
 
         {!isExitAnimationFinished && <View style={{
           flexGrow: 1,
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'center'
         }}>
           <Animatable.View ref='courseSelectorTitle'>
             <Text
@@ -292,9 +292,9 @@ class Home extends React.Component {
 
               return (
                 <Animatable.View key={course._id} style={{ elevation: 100, width: '45%' }}
-                                 ref={`${course._id}courseSelector`}>
+                  ref={`${course._id}courseSelector`}>
                   <View ref={`${course._id}courseSelectorContainer`}
-                        onLayout={() => {}}>
+                    onLayout={() => {}}>
                     <CircleButton
                       color={courseColor}
                       onPress={onPressAction}
@@ -312,7 +312,7 @@ class Home extends React.Component {
                     marginBottom: 20
                   }}>
                     <Animatable.Text style={[style.courseTitle, { opacity: textOpacity }]}
-                                     ref={`${course._id}courseSelectorText`}
+                      ref={`${course._id}courseSelectorText`}
                     >
                       {course.name}
                     </Animatable.Text>
@@ -326,9 +326,9 @@ class Home extends React.Component {
 
         </View>}
 
-        {isExitAnimationFinished && <Course closeCourse={this.closeCourse}/>}
+        {isExitAnimationFinished && <Course closeCourse={this.closeCourse} />}
 
-        {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction}/>}
+        {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction} />}
       </View>
     )
   }
@@ -418,7 +418,7 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),
@@ -433,13 +433,13 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
-  graphql(userDetailsQuery, { name: 'userDetails' }),
+  graphql(userDetailsQuery, { name: 'userDetails' })
 )(WithData(Home, ['currentUser', 'courses', 'userDetails']))
 
 const style = StyleSheet.create({
@@ -447,7 +447,7 @@ const style = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Exo2-Bold',
+    fontFamily: 'Exo2-Bold'
   },
   smallCircle: {
     position: 'absolute',
@@ -462,6 +462,6 @@ const style = StyleSheet.create({
   courseHeader: {
     margin: 0,
     height: appStyle.header.height,
-    width: '100%',
+    width: '100%'
   }
 })

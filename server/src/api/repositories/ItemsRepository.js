@@ -13,23 +13,22 @@ export class ItemsRepository extends MongoRepository {
     this.itemsCollection = this.db.collection('items')
   }
 
-  async getItems (userDetails) {
+  getItems (userDetails) {
     let currentItemsQuery = {
       userId: userDetails.userId,
       courseId: userDetails.selectedCourse,
       $or: [
         { actualTimesRepeated: 0 },
         { extraRepeatToday: true },
-        { nextRepetition: { $lte: moment().unix() } },
+        { nextRepetition: { $lte: moment().unix() } }
       ]
     }
-    if(userDetails.isCasual) {
+    if (userDetails.isCasual) {
       currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     // currently changed to fetching two items, after testing and approving, code below should be refactored
 
-    const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 2, sort: {lastRepetition: 1} }).toArray()
-    return currentItems
+    return this.itemsCollection.find(currentItemsQuery, {limit: 2, sort: {lastRepetition: 1}}).toArray()
   }
 
   async update (_id: string, item: Object, userId: string) {
@@ -61,9 +60,9 @@ export class ItemsRepository extends MongoRepository {
 
   async getReviews (userId: string, isCasual: Boolean) {
     let itemsQuery = {
-      userId,
+      userId
     }
-    if(isCasual) {
+    if (isCasual) {
       itemsQuery = _.extend({}, itemsQuery, {isCasual: true})
     }
     const items = await this.itemsCollection.find(
@@ -80,8 +79,9 @@ export class ItemsRepository extends MongoRepository {
     }))
   }
 
-  async clearNotCasualItems (userId: string) {
-    return await this.itemsCollection.removeMany({userId, isCasual: false})
+  clearNotCasualItems (userId: string) {
+    // TODO this will not work with TingoDB
+    return this.itemsCollection.removeMany({userId, isCasual: false})
   }
 
   async getSessionCount (userId: string, userDetails: Object) {
@@ -94,7 +94,7 @@ export class ItemsRepository extends MongoRepository {
         { nextRepetition: { $lte: moment().unix() } }
       ]
     }
-    if(userDetails.isCasual) {
+    if (userDetails.isCasual) {
       currentItemsQuery = _.extend({}, currentItemsQuery, {isCasual: true})
     }
     const items = await this.itemsCollection.find(currentItemsQuery).toArray()

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View, BackHandler} from 'react-native'
+import { Animated, Easing, Text, View, BackHandler } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
@@ -45,7 +45,7 @@ class Lecture extends React.Component {
   }
 
   handleBack = () => {
-    if(this.props.mainMenu.visible) {
+    if (this.props.mainMenu.visible) {
       this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
         visible: false
       }))
@@ -73,7 +73,7 @@ class Lecture extends React.Component {
     }
 
     if (this.props.data.loading) {
-      return <Loading/>
+      return <Loading />
     }
 
     if (!this.props.data.Lesson) {
@@ -104,7 +104,7 @@ class Lecture extends React.Component {
         {this.state.showLecture &&
         <Animatable.View animation='bounceIn' style={{ height: '60%' }}>
           <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}
-                 loading={this.props.data.loading}/>
+            loading={this.props.data.loading} />
         </Animatable.View>
         }
       </View>
@@ -124,7 +124,7 @@ export default compose(
   withRouter,
   graphql(clearNotCasualItems, {
     props: ({ ownProps, mutate }) => ({
-      clearNotCasual: () => mutate({}),
+      clearNotCasual: () => mutate({})
     })
   }),
   graphql(currentLessonQuery, {

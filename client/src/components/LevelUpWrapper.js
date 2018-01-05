@@ -4,10 +4,9 @@ import { withRouter } from 'react-router'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
 
 export default (Component) => {
-
   class LevelUpWrapper extends React.Component {
     componentWillReceiveProps = (nextProps) => {
-      //TODO use lodash get here
+      // TODO use lodash get here
       if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.experience) {
         if (nextProps.userDetails.UserDetails.experience.showLevelUp) {
           nextProps.history.push('/congratulations')
@@ -17,7 +16,7 @@ export default (Component) => {
 
     render () {
       return (
-        <Component {...this.props}/>
+        <Component {...this.props} />
       )
     }
   }

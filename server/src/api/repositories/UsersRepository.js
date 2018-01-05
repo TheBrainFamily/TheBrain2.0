@@ -30,8 +30,10 @@ export class UsersRepository extends MongoRepository {
     const addedUser = (await this.userCollection.insert(newUser)).ops[0]
 
     const newUserId = addedUser._id.toString()
-    await new userDetailsRepository.create(newUserId, courseId)
-    if(deviceId) {
+    // TODO changed this from new userDetailsRepository call
+    // - since this is not covered with test we need to test that it still works
+    await userDetailsRepository.create(newUserId, courseId)
+    if (deviceId) {
       addedUser.currentAccessToken = await this.insertNewUserToken(newUserId, deviceId)
     }
     return addedUser
@@ -126,11 +128,11 @@ export class UsersRepository extends MongoRepository {
   async removeToken (userId: string, token: string) {
     await this.authTokenCollection.removeOne({
       userId,
-      token,
+      token
     })
   }
 
-  async removeExpiredTokens() {
+  async removeExpiredTokens () {
     console.log('### EXPIRED TOKENS REMOVAL STARTING ###', moment().format())
     const timestamp = moment().unix()
     const result = await this.authTokenCollection.removeMany({createdAt: {$lt: timestamp - tokenExpirationPeriod}})

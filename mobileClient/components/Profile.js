@@ -49,7 +49,7 @@ class Profile extends React.Component {
         } else {
           Alert.alert(
             'Oops...',
-            'There was a problem while changing your password',
+            'There was a problem while changing your password'
           )
         }
       })
@@ -69,8 +69,8 @@ class Profile extends React.Component {
     this.setState(getPasswordValidationState({ oldPassword, newPassword, newPasswordConfirmation }))
   }
 
-  focusNextField(key) {
-    this.inputs[key].focus();
+  focusNextField (key) {
+    this.inputs[key].focus()
   }
 
   casualSwitchAction = () => {
@@ -79,7 +79,7 @@ class Profile extends React.Component {
   }
 
   componentWillUpdate = (nextProps) => {
-    if(nextProps.userDetails.loading === false && !!nextProps.userDetails.UserDetails.isCasual !== this.state.isCasual) {
+    if (nextProps.userDetails.loading === false && !!nextProps.userDetails.UserDetails.isCasual !== this.state.isCasual) {
       this.setState({isCasual: !!nextProps.userDetails.UserDetails.isCasual})
     }
   }
@@ -99,11 +99,11 @@ class Profile extends React.Component {
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
             <Text>Hide hard questions</Text>
-            <Switch onValueChange={this.casualSwitchAction} value={this.state.isCasual}/>
+            <Switch onValueChange={this.casualSwitchAction} value={this.state.isCasual} />
           </TouchableOpacity>
         </View>
         <View style={{paddingHorizontal: 10, marginTop: 18}}>
-          <Separator/>
+          <Separator />
         </View>
 
         { isGuest || isFacebookUser ? null : <View style={{
@@ -111,7 +111,7 @@ class Profile extends React.Component {
         }}>
           <TextField
             onSubmitEditing={() => {
-              this.focusNextField('newPassword');
+              this.focusNextField('newPassword')
             }}
             autoFocus
             autoCapitalize='none'
@@ -122,11 +122,11 @@ class Profile extends React.Component {
             error={this.state.oldPasswordError}
           />
           <TextField
-            ref={ input => {
+            ref={input => {
               this.inputs['newPassword'] = input
             }}
             onSubmitEditing={() => {
-              this.focusNextField('newPasswordConfirmation');
+              this.focusNextField('newPasswordConfirmation')
             }}
             autoCapitalize='none'
             secureTextEntry
@@ -135,7 +135,7 @@ class Profile extends React.Component {
             onChangeText={this.onChangeText('newPassword')}
           />
           <TextField
-            ref={ input => {
+            ref={input => {
               this.inputs['newPasswordConfirmation'] = input
             }}
             autoCapitalize='none'
@@ -196,7 +196,7 @@ export default compose(
             })
           }
         }
-      }),
+      })
     })
-  }),
+  })
 )(WithData(Profile, ['userDetails', 'currentUser']))

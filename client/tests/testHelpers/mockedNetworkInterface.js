@@ -1,9 +1,9 @@
-import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
-import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context';
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools'
+import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 // import { typeDefs } from '../../../server/src/api/typeDef'
 // import resolvers from '../../../server/src/api/resolvers'
 
-const gql = a => a;
+const gql = a => a
 
 const typeDefs = gql`
     type Achievement {
@@ -157,76 +157,75 @@ window.__APOLLO_TEST_TOOLS = {
   addMockFunctionsToSchema,
   makeExecutableSchema,
   stringify: function (obj) {
-
     return JSON.stringify(obj, function (key, value) {
-      var fnBody;
-      if (value instanceof Function || typeof value == 'function') {
+      var fnBody
+      if (value instanceof Function || typeof value === 'function') {
+        fnBody = value.toString()
 
-
-        fnBody = value.toString();
-
-        if (fnBody.length < 8 || fnBody.substring(0, 8) !== 'function') { //this is ES6 Arrow Function
-          return '_NuFrRa_' + fnBody;
+        if (fnBody.length < 8 || fnBody.substring(0, 8) !== 'function') { // this is ES6 Arrow Function
+          return '_NuFrRa_' + fnBody
         }
-        return fnBody;
+        return fnBody
       }
       if (value instanceof RegExp) {
-        return '_PxEgEr_' + value;
+        return '_PxEgEr_' + value
       }
-      return value;
-    });
+      return value
+    })
   },
   parse: function (str, date2obj) {
-
-    var iso8061 = date2obj ? /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/ : false;
+    var iso8061 = date2obj ? /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/ : false
 
     return JSON.parse(str, function (key, value) {
-      var prefix;
+      var prefix
 
-      if (typeof value != 'string') {
-        return value;
+      if (typeof value !== 'string') {
+        return value
       }
       if (value.length < 8) {
-        return value;
+        return value
       }
 
-      prefix = value.substring(0, 8);
+      prefix = value.substring(0, 8)
 
       if (iso8061 && value.match(iso8061)) {
-        return new Date(value);
+        return new Date(value)
       }
       if (prefix === 'function') {
-        return eval('(' + value + ')');
+        // eslint-disable-next-line no-eval
+        return eval('(' + value + ')')
       }
       if (prefix === '_PxEgEr_') {
-        return eval(value.slice(8));
+        // eslint-disable-next-line no-eval
+        return eval(value.slice(8))
       }
       if (prefix === '_NuFrRa_') {
-        return eval(`(function ${value.slice(8)})`);
+        // eslint-disable-next-line no-eval
+        return eval(`(function ${value.slice(8)})`)
       }
 
-      return value;
-    });
+      return value
+    })
   }
 }
 
 const resolvers = {
   Query: {
     CurrentUser () {
-        return null
+      return null
     },
-    Courses() {
+    Courses () {
       return [
-        {_id: "_id", name: "name", color: "color", isDisabled: false}
+        {_id: '_id', name: 'name', color: 'color', isDisabled: false}
       ]
     }
   }
 }
 
-const schema = makeExecutableSchema({typeDefs, resolvers});
-export { schema };
+const schema = makeExecutableSchema({typeDefs, resolvers})
+export { schema }
 
 // addMockFunctionsToSchema({schema, preserveResolvers: true});
 
-const networkInterface =  mockNetworkInterfaceWithSchema({schema});
+const networkInterface = mockNetworkInterfaceWithSchema({schema})
 export { networkInterface }

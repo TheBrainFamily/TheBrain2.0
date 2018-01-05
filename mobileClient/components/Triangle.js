@@ -22,11 +22,11 @@ export default class Triangle extends React.Component {
     }
 
     if (!this.props.animated) {
-      return <View style={[styles.triangle, this.props.style]}/>
+      return <View style={[styles.triangle, this.props.style]} />
     }
     return (
-      <Animatable.View style={[styles.triangle, this.props.style]} animation={animation} direction="reverse"
-                       iterationCount="infinite" ref="triangle"/>
+      <Animatable.View style={[styles.triangle, this.props.style]} animation={animation} direction='reverse'
+        iterationCount='infinite' ref='triangle' />
     )
   }
 }

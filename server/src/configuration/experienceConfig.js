@@ -2,7 +2,7 @@ const experienceGained = {
   processEvaluation: 2
 }
 
-export function getExperienceForAction(action) {
+export function getExperienceForAction (action) {
   let exp = 0
   if (experienceGained[action]) {
     exp = experienceGained[action]
@@ -12,6 +12,6 @@ export function getExperienceForAction(action) {
   return exp
 }
 
-export function calculateUserLevel(xp: Number) {
-  return Math.floor(0.13 * Math.sqrt(xp*2)) + 1
+export function calculateUserLevel (xp: Number) {
+  return Math.floor(0.13 * Math.sqrt(xp * 2)) + 1
 }

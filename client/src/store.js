@@ -1,13 +1,12 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
-import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
 import { persistStore, autoRehydrate } from 'redux-persist'
 import { asyncSessionStorage } from 'redux-persist/storages'
-import { networkInterface } from './networkInterface';
+import { networkInterface } from './networkInterface'
 import createHistory from 'history/createBrowserHistory'
 
 import * as reducers from './reducers'
-
 
 const client = new ApolloClient({
   networkInterface

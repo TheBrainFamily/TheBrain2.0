@@ -19,7 +19,7 @@ class Congratulations extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if(!nextProps.userDetails.UserDetails.experience.showLevelUp) {
+    if (!nextProps.userDetails.UserDetails.experience.showLevelUp) {
       this.props.history.push('/')
     }
   }
@@ -30,7 +30,7 @@ class Congratulations extends React.Component {
     const levelCap = levelConfig.levelCap
     const level = Math.min(userLevel, levelCap)
     return (
-      <PageContainer dontUseKeyboarAware={true}>
+      <PageContainer dontUseKeyboarAware>
         <View style={{ backgroundColor: '#6905ea', height: '100%', paddingTop: 10 }}>
           <Text style={[styles.textDefault, { fontSize: 26 }]}>
             Congratulations
@@ -50,7 +50,6 @@ class Congratulations extends React.Component {
           <Text style={[styles.textDefault, { fontSize: 26 }]}>
             {levelConfig[level].name} (level {userLevel})
           </Text>
-
 
           <TouchableOpacity onPress={this.click}>
             <Text style={[styles.button, { backgroundColor: '#68b888', marginTop: 10, marginHorizontal: 10, paddingHorizontal: 50 }]}>
@@ -85,5 +84,5 @@ export default compose(
     options: {
       fetchPolicy: 'network-only'
     }
-  }),
+  })
 )(WithData(Congratulations, ['currentUser', 'userDetails']))

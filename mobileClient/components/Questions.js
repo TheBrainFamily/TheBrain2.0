@@ -53,7 +53,7 @@ class Questions extends React.Component {
   }
 
   handleBack = () => {
-    if(this.props.mainMenu.visible) {
+    if (this.props.mainMenu.visible) {
       this.props.dispatch(mainMenuActions.updateMainMenuVisibility({
         visible: false
       }))
@@ -138,23 +138,23 @@ class Questions extends React.Component {
 
         return (
           <View style={{ backgroundColor: courseColor }}>
-            <CourseHeader isExitAnimationFinished={true} closeCourse={this.closeCourse}>
-              <ProgressBar progress={progress}/>
+            <CourseHeader isExitAnimationFinished closeCourse={this.closeCourse}>
+              <ProgressBar progress={progress} />
             </CourseHeader>
 
             <Flashcard question={flashcard.question}
-                       answer={flashcard.answer}
-                       image={flashcard.image}
-                       answerImage={flashcard.answerImage}
-                       evalItemId={evalItem._id}
-                       getFlashcardHeight={this.getFlashcardHeight}
-                       getFlashcardWidth={this.getFlashcardWidth}
-                       isQuestionCasual={flashcard.isCasual}/>
+              answer={flashcard.answer}
+              image={flashcard.image}
+              answerImage={flashcard.answerImage}
+              evalItemId={evalItem._id}
+              getFlashcardHeight={this.getFlashcardHeight}
+              getFlashcardWidth={this.getFlashcardWidth}
+              isQuestionCasual={flashcard.isCasual} />
             <AnswerEvaluator isQuestionCasual={flashcard.isCasual} enabled={this.props.flashcard.visibleAnswer}
-                             evalItemId={evalItem._id}
-                             getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight}/>
+              evalItemId={evalItem._id}
+              getAnswerEvaluatorHeight={this.getAnswerEvaluatorHeight} />
             {this.props.mainMenu.visible &&
-            <MainMenu topMargin={this.props.height} closeCourse={this.closeCourse}/>}
+            <MainMenu topMargin={this.props.height} closeCourse={this.closeCourse} />}
           </View>
         )
       } else {
@@ -172,7 +172,7 @@ export default compose(
     name: 'currentItems',
     options: {
       fetchPolicy: 'network-only',
-      notifyOnNetworkStatusChange: true //workaround to infininte loading after user relog in apoolo-client > 1.8
+      notifyOnNetworkStatusChange: true // workaround to infininte loading after user relog in apoolo-client > 1.8
     }
   }),
   graphql(sessionCountQuery, {
@@ -193,7 +193,7 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),

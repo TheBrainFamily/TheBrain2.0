@@ -1,4 +1,5 @@
 // @flow
+/* eslint-env browser */
 
 import React from 'react'
 import { compose, withApollo, graphql } from 'react-apollo'
@@ -26,7 +27,7 @@ class LoginSwitcher extends React.Component {
     localStorage.removeItem('userIdFb')
     this.props.dispatch(course.close())
     this.props.logout()
-      .then( async () => {
+      .then(async () => {
         await this.props.client.resetStore()
         this.props.dispatch(push(`/`))
       })
@@ -72,7 +73,7 @@ const LoginSwitcherWithGraphQl = compose(
 
 class AppHeader extends React.Component {
   closeCourse = () => async () => {
-    if(this.props.selectedCourse) {
+    if (this.props.selectedCourse) {
       await this.props.closeCourse()
       this.props.dispatch(course.close())
     }
@@ -85,16 +86,15 @@ class AppHeader extends React.Component {
       <div className='App-header-shadow'>
         <div className='App-header-container'>
           <div className='App-header'>
-            <img onClick={this.closeCourse()} src={logo} className='App-logo' alt='logo' style={{cursor: 'pointer'}}/>
+            <img onClick={this.closeCourse()} src={logo} className='App-logo' alt='logo' style={{cursor: 'pointer'}} />
             <div className='App-header-right'>
               <Hamburger>
                 {currentUser && currentUser.activated
-                  ?
-                  <span>
-                    <MenuProfile currentUser={currentUser}/>
-                    <div className={'menu-separator'}/>
+                  ? <span>
+                    <MenuProfile currentUser={currentUser} />
+                    <div className={'menu-separator'} />
                   </span>
-                  : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}}/>
+                  : <div className={'menu-profile-container'} style={{height: 20, backgroundColor: '#eee'}} />
                 }
                 {!this.props.data.loading &&
                   <span>
@@ -110,10 +110,10 @@ class AppHeader extends React.Component {
                   <div className={'menu-separator menu-separator-visible'} />
                   { this.props.selectedCourse && <a onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
-                  {/*<a>ACHIEVEMENTS LIST</a>*/}
-                  {/*<div className={'menu-separator menu-separator-visible'} />*/}
+                  {/* <a>ACHIEVEMENTS LIST</a> */}
+                  {/* <div className={'menu-separator menu-separator-visible'} /> */}
                   <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
-                  < div className={'menu-separator menu-separator-visible'} />
+                  <div className={'menu-separator menu-separator-visible'} />
                 </div>
                 }
                 <a onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
@@ -163,7 +163,7 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),

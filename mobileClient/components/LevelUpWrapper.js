@@ -5,7 +5,6 @@ import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import WithData from './WithData'
 
 export default (Component) => {
-
   class LevelUpWrapper extends React.Component {
     componentWillReceiveProps = (nextProps) => {
       if (nextProps.userDetails && nextProps.userDetails.UserDetails && nextProps.userDetails.UserDetails.experience) {
@@ -17,7 +16,7 @@ export default (Component) => {
 
     render () {
       return (
-        <Component {...this.props}/>
+        <Component {...this.props} />
       )
     }
   }

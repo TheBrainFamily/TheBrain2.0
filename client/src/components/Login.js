@@ -1,4 +1,5 @@
 // @flow
+/* eslint-env browser */
 
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
@@ -9,7 +10,7 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import FBLoginButton from './FBLoginButton'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
-import TextField from 'material-ui/TextField';
+import TextField from 'material-ui/TextField'
 
 import currentUserQuery from '../../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../../shared/graphql/queries/userDetails'
@@ -31,7 +32,7 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if(nextProps.match.path === '/signup') {
+    if (nextProps.match.path === '/signup') {
       this.setState({isSignup: true})
     }
   }
@@ -41,14 +42,14 @@ class Login extends React.Component {
     const deviceId = 'browser'
     const saveToken = this.state.saveToken
     let submitAction = this.props.login
-    if(this.refs.isSignup.checked) {
+    if (this.refs.isSignup.checked) {
       submitAction = this.props.signup
     }
     this.setState({ error: '' })
 
     submitAction({ username: this.refs.username.input.value, password: this.refs.password.input.value, deviceId, saveToken })
       .then(() => {
-        if(saveToken) {
+        if (saveToken) {
           const accessToken = this.props.currentUser.CurrentUser.currentAccessToken
           const userId = this.props.currentUser.CurrentUser._id
           localStorage.setItem('accessToken', accessToken)
@@ -80,7 +81,7 @@ class Login extends React.Component {
       <FlexibleContentWrapper>
         <h1>{ this.state.isSignup ? 'Sign up' : 'Sign in' } and stay educated</h1>
         <form className={'login-form'} onSubmit={this.submit}>
-          <FBLoginButton onLogin={this.redirectAfterLogin}/>
+          <FBLoginButton onLogin={this.redirectAfterLogin} />
           <p>
             OR
           </p>
@@ -88,30 +89,30 @@ class Login extends React.Component {
           <div>
             <TextField
               ref='username'
-              hintText="Username"
-              floatingLabelText="Username"
+              hintText='Username'
+              floatingLabelText='Username'
             />
           </div>
           <div>
             <TextField
               ref='password'
-              hintText="Password"
-              floatingLabelText="Password"
-              type="password"
+              hintText='Password'
+              floatingLabelText='Password'
+              type='password'
             />
           </div>
           <div className='mt-1'>
-            <input ref='saveToken' type="checkbox" name="saveToken" checked={this.state.saveToken}
-                   onChange={this.checkboxClickSave}/>
+            <input ref='saveToken' type='checkbox' name='saveToken' checked={this.state.saveToken}
+              onChange={this.checkboxClickSave} />
             <label className={'checkbox-label'} onClick={this.checkboxClickSave}>Remember me</label>
           </div>
           <div>
-            <input ref='isSignup' type="checkbox" name="newAccount" checked={this.state.isSignup}
-                   onChange={this.checkboxClick}/>
+            <input ref='isSignup' type='checkbox' name='newAccount' checked={this.state.isSignup}
+              onChange={this.checkboxClick} />
             <label className={'checkbox-label'} onClick={this.checkboxClick}>New account</label>
           </div>
           <div className={'login-form-buttons-container'}>
-            <input className={'login-button'} type='submit' value={this.getLoginButtonLabel(this.state.isSignup)}/>
+            <input className={'login-button'} type='submit' value={this.getLoginButtonLabel(this.state.isSignup)} />
           </div>
         </form>
       </FlexibleContentWrapper>

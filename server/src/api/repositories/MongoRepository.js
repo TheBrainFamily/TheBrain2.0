@@ -29,6 +29,9 @@ export class MongoRepository {
     if (connectingToDb === false) {
       connectingToDb = true
       MongoClient.connect(resolvedDBURI, (error, db) => {
+        if (error) {
+          throw new Error(error)
+        }
         dbInstance = db
         collectionInitQueue.forEach(collectionInitCallback => collectionInitCallback())
       })

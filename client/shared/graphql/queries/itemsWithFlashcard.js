@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-//TODO change the filename here
+// TODO change the filename here
 
 export default gql`
     query CurrentItems {

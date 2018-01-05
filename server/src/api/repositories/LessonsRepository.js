@@ -10,7 +10,7 @@ export class LessonsRepository extends MongoRepository {
   }
 
   async getLessons (courseId: string) {
-    return this.lessonsCollection.find({courseId}).sort({position: 1}).toArray();
+    return this.lessonsCollection.find({courseId}).sort({position: 1}).toArray()
   }
 
   async getLessonCount () {

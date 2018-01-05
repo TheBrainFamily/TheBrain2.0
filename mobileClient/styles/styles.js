@@ -7,7 +7,7 @@ import appStyle from './appStyle'
 const styles = StyleSheet.create({
   topContainer: {
     height: appStyle.header.offset,
-    backgroundColor: appStyle.colors.bgAlt,
+    backgroundColor: appStyle.colors.bgAlt
   },
   textDefault: {
     letterSpacing: -1,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   flipCardContent: {
     backgroundColor: 'white',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   summaryContainer: {
     height: 25,
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
     paddingVertical: 5,
-    borderColor: '#fff5',
+    borderColor: '#fff5'
   },
   menuButtonText: {
     color: '#999',
     fontSize: 14,
-    fontFamily: 'Exo2-Bold',
+    fontFamily: 'Exo2-Bold'
   },
   header: {
     height: appStyle.header.height,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 27,
     paddingHorizontal: 20,
-    width: '100%',
+    width: '100%'
   },
   headerWithShadow: {
     shadowColor: '#000',
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   flipCardBody: {
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   cardText: {
     color: 'black',
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowRadius: 4,
     shadowOpacity: 0.5,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   form: {
     marginTop: 5,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '85%',
     height: 20,
-    marginVertical: 15,
+    marginVertical: 15
   },
   progressBarTrack: {
     top: 3,
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     overflow: 'hidden',
     width: '100%',
-    height: 200,
+    height: 200
   },
   answerTopLine: {
     position: 'absolute',
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#71b9d3',
     width: 170,
-    height: "16%",
+    height: '16%',
     borderRadius: 35,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#62c46c',
-    width: "12%",
+    width: '12%',
     height: 170,
     borderRadius: 35,
     borderTopRightRadius: 0,
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#c1272d',
     width: 170,
-    height: "16%",
+    height: '16%',
     borderRadius: 35,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ff8533',
-    width: "12%",
+    width: '12%',
     height: 170,
     borderRadius: 35,
     borderTopLeftRadius: 0,
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
 
   },
   answerSwipeBall: {
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#662d91',
     width: 70,
     height: 70,
-    borderRadius: 35,
+    borderRadius: 35
   },
   answerEvaluatorOverlay: {
     position: 'absolute',
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
-    padding: "5%"
+    padding: '5%'
   },
   infoText: {
     textAlign: 'center',
@@ -440,17 +440,17 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: '#b3b3b3',
     position: 'absolute',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   triangleTop: {
-    top: '34%',
+    top: '34%'
   },
   triangleBottom: {
     borderBottomWidth: 0,
     borderTopWidth: 12,
     borderBottomColor: 'transparent',
     borderTopColor: '#b3b3b3',
-    top: '60%',
+    top: '60%'
   },
   triangleRight: {
     borderBottomWidth: 4,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderLeftColor: '#b3b3b3',
     top: '48.75%',
-    left: '60%',
+    left: '60%'
   },
   triangleLeft: {
     borderBottomWidth: 4,
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#b3b3b3',
     borderLeftColor: 'transparent',
     top: '48.75%',
-    left: '38%',
+    left: '38%'
   }
 })
 

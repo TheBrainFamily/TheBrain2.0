@@ -11,17 +11,17 @@ import dotsLayer from '../img/dots-for-icons.png'
 const iconMap = {
   biology: {
     normal: biology,
-    simple: biologySimple,
+    simple: biologySimple
   },
   chemistry: {
     normal: chemistry,
     simple: chemistrySimple
   },
   'computer science': {
-    normal: comingSoon,
+    normal: comingSoon
   },
   'history': {
-    normal: comingSoon,
+    normal: comingSoon
   }
 }
 
@@ -40,12 +40,12 @@ export default class CourseIcon extends React.Component {
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       backgroundPositionX: 'center',
-      backgroundPositionY: 'middle',
+      backgroundPositionY: 'middle'
     }
 
     let divClass = 'course-icon'
 
-    if(this.props.isDisabled) {
+    if (this.props.isDisabled) {
       styleBackground.opacity = 0.3
       imageStyle.cursor = 'default'
       divClass = 'course-icon-disabled'
@@ -53,13 +53,13 @@ export default class CourseIcon extends React.Component {
 
     return (
       <div style={styleBackground}
-           className={divClass}
-           onClick={this.props.onClick && !this.props.isDisabled ? this.props.onClick(this.props.onClickArgument) : null}>
+        className={divClass}
+        onClick={this.props.onClick && !this.props.isDisabled ? this.props.onClick(this.props.onClickArgument) : null}>
         { this.props.simple
           ? null
           : <img style={imageStyle}
-                 alt={this.props.name}
-                 src={dotsLayer}
+            alt={this.props.name}
+            src={dotsLayer}
           />}
         {this.props.children && this.props.children}
       </div>

@@ -1,39 +1,39 @@
-import _ from 'lodash';
+import _ from 'lodash'
 import {
-  Animated,
-} from 'react-native';
+  Animated
+} from 'react-native'
 
 export default class Animator {
-  constructor(animations) {
-    this.animations = animations;
-    this.firstPhase = true;
+  constructor (animations) {
+    this.animations = animations
+    this.firstPhase = true
     _.forEach(this.animations, (animatedStyle) => {
-      animatedStyle.animatedValue = new Animated.Value(animatedStyle.initial);
-    });
+      animatedStyle.animatedValue = new Animated.Value(animatedStyle.initial)
+    })
   }
 
-  updateFinalDimension(attrName, value) {
+  updateFinalDimension (attrName, value) {
     if (this.animations && this.animations[attrName]) {
       this.animations[attrName].final = value
     }
   }
 
-  resetAnimations() {
+  resetAnimations () {
     this.firstPhase = true
     _.forEach(this.animations, (animatedStyle) => {
       animatedStyle.animatedValue.setValue(animatedStyle.initial)
-    });
+    })
   }
 
-  getStyle() {
+  getStyle () {
     const style = {}
     _.forEach(this.animations, (animatedStyle, attrName) => {
       style[attrName] = animatedStyle.animatedValue
-    });
+    })
     return style
   }
 
-  startAnimations(twoPhase = true) {
+  startAnimations (twoPhase = true) {
     const animationsContainer = []
 
     _.forEach(this.animations, (animatedStyle) => {
@@ -45,7 +45,7 @@ export default class Animator {
         animatedStyle.animatedValue,
         {
           toValue: finalValue,
-          friction: animatedStyle.friction,
+          friction: animatedStyle.friction
         }
       )
       animationsContainer.push(animation)

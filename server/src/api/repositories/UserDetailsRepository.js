@@ -17,12 +17,12 @@ export class UserDetailsRepository extends MongoRepository {
       userId,
       hasDisabledTutorial: false,
       selectedCourse: courseId,
-      //TODO selected course was set to empty string originally -double check that we are not braking anything by adding it here
+      // TODO selected course was set to empty string originally -double check that we are not braking anything by adding it here
       progress: [{courseId, lesson: 1}],
       collectedAchievements: [],
       achievementStats: {
         watchedMovies: 0,
-        answeredQuestions: 0,
+        answeredQuestions: 0
       },
       experience: {
         value: 0,
@@ -51,7 +51,7 @@ export class UserDetailsRepository extends MongoRepository {
   async updateUserXp (userId: string, action: string) {
     let xpGained = getExperienceForAction(action)
     await this.userDetailsCollection.update({userId}, {$inc: {'experience.value': xpGained}}, {
-      upsert: true,
+      upsert: true
     })
     const userDetails = await this.userDetailsCollection.findOne({userId})
     const prevLevel = calculateUserLevel(userDetails.experience.value - xpGained)
@@ -61,16 +61,16 @@ export class UserDetailsRepository extends MongoRepository {
   }
 
   async resetLevelUpFlag (userId: string) {
-    //TODO this requires a test, and a rewrite to work witn tingodb
+    // TODO this requires a test, and a rewrite to work witn tingodb
     return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {'experience.showLevelUp': false}}, {
-      upsert: true,
+      upsert: true
     })).value
   }
 
   async switchUserIsCasual (userId: string) {
     const currentUserDetails = await this.userDetailsCollection.findOne({userId})
     const isCasualToSet = !currentUserDetails.isCasual
-    await this.userDetailsCollection.update({userId}, {$set: { isCasual: isCasualToSet}})
+    await this.userDetailsCollection.update({userId}, {$set: {isCasual: isCasualToSet}})
     currentUserDetails.isCasual = isCasualToSet
     return currentUserDetails
   }
@@ -92,7 +92,7 @@ export class UserDetailsRepository extends MongoRepository {
     })
     await this.userDetailsCollection.update({userId}, {$set: {progress: newProgress}})
 
-    //TODO fix positional operators in tingodb -
+    // TODO fix positional operators in tingodb -
     // https://github.com/sergeyksv/tingodb/issues/34
 
     // userId: new ObjectId(userId),
@@ -105,12 +105,11 @@ export class UserDetailsRepository extends MongoRepository {
   }
 
   async disableTutorial (userId: string) {
-    await this.userDetailsCollection.update({userId}, {$set: {hasDisabledTutorial: true}});
+    await this.userDetailsCollection.update({userId}, {$set: {hasDisabledTutorial: true}})
     return this.userDetailsCollection.findOne({userId})
   }
 
   async selectCourse (userId: string, courseId: string) {
-
     const userDetails = await this.userDetailsCollection.findOne({userId})
     userDetails.selectedCourse = courseId
     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)

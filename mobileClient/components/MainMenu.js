@@ -29,7 +29,7 @@ const MenuButton = (props) => (
   <TouchableHighlight
     onPress={props.onPress}
     activeOpacity={1}
-    underlayColor="#fff"
+    underlayColor='#fff'
     style={styles.menuButton}
   >
     <Text style={styles.menuButtonText}>{props.text}</Text>
@@ -54,7 +54,7 @@ class MainMenu extends React.Component {
 
   logout = () => {
     console.log('>>>>>>>>>> LOGOUT')
-    //TODO this is a weird pattern, double check it
+    // TODO this is a weird pattern, double check it
     this.setState({ loading: true }, async () => {
       await AsyncStorage.removeItem('accessTokenFb')
       await AsyncStorage.removeItem('accessToken')
@@ -111,7 +111,7 @@ class MainMenu extends React.Component {
         justifyContent: 'space-between',
         height
       }]}>
-        <Loading lightStyle={true} />
+        <Loading lightStyle />
       </View>
     }
     let { fadeAnim } = this.state
@@ -122,10 +122,10 @@ class MainMenu extends React.Component {
     const username = _.get(this.props, 'currentUser.CurrentUser.username', 'Guest')
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
     const levelCap = levelConfig.levelCap
-    //TODO extract this to a separate component
+    // TODO extract this to a separate component
     const level = Math.min(userLevel, levelCap)
 
-    //TODO in general split this up into different components
+    // TODO in general split this up into different components
 
     Keyboard.dismiss()
 
@@ -144,7 +144,7 @@ class MainMenu extends React.Component {
           flexDirection: 'row',
           width: '100%',
           height: '33%',
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }}>
           <Image
             style={{ width: '25%', height: '85%', marginLeft: 20, resizeMode: 'contain' }}
@@ -162,7 +162,7 @@ class MainMenu extends React.Component {
               <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
                 <Text style={style.text}>DUE</Text>
                 <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
-                <View style={[style.card, { backgroundColor: '#4ba695' }]}/>
+                <View style={[style.card, { backgroundColor: '#4ba695' }]} />
               </View>
               <View style={{ position: 'relative', width: 1, backgroundColor: '#999', elevation: 1000 }}>
                 <View style={{
@@ -173,7 +173,7 @@ class MainMenu extends React.Component {
                   height: 8,
                   borderRadius: 8,
                   backgroundColor: '#999'
-                }}/>
+                }} />
                 <View style={{
                   position: 'absolute',
                   bottom: -4,
@@ -182,12 +182,12 @@ class MainMenu extends React.Component {
                   height: 8,
                   borderRadius: 8,
                   backgroundColor: '#999'
-                }}/>
+                }} />
               </View>
               <View style={{ width: '50%', padding: 10, alignItems: 'center' }}>
                 <Text style={style.text}>REVIEW</Text>
                 <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
-                <View style={[style.card, { backgroundColor: '#c64f34' }]}/>
+                <View style={[style.card, { backgroundColor: '#c64f34' }]} />
               </View>
             </View>
           </View>
@@ -195,29 +195,29 @@ class MainMenu extends React.Component {
         </View>
         <View style={{ marginBottom: '10%', marginTop: '3%', flex: 1, justifyContent: 'flex-start' }}>
           {activated
-            ? <MenuButton text="LOG OUT" onPress={this.logout} />
-            : <MenuButton text="LOG IN" onPress={this.go('/login')} />
+            ? <MenuButton text='LOG OUT' onPress={this.logout} />
+            : <MenuButton text='LOG IN' onPress={this.go('/login')} />
           }
           <Separator />
           {currentUser &&
             <View>
-              {this.props.selectedCourse ? <MenuButton text="LECTURES LIST" onPress={this.go('/lectures')} /> : null}
+              {this.props.selectedCourse ? <MenuButton text='LECTURES LIST' onPress={this.go('/lectures')} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
 
-              <MenuButton text="REVIEWS CALENDAR" onPress={this.go('/calendar')} />
+              <MenuButton text='REVIEWS CALENDAR' onPress={this.go('/calendar')} />
               <Separator />
-              {this.props.selectedCourse ? <MenuButton text="CHANGE THE COURSE"
-                                                       onPress={() => {
-                                                         this.props.closeCourse ? this.props.closeCourse() : this.closeCourse()
-                                                       }} /> : null}
+              {this.props.selectedCourse ? <MenuButton text='CHANGE THE COURSE'
+                onPress={() => {
+                  this.props.closeCourse ? this.props.closeCourse() : this.closeCourse()
+                }} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
-              {/*<MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} />*/}
-              {/*<Separator />*/}
-              <MenuButton text="PROFILE" onPress={this.go('/profile')} />
+              {/* <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} /> */}
+              {/* <Separator /> */}
+              <MenuButton text='PROFILE' onPress={this.go('/profile')} />
               <Separator />
             </View>
           }
-          <MenuButton text="CONTACT" onPress={this.go('/contact')} />
+          <MenuButton text='CONTACT' onPress={this.go('/contact')} />
         </View>
       </Animated.View>
     )
@@ -275,7 +275,7 @@ export default compose(
               }
             })
           }
-        },
+        }
       })
     })
   }),
@@ -301,9 +301,9 @@ export default compose(
     }
   }),
   graphql(currentUserQuery, {
-    name: 'currentUser',
+    name: 'currentUser'
   }),
   graphql(userDetailsQuery, {
-    name: 'userDetails',
+    name: 'userDetails'
   })
 )(WithData(MainMenu, ['currentUser', 'userDetails', 'sessionCount']))
