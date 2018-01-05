@@ -4,12 +4,11 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import resolvers from './resolvers'
-import { deepFreeze, extendExpect } from 'testHelpers/testHelpers'
+import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import { LessonsRepository } from './repositories/LessonsRepository'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
-import { ItemsWithFlashcardRepository } from './repositories/ItemsWithFlashcardRepository'
 import { UsersRepository } from './repositories/UsersRepository'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 

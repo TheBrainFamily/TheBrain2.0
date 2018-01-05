@@ -93,7 +93,7 @@
   "devDependencies": {
     "apollo-client": "^1.9.3",
     "apollo-test-utils-with-context": "^0.3.5",
-    "babel-plugin-module-rewrite": "^0.2.0",
+    "babel-plugin-module-rewrite-with-root": "^0.3.0",
     "graphql": "^0.11.7",
     "module-resolver": "^1.0.0",
     "thenify": "^3.3.0",
