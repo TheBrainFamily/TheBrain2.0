@@ -17,7 +17,7 @@
       ],
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./testing/testHelpers/replace-for-testing.js"
           }
@@ -32,7 +32,7 @@
       ],
       "plugins": [
         [
-          "module-rewrite",
+          "module-rewrite-with-root",
           {
             "replaceFunc": "./testing/testHelpers/replace-for-testing.js"
           }
