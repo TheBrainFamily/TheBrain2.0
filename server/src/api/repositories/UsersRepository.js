@@ -27,10 +27,12 @@ export class UsersRepository extends MongoRepository {
       createdAt: moment().unix()
     }
 
-    const addedUser = (await this.userCollection.insert(newUser))[0]
+    const insertReturn = await this.userCollection.insert(newUser)
+    // TODO Tingodb returns the ops array directly :-( we will have to make the internals simulate the same way
+    const addedUser = insertReturn.ops ? insertReturn.ops[0] : insertReturn[0]
 
     const newUserId = addedUser._id.toString()
-    // TODO changed this from new userDetailsRepository call
+    // TODO changed this from "new userDetailsRepository.create(..)" call
     // - since this is not covered with test we need to test that it still works
     await userDetailsRepository.create(newUserId, courseId)
     if (deviceId) {
