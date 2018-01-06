@@ -4,11 +4,11 @@
   "description": "Server for TheBrain 2.0",
   "main": "src/startup.js",
   "engines": {
-    "node": "7.10.1"
+    "node": "8.9.4"
   },
   "scripts": {
     "test": "BABEL_ENV=test NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
-    "dev": "BABEL_ENV=production NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
+    "dev": "BABEL_ENV=production NODE_PATH='src' nodemon --inspect=6666 src/startup.js --watch src --exec babel-node",
     "startProdDb": "NODE_ENV='production' NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker stop mongo_instance_001 && docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d jmozgawa/thebrain && sleep 5 && mongo localhost:27017/thebrain < ../dbImporter/improvedDb.js",

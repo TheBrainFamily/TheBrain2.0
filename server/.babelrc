@@ -1,13 +1,22 @@
 {
-  "plugins": [
-    "transform-async-to-generator"
-  ],
   "presets": [
     "es2015",
     "stage-2",
     "flow"
   ],
   "env": {
+    "development": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
+            "optionalRoot": "server/"
+          }
+        ]
+      ]
+    },
+
     "test": {
       "plugins": [
         [
