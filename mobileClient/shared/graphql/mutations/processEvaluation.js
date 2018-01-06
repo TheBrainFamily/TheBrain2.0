@@ -1,24 +1,22 @@
 import gql from 'graphql-tag'
 
 export default gql`
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
+    mutation processEvaluation($itemId: String!, $evaluation: Float!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
+            _id
+            flashcardId
+            extraRepeatToday
+            actualTimesRepeated
             flashcard
             {
                 _id question answer isCasual
                 image {
-                  url
-                  hasAlpha
+                    url
+                    hasAlpha
                 }
                 answerImage {
-                  url
-                  hasAlpha
+                    url
+                    hasAlpha
                 }
             }
         }

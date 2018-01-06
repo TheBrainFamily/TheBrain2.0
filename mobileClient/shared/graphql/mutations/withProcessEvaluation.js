@@ -3,21 +3,22 @@ import { graphql } from 'react-apollo'
 import update from 'immutability-helper'
 
 const submitEval = gql`
-    mutation processEvaluation($itemId: String!, $evaluation: Int!){
+    mutation processEvaluation($itemId: String!, $evaluation: Float!){
         processEvaluation(itemId:$itemId, evaluation: $evaluation){
-            item {
-                _id
-                flashcardId
-                extraRepeatToday
-                actualTimesRepeated
-            }
+            _id
+            flashcardId
+            extraRepeatToday
+            actualTimesRepeated
             flashcard
             {
-                _id question answer image {
-                    url hasAlpha
+                _id question answer isCasual
+                image {
+                    url
+                    hasAlpha
                 }
                 answerImage {
-                    url hasAlpha
+                    url
+                    hasAlpha
                 }
             }
         }
@@ -35,7 +36,7 @@ export default function () {
         updateQueries: {
           CurrentItems: (prev, {mutationResult}) => {
             const updateResults = update(prev, {
-              ItemsWithFlashcard: {
+              Items: {
                 $set: mutationResult.data.processEvaluation
               }
             })

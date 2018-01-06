@@ -20,7 +20,7 @@ class Course extends React.Component {
     if (!nextProps.selectedCourse) {
       nextProps.history.push('/')
     }
-    if (nextProps.data.ItemsWithFlashcard.length > 0) {
+    if (nextProps.data.Items.length > 0) {
       nextProps.history.push('/questions')
     }
   }

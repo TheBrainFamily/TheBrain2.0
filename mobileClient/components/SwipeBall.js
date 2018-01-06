@@ -146,13 +146,11 @@ export default compose(
         optimisticResponse: {
           processEvaluation: {
             // With this fake data we get warnings in the client on every evaluation :-(
-            'item': {
-              '_id': '-1',
-              'flashcardId': '',
-              'extraRepeatToday': false,
-              'actualTimesRepeated': 0,
-              '__typename': 'Item'
-            },
+            '_id': '-1',
+            'flashcardId': '',
+            'extraRepeatToday': false,
+            'actualTimesRepeated': 0,
+            '__typename': 'Item',
             'flashcard': {
               '_id': '-1',
               'question': '',
@@ -169,19 +167,19 @@ export default compose(
         update: (proxy, { data: { processEvaluation } }) => {
           const data = proxy.readQuery({ query: currentItemsQuery })
           if (processEvaluation.switchFlashcards) {
-            const newFlashcards = [_.last(data.ItemsWithFlashcard)]
-            data.ItemsWithFlashcard = newFlashcards
+            const newFlashcards = [_.last(data.Items)]
+            data.Items = newFlashcards
           } else {
-            data.ItemsWithFlashcard = processEvaluation
+            data.Items = processEvaluation
           }
           proxy.writeQuery({ query: currentItemsQuery, data })
         },
         refetchQueries: [{
           query: sessionCountQuery
         },
-        {
-          query: userDetailsQuery
-        }]
+          {
+            query: userDetailsQuery
+          }]
       })
     })
   }),

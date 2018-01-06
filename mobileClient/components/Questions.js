@@ -125,12 +125,13 @@ class Questions extends React.Component {
     if (this.props.currentItems.loading || this.props.currentUser.loading || this.props.sessionCount.loading) {
       return <Loading backgroundColor={courseColor} />
     } else {
-      const itemsWithFlashcard = this.props.currentItems.ItemsWithFlashcard
+      const itemsWithFlashcard = this.props.currentItems.Items
       const sessionCount = this.props.sessionCount.SessionCount
+
 
       if (itemsWithFlashcard && itemsWithFlashcard.length > 0) {
         const flashcard = itemsWithFlashcard[0].flashcard
-        const evalItem = itemsWithFlashcard[0].item
+        const evalItem = itemsWithFlashcard[0]
 
         const done = sessionCount.newDone + sessionCount.dueDone + sessionCount.reviewDone
         const total = sessionCount.newTotal + sessionCount.dueTotal + sessionCount.reviewTotal
