@@ -1,7 +1,7 @@
 // We are automatically replacing the Base Repository Class to use Tingo instead of MongoDB
 module.exports = function replaceImport (originalPath) {
   let prefix = ''
-  if (process.env.BABEL_ENV !== "serverTest") {
+  if (process.env.BABEL_ENV !== 'serverTest') {
     prefix = '/server'
   }
   if (originalPath.indexOf('./MongoRepository') !== -1) {

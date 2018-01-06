@@ -18,7 +18,7 @@ jobs:
       - run: pushd ~/TheBrain2.0/server/artifacts ; CODECOV_TOKEN="c2740296-3f65-4994-beac-37a127192011" ../node_modules/.bin/codecov -f lcov.info
       - run: pushd ~/TheBrain2.0/server/ ; npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
       - run: pushd ~/TheBrain2.0/client/ ; npm install
-      - run: pushd ~/TheBrain2.0/client/ ; npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
+#      - run: pushd ~/TheBrain2.0/client/ ; npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm install
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
       - run: pushd ~/TheBrain2.0/ ; npm install
