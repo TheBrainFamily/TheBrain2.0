@@ -5,7 +5,7 @@ import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 // import {typeDefs} from 'thebrain-server/lib/api/schema'
 // import resolvers from 'thebrain-server/lib/api/resolvers'
 
-console.log("Gandecki resolvers", resolvers);
+console.log('Gandecki resolvers', resolvers)
 const gql = a => a
 
 const typeDefs = gql`
@@ -209,7 +209,7 @@ window.__APOLLO_TEST_TOOLS = {
 
       return value
     })
-  },
+  }
 }
 
 const resolvers = {
@@ -224,7 +224,6 @@ const resolvers = {
     }
   }
 }
-
 
 const schema = makeExecutableSchema({typeDefs, resolvers})
 export { schema }

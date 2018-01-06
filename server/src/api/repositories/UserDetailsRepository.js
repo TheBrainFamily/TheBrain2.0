@@ -11,8 +11,7 @@ export class UserDetailsRepository extends MongoRepository {
     this.userDetailsCollection = this.db.collection('userdetails')
   }
 
-
-   async create (userId: string, courseId: string) {
+  async create (userId: string, courseId: string) {
     const newUserDetailsItem = {
       _id: (new ObjectId()).toString(),
       userId,

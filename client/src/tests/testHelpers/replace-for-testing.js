@@ -1,5 +1,5 @@
 module.exports = function replaceImport (originalPath) {
-  console.log("Gandecki originalPath", originalPath);
+  console.log('Gandecki originalPath', originalPath)
   let enzymePrefix = ''
   if (process.env.ENZYME) {
     enzymePrefix = '/client'
