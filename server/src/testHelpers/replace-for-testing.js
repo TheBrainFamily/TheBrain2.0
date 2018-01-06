@@ -1,5 +1,9 @@
 // We are automatically replacing the Base Repository Class to use Tingo instead of MongoDB
 module.exports = function replaceImport (originalPath) {
+  let prefix = ''
+  if (process.env.BABEL_ENV !== "serverTest") {
+    prefix = '/server'
+  }
   if (originalPath.indexOf('./MongoRepository') !== -1) {
     const newPath = originalPath.replace('./MongoRepository', `./TingoRepository`)
     return newPath
@@ -14,8 +18,8 @@ module.exports = function replaceImport (originalPath) {
     const newPath = originalPath.replace('bcrypt', `apollo-test-utils-with-context`)
     return newPath
   }
-  // TODO it would be great (probably much faster) if we could not load the whole mongodb dependencies when testing - but there is a problem with new new ObjectId() all around our repositories, and tingodb doesn't provide that for us.
-  // if (originalPath.indexOf('mongodb') !== -1) {
-  //   return 'tingodb';
-  // }
+
+  if (originalPath.indexOf('mongodb') !== -1) {
+    return originalPath.replace('mongodb', `${process.cwd()}${prefix}/src/testHelpers/mockedMongodb`)
+  }
 }
