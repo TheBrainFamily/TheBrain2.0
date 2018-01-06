@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 import cs from 'classnames'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
-import currentLessonQuery from '../../shared/graphql/queries/currentLesson'
+import currentLessonQuery from '../graphql/queries/currentLesson'
 
 function getDaysInMonth (month, year = new Date().getFullYear()) {
   return new Date(year, month, 0).getDate()

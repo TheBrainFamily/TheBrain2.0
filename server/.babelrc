@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "transform-async-to-generator"
   ],
   "presets": [
     "es2015",
@@ -26,6 +25,16 @@
           {
             "replaceFunc": "./src/testHelpers/replace-for-testing.js",
             "optionalRoot": "server/"
+          }
+        ]
+      ]
+    },
+    "serverTest": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
           }
         ]
       ]

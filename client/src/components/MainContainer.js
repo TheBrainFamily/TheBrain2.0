@@ -21,9 +21,9 @@ import ReviewsCalendar from './ReviewsCalendar'
 import Congratulations from './Congratulations'
 import Lectures from './Lectures'
 
-import coursesQuery from '../../shared/graphql/queries/courses'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
-import currentUserQuery from '../../shared/graphql/queries/currentUser'
+import coursesQuery from '../graphql/queries/courses'
+import userDetailsQuery from '../graphql/queries/userDetails'
+import currentUserQuery from '../graphql/queries/currentUser'
 
 class AirplaneWrapper extends React.Component {
   constructor (props) {

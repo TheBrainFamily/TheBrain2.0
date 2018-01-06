@@ -7,7 +7,7 @@
     "node": "7.10.1"
   },
   "scripts": {
-    "test": "BABEL_ENV=test NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
+    "test": "BABEL_ENV=serverTest NODE_ENV=TESTING NODE_PATH='src' ./node_modules/.bin/jest src/**/*.spec.js --coverage --coverageDirectory artifacts ",
     "dev": "BABEL_ENV=production NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "startProdDb": "NODE_ENV='production' NODE_PATH='src' nodemon --debug=6666 src/startup.js --watch src --exec babel-node",
     "start": "NODE_PATH='src' babel-node src/startup.js",
@@ -18,7 +18,8 @@
     "standardFix": "standard --fix",
     "deploySetup": "./.scripts/deploySetup.sh",
     "deploy": "./.scripts/deploy.sh",
-    "heroku-postbuild": "npm install"
+    "heroku-postbuild": "npm install",
+    "build": "BABEL_ENV=development NODE_ENV=production babel src --out-dir lib --watch"
   },
   "author": "",
   "license": "ISC",

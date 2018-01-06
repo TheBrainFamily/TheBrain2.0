@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
 import Flashcard from './Flashcard'
-import sessionCountQuery from '../../shared/graphql/queries/sessionCount'
+import sessionCountQuery from '../graphql/queries/sessionCount'
 import ProgressBar from './ProgressBar'
 
 class Questions extends React.Component {

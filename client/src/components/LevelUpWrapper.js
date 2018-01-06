@@ -1,7 +1,7 @@
 import React from 'react'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
+import userDetailsQuery from '../graphql/queries/userDetails'
 
 export default (Component) => {
   class LevelUpWrapper extends React.Component {
