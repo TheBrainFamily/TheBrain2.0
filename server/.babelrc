@@ -19,17 +19,6 @@
         ]
       ]
     },
-    "development": {
-      "plugins": [
-        [
-          "module-rewrite-with-root",
-          {
-            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
-            "optionalRoot": "server/"
-          }
-        ]
-      ]
-    },
     "cypressTest": {
       "presets": [
         "es2015",
@@ -40,7 +29,8 @@
         [
           "module-rewrite-with-root",
           {
-            "replaceFunc": "./server/src/testHelpers/replace-for-testing.js"
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
+            "optionalRoot": "server/"
           }
         ]
       ]
