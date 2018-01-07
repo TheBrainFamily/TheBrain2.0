@@ -43,7 +43,6 @@ const returnContext = async function () {
 describe('Landing Page', () => {
   // Scenario: New student is introduced to the page
 
-  // TODO When I Switched the order here the enzyme test failed. Does this somehow share state?!
   test('Watching introduction', async () => {
     // Given I am a new student
     // When I open a landing page

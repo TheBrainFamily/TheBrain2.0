@@ -16,22 +16,28 @@ const history = createHistory()
 
 const devToolsExtension = window && window.__REDUX_DEVTOOLS_EXTENSION__
 
-const store = createStore(
-  combineReducers({
-    ...reducers,
-    router: routerReducer,
-    apollo: client.reducer()
-  }),
-  {}, // initial state
-  compose(
-    applyMiddleware(routerMiddleware(history), client.middleware()),
-    autoRehydrate(),
-    devToolsExtension ? devToolsExtension() : f => f
+const createTheBrainStore = (history) => {
+  return createStore(
+    combineReducers({
+      ...reducers,
+      router: routerReducer,
+      apollo: client.reducer()
+    }),
+    {}, // initial state
+    compose(
+      applyMiddleware(routerMiddleware(history), client.middleware()),
+      autoRehydrate(),
+      devToolsExtension ? devToolsExtension() : f => f
+    )
   )
-)
+}
 
-persistStore(store, { storage: asyncSessionStorage, whitelist: ['course'] })
+const store = createTheBrainStore(history)
+
+persistStore(store, {storage: asyncSessionStorage, whitelist: ['course']})
 
 export { history }
 export { client }
+export { createHistory }
+export { createTheBrainStore }
 export default store
