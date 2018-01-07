@@ -8,7 +8,7 @@ export default async function saveHtml (wrapper) {
     '  <title>title</title>\n' +
     '<link href="style.css" rel="stylesheet"></head>' + wrapper.render().html()
 
-  await fs.writeFileSync('./assets/enzymePreviewFile.html', html)
+  await fs.writeFileSync('./.enzymePreviewFile.html', html)
 
   open('./.enzymePreviewFile.html')
 }
