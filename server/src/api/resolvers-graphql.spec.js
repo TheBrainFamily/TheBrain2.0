@@ -6,6 +6,8 @@ import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import schema from './schema'
+import { CoursesRepository } from './repositories/CoursesRepository'
+import resolvers from './resolvers'
 
 // TODO extract the common functionality to a test helper
 const mongoObjectId = function () {
@@ -56,6 +58,33 @@ function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: M
   })
   return addedItems.map(item => itemsCollection.insert(item))
 }
+
+describe('Courses query', ()=> {
+  it('returns all courses', async () => {
+    const coursesRepository = new CoursesRepository()
+    coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
+    coursesRepository.coursesCollection.insert({_id: 'testCourse2Id', name: 'testCourseName2'})
+    const context = {Courses: coursesRepository}
+    // const courses = await resolvers.Query.Courses(undefined, undefined, context)
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query {
+              Courses {
+                  _id
+                  name
+                  color
+                  isDisabled
+              }
+          }
+      `
+    }))
+    const courses = result.data.Courses;
+
+    expect(courses.length).toBe(2)
+  })
+})
 
 describe('Items query', async() => {
   it('returns two items with flashcards attached for a new user after watching the first lesson', async () => {

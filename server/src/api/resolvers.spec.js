@@ -107,18 +107,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-describe('query.Courses', () => {
-  it('returns all courses', async () => {
-    let coursesRepository = new CoursesRepository()
-    coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
-    coursesRepository.coursesCollection.insert({_id: 'testCourse2Id', name: 'testCourseName2'})
-    const context = {Courses: coursesRepository}
-    const courses = await resolvers.Query.Courses(undefined, undefined, context)
-
-    expect(courses.length).toBe(2)
-  })
-})
-
 describe('query.Course', () => {
   it('returns a specific course', async () => {
     let coursesRepository = new CoursesRepository()
