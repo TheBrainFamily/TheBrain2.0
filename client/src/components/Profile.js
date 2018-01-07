@@ -10,11 +10,11 @@ import update from 'immutability-helper'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from './FlexibleContentWrapper'
-import changePasswordMutation from '../../shared/graphql/queries/changePasswordMutation'
-import switchUserIsCasualMutation from '../../shared/graphql/mutations/switchUserIsCasual'
-import getPasswordValidationState from '../../shared/helpers/getPasswordValidationState'
-import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
+import changePasswordMutation from '../graphql/queries/changePasswordMutation'
+import switchUserIsCasualMutation from '../graphql/mutations/switchUserIsCasual'
+import getPasswordValidationState from '../helpers/getPasswordValidationState'
+import currentUserQuery from '../graphql/queries/currentUser'
+import userDetailsQuery from '../graphql/queries/userDetails'
 
 class Profile extends React.Component {
   state = {

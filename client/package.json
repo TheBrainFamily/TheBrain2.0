@@ -77,25 +77,28 @@
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "2.0.2"
+    "whatwg-fetch": "2.0.2",
+    "react-scripts": "1.0.17"
   },
   "devDependencies": {
     "apollo-test-utils-with-context": "^0.3.5",
     "babel-plugin-module-rewrite-with-root": "^0.3.0",
-    "testdouble": "^3.3.0"
+    "testdouble": "^3.3.0",
+    "react-app-rewired": "^1.4.0"
   },
   "scripts": {
-    "start": "./.scripts/startProd.sh",
-    "dev": "NODE_PATH='src' node scripts/start.js",
-    "build": "NODE_PATH='src' node scripts/build.js",
-    "test": "NODE_PATH='src' node scripts/test.js --env=jsdom",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "tests": "react-app-rewired start",
     "flow": "flow",
     "standard": "standard",
     "standardFix": "standard --fix",
     "deploySetup": "./.scripts/deploySetup.sh",
     "deploy": "./.scripts/deploy.sh",
     "postinstall": "npm run build",
-    "startWithCypress": "rimraf -rf ./node_modules/.cache && BABEL_ENV=development npm run dev"
+    "startForCypress": "react-app-rewired start"
   },
   "jest": {
     "collectCoverageFrom": [

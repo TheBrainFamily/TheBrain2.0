@@ -1,10 +1,23 @@
 {
+  "plugins": [
+  ],
   "presets": [
     "es2015",
     "stage-2",
     "flow"
   ],
   "env": {
+    "test": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
+            "optionalRoot": "server/"
+          }
+        ]
+      ]
+    },
     "development": {
       "plugins": [
         [
@@ -16,14 +29,12 @@
         ]
       ]
     },
-
-    "test": {
+    "serverTest": {
       "plugins": [
         [
           "module-rewrite-with-root",
           {
             "replaceFunc": "./src/testHelpers/replace-for-testing.js",
-            "optionalRoot": "server/"
           }
         ]
       ]
@@ -38,8 +49,7 @@
         [
           "module-rewrite-with-root",
           {
-            "replaceFunc": "./src/testHelpers/replace-for-testing.js",
-            "optionalRoot": "server/"
+            "replaceFunc": "./server/src/testHelpers/replace-for-testing.js"
           }
         ]
       ]
