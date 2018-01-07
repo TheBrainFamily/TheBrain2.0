@@ -107,32 +107,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-describe('query.Lessons', () => {
-  const generateLessonContext = async () => {
-    let lessonsRepository = new LessonsRepository()
-    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourse2Id'})
-    return {lessonsRepository}
-  }
-  it('returns all lessons for a specified course', async () => {
-    const {lessonsRepository} = await generateLessonContext()
-    const context = {Lessons: lessonsRepository}
-
-    const lessons = await resolvers.Query.Lessons(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lessons.length).toBe(2)
-  })
-  it('returns all lessons for a specified course sorted by its position', async () => {
-    const {lessonsRepository} = await generateLessonContext()
-    const context = {Lessons: lessonsRepository}
-
-    const lessons = await resolvers.Query.Lessons(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lessons[0].position).toBe(1)
-  })
-})
-
 describe('query.LessonCount', () => {
   it('returns all lessons', async () => {
     const lessonsRepository = new LessonsRepository()

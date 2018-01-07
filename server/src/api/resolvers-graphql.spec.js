@@ -8,6 +8,7 @@ import { ItemsRepository } from './repositories/ItemsRepository'
 import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import resolvers from './resolvers'
+import {LessonsRepository} from "./repositories/LessonsRepository";
 
 // TODO extract the common functionality to a test helper
 const mongoObjectId = function () {
@@ -113,6 +114,54 @@ describe('query.Course', () => {
 
     expect(course.name).toEqual('testCourseName2')
   })
+})
+
+describe('query.Lessons', () => {
+	const generateLessonContext = async () => {
+		let lessonsRepository = new LessonsRepository()
+		await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
+		await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+		await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourse2Id'})
+		return {lessonsRepository}
+	}
+	it('returns all lessons for a specified course', async () => {
+		const {lessonsRepository} = await generateLessonContext()
+		const context = {Lessons: lessonsRepository}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+                    query ($courseId: String!) {
+                        Lessons(courseId:$courseId) {
+                            _id 
+                        }
+                    },
+                `,
+				variables: {courseId: 'testCourseId'}
+			}))
+		const lessons = result.data.Lessons;
+
+		expect(lessons.length).toBe(2)
+	})
+	it('returns all lessons for a specified course sorted by its position', async () => {
+		const {lessonsRepository} = await generateLessonContext()
+		const context = {Lessons: lessonsRepository}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+                    query ($courseId: String!) {
+                        Lessons(courseId:$courseId) {
+                            _id
+                            position
+                        }
+                    },
+                `,
+				variables: {courseId: 'testCourseId'}
+			}))
+		const lessons = result.data.Lessons;
+		expect(lessons[0].position).toBe(1)
+	})
 })
 
 describe('Items query', async() => {
