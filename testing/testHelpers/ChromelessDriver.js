@@ -7,4 +7,7 @@ export class ChromelessDriver {
   getElement (selector) {
     return new ChromelessElement(this.wrapper, selector)
   }
+  saveHtml() {
+    // noop
+  }
 }

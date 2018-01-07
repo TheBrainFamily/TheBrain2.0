@@ -4,4 +4,7 @@ export class CypressDriver {
   getElement (selector) {
     return new CypressElement(selector)
   }
+  saveHtml() {
+    // noop
+  }
 }
