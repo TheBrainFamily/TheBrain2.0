@@ -9,6 +9,9 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import resolvers from './resolvers'
 import {LessonsRepository} from "./repositories/LessonsRepository";
+import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
+
+extendExpect();
 
 // TODO extract the common functionality to a test helper
 const mongoObjectId = function () {
@@ -45,6 +48,11 @@ type MakeItemsData = {
   itemsToExtend?: Array<Object>
 }
 
+type MakeFlashcardsData = {
+  number?: number,
+  flashcardsToExtend?: Array<Object>
+}
+
 function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: MakeItemsData = {}) {
   const addedItems = []
   _.times(number, (index) => {
@@ -58,6 +66,26 @@ function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: M
     addedItems.push(newFlashcard)
   })
   return addedItems.map(item => itemsCollection.insert(item))
+}
+
+async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
+  const addedFlashcards = []
+  _.times(number, (index) => {
+      let newFlashcard = casual.flashcard
+      if (flashcardsToExtend[index]) {
+        newFlashcard = {
+          ...newFlashcard,
+          ...flashcardsToExtend[index]
+        }
+      }
+    console.log('PINGWIN: newFlashcard', newFlashcard)
+      addedFlashcards.push(newFlashcard)
+      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
+    }
+  )
+  await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
+
+  return addedFlashcards
 }
 
 describe('Courses query', ()=> {
@@ -160,8 +188,72 @@ describe('query.Lessons', () => {
 				variables: {courseId: 'testCourseId'}
 			}))
 		const lessons = result.data.Lessons;
+
 		expect(lessons[0].position).toBe(1)
 	})
+})
+
+
+describe('query.LessonCount', () => {
+  it('returns all lessons', async () => {
+    const lessonsRepository = new LessonsRepository()
+    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+    const context = {Lessons: lessonsRepository}
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query {
+              LessonCount {
+                  count
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
+    const lessonCount = result.data.LessonCount;
+
+    expect(lessonCount).toEqual({count: 3})
+  })
+})
+
+describe('query.flashcards', () => {
+  it('returns flashcards from the db 1', async () => {
+    const flashcardRepository = new FlashcardsRepository()
+    const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
+    console.log('PINGWIN: flashcardsData', flashcardsData)
+    const context = {Flashcards: flashcardRepository}
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query {
+              Flashcards {
+                  question,
+                  answer,
+                  _id
+              }
+          },
+      `,
+    }))
+    const dbFlashcards = result.data.Flashcards;
+    console.log('PINGWIN: dbFlashcards', dbFlashcards)
+
+    const dbFlashcards2 = await resolvers.Query.Flashcards(undefined, undefined,
+      {Flashcards: flashcardRepository}
+    )
+
+    // WHY: _id is a string in response from GraphQL
+    // Expected value to be (using ===):
+    // [{"_id": 2, "answer": "Consectetur qua
+    //   Received:
+    //     [{"_id": "2", "answer": "Consectetur q
+
+    expect(dbFlashcards.length).toBe(3)
+    expect(dbFlashcards).toContainDocuments(flashcardsData)
+  })
 })
 
 describe('Items query', async() => {

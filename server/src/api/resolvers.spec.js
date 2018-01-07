@@ -107,19 +107,7 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-describe('query.LessonCount', () => {
-  it('returns all lessons', async () => {
-    const lessonsRepository = new LessonsRepository()
-    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    const context = {Lessons: lessonsRepository}
-    const lessonCount = await resolvers.Query.LessonCount(undefined, undefined, context)
-
-    expect(lessonCount).toEqual({count: 3})
-  })
-})
-
+// TODO: REMOVE this test after fixing problem with mock
 describe('query.flashcards', () => {
   it('returns flashcards from the db 1', async () => {
     const flashcardRepository = new FlashcardsRepository()
