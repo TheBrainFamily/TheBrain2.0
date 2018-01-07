@@ -4,7 +4,6 @@ import urlencode from 'urlencode'
 import moment from 'moment'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
-import { userDetailsRepository } from './UserDetailsRepository'
 import { tokenExpirationPeriod } from '../../configuration/common'
 
 const SALT_WORK_FACTOR = 10
@@ -33,7 +32,6 @@ export class UsersRepository extends MongoRepository {
     const newUserId = addedUser._id.toString()
     // TODO changed this from new userDetailsRepository call
     // - since this is not covered with test we need to test that it still works
-    await userDetailsRepository.create(newUserId, courseId)
     if (deviceId) {
       addedUser.currentAccessToken = await this.insertNewUserToken(newUserId, deviceId)
     }

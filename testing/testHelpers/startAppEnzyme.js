@@ -2,7 +2,7 @@ import React from 'react'
 import { mount, configure } from 'enzyme'
 import { ApolloClient } from 'apollo-client'
 import { EnzymeDriver } from './EnzymeDriver'
-import store, { client, history } from '../../client/src/store'
+import store, {createTheBrainStore, history, createHistory } from '../../client/src/store'
 import { ApolloProvider } from 'react-apollo'
 
 import Adapter from 'enzyme-adapter-react-15';
@@ -45,6 +45,7 @@ class ErrorBoundary extends React.Component {
 }
 
 const startAppEnzyme = (path, networkInterface) => {
+  const history = createHistory()
   history.push(path);
 
 // //This and attachTo Div we do only because we have some jQuery code that runs outside of react
@@ -55,7 +56,7 @@ const startAppEnzyme = (path, networkInterface) => {
   const client = new ApolloClient({networkInterface})
 
   const wrapper = mount(
-    <ApolloProvider client={client} store={store}><MainContainer history={history}/></ApolloProvider>);
+    <ApolloProvider client={client} store={createTheBrainStore(history)}><MainContainer history={history}/></ApolloProvider>);
 
   return new EnzymeDriver(wrapper)
 }

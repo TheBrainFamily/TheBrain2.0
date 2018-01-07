@@ -9,9 +9,11 @@ const startAppCypress = (path, networkInterface) => {
         Object.assign(win.__APOLLO_CLIENT__.networkInterface, networkInterface)
         win.__APOLLO_CLIENT__.resetStore()
       } else {
-        console.log("existing apollo client?")
         win.__APOLLO_CLIENT__ = newClient;
       }
+    },
+    onBeforeLoad: (win) => {
+      win.sessionStorage.clear()
     }
   })
 
@@ -19,4 +21,3 @@ const startAppCypress = (path, networkInterface) => {
 }
 
 export { startAppCypress }
-
