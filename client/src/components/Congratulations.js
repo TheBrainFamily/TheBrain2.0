@@ -6,10 +6,10 @@ import FlexibleContentWrapper from './FlexibleContentWrapper'
 import _ from 'lodash'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
-import levelConfig from '../../shared/helpers/levelConfig'
-import currentUserQuery from '../../shared/graphql/queries/currentUser'
-import userDetailsQuery from '../../shared/graphql/queries/userDetails'
-import confirmLevelUpMutation from '../../shared/graphql/mutations/confirmLevelUp'
+import levelConfig from '../helpers/levelConfig'
+import currentUserQuery from '../graphql/queries/currentUser'
+import userDetailsQuery from '../graphql/queries/userDetails'
+import confirmLevelUpMutation from '../graphql/mutations/confirmLevelUp'
 
 class Congratulations extends React.Component {
   click = () => {

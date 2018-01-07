@@ -40,17 +40,13 @@ const returnContext = async function () {
   return context
 }
 
-if (global.cy) {
-  window.test = it
-}
-
-describe('Landing Page', async () => {
+describe('Landing Page', () => {
   // Scenario: New student is introduced to the page
 
   test('Watching introduction', async () => {
     // Given I am a new student
     // When I open a landing page
-    const driver = await startApp('/', returnContext())
+    const driver = await startApp('/', await returnContext())
     const mainPage = new LandingPage(driver)
 
     // Then I see the introduction info
