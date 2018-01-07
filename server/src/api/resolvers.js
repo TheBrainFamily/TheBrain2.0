@@ -270,6 +270,7 @@ const resolvers = {
             idToUpdate = context.user._id
           } else {
             user = await context.Users.createGuest()
+            await context.UserDetails.create(user._id)
             idToUpdate = user._id
           }
         }
@@ -459,6 +460,7 @@ const resolvers = {
 const loginWithGuest = async (root: ?string, args: ?Object, passedContext: Object) => {
   const context = {...repositoriesContext, ...passedContext}
   const guestUser = await context.Users.createGuest(args.courseId, args.deviceId)
+  await context.UserDetails.create(guestUser._id)
   context.req.logIn(guestUser, (err) => { if (err) throw err })
   return guestUser
 }

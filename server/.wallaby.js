@@ -1,4 +1,4 @@
-process.env.BABEL_ENV = 'test'
+process.env.BABEL_ENV = 'serverTest'
 process.env.NODE_ENV = 'testing'
 
 module.exports = (wallaby) => {

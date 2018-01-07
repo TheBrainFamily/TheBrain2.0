@@ -18,6 +18,7 @@ export class UserDetailsRepository extends MongoRepository {
       hasDisabledTutorial: false,
       selectedCourse: courseId,
       // TODO selected course was set to empty string originally -double check that we are not braking anything by adding it here
+      // TODO when you create a guest account courseId is undefined, so we probably shouldn't be setting the progress here
       progress: [{courseId, lesson: 1}],
       collectedAchievements: [],
       achievementStats: {
