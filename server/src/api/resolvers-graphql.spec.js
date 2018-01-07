@@ -86,6 +86,35 @@ describe('Courses query', ()=> {
   })
 })
 
+describe('query.Course', () => {
+  it('returns a specific course', async () => {
+    let coursesRepository = new CoursesRepository()
+    await coursesRepository.coursesCollection.insert({_id: 'id', name: 'testCourseName'})
+
+    const secondCourseId = mongoObjectId()
+    await coursesRepository.coursesCollection.insert({_id: secondCourseId, name: 'testCourseName2'})
+    const context = {Courses: coursesRepository}
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($secondCourseId: String!) {
+              Course(_id:$secondCourseId) {
+                  _id
+                  name
+                  color
+                  isDisabled
+              }
+          },
+      `,
+      variables: {secondCourseId}
+    }))
+    const course = result.data.Course;
+
+    expect(course.name).toEqual('testCourseName2')
+  })
+})
+
 describe('Items query', async() => {
   it('returns two items with flashcards attached for a new user after watching the first lesson', async () => {
     const userId = mongoObjectId()

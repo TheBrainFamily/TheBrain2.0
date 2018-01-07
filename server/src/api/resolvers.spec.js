@@ -107,21 +107,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-describe('query.Course', () => {
-  it('returns a specific course', async () => {
-    let coursesRepository = new CoursesRepository()
-    await coursesRepository.coursesCollection.insert({_id: 'id', name: 'testCourseName'})
-
-    const secondCourseId = mongoObjectId()
-    await coursesRepository.coursesCollection.insert({_id: secondCourseId, name: 'testCourseName2'})
-    const context = {Courses: coursesRepository}
-
-    const course = await resolvers.Query.Course(undefined, {_id: secondCourseId}, context)
-
-    expect(course.name).toEqual('testCourseName2')
-  })
-})
-
 describe('query.Lessons', () => {
   const generateLessonContext = async () => {
     let lessonsRepository = new LessonsRepository()
