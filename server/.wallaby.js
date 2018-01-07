@@ -10,7 +10,6 @@ module.exports = (wallaby) => {
     files: [
       'src/**/*.js',
       'package.json',
-      'aws_config.json',
       {pattern: 'src/**/*.spec.js', ignore: true},
     ],
     tests: [
