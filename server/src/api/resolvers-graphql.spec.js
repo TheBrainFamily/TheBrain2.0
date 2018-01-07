@@ -218,8 +218,8 @@ describe('query.LessonCount', () => {
     expect(lessonCount).toEqual({count: 3})
   })
 })
-
-describe('query.flashcards', () => {
+//This one is work in progress by @igor and @pgierski
+describe.skip('query.flashcards', () => {
   it('returns flashcards from the db 1', async () => {
     const flashcardRepository = new FlashcardsRepository()
     const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
