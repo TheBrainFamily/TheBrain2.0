@@ -9,6 +9,7 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import {LessonsRepository} from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
+import resolvers from './resolvers'
 
 extendExpect()
 
@@ -495,5 +496,61 @@ describe('query.CurrentUser', () => {
     const currentUser = result.data.CurrentUser
 
     expect(currentUser).toEqual(context.user)
+  })
+})
+
+describe('query.UserDetails', () => {
+  it('returns an empty object if no user exists', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
+    const context = {
+      user: {},
+      UserDetails: userDetailsRepository
+    }
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+            .query({
+              query: gql`
+                    query {
+                        UserDetails {
+                            hasDisabledTutorial
+                            selectedCourse
+                            isCasual
+                        }
+                    }
+            `
+            }))
+    const userDetails = result.data.UserDetails
+
+    expect(userDetails).toEqual({'hasDisabledTutorial': null, 'isCasual': null, 'selectedCourse': null})
+  })
+  it('returns user details by user id', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
+
+    const userId = mongoObjectId()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+		selectedCourse: 'testCourse',
+		hasDisabledTutorial: true
+    })
+
+    const context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository
+    }
+
+	  let result = (await mockNetworkInterfaceWithSchema({schema, context})
+		  .query({
+			  query: gql`
+                    query {
+                        UserDetails {
+                            hasDisabledTutorial
+                            selectedCourse
+                        }
+                    }
+            `
+		  }))
+	  const userDetails = result.data.UserDetails
+
+    expect(userDetails).toEqual({selectedCourse: 'testCourse', hasDisabledTutorial: true})
   })
 })

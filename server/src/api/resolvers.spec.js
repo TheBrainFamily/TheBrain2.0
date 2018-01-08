@@ -129,38 +129,6 @@ describe('query.Items', () => {
   })
 })
 
-describe('query.UserDetails', () => {
-  it('returns an empty object if no user exists', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-    const context = {
-      user: {},
-      UserDetails: userDetailsRepository
-    }
-
-    const userDetails = resolvers.Query.UserDetails(undefined, undefined, context)
-
-    expect(userDetails).toEqual(Promise.resolve({}))
-  })
-  it('returns user details by user id', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-
-    const userDetails = await resolvers.Query.UserDetails(undefined, undefined, context)
-
-    expect(userDetails.progress[0].lesson).toEqual(1)
-  })
-})
-
 describe('mutation.selectCourse', () => {
   let context
   beforeAll(async () => {
