@@ -153,17 +153,6 @@ describe('query.Items', () => {
   })
 })
 
-describe('query.CurrentUser', () => {
-  it('returns unchanged user from a context', () => {
-    const context = deepFreeze({
-      user: {_id: 'testId', email: 'test@email.com'}
-    })
-
-    const currentUser = resolvers.Query.CurrentUser(undefined, undefined, context)
-    expect(currentUser).toEqual(context.user)
-  })
-})
-
 describe('query.UserDetails', () => {
   it('returns an empty object if no user exists', async () => {
     const userDetailsRepository = new UserDetailsRepository()

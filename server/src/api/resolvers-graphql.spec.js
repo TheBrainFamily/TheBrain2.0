@@ -477,3 +477,26 @@ describe('query.SessionCount', () => {
 		}))
 	})
 })
+
+describe('query.CurrentUser', () => {
+	it('returns unchanged user from a context', async () => {
+		const context = deepFreeze({
+			user: {_id: 'testId', email: 'test@email.com'}
+		})
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+					query {
+						CurrentUser {
+									_id
+									email
+						}
+					}
+			`
+			}))
+		const currentUser = result.data.CurrentUser;
+
+		expect(currentUser).toEqual(context.user)
+	})
+})
