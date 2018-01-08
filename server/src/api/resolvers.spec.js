@@ -140,54 +140,6 @@ describe('query.flashcard', () => {
   })
 })
 
-describe('query.Lesson', () => {
-  const generateContext = async () => {
-    const lessonsRepository = new LessonsRepository()
-
-    // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
-
-    return {
-      lessonsRepository,
-      userDetailsRepository: new UserDetailsRepository(),
-      userId: mongoObjectId()
-    }
-  }
-  it('returns first lesson for a new user', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-    const lesson = await resolvers.Query.Lesson(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson).toEqual(expect.objectContaining({position: 1}))
-  })
-  it('returns third lesson for a logged in user that already watched two lessons', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 3}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-    const lesson = await resolvers.Query.Lesson(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson).toEqual(expect.objectContaining({position: 3}))
-  })
-})
 
 describe('query.Item', () => {
   // TODO is this used on the frontend?

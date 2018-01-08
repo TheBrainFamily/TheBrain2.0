@@ -218,7 +218,6 @@ describe('query.LessonCount', () => {
     expect(lessonCount).toEqual({count: 3})
   })
 })
-//This one is work in progress by @igor and @pgierski
 describe.skip('query.flashcards', () => {
   it('returns flashcards from the db 1', async () => {
     const flashcardRepository = new FlashcardsRepository()
@@ -255,6 +254,82 @@ describe.skip('query.flashcards', () => {
     expect(dbFlashcards).toContainDocuments(flashcardsData)
   })
 })
+
+describe('query.Lesson', () => {
+	const generateContext = async () => {
+		const lessonsRepository = new LessonsRepository()
+
+		// we have those in different order to make sure the query doesn't return the first inserted lesson.
+		await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
+		await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+		await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
+
+		return {
+			lessonsRepository,
+			userDetailsRepository: new UserDetailsRepository(),
+			userId: mongoObjectId()
+		}
+	}
+	it('returns first lesson for a new user', async () => {
+		const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
+		await userDetailsRepository.userDetailsCollection.insert({
+			userId,
+			progress: [{courseId: 'testCourseId', lesson: 1}]
+		})
+
+		const context = {
+			Lessons: lessonsRepository,
+			user: {_id: userId},
+			UserDetails: userDetailsRepository
+		}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+                    query ($courseId: String!) {
+                        Lesson(courseId:$courseId) {
+                            _id
+                            position
+                        }
+                    },
+                `,
+				variables: {courseId: 'testCourseId'}
+			}))
+		const lesson = result.data.Lesson;
+
+		expect(lesson).toEqual(expect.objectContaining({position: 1}))
+	})
+	it('returns third lesson for a logged in user that already watched two lessons', async () => {
+		const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
+		await userDetailsRepository.userDetailsCollection.insert({
+			userId,
+			progress: [{courseId: 'testCourseId', lesson: 3}]
+		})
+
+		const context = {
+			Lessons: lessonsRepository,
+			user: {_id: userId},
+			UserDetails: userDetailsRepository
+		}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+                    query ($courseId: String!) {
+                        Lesson(courseId:$courseId) {
+                            _id
+                            position
+                        }
+                    },
+                `,
+				variables: {courseId: 'testCourseId'}
+			}))
+		const lesson = result.data.Lesson;
+
+		expect(lesson).toEqual(expect.objectContaining({position: 3}))
+	})
+})
+
 
 describe('Items query', async() => {
   it('returns two items with flashcards attached for a new user after watching the first lesson', async () => {
