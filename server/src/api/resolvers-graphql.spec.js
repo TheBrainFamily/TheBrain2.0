@@ -7,7 +7,6 @@ import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
-import resolvers from './resolvers'
 import {LessonsRepository} from "./repositories/LessonsRepository";
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 
@@ -23,7 +22,7 @@ const mongoObjectId = function () {
 
 casual.define('flashcard', function () {
   return {
-    // _id: mongoObjectId(),
+    _id: mongoObjectId(),
     question: casual.sentence,
     answer: casual.sentence
   }
@@ -78,7 +77,6 @@ async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], fla
           ...flashcardsToExtend[index]
         }
       }
-    console.log('PINGWIN: newFlashcard', newFlashcard)
       addedFlashcards.push(newFlashcard)
       // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
     }
@@ -94,7 +92,6 @@ describe('Courses query', ()=> {
     coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
     coursesRepository.coursesCollection.insert({_id: 'testCourse2Id', name: 'testCourseName2'})
     const context = {Courses: coursesRepository}
-    // const courses = await resolvers.Query.Courses(undefined, undefined, context)
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
     .query({
@@ -218,11 +215,10 @@ describe('query.LessonCount', () => {
     expect(lessonCount).toEqual({count: 3})
   })
 })
-describe.skip('query.flashcards', () => {
+describe('query.flashcards', () => {
   it('returns flashcards from the db 1', async () => {
     const flashcardRepository = new FlashcardsRepository()
     const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
-    console.log('PINGWIN: flashcardsData', flashcardsData)
     const context = {Flashcards: flashcardRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
@@ -238,11 +234,6 @@ describe.skip('query.flashcards', () => {
       `,
     }))
     const dbFlashcards = result.data.Flashcards;
-    console.log('PINGWIN: dbFlashcards', dbFlashcards)
-
-    const dbFlashcards2 = await resolvers.Query.Flashcards(undefined, undefined,
-      {Flashcards: flashcardRepository}
-    )
 
     // WHY: _id is a string in response from GraphQL
     // Expected value to be (using ===):
