@@ -9,7 +9,6 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import {LessonsRepository} from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
-import resolvers from './resolvers'
 
 extendExpect()
 
@@ -529,8 +528,8 @@ describe('query.UserDetails', () => {
     const userId = mongoObjectId()
     await userDetailsRepository.userDetailsCollection.insert({
       userId,
-		selectedCourse: 'testCourse',
-		hasDisabledTutorial: true
+      selectedCourse: 'testCourse',
+      hasDisabledTutorial: true
     })
 
     const context = {
@@ -538,9 +537,9 @@ describe('query.UserDetails', () => {
       UserDetails: userDetailsRepository
     }
 
-	  let result = (await mockNetworkInterfaceWithSchema({schema, context})
-		  .query({
-			  query: gql`
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+          .query({
+            query: gql`
                     query {
                         UserDetails {
                             hasDisabledTutorial
@@ -548,8 +547,8 @@ describe('query.UserDetails', () => {
                         }
                     }
             `
-		  }))
-	  const userDetails = result.data.UserDetails
+          }))
+    const userDetails = result.data.UserDetails
 
     expect(userDetails).toEqual({selectedCourse: 'testCourse', hasDisabledTutorial: true})
   })
