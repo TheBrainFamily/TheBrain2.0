@@ -9,6 +9,7 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import {LessonsRepository} from "./repositories/LessonsRepository";
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
+import resolvers from "./resolvers";
 
 extendExpect();
 
@@ -244,6 +245,32 @@ describe('query.flashcards', () => {
     expect(dbFlashcards.length).toBe(3)
     expect(dbFlashcards).toContainDocuments(flashcardsData)
   })
+})
+
+describe('query.flashcard', () => {
+	it('returns a flashcard by id', async () => {
+		const flashcardsToExtend = [
+			{_id: mongoObjectId()}, {_id: mongoObjectId()}
+		]
+		const flashcardRepository = new FlashcardsRepository()
+		const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
+		const context = {Flashcards: flashcardRepository}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+                    query ($_id: String!) {
+                        Flashcard(_id:$_id) {
+                            _id
+                        }
+                    },
+                `,
+				variables: {_id: flashcardsData[1]._id}
+			}))
+		const dbFlashcard = result.data.Flashcard;
+
+		expect(dbFlashcard._id).toEqual(flashcardsData[1]._id)
+	})
 })
 
 describe('query.Lesson', () => {

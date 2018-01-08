@@ -107,40 +107,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   return addedItems.map(item => itemsCollection.insert(item))
 }
 
-// TODO: REMOVE this test after fixing problem with mock
-describe('query.flashcards', () => {
-  it('returns flashcards from the db 1', async () => {
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
-
-    const dbFlashcards = await resolvers.Query.Flashcards(undefined, undefined,
-      {Flashcards: flashcardRepository}
-    )
-
-    expect(dbFlashcards.length).toBe(3)
-    expect(dbFlashcards).toContainDocuments(flashcardsData)
-  })
-})
-
-describe('query.flashcard', () => {
-  it('returns a flashcard by id', async () => {
-    const flashcardsToExtend = [
-      {_id: mongoObjectId()}, {_id: mongoObjectId()}
-    ]
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
-
-    const dbFlashcards = await resolvers.Query.Flashcard(
-      undefined,
-      {_id: flashcardsData[1]._id},
-      {Flashcards: flashcardRepository}
-    )
-
-    expect(dbFlashcards._id).toEqual(flashcardsData[1]._id)
-  })
-})
-
-
 describe('query.Item', () => {
   // TODO is this used on the frontend?
   it.skip('returns a specific item', async () => {
