@@ -153,45 +153,6 @@ describe('query.Items', () => {
   })
 })
 
-describe('query.SessionCount', () => {
-  it('returns an empty object if no user exists', async () => {
-    const itemsRepository = new ItemsRepository()
-
-    const context = {Items: itemsRepository}
-
-    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
-
-    expect(sessionCount).toEqual({})
-  })
-  it('returns a session count', async () => {
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      casual: false,
-      selectedCourse: 'selectedCourse'
-    })
-    const itemsRepository = new ItemsRepository()
-
-    await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: 'selectedCourse'})
-    const context = {
-      user: {_id: userId},
-      Items: itemsRepository,
-      UserDetails: userDetailsRepository
-    }
-
-    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
-    expect(sessionCount).toEqual(expect.objectContaining({
-      newDone: 0,
-      newTotal: 1,
-      dueDone: 0,
-      dueTotal: 0,
-      reviewDone: 0,
-      reviewTotal: 0
-    }))
-  })
-})
-
 describe('query.CurrentUser', () => {
   it('returns unchanged user from a context', () => {
     const context = deepFreeze({

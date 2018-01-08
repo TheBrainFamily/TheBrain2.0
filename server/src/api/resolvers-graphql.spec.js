@@ -407,3 +407,73 @@ describe('Items query', async() => {
     expect(result.errors).not.toBeDefined()
   })
 })
+
+describe('query.SessionCount', () => {
+	it('returns an empty object if no user exists', async () => {
+		const itemsRepository = new ItemsRepository()
+
+		const context = {Items: itemsRepository}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+		.query({
+			query: gql`
+        		query {
+            		SessionCount {
+            			        newDone
+								newTotal
+								dueDone
+								dueTotal
+								reviewDone
+								reviewTotal      
+					}
+          		}
+			`
+		}))
+		const sessionCount = result.data.SessionCount;
+
+		expect(sessionCount).toEqual({newDone: null, newTotal: null, dueDone: null, dueTotal: null, reviewDone: null, reviewTotal: null})
+	})
+	it('returns a session count', async () => {
+		const userId = mongoObjectId()
+		const userDetailsRepository = new UserDetailsRepository()
+		await userDetailsRepository.userDetailsCollection.insert({
+			userId,
+			casual: false,
+			selectedCourse: 'selectedCourse'
+		})
+		const itemsRepository = new ItemsRepository()
+
+		await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: 'selectedCourse'})
+		const context = {
+			user: {_id: userId},
+			Items: itemsRepository,
+			UserDetails: userDetailsRepository
+		}
+
+		let result = (await mockNetworkInterfaceWithSchema({schema, context})
+			.query({
+				query: gql`
+        		query {
+            		SessionCount {
+            			        newDone
+								newTotal
+								dueDone
+								dueTotal
+								reviewDone
+								reviewTotal      
+					}
+          		}
+			`
+			}))
+		const sessionCount = result.data.SessionCount;
+
+		expect(sessionCount).toEqual(expect.objectContaining({
+			newDone: 0,
+			newTotal: 1,
+			dueDone: 0,
+			dueTotal: 0,
+			reviewDone: 0,
+			reviewTotal: 0
+		}))
+	})
+})
