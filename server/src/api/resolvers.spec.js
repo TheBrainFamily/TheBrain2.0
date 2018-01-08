@@ -63,30 +63,6 @@ casual.define('item', function () {
   }
 })
 
-type MakeFlashcardsData = {
-  number?: number,
-  flashcardsToExtend?: Array<Object>
-}
-
-async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
-  const addedFlashcards = []
-  _.times(number, (index) => {
-    let newFlashcard = casual.flashcard
-    if (flashcardsToExtend[index]) {
-      newFlashcard = {
-        ...newFlashcard,
-        ...flashcardsToExtend[index]
-      }
-    }
-    addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
-  }
-  )
-  await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
-
-  return addedFlashcards
-}
-
 type MakeItemsData = {
   number?: number,
   itemsToExtend?: Array<Object>
