@@ -6,35 +6,16 @@ import OpticsAgent from 'optics-agent'
 import bodyParser from 'body-parser'
 import { createServer } from 'http'
 import passport from 'passport'
-import { Strategy as FacebookStrategy } from 'passport-facebook'
 import session from 'express-session'
 import schedule from 'node-schedule'
-
 import cors from 'cors'
-
 import schema from './api/schema'
-
-import facebookConfig from './configuration/facebook'
-
 import { usersRepository } from './api/repositories/UsersRepository'
 
 const app = express()
 
 passport.serializeUser((user, cb) => cb(null, user))
 passport.deserializeUser((obj, cb) => cb(null, obj))
-
-passport.use(new FacebookStrategy({
-  clientID: facebookConfig.clientID,
-  clientSecret: facebookConfig.clientSecret,
-  callbackURL: facebookConfig.callbackURL
-},
-    function (accessToken, refreshToken, profile, done) {
-      process.nextTick(function () {
-        console.log('Gozdecki: profile', profile)
-        return done(null, profile)
-      })
-    }
-))
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'development secret',
