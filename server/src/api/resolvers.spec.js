@@ -6,7 +6,6 @@ import moment from 'moment'
 import resolvers from './resolvers'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 import { CoursesRepository } from './repositories/CoursesRepository'
-import { LessonsRepository } from './repositories/LessonsRepository'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import { UsersRepository } from './repositories/UsersRepository'
@@ -165,35 +164,6 @@ describe('mutation.selectCourse', () => {
     expect(result.userId).toBeDefined()
     expect(result.progress[0]).toEqual({courseId: 'testCourseId', lesson: 1})
     expect(result.selectedCourse).toEqual('testCourseId')
-  })
-})
-
-describe('mutation.createItemsAndMarkLessonAsWatched', () => {
-  it('returns the second lesson after watching the first one if you are a logged in user', async () => {
-    const Lessons = new LessonsRepository()
-    await Lessons.lessonsCollection.insert({position: 2, courseId: 'testCourseId', flashcardIds: []})
-    await Lessons.lessonsCollection.insert({position: 1, courseId: 'testCourseId', flashcardIds: []})
-
-    const userId = mongoObjectId()
-    const UserDetails = new UserDetailsRepository()
-    await UserDetails.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}],
-      casual: false
-    })
-
-    const context = {
-      UserDetails,
-      Lessons,
-      user: {_id: userId},
-      req: {
-        logIn: jest.fn()
-      }
-    }
-
-    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson.position).toBe(2)
   })
 })
 

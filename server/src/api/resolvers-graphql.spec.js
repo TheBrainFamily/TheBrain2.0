@@ -553,3 +553,55 @@ describe('query.UserDetails', () => {
     expect(userDetails).toEqual({selectedCourse: 'testCourse', hasDisabledTutorial: true})
   })
 })
+
+describe('mutation.createItemsAndMarkLessonAsWatched', () => {
+  it('returns the second lesson after watching the first one if you are a logged in user', async () => {
+    const Lessons = new LessonsRepository()
+    await Lessons.lessonsCollection.insert({position: 2, courseId: 'testCourseId', flashcardIds: []})
+    await Lessons.lessonsCollection.insert({position: 1, courseId: 'testCourseId', flashcardIds: []})
+
+    const userId = mongoObjectId()
+    const UserDetails = new UserDetailsRepository()
+    await UserDetails.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}],
+      casual: false
+    })
+
+    const context = {
+      UserDetails,
+      Lessons,
+      user: {_id: userId},
+      req: {
+        logIn: jest.fn()
+      }
+    }
+
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    await networkInterface.query({
+      query: gql`
+                    mutation CreateItems($courseId: String!) {
+                            createItemsAndMarkLessonAsWatched(courseId: $courseId) {
+                              _id
+                            }
+                    },
+                `,
+      variables: {courseId: 'testCourseId'}
+    })
+    let result = await networkInterface.query({
+      query: gql`
+                    query ($courseId: String!) {
+                        Lesson(courseId:$courseId) {
+                            _id
+                            position
+                        }
+                    },
+                `,
+      variables: {courseId: 'testCourseId'}
+    })
+    const lesson = result.data.Lesson
+
+    expect(lesson.position).toBe(2)
+  })
+})
