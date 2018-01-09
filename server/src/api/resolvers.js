@@ -253,6 +253,16 @@ const resolvers = {
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) {
       const context = {...repositoriesContext, ...passedContext}
       const {accessTokenFb, userIdFb} = args
+
+      const validFbAppId = process.env.FB_APP_ID || null
+      const appIdRequest = `https://graph.facebook.com/app/?access_token=${accessTokenFb}`
+      const appIdResponse = await fetch(appIdRequest)
+      const appIdParsedResponse = await appIdResponse.json()
+      const tokenAppId = appIdParsedResponse.id || null
+      if (!validFbAppId || !tokenAppId || tokenAppId != validFbAppId) {
+        throw new Error(`Facebook access token app id mismatch, tokenAppId: ${tokenAppId} facebookConfig.appId: ${validFbAppId}`)
+      }
+
       const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`
       const res = await fetch(requestUrl)
       const parsedResponse = await res.json()
