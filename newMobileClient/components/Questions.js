@@ -89,14 +89,12 @@ class Questions extends React.Component {
 
   getHeaderHeight = () => {
     const actionBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0
-    console.log("Gandecki Platform.OS", Platform.OS);
     return appStyle.header.offset +
       appStyle.header.height + actionBarHeight + 22.5
   }
 
   getFlashcardHeight = () => {
     const windowDimensions = Dimensions.get('window')
-    console.log("Gandecki windowDimensions", windowDimensions);
     const elementHeight = (windowDimensions.height - this.getHeaderHeight()) * 0.39
     return elementHeight
   }
