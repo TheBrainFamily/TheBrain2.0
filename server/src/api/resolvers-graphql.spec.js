@@ -9,7 +9,6 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import {LessonsRepository} from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
-import resolvers from "./resolvers";
 
 extendExpect()
 
@@ -608,36 +607,36 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
 })
 
 describe('mutation.hideTutorial', () => {
-	it('saves info that a tutorial should be disabled for a specific user', async () => {
-		const userDetailsRepository = new UserDetailsRepository()
+  it('saves info that a tutorial should be disabled for a specific user', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
 
-		const userId = mongoObjectId()
-		await userDetailsRepository.userDetailsCollection.insert({
-			userId,
-            selectedCourse: 'testCourseId'
-		})
-		const context = {
-			user: {_id: userId},
-			UserDetails: userDetailsRepository,
-			req: {
-				logIn: jest.fn()
-			}
-		}
-		const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const userId = mongoObjectId()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      selectedCourse: 'testCourseId'
+    })
+    const context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
 
-		await networkInterface.query({
-			query: gql`
+    await networkInterface.query({
+      query: gql`
                     mutation  {
                         hideTutorial {
                             hasDisabledTutorial
                         }
                     },
                 `,
-			variables: {courseId: 'testCourseId'}
-		})
+      variables: {courseId: 'testCourseId'}
+    })
 
-		let result = await networkInterface.query({
-				query: gql`
+    let result = await networkInterface.query({
+      query: gql`
                     query {
                         UserDetails {
                             hasDisabledTutorial
@@ -646,9 +645,9 @@ describe('mutation.hideTutorial', () => {
                         }
                     }
             `
-			})
-		const userDetails = result.data.UserDetails
+    })
+    const userDetails = result.data.UserDetails
 
-		expect(userDetails.hasDisabledTutorial).toBe(true)
-	})
+    expect(userDetails.hasDisabledTutorial).toBe(true)
+  })
 })
