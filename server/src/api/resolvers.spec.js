@@ -167,29 +167,6 @@ describe('mutation.selectCourse', () => {
   })
 })
 
-describe('mutation.hideTutorial', () => {
-  it('saves info that a tutorial should be disabled for a specific user', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository,
-      req: {
-        logIn: jest.fn()
-      }
-    }
-
-    const user = await resolvers.Mutation.hideTutorial(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(user.hasDisabledTutorial).toBe(true)
-  })
-})
-
 describe('mutation.processEvaluation', () => {
   it('returns a correct item after "Wrong" evaluation', async () => {
     const itemsRepository = new ItemsRepository()
