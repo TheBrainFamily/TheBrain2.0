@@ -33,7 +33,7 @@ import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../shared/graphql/queries/courses'
-import logInWithFacebook from '../shared/graphql/mutations/logInWithFacebook'
+import logInWithFacebookAccessToken from '../shared/graphql/mutations/logInWithFacebookAccessToken'
 import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
@@ -83,7 +83,6 @@ class Home extends React.Component {
   logInWithSavedData = async () => {
     const deviceId = Expo.Constants.deviceId
     const userId = await AsyncStorage.getItem('userId')
-    const userIdFb = await AsyncStorage.getItem('userIdFb')
     const accessToken = await AsyncStorage.getItem('accessToken')
     const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
 
@@ -99,11 +98,10 @@ class Home extends React.Component {
       })
     }
 
-    if (userIdFb && accessTokenFb) {
-      console.log('loguje z FB ', accessTokenFb, userIdFb)
-      await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
+    if (accessTokenFb) {
+      console.log('loguje z FB ', accessTokenFb)
+      await this.props.logInWithFacebookAccessToken({ accessTokenFb }).catch(async () => {
         await AsyncStorage.removeItem('accessTokenFb')
-        await AsyncStorage.removeItem('userIdFb')
         FBLoginManager.logout(() => {})
         Alert.alert('Facebook login expired', 'Please log in again')
       })
@@ -381,18 +379,17 @@ export default compose(
       })
     })
   }),
-  graphql(logInWithFacebook, {
+  graphql(logInWithFacebookAccessToken, {
     props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
+      logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
         variables: {
-          accessTokenFb,
-          userIdFb
+          accessTokenFb
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
             return update(prev, {
               CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
+                $set: mutationResult.data.logInWithFacebookAccessToken
               }
             })
           }
