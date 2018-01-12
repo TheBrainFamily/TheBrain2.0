@@ -73,8 +73,10 @@
       "<rootDir>/mobileClient/node_modules/react-native/Libraries/react-native/"
     ],
     "transformIgnorePatterns": [
-      "<rootDir>/server/node_modules/tingodb/",
-      "node_modules/(?!react-native|react-router-native)/"
+      "<rootDir>/server/node_modules/",
+      "<rootDir>/client/node_modules/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/mobileClient/node_modules/(?!react-apollo|react-native|expo|react-router-native)"
     ],
     "setupFiles": [
       "<rootDir>/mobileClient/node_modules/react-native/jest/setup.js",
