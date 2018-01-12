@@ -19,7 +19,7 @@ const PageTitle = (props) => (
 const style = {
   color: '#999',
   fontSize: 16,
-  fontFamily: 'Exo2-Bold',
+
   paddingHorizontal: 30,
   paddingVertical: 5
 }

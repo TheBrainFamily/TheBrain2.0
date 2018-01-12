@@ -14,13 +14,13 @@ module.exports = (wallaby) => {
     debug: true,
     testFramework: 'jest',
     files: [
-      'newMobileClient/src/**/*.js',
+      'mobileClient/src/**/*.js',
       'server/src/**/*.js',
       {pattern: '*/src/**/*.spec.js', ignore: true},
       {pattern: '*/src/**/*.spec.js', ignore: true},
-      {pattern: 'newMobileClient/node_modules/jest/**/*.js', ignore: true},
-      {pattern: 'newMobileClient/node_modules/**/*.js', ignore: true},
-      {pattern: 'newMobileClient/node_modules/jest-runtime/**/*.js', ignore: true},
+      {pattern: 'mobileClient/node_modules/jest/**/*.js', ignore: true},
+      {pattern: 'mobileClient/node_modules/**/*.js', ignore: true},
+      {pattern: 'mobileClient/node_modules/jest-runtime/**/*.js', ignore: true},
       // {pattern: 'modules/*(browser|ui)*', ignore: true},
       // {pattern: 'modules/@(browser|ui)/**/*.js', ignore: true},
       {pattern: 'testingMobile/testHelpers/*.js', instrument: true}

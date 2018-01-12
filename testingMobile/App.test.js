@@ -2,7 +2,7 @@
 // import { AppInternal } from '../AppInternal'
 
 // import ApolloProvider from 'react-apollo'
-// import store, { client } from '../newMobileClient/store'
+// import store, { client } from '../mobileClient/store'
 // import Contact from '../components/Contact'
 
 // import ApolloProvider from 'react-apollo/ApolloProvider'
@@ -21,15 +21,15 @@ import flushAllPromises from '../testing/testHelpers/flushAllPromises'
 const schema = makeExecutableSchema({typeDefs, resolvers});
 
 
-const {React ,Enzyme, ApolloProvider } =require('../newMobileClient/tests/helpers/setup')
+const {React ,Enzyme, ApolloProvider } =require('../mobileClient/tests/helpers/setup')
 // const React = require('react')
 // const Enzyme = require('enzyme');
 // const ApolloProvider = require('react-apollo').default
-const {returnStore} = require('../newMobileClient/store')
+const {returnStore} = require('../mobileClient/store')
 
 
-// const Separator = require('../newMobileClient/components/Separator').default
-const { AppInternal } = require('../newMobileClient/AppInternal')
+// const Separator = require('../mobileClient/components/Separator').default
+const { AppInternal } = require('../mobileClient/AppInternal')
 // console.log("Gandecki AppInternal", AppInternal);
 // const store = require('../store').default
 

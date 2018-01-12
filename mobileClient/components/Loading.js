@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
   loading: {
     textAlign: 'center',
     color: 'white',
-    fontFamily: 'Exo2-Bold',
+
     marginTop: 10
   },
   loadingLight: {
     textAlign: 'center',
     color: 'black',
-    fontFamily: 'Exo2-Bold',
+
     marginTop: 10
   }
 })

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text, TouchableWithoutFeedback, Animated } from 'react-native'
 
 import appStyle from '../styles/appStyle'
@@ -6,7 +7,6 @@ import NetworkImage from './NetworkImage'
 import { connect } from 'react-redux'
 import { compose } from 'react-apollo'
 
-import Orientation from 'react-native-orientation'
 import * as fullscreenActions from '../actions/FullscreenActions'
 
 const styles = StyleSheet.create({
@@ -34,7 +34,6 @@ class FullscreenOverlay extends React.Component {
   }
 
   startFadeIn = () => {
-    Orientation.unlockAllOrientations()
     Animated.timing(
       this.state.fadeValue, {
         toValue: 1,
@@ -43,7 +42,6 @@ class FullscreenOverlay extends React.Component {
   }
 
   startFadeOut = (cb) => {
-    Orientation.lockToPortrait()
     Animated.timing(
       this.state.fadeValue, {
         toValue: 0,

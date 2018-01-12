@@ -143,7 +143,7 @@ class ReviewsCalendar extends React.Component {
 const style = {
   text: {
     color: '#999',
-    fontFamily: 'Exo2-Bold',
+
     padding: 5,
     textAlign: 'center'
   },
@@ -154,7 +154,7 @@ const style = {
   },
   reviewText: {
     color: '#662d91',
-    fontFamily: 'Exo2-Bold',
+
     fontSize: 15,
     textAlign: 'center',
     marginBottom: 5

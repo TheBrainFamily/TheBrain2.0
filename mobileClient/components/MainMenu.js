@@ -231,7 +231,7 @@ const style = {
   },
   textBold: {
     color: '#999',
-    fontFamily: 'Exo2-Bold',
+
     fontSize: 18
   },
   card: {

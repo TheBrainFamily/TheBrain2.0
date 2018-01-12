@@ -55,16 +55,13 @@ class Lecture extends React.Component {
     return true
   }
 
-  onChangeState = async (event) => {
-    // console.log('Gozdecki: event in lecture', event)
-    if (event.state === 'ended') {
-      await mutationConnectionHandler(this.props.history, async () => {
-        await this.props.clearNotCasual()
-        this.props.lessonWatchedMutation({ courseId: this.props.selectedCourse._id }).then(() => {
-          this.props.history.push('/questions')
-        })
+  onVideoWatched = async () => {
+    await mutationConnectionHandler(this.props.history, async () => {
+      await this.props.clearNotCasual()
+      this.props.lessonWatchedMutation({courseId: this.props.selectedCourse._id}).then(() => {
+        this.props.history.push('/questions')
       })
-    }
+    })
   }
 
   render () {
@@ -103,7 +100,7 @@ class Lecture extends React.Component {
 
         {this.state.showLecture &&
         <Animatable.View animation='bounceIn' style={{ height: '60%' }}>
-          <Video videoId={this.props.data.Lesson.youtubeId} onChangeState={this.onChangeState}
+          <Video videoId={this.props.data.Lesson.youtubeId} onVideoWatched={this.onVideoWatched}
             loading={this.props.data.loading} />
         </Animatable.View>
         }

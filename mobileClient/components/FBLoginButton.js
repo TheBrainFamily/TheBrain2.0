@@ -1,21 +1,23 @@
 import React from 'react'
-import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
+import Expo from 'expo'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
 import { withApollo, graphql, compose } from 'react-apollo'
-import { AsyncStorage, Alert } from 'react-native'
+import { AsyncStorage, Alert, TouchableOpacity, View, Image } from 'react-native'
 import { connect } from 'react-redux'
-import logInWithFacebook from '../shared/graphql/mutations/logInWithFacebook'
+import logInWithFacebookAccessToken from '../shared/graphql/mutations/logInWithFacebookAccessToken'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import * as courseActions from '../actions/CourseActions'
+import fbButtonImg from '../images/loginwfb.png'
+
+const FB_APP_ID = '1621044308126388'
 
 class FBLoginButton extends React.Component {
-  logInWithFacebook = async (accessTokenFb, userIdFb) => {
+  logInWithFacebookAccessToken = async (accessTokenFb) => {
     this.props.setLoadingState(true)
     this.props.dispatch(courseActions.close())
-    this.props.logInWithFacebook({accessTokenFb, userIdFb}).then(async () => {
+    this.props.logInWithFacebookAccessToken({ accessTokenFb }).then(async () => {
       await AsyncStorage.setItem('accessTokenFb', accessTokenFb)
-      await AsyncStorage.setItem('userIdFb', userIdFb)
       await this.props.userDetails.refetch()
       this.props.history.push('/')
       this.props.setLoadingState(false)
@@ -25,59 +27,40 @@ class FBLoginButton extends React.Component {
     })
   }
 
+  _handlePressAsync = async () => {
+    const response = await Expo.Facebook.logInWithReadPermissionsAsync(FB_APP_ID, {
+      permissions: ['public_profile']
+    })
+
+    if (response.token) {
+      this.logInWithFacebookAccessToken(response.token)
+    }
+  }
+
   render () {
-    return (
-      <FBLogin style={{maxHeight: 40, justifyContent: 'center'}}
-        ref={(fbLogin) => {
-          this.fbLogin = fbLogin
-        }}
-        permissions={['email']}
-        loginBehavior={FBLoginManager.LoginBehaviors.Native}
-        onLogin={(data) => {
-          console.log('Logged in!', data)
-          this.logInWithFacebook(data.credentials.token, data.credentials.userId)
-        }}
-        onLogout={async () => {
-          console.log('Logged out FB.')
-          this.props.history.push('/')
-        }}
-        onLoginFound={(data) => {
-          console.log('Existing login found.', data)
-          this.logInWithFacebook(data.credentials.token, data.credentials.userId)
-        }}
-        onLoginNotFound={() => {
-          console.log('No user logged in.')
-        }}
-        onError={(data) => {
-          console.log('ERROR')
-          console.log(data)
-        }}
-        onCancel={() => {
-          console.log('User cancelled.')
-        }}
-        onPermissionsMissing={(data) => {
-          console.log('Check permissions!')
-          console.log(data)
-        }}
-      />
-    )
+    return (<View style={{ maxHeight: 40, alignItems: 'center', justifyContent: 'center' }}>
+      <TouchableOpacity onPress={this._handlePressAsync}>
+        <Image resizeMode={'contain'}
+          source={fbButtonImg}
+          style={{ width: 200, alignSelf: 'center' }} />
+      </TouchableOpacity>
+    </View>)
   };
 }
 
 export default withRouter(withApollo(compose(
   connect(),
-  graphql(logInWithFacebook, {
-    props: ({ownProps, mutate}) => ({
-      logInWithFacebook: ({accessTokenFb, userIdFb}) => mutate({
+  graphql(logInWithFacebookAccessToken, {
+    props: ({ ownProps, mutate }) => ({
+      logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
         variables: {
-          accessTokenFb,
-          userIdFb
+          accessTokenFb
         },
         updateQueries: {
-          CurrentUser: (prev, {mutationResult}) => {
+          CurrentUser: (prev, { mutationResult }) => {
             return update(prev, {
               CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
+                $set: mutationResult.data.logInWithFacebookAccessToken
               }
             })
           }

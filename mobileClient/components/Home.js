@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import Expo from 'expo'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
@@ -16,7 +17,6 @@ import {
   BackHandler
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import DeviceInfo from 'react-native-device-info'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import Header from './Header'
@@ -33,7 +33,7 @@ import appStyle from '../styles/appStyle'
 import courseLogos from '../helpers/courseLogos'
 
 import coursesQuery from '../shared/graphql/queries/courses'
-import logInWithFacebook from '../shared/graphql/mutations/logInWithFacebook'
+import logInWithFacebookAccessToken from '../shared/graphql/mutations/logInWithFacebookAccessToken'
 import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
 import currentUserQuery from '../shared/graphql/queries/currentUser'
 import userDetailsQuery from '../shared/graphql/queries/userDetails'
@@ -81,9 +81,8 @@ class Home extends React.Component {
   }
 
   logInWithSavedData = async () => {
-    const deviceId = DeviceInfo.getUniqueID()
+    const deviceId = Expo.Constants.deviceId
     const userId = await AsyncStorage.getItem('userId')
-    const userIdFb = await AsyncStorage.getItem('userIdFb')
     const accessToken = await AsyncStorage.getItem('accessToken')
     const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
 
@@ -99,11 +98,10 @@ class Home extends React.Component {
       })
     }
 
-    if (userIdFb && accessTokenFb) {
-      console.log('loguje z FB ', accessTokenFb, userIdFb)
-      await this.props.logInWithFacebook({ accessTokenFb, userIdFb }).catch(async () => {
+    if (accessTokenFb) {
+      console.log('loguje z FB ', accessTokenFb)
+      await this.props.logInWithFacebookAccessToken({ accessTokenFb }).catch(async () => {
         await AsyncStorage.removeItem('accessTokenFb')
-        await AsyncStorage.removeItem('userIdFb')
         FBLoginManager.logout(() => {})
         Alert.alert('Facebook login expired', 'Please log in again')
       })
@@ -195,7 +193,7 @@ class Home extends React.Component {
 
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
-      const deviceId = DeviceInfo.getUniqueID()
+      const deviceId = Expo.Constants.deviceId
       console.log('selecting course', course)
       this.props.dispatch(courseActions.select(course))
       await mutationConnectionHandler(this.props.history, () => {
@@ -381,18 +379,17 @@ export default compose(
       })
     })
   }),
-  graphql(logInWithFacebook, {
+  graphql(logInWithFacebookAccessToken, {
     props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
+      logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
         variables: {
-          accessTokenFb,
-          userIdFb
+          accessTokenFb
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
             return update(prev, {
               CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
+                $set: mutationResult.data.logInWithFacebookAccessToken
               }
             })
           }
@@ -446,8 +443,8 @@ const style = StyleSheet.create({
   courseTitle: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 16,
-    fontFamily: 'Exo2-Bold'
+    fontSize: 16
+
   },
   smallCircle: {
     position: 'absolute',

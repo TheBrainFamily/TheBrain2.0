@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Animated, PanResponder, View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
-import LinearGradient from 'react-native-linear-gradient'
 import _ from 'lodash'
 
 import styles from '../styles/styles'
@@ -15,6 +14,7 @@ import userDetailsQuery from '../shared/graphql/queries/userDetails'
 import submitEval from '../shared/graphql/mutations/processEvaluation'
 import currentItemsQuery from '../shared/graphql/queries/itemsWithFlashcard'
 import { mutationConnectionHandler } from './NoInternet'
+import { LinearGradient } from 'expo'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
@@ -160,7 +160,6 @@ export default compose(
               'answerImage': null,
               '__typename': 'Flashcard'
             },
-            '__typename': 'ItemWithFlashcard',
             switchFlashcards: true
           }
         },
@@ -177,9 +176,9 @@ export default compose(
         refetchQueries: [{
           query: sessionCountQuery
         },
-          {
-            query: userDetailsQuery
-          }]
+        {
+          query: userDetailsQuery
+        }]
       })
     })
   }),
