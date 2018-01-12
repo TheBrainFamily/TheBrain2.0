@@ -47,12 +47,12 @@ jobs:
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
-            - npm-testing-deps-{{ checksum "./testing/package.json"  }}
+            - npm-testing-deps-{{ checksum "./package.json"  }}
       - run: pushd ~/TheBrain2.0/ ; npm install
       - save_cache:
-          key: npm-testing-deps-{{ checksum "./testing/package.json"  }}
+          key: npm-testing-deps-{{ checksum "./package.json"  }}
           paths:
-            - ~/TheBrain2.0/testing/node_modules
+            - ~/TheBrain2.0/node_modules
       - run: pushd ~/TheBrain2.0/ ; npm run enzymeTest
       - run:
           name: start the web client with "stateless" server
