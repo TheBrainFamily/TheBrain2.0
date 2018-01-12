@@ -1,9 +1,8 @@
-// require('react-native-mock/mock');
-// const App = require('./App').default
-
+const MockAsyncStorage = require('mock-async-storage').default
+const mockImpl = new MockAsyncStorage()
+jest.mock('AsyncStorage', () => mockImpl)
 
 const { JSDOM } = require('jsdom');
-
 
 const jsdom = new JSDOM();
 const { window } = jsdom;// console.log("Gandecki JSDOM", JSDOM);
@@ -26,6 +25,7 @@ copyProps(window, global);
 // Setup adapter to work with enzyme 3.2.0
 
 const Enzyme = require('enzyme');
+const React = require('react')
 const Adapter = require('enzyme-adapter-react-16');
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -37,4 +37,10 @@ console.error = (message) => {
 
 require('react-native-mock-render/mock');
 
+const ApolloProvider = require('react-apollo/ApolloProvider').default
 
+module.exports = {
+  Enzyme,
+  React,
+  ApolloProvider
+}

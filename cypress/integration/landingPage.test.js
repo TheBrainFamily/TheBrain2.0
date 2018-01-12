@@ -32,7 +32,6 @@ const returnContext = async function () {
     Lessons: lessonsRepository,
     req: {
       logIn: (user) => {
-        console.log("Gandecki user", user);
         context.user = user
       }
     }

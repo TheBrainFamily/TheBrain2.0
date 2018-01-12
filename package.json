@@ -7,7 +7,8 @@
     "test": "npm run cypressTestCI && npm run enzymeTest",
     "cypressTest": "BABEL_ENV=development cypress open",
     "cypressTestCI": "BABEL_ENV cypress run",
-    "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest cypress/integration/landingPage.test.js",
+    "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest cypress/integration/landingPage.test.js --config ./clientEnzymeTest.json",
+    "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest testingMobile/App.test.js",
     "enzymeTest:watch": "npm run enzymeTest -- --watch"
   },
   "repository": {
@@ -24,7 +25,7 @@
     "@cypress/browserify-preprocessor": "^1.0.2",
     "apollo-client": "^1.8.1",
     "apollo-test-utils-with-context": "^0.3.5",
-    "babel-plugin-get-rid-of-async-await": "0.0.2",
+    "babel-plugin-get-rid-of-async-await": "0.0.4",
     "babel-plugin-module-rewrite-with-root": "^0.3.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
@@ -36,6 +37,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.5",
     "jest": "^22.0.4",
+    "jest-expo": "^24.0.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
@@ -47,11 +49,36 @@
     "regenerator-runtime": "^0.11.1"
   },
   "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/testing/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/testing/fileMock.js"
+    "haste": {
+      "defaultPlatform": "ios",
+      "platforms": [
+        "android",
+        "ios",
+        "native"
+      ],
+      "providesModuleNodeModules": [
+        "react-native"
+      ]
     },
-    "testURL": "http://localhost",
-    "testEnvironment": "jsdom"
+    "moduleNameMapper": {
+      "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "RelativeImageStub",
+      "^React$": "<rootDir>/newMobileClient/node_modules/react",
+      "^react$": "<rootDir>/newMobileClient/node_modules/react",
+      "^react-native$": "<rootDir>/newMobileClient/node_modules/react-native",
+      "^react-apollo$": "<rootDir>/newMobileClient/node_modules/react-apollo",
+      "^react-native/(.*)$": "<rootDir>/newMobileClient/node_modules/react-native/$1",
+      "^[./a-zA-Z0-9$_-]+\\.(ttf|otf|m4v|mov|mp4|mpeg|mpg|webm|aac|aiff|caf|m4a|mp3|wav|html|pdf|obj)$": "RelativeImageStub"
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/newMobileClient/node_modules/react-native/Libraries/react-native/"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!react-native|react-router-native)/"
+    ],
+    "setupFiles": [
+      "<rootDir>/newMobileClient/node_modules/react-native/jest/setup.js",
+      "<rootDir>/newMobileClient/node_modules/jest-expo/src/setup.js"
+    ],
+    "testEnvironment": "node"
   }
 }

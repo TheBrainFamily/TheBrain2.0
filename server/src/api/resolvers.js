@@ -139,11 +139,9 @@ const resolvers = {
 
       let userId = context.user && context.user._id
       if (!userId) {
-        console.log('user not found')
         const guestUser = await loginWithGuest(root, args, context)
         userId = guestUser._id
       }
-      console.log('select course')
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
     async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, passedContext: Object) {
