@@ -72,3 +72,5 @@ jobs:
           path: ~/TheBrain2.0/client/artifacts
       - store_artifacts:
           path: ~/TheBrain2.0/mobileClient/artifacts
+      - store_artifacts:
+          path: ~/TheBrain2.0/cypress/videos
