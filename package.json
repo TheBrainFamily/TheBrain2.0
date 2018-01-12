@@ -73,6 +73,7 @@
       "<rootDir>/mobileClient/node_modules/react-native/Libraries/react-native/"
     ],
     "transformIgnorePatterns": [
+      "<rootDir>/server/node_modules/tingodb/",
       "node_modules/(?!react-native|react-router-native)/"
     ],
     "setupFiles": [
