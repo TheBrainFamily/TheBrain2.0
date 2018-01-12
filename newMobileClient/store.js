@@ -10,7 +10,7 @@ const client = new ApolloClient({
   networkInterface
 })
 
-//TODO this file needs a clean up! we create the store and client and in tests we create different ones - this should be streamlined similarly to what we do in web client
+// TODO this file needs a clean up! we create the store and client and in tests we create different ones - this should be streamlined similarly to what we do in web client
 const history = createHistory()
 
 const returnStore = (client, history = createHistory()) => {

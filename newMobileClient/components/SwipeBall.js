@@ -160,7 +160,6 @@ export default compose(
               'answerImage': null,
               '__typename': 'Flashcard'
             },
-            '__typename': 'ItemWithFlashcard',
             switchFlashcards: true
           }
         },
@@ -177,9 +176,9 @@ export default compose(
         refetchQueries: [{
           query: sessionCountQuery
         },
-          {
-            query: userDetailsQuery
-          }]
+        {
+          query: userDetailsQuery
+        }]
       })
     })
   }),

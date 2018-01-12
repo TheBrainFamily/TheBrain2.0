@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Image, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, TouchableWithoutFeedback, View } from 'react-native'
 
 import Loading from './Loading'
 
@@ -54,16 +54,15 @@ export default class Video extends React.Component {
         <View style={{height: '100%'}}>
           <View style={styles.videoPlaceholder}>
             <Image resizemode={'cover'}
-                   style={{height: this.props.height, width: '100%', justifyContent: 'center'}}
-                   source={{uri: `https://img.youtube.com/vi/${this.props.videoId}/0.jpg`}}
-            >
-            </Image>
+              style={{height: this.props.height, width: '100%', justifyContent: 'center'}}
+              source={{uri: `https://img.youtube.com/vi/${this.props.videoId}/0.jpg`}}
+             />
           </View>
-          {this.state.loading ? <Loading/> : null}
+          {this.state.loading ? <Loading /> : null}
           {this.state.playVideo ? <YoutubeLoader videoId={this.props.videoId}
-                                                 onFinished={this.onFinished.bind(this)}
-                                                 onPaused={this.onPaused.bind(this)}
-                                                 style={{display: 'none', backgroundColor: 'black'}}
+            onFinished={this.onFinished.bind(this)}
+            onPaused={this.onPaused.bind(this)}
+            style={{display: 'none', backgroundColor: 'black'}}
 
           /> : null}
         </View>

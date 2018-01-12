@@ -1,7 +1,7 @@
 import { makeExecutableSchema, addMockFunctionsToSchema, mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 import schema from '../../../server/src/api/schema'
 
-//TODO leaving this here since it might possibly be used by detox, if not, delete the whole madness
+// TODO leaving this here since it might possibly be used by detox, if not, delete the whole madness
 window.__APOLLO_TEST_TOOLS = {
   mockNetworkInterfaceWithSchema,
   addMockFunctionsToSchema,
@@ -60,8 +60,6 @@ window.__APOLLO_TEST_TOOLS = {
 }
 export { schema }
 
-
 const networkInterface = mockNetworkInterfaceWithSchema({schema})
-
 
 export { networkInterface }

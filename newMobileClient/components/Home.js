@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import Expo from 'expo'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
@@ -16,7 +17,6 @@ import {
   BackHandler
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import DeviceInfo from 'react-native-device-info'
 import { FBLoginManager } from 'react-native-facebook-login'
 
 import Header from './Header'
@@ -443,7 +443,7 @@ const style = StyleSheet.create({
   courseTitle: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 16
 
   },
   smallCircle: {

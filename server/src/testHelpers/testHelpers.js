@@ -17,7 +17,7 @@ export function extendExpect () {
       //   message = `documents ${this.utils.printExpected(notFoundDocuments)} not found in the array ${this.utils.printReceived(received)}`
       // }
 
-            const message = pass
+      const message = pass
                 ? () => this.utils.matcherHint('.not.toBe') + '\n\n' +
             `Expected value to not be (using ===):\n` +
             `  ${this.utils.printExpected(expected)}\n` +
@@ -28,14 +28,14 @@ export function extendExpect () {
                 //     expand: this.expand,
                 // });
                 // TODO: fix message
-                const diffString = "";
-                return this.utils.matcherHint('.toBe') + '\n\n' +
+                  const diffString = ''
+                  return this.utils.matcherHint('.toBe') + '\n\n' +
                     `Expected value to be (using ===):\n` +
                     `  ${this.utils.printExpected(expected)}\n` +
                     `Received:\n` +
                     `  ${this.utils.printReceived(received)}` +
-                    (diffString ? `\n\nDifference:\n\n${diffString}` : '');
-            };
+                    (diffString ? `\n\nDifference:\n\n${diffString}` : '')
+                }
 
       return {actual: received, message, pass}
     }

@@ -33,7 +33,7 @@ export default class Card extends React.Component {
     const isNotCasualIndicator =
       !this.props.isCasualFlashcard && <TouchableOpacity onPress={this.notCasualOnPress}>
         {this.state.toolTipVisible ? <View>
-          <Text style={{ marginTop: 5, marginRight: 5, color: 'black', fontSize: 12,  }}>This is a hard
+          <Text style={{ marginTop: 5, marginRight: 5, color: 'black', fontSize: 12 }}>This is a hard
             question</Text>
         </View>
           : <Image

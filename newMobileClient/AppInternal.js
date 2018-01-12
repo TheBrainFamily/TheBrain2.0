@@ -16,7 +16,7 @@ import { SafeAreaView, View } from 'react-native'
 import Page from './components/Page'
 
 export class AppInternal extends Component {
-  render() {
+  render () {
     return (<NativeRouter>
       <SafeAreaView style={{backgroundColor: 'transparent'}}>
         <View style={styles.mainPage}>

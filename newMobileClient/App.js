@@ -13,7 +13,7 @@ export default class App extends Component {
     fontLoaded: false
   }
 
-  //TODO move this out
+  // TODO move this out
   async componentDidMount () {
     await Font.loadAsync({
       'Exo2-Regular': require('./fonts/Exo2-Regular.ttf'),
@@ -27,11 +27,10 @@ export default class App extends Component {
   render () {
     return (
       <ApolloProvider client={client} store={store}>
-        <AppInternal fontLoaded={this.state.fontLoaded}/>
+        <AppInternal fontLoaded={this.state.fontLoaded} />
       </ApolloProvider>
     )
   }
 };
-
 
 AppRegistry.registerComponent('mobileClient', () => App)

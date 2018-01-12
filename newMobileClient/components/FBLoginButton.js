@@ -1,8 +1,8 @@
 import React from 'react'
-import { FBLogin, FBLoginManager } from 'react-native-facebook-login'
+import Expo from 'expo'
 import { withRouter } from 'react-router'
 import update from 'immutability-helper'
-import { withApollo, graphql, compose, } from 'react-apollo'
+import { withApollo, graphql, compose } from 'react-apollo'
 import { AsyncStorage, Alert, TouchableOpacity, View, Image } from 'react-native'
 import { connect } from 'react-redux'
 import logInWithFacebookAccessToken from '../shared/graphql/mutations/logInWithFacebookAccessToken'
@@ -29,7 +29,7 @@ class FBLoginButton extends React.Component {
 
   _handlePressAsync = async () => {
     const response = await Expo.Facebook.logInWithReadPermissionsAsync(FB_APP_ID, {
-      permissions: ['public_profile'],
+      permissions: ['public_profile']
     })
 
     if (response.token) {
@@ -41,8 +41,8 @@ class FBLoginButton extends React.Component {
     return (<View style={{ maxHeight: 40, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={this._handlePressAsync}>
         <Image resizeMode={'contain'}
-               source={fbButtonImg}
-               style={{ width: 200, alignSelf: 'center' }}/>
+          source={fbButtonImg}
+          style={{ width: 200, alignSelf: 'center' }} />
       </TouchableOpacity>
     </View>)
   };

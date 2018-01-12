@@ -256,7 +256,7 @@ const resolvers = {
       const userIdParsedResponse = await userIdResponse.json()
       const userIdFb = userIdParsedResponse.id || null
 
-      return logInWithFacebook(root, {...args, userIdFb }, passedContext)
+      return logInWithFacebook(root, {...args, userIdFb}, passedContext)
     },
 
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) {
@@ -448,7 +448,7 @@ const logInWithFacebook = async (root: ?string, args: { accessTokenFb: string, u
   const appIdParsedResponse = await appIdResponse.json()
   const tokenAppId = appIdParsedResponse.id || null
 
-  if (!validFbAppId || !tokenAppId || tokenAppId != validFbAppId) {
+  if (!validFbAppId || !tokenAppId || tokenAppId !== validFbAppId) {
     throw new Error(`Facebook access token app id mismatch, tokenAppId: ${tokenAppId} facebookConfig.appId: ${validFbAppId}`)
   }
 

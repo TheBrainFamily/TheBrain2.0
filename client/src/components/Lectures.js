@@ -62,7 +62,7 @@ class Lectures extends React.Component {
           locked={lesson.position > this.props.currentLesson.Lesson.position} />
         <div style={{ textAlign: 'center' }}>{lesson.description}</div>
       </div>
-      )
+    )
     return (
       <div>
         <h1>LECTURES LIST - {this.props.selectedCourse && this.props.selectedCourse.name.toUpperCase()}</h1>

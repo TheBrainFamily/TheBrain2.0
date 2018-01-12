@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Kalam-Bold'
   },
   safeArea: {
-    backgroundColor: appStyle.colors.bg,
+    backgroundColor: appStyle.colors.bg
   },
   mainPage: {
     backgroundColor: appStyle.colors.bg,

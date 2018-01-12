@@ -1,11 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, View, WebView, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { View, WebView } from 'react-native'
 
 const onMessage = function (event) {
-  if (event.nativeEvent.data === "0") {
+  if (event.nativeEvent.data === '0') {
     this.props.onFinished()
   }
-  if (event.nativeEvent.data === "2") {
+  if (event.nativeEvent.data === '2') {
     this.props.onPaused()
   }
 }
@@ -28,9 +28,8 @@ const patchPostMessageFunction = function () {
 const injectScript = '(' + String(patchPostMessageFunction) + ')();'
 
 export default class YoutubeLoader extends React.Component {
-
   render () {
-    console.log("Gandecki this.props.videoId", this.props.videoId);
+    console.log('Gandecki this.props.videoId', this.props.videoId)
     const myOwn = `
                 <!DOCTYPE html>
        <html>
@@ -109,26 +108,18 @@ export default class YoutubeLoader extends React.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-          <View style={{display: 'none'}}>
-            <WebView
-              injectedJavaScript={injectScript}
-              style={{display: 'none'}}
-              javaScriptEnabled={true}
-              source={{html: myOwn}}
-              onMessage={onMessage.bind(this)}
-              mediaPlaybackRequiresUserAction={false}
+        <View style={{display: 'none'}}>
+          <WebView
+            injectedJavaScript={injectScript}
+            style={{display: 'none'}}
+            javaScriptEnabled
+            source={{html: myOwn}}
+            onMessage={onMessage.bind(this)}
+            mediaPlaybackRequiresUserAction={false}
             />
-          </View>
+        </View>
 
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})

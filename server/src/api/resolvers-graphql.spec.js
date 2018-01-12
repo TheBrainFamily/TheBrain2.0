@@ -8,10 +8,10 @@ import { ItemsRepository } from './repositories/ItemsRepository'
 import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import resolvers from './resolvers'
-import {LessonsRepository} from "./repositories/LessonsRepository";
+import { LessonsRepository } from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 
-extendExpect();
+extendExpect()
 
 // TODO extract the common functionality to a test helper
 const mongoObjectId = function () {
@@ -71,24 +71,24 @@ function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: M
 async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
   const addedFlashcards = []
   _.times(number, (index) => {
-      let newFlashcard = casual.flashcard
-      if (flashcardsToExtend[index]) {
-        newFlashcard = {
-          ...newFlashcard,
-          ...flashcardsToExtend[index]
-        }
+    let newFlashcard = casual.flashcard
+    if (flashcardsToExtend[index]) {
+      newFlashcard = {
+        ...newFlashcard,
+        ...flashcardsToExtend[index]
       }
-    console.log('PINGWIN: newFlashcard', newFlashcard)
-      addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
     }
+    console.log('PINGWIN: newFlashcard', newFlashcard)
+    addedFlashcards.push(newFlashcard)
+      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
+  }
   )
   await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
 
   return addedFlashcards
 }
 
-describe('Courses query', ()=> {
+describe('Courses query', () => {
   it('returns all courses', async () => {
     const coursesRepository = new CoursesRepository()
     coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
@@ -109,7 +109,7 @@ describe('Courses query', ()=> {
           }
       `
     }))
-    const courses = result.data.Courses;
+    const courses = result.data.Courses
 
     expect(courses.length).toBe(2)
   })
@@ -138,61 +138,60 @@ describe('query.Course', () => {
       `,
       variables: {secondCourseId}
     }))
-    const course = result.data.Course;
+    const course = result.data.Course
 
     expect(course.name).toEqual('testCourseName2')
   })
 })
 
 describe('query.Lessons', () => {
-	const generateLessonContext = async () => {
-		let lessonsRepository = new LessonsRepository()
-		await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-		await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-		await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourse2Id'})
-		return {lessonsRepository}
-	}
-	it('returns all lessons for a specified course', async () => {
-		const {lessonsRepository} = await generateLessonContext()
-		const context = {Lessons: lessonsRepository}
+  const generateLessonContext = async () => {
+    let lessonsRepository = new LessonsRepository()
+    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourse2Id'})
+    return {lessonsRepository}
+  }
+  it('returns all lessons for a specified course', async () => {
+    const {lessonsRepository} = await generateLessonContext()
+    const context = {Lessons: lessonsRepository}
 
-		let result = (await mockNetworkInterfaceWithSchema({schema, context})
-			.query({
-				query: gql`
-                    query ($courseId: String!) {
-                        Lessons(courseId:$courseId) {
-                            _id 
-                        }
-                    },
-                `,
-				variables: {courseId: 'testCourseId'}
-			}))
-		const lessons = result.data.Lessons;
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lessons(courseId:$courseId) {
+                  _id
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
+    const lessons = result.data.Lessons
 
-		expect(lessons.length).toBe(2)
-	})
-	it('returns all lessons for a specified course sorted by its position', async () => {
-		const {lessonsRepository} = await generateLessonContext()
-		const context = {Lessons: lessonsRepository}
+    expect(lessons.length).toBe(2)
+  })
+  it('returns all lessons for a specified course sorted by its position', async () => {
+    const {lessonsRepository} = await generateLessonContext()
+    const context = {Lessons: lessonsRepository}
 
-		let result = (await mockNetworkInterfaceWithSchema({schema, context})
-			.query({
-				query: gql`
-                    query ($courseId: String!) {
-                        Lessons(courseId:$courseId) {
-                            _id
-                            position
-                        }
-                    },
-                `,
-				variables: {courseId: 'testCourseId'}
-			}))
-		const lessons = result.data.Lessons;
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lessons(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
+    const lessons = result.data.Lessons
 
-		expect(lessons[0].position).toBe(1)
-	})
+    expect(lessons[0].position).toBe(1)
+  })
 })
-
 
 describe('query.LessonCount', () => {
   it('returns all lessons', async () => {
@@ -213,12 +212,12 @@ describe('query.LessonCount', () => {
       `,
       variables: {courseId: 'testCourseId'}
     }))
-    const lessonCount = result.data.LessonCount;
+    const lessonCount = result.data.LessonCount
 
     expect(lessonCount).toEqual({count: 3})
   })
 })
-//This one is work in progress by @igor and @pgierski
+// This one is work in progress by @igor and @pgierski
 describe.skip('query.flashcards', () => {
   it('returns flashcards from the db 1', async () => {
     const flashcardRepository = new FlashcardsRepository()
@@ -236,27 +235,20 @@ describe.skip('query.flashcards', () => {
                   _id
               }
           },
-      `,
+      `
     }))
-    const dbFlashcards = result.data.Flashcards;
-    console.log('PINGWIN: dbFlashcards', dbFlashcards)
+    const dbFlashcards = result.data.Flashcards
 
-    const dbFlashcards2 = await resolvers.Query.Flashcards(undefined, undefined,
+    await resolvers.Query.Flashcards(undefined, undefined,
       {Flashcards: flashcardRepository}
     )
-
-    // WHY: _id is a string in response from GraphQL
-    // Expected value to be (using ===):
-    // [{"_id": 2, "answer": "Consectetur qua
-    //   Received:
-    //     [{"_id": "2", "answer": "Consectetur q
 
     expect(dbFlashcards.length).toBe(3)
     expect(dbFlashcards).toContainDocuments(flashcardsData)
   })
 })
 
-describe('Items query', async() => {
+describe('Items query', async () => {
   it('returns two items with flashcards attached for a new user after watching the first lesson', async () => {
     const userId = mongoObjectId()
     const userDetailsRepository = new UserDetailsRepository()
@@ -286,7 +278,11 @@ describe('Items query', async() => {
 
     }
     const itemsToExtend = [
-      {userId, flashcardId: secondFlashcardId, courseId: 'selectedCourse'}, {userId, flashcardId, courseId: 'selectedCourse'}
+      {userId, flashcardId: secondFlashcardId, courseId: 'selectedCourse'}, {
+        userId,
+        flashcardId,
+        courseId: 'selectedCourse'
+      }
     ]
     await makeItems({itemsToExtend, itemsCollection: itemsRepository.itemsCollection})
 
