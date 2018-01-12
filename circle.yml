@@ -23,6 +23,8 @@ jobs:
       - run: pushd ~/TheBrain2.0/server/ ; CI=true npm test
       - save_cache:
           key: npm-server-deps-{{ pushd ~/TheBrain2.0/server/ ; checksum "package.json" }}
+          paths:
+            - ~/TheBrain2.0/server/node_modules
       - run: pushd ~/TheBrain2.0/server/artifacts ; CODECOV_TOKEN="c2740296-3f65-4994-beac-37a127192011" ../node_modules/.bin/codecov -f lcov.info
       - run: pushd ~/TheBrain2.0/server/ ; npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
       - restore_cache:
@@ -31,6 +33,8 @@ jobs:
       - run: pushd ~/TheBrain2.0/client/ ; npm install
       - save_cache:
           key: npm-client-deps-{{ pushd ~/TheBrain2.0/client/ ; checksum "package.json" }}
+          paths:
+            - ~/TheBrain2.0/client/node_modules
       - run: pushd ~/TheBrain2.0/client/ ; npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
@@ -38,6 +42,8 @@ jobs:
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm install
       - save_cache:
           key: npm-mobileClient-deps-{{ pushd ~/TheBrain2.0/mobileClient/ ; checksum "package.json" }}
+          paths:
+            - ~/TheBrain2.0/mobileClient/node_modules
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
@@ -45,6 +51,8 @@ jobs:
       - run: pushd ~/TheBrain2.0/ ; npm install
       - save_cache:
           key: npm-testing-deps-{{ pushd ~/TheBrain2.0/testing/ ; checksum "package.json" }}
+          paths:
+            - ~/TheBrain2.0/testing/node_modules
       - run: pushd ~/TheBrain2.0/ ; npm run enzymeTest
       - run:
           name: start the web client with "stateless" server
