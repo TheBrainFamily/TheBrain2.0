@@ -1,7 +1,7 @@
 module.exports = function replaceImport (originalPath) {
   let enzymePrefix = ''
   if (process.env.ENZYME) {
-    enzymePrefix = '/client'
+    enzymePrefix = '/client/src'
   }
   if (originalPath.indexOf('graphql-tools') !== -1) {
     const newPath = originalPath.replace('graphql-tools', `apollo-test-utils-with-context`)
