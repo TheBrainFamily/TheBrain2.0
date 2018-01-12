@@ -14,8 +14,8 @@
     "startLocalDB": "docker stop mongo_instance_001 && docker rm mongo_instance_001 && docker run -p 27017:27017 --name mongo_instance_001 -d thebrain/devdb && sleep 5 && mongo localhost:27017/thebrain < ../dbImporter/improvedDb.js",
     "startTestingDB": "docker run -d -p 27017:27017 mongo",
     "flow": "flow",
-    "standard": "standard",
-    "standardFix": "standard --fix",
+    "standard": "standard --verbose | snazzy",
+    "standardFix": "standard --verbose --fix | snazzy",
     "deploySetup": "./.scripts/deploySetup.sh",
     "deploy": "./.scripts/deploy.sh",
     "heroku-postbuild": "npm install",
@@ -95,6 +95,7 @@
     "graphql": "^0.11.7",
     "graphql-tag": "^2.6.1",
     "module-resolver": "^1.0.0",
+    "snazzy": "^7.0.0",
     "thenify": "^3.3.0",
     "tingodb-promise": "0.0.1"
   }

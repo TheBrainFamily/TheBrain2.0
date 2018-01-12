@@ -89,7 +89,7 @@
     "eject": "react-scripts eject",
     "tests": "react-app-rewired start",
     "flow": "flow",
-    "standard": "./node_modules/.bin/standard --verbose | snazzy",
+    "standard": "standard --verbose | snazzy",
     "standardFix": "standard --fix | snazzy",
     "deploySetup": "./.scripts/deploySetup.sh",
     "deploy": "./.scripts/deploy.sh",
