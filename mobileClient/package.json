@@ -70,6 +70,7 @@
     ]
   },
   "standard": {
+    "parser": "babel-eslint",
     "ignore": [
       "flow-typed/",
       "ios/",
