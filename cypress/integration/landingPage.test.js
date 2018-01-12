@@ -50,7 +50,7 @@ describe('Landing Page', () => {
 
     // Then I see the introduction info
     await mainPage.introductionVideo.assertIsVisible()
-  })
+  }, 20000)
 
   test('Going to course selector and selecting course', async () => {
     // Given I am a new student
