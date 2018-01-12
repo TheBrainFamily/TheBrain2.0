@@ -18,39 +18,39 @@ jobs:
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
       - restore_cache:
           keys:
-            - npm-server-deps-{{ checksum " ~/TheBrain2.0/server/package.json" }}
+            - npm-server-deps-{{ checksum "./server/package.json" }}
       - run: pushd ~/TheBrain2.0/server/ ; npm install
       - run: pushd ~/TheBrain2.0/server/ ; CI=true npm test
       - save_cache:
-          key: npm-server-deps-{{ checksum " ~/TheBrain2.0/server/package.json" }}
+          key: npm-server-deps-{{ checksum "./server/package.json" }}
           paths:
             - ~/TheBrain2.0/server/node_modules
       - run: pushd ~/TheBrain2.0/server/artifacts ; CODECOV_TOKEN="c2740296-3f65-4994-beac-37a127192011" ../node_modules/.bin/codecov -f lcov.info
       - run: pushd ~/TheBrain2.0/server/ ; npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
-            - npm-client-deps-{{ checksum " ~/TheBrain2.0/client/package.json"  }}
+            - npm-client-deps-{{ checksum "./client/package.json"  }}
       - run: pushd ~/TheBrain2.0/client/ ; npm install
       - save_cache:
-          key: npm-client-deps-{{ checksum " ~/TheBrain2.0/client/package.json"  }}
+          key: npm-client-deps-{{ checksum "./client/package.json"  }}
           paths:
             - ~/TheBrain2.0/client/node_modules
       - run: pushd ~/TheBrain2.0/client/ ; npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
-            - npm-mobileClient-deps-{{ checksum " ~/TheBrain2.0/mobileClient/package.json"  }}
+            - npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm install
       - save_cache:
-          key: npm-mobileClient-deps-{{ checksum " ~/TheBrain2.0/mobileClient/package.json"  }}
+          key: npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
           paths:
             - ~/TheBrain2.0/mobileClient/node_modules
       - run: pushd ~/TheBrain2.0/mobileClient/ ; npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
       - restore_cache:
           keys:
-            - npm-testing-deps-{{ checksum " ~/TheBrain2.0/testing/package.json"  }}
+            - npm-testing-deps-{{ checksum "./testing/package.json"  }}
       - run: pushd ~/TheBrain2.0/ ; npm install
       - save_cache:
-          key: npm-testing-deps-{{ checksum " ~/TheBrain2.0/testing/package.json"  }}
+          key: npm-testing-deps-{{ checksum "./testing/package.json"  }}
           paths:
             - ~/TheBrain2.0/testing/node_modules
       - run: pushd ~/TheBrain2.0/ ; npm run enzymeTest
