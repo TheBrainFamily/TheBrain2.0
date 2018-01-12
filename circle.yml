@@ -54,6 +54,7 @@ jobs:
           paths:
             - ~/TheBrain2.0/node_modules
       - run: pushd ~/TheBrain2.0/ ; npm run enzymeTest
+      - run: pushd ~/TheBrain2.0/ ; npm run enzymeTestMobile
       - run:
           name: start the web client with "stateless" server
           command: pushd ~/TheBrain2.0/client ; npm run startForCypress
