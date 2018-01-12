@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run cypressTestCI && npm run enzymeTest",
     "cypressTest": "BABEL_ENV=development cypress open",
-    "cypressTestCI": "BABEL_ENV cypress run",
+    "cypressTestCI": "BABEL_ENV=development cypress run",
     "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest cypress/integration/landingPage.test.js --config ./clientEnzymeTest.json",
     "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest testingMobile/App.test.js",
     "enzymeTest:watch": "npm run enzymeTest -- --watch"
