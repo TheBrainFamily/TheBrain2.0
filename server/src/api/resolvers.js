@@ -139,11 +139,9 @@ const resolvers = {
 
       let userId = context.user && context.user._id
       if (!userId) {
-        console.log('user not found')
         const guestUser = await loginWithGuest(root, args, context)
         userId = guestUser._id
       }
-      console.log('select course')
       return context.UserDetails.selectCourse(userId, args.courseId)
     },
     async selectCourseSaveToken (root: ?string, args: { courseId: string, deviceId: string }, passedContext: Object) {
@@ -250,46 +248,19 @@ const resolvers = {
       }
       return true
     },
+
+    async logInWithFacebookAccessToken (root: ?string, args: { accessTokenFb: string }, passedContext: Object) {
+      const { accessTokenFb } = args
+      const userIdRequest = `https://graph.facebook.com/me?access_token=${accessTokenFb}`
+      const userIdResponse = await fetch(userIdRequest)
+      const userIdParsedResponse = await userIdResponse.json()
+      const userIdFb = userIdParsedResponse.id || null
+
+      return logInWithFacebook(root, {...args, userIdFb}, passedContext)
+    },
+
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-      const {accessTokenFb, userIdFb} = args
-
-      const validFbAppId = process.env.FB_APP_ID || null
-      const appIdRequest = `https://graph.facebook.com/app/?access_token=${accessTokenFb}`
-      const appIdResponse = await fetch(appIdRequest)
-      const appIdParsedResponse = await appIdResponse.json()
-      const tokenAppId = appIdParsedResponse.id || null
-      if (!validFbAppId || !tokenAppId || tokenAppId != validFbAppId) {
-        throw new Error(`Facebook access token app id mismatch, tokenAppId: ${tokenAppId} facebookConfig.appId: ${validFbAppId}`)
-      }
-
-      const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`
-      const res = await fetch(requestUrl)
-      const parsedResponse = await res.json()
-      if (parsedResponse.error) {
-        console.error('FBLogin failed:', parsedResponse)
-        throw new Error('Facebook token expired')
-      }
-      if (parsedResponse.id === userIdFb) {
-        let user = await context.Users.findByFacebookId(userIdFb)
-        let idToUpdate = null
-        if (user) {
-          idToUpdate = user._id
-        } else {
-          if (context.user && context.user._id) {
-            idToUpdate = context.user._id
-          } else {
-            user = await context.Users.createGuest()
-            await context.UserDetails.create(user._id)
-            idToUpdate = user._id
-          }
-        }
-        user = await context.Users.updateFacebookUser(idToUpdate, userIdFb, parsedResponse.name, parsedResponse.email)
-        context.req.logIn(user, (err) => { if (err) throw err })
-        return user
-      } else {
-        throw new Error('Invalid facebook response')
-      }
+      return logInWithFacebook(root, args, passedContext)
     },
     async logIn (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, passedContext: Object) {
       const context = {...repositoriesContext, ...passedContext}
@@ -464,6 +435,49 @@ const resolvers = {
         throw e
       }
     }
+  }
+}
+
+const logInWithFacebook = async (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) => {
+  const context = { ...repositoriesContext, ...passedContext }
+  const { accessTokenFb, userIdFb } = args
+
+  const validFbAppId = process.env.FB_APP_ID || null
+  const appIdRequest = `https://graph.facebook.com/app/?access_token=${accessTokenFb}`
+  const appIdResponse = await fetch(appIdRequest)
+  const appIdParsedResponse = await appIdResponse.json()
+  const tokenAppId = appIdParsedResponse.id || null
+
+  if (!validFbAppId || !tokenAppId || tokenAppId !== validFbAppId) {
+    throw new Error(`Facebook access token app id mismatch, tokenAppId: ${tokenAppId} facebookConfig.appId: ${validFbAppId}`)
+  }
+
+  const requestUrl = `https://graph.facebook.com/v2.10/${userIdFb}?fields=name,email&access_token=${accessTokenFb}`
+  const res = await fetch(requestUrl)
+  const parsedResponse = await res.json()
+  if (parsedResponse.error) {
+    console.error('FBLogin failed:', parsedResponse)
+    throw new Error('Facebook token expired')
+  }
+  if (parsedResponse.id === userIdFb) {
+    let user = await context.Users.findByFacebookId(userIdFb)
+    let idToUpdate = null
+    if (user) {
+      idToUpdate = user._id
+    } else {
+      if (context.user && context.user._id) {
+        idToUpdate = context.user._id
+      } else {
+        user = await context.Users.createGuest()
+        await context.UserDetails.create(user._id)
+        idToUpdate = user._id
+      }
+    }
+    user = await context.Users.updateFacebookUser(idToUpdate, userIdFb, parsedResponse.name, parsedResponse.email)
+    context.req.logIn(user, (err) => { if (err) throw err })
+    return user
+  } else {
+    throw new Error('Invalid facebook response')
   }
 }
 

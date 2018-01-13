@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+<iframe id="existing-iframe-example"
+        width="640" height="360"
+        src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&autoplay=1&rel=0&showinfo=0&control=0?allowfullscreen=true"
+        frameborder="0"
+        allowfullscreen="allowfullscreen"
+        style="border: solid 4px #37474F"
+></iframe>
+
+<script type="text/javascript">
+  var tag = document.createElement('script');
+  tag.id = 'iframe-demo';
+  tag.src = 'https://www.youtube.com/iframe_api';
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    window.player = new YT.Player('existing-iframe-example', {
+      events: {
+        'onReady': onPlayerReady,
+      }
+    });
+  }
+
+  function onPlayerReady(event) {
+    setTimeout(function() {
+      // postMessage("PLAYER READY")
+    }, 1000);
+
+    document.getElementById('existing-iframe-example').style.borderColor = '#FF6D00';
+  }
+</script>
+
+</body>
+</html>

@@ -2,10 +2,7 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 // import { typeDefs } from '../../../server/src/api/typeDef'
 // import resolvers from '../../../server/src/api/resolvers'
-// import {typeDefs} from 'thebrain-server/lib/api/schema'
-// import resolvers from 'thebrain-server/lib/api/resolvers'
 
-console.log('Gandecki resolvers', resolvers)
 const gql = a => a
 
 const typeDefs = gql`

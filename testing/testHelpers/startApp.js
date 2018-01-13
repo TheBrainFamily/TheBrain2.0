@@ -1,5 +1,4 @@
 import {
-  addMockFunctionsToSchema,
   makeExecutableSchema
 } from 'graphql-tools';
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context';
@@ -19,7 +18,6 @@ let startApp = async function (path = '/', context, testCafe) {
     return startAppCypress(path, networkInterface)
   } else if (isEnzyme) { // TODO better check for jest ;-)
     const startAppEnzyme = require('./startAppEnzyme').startAppEnzyme
-    console.log("is enzyme")
     return startAppEnzyme(path, networkInterface)
   } else if (isTestCafe) {
     //For some reason if I put this inside startAppTestCafe I get

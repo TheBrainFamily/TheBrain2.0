@@ -6,7 +6,6 @@ import appStyle from './appStyle'
 
 const styles = StyleSheet.create({
   topContainer: {
-    height: appStyle.header.offset,
     backgroundColor: appStyle.colors.bgAlt
   },
   textDefault: {
@@ -15,6 +14,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: appStyle.colors.text,
     fontFamily: 'Kalam-Bold'
+  },
+  safeArea: {
+    backgroundColor: appStyle.colors.bg
   },
   mainPage: {
     backgroundColor: appStyle.colors.bg,
@@ -162,9 +164,6 @@ const styles = StyleSheet.create({
     ]
   },
   headerBorder: {
-    paddingLeft: 15,
-    borderLeftWidth: 0.5,
-    borderLeftColor: 'white',
     height: 36,
     alignItems: 'center',
     justifyContent: 'center'

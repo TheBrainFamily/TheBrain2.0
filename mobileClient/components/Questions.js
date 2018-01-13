@@ -128,7 +128,6 @@ class Questions extends React.Component {
       const itemsWithFlashcard = this.props.currentItems.Items
       const sessionCount = this.props.sessionCount.SessionCount
 
-
       if (itemsWithFlashcard && itemsWithFlashcard.length > 0) {
         const flashcard = itemsWithFlashcard[0].flashcard
         const evalItem = itemsWithFlashcard[0]

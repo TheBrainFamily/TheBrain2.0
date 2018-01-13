@@ -10,7 +10,6 @@ const appStyle = {
     textAlt: '#222',
     textLight: '#ccc',
     bg: '#9050ba',
-    bgAlt: '#fff',
     bgDark: '#000'
   },
   pageTitle: {

@@ -1,3 +1,19 @@
 {
-  "presets": ["react-native"]
+  "presets": ["babel-preset-expo"],
+  "env": {
+    "development": {
+      "plugins": ["transform-react-jsx-source"]
+    },
+    "test": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
+            "optionalRoot": "mobileClient/"
+          }
+        ]
+      ]
+    }
+  }
 }

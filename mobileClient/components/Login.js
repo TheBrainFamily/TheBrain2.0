@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text, TouchableOpacity, View, Switch, AsyncStorage } from 'react-native'
+import Expo from 'expo'
 import { TextField } from 'react-native-material-textfield'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import DeviceInfo from 'react-native-device-info'
 import * as courseActions from '../actions/CourseActions'
 import PageContainer from './PageContainer'
 import FBLoginButton from './FBLoginButton'
@@ -51,7 +51,7 @@ class Login extends React.Component {
   }
 
   submit = async () => {
-    const deviceId = DeviceInfo.getUniqueID() || 'defaultMobileClient'
+    const deviceId = Expo.Constants.deviceId || 'defaultMobileClient'
     this.setState({ error: '', loading: true })
     const actionName = this.state.isLogin ? 'login' : 'signup'
 

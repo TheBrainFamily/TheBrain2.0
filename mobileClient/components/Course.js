@@ -12,6 +12,7 @@ import Lecture from './Lecture'
 import currentItemsExistQuery from '../shared/graphql/queries/currentItemsExist'
 import WithData from './WithData'
 
+// TODO this is not really a Course, it's just a wrapper around a lecture, isn't it?
 class Course extends React.Component {
   componentWillReceiveProps (nextProps) {
     if (!nextProps.data || nextProps.data.loading || nextProps.data.error) {
@@ -52,6 +53,7 @@ class Course extends React.Component {
   }
 }
 
+// TODO are we ever changing this to something else?
 Course.defaultProps = {
   backgroundColor: 'transparent'
 }

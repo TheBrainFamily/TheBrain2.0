@@ -133,6 +133,7 @@ export const typeDefs = gql`
         setUsernameAndPasswordForGuest(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
         logIn(username: String!, password: String!, deviceId: String!, saveToken: Boolean): User
         logInWithFacebook(accessTokenFb: String!, userIdFb: String!): User
+        logInWithFacebookAccessToken(accessTokenFb: String): User
         logInWithToken(accessToken: String!, userId: String!, deviceId: String!): User
         isTokenExpired(userId: String, token: String, deviceId: String): Boolean
         switchUserIsCasual: UserDetails

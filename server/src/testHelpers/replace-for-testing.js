@@ -1,5 +1,5 @@
 // We are automatically replacing the Base Repository Class to use Tingo instead of MongoDB
-module.exports = function replaceImport (originalPath) {
+module.exports = function replaceImport (originalPath, sourcePath) {
   let prefix = ''
   if (process.env.BABEL_ENV !== 'serverTest') {
     prefix = '/server'
@@ -9,7 +9,7 @@ module.exports = function replaceImport (originalPath) {
     return newPath
   }
 
-  if (originalPath.indexOf('graphql-tools') !== -1) {
+  if (originalPath.indexOf('graphql-tools') !== -1 && sourcePath.indexOf('node_modules') === -1) {
     const newPath = originalPath.replace('graphql-tools', `apollo-test-utils-with-context`)
     return newPath
   }

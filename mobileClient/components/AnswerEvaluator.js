@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
-import LinearGradient from 'react-native-linear-gradient'
+import { LinearGradient } from 'expo'
 import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'

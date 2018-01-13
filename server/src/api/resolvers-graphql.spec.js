@@ -7,7 +7,7 @@ import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
-import {LessonsRepository} from './repositories/LessonsRepository'
+import { LessonsRepository } from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 
 extendExpect()
@@ -154,16 +154,16 @@ describe('query.Lessons', () => {
     const context = {Lessons: lessonsRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query ($courseId: String!) {
-                        Lessons(courseId:$courseId) {
-                            _id 
-                        }
-                    },
-                `,
-              variables: {courseId: 'testCourseId'}
-            }))
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lessons(courseId:$courseId) {
+                  _id
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
     const lessons = result.data.Lessons
 
     expect(lessons.length).toBe(2)
@@ -173,17 +173,17 @@ describe('query.Lessons', () => {
     const context = {Lessons: lessonsRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query ($courseId: String!) {
-                        Lessons(courseId:$courseId) {
-                            _id
-                            position
-                        }
-                    },
-                `,
-              variables: {courseId: 'testCourseId'}
-            }))
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lessons(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
     const lessons = result.data.Lessons
 
     expect(lessons[0].position).toBe(1)
@@ -248,23 +248,23 @@ describe('query.flashcards', () => {
 describe('query.flashcard', () => {
   it('returns a flashcard by id', async () => {
     const flashcardsToExtend = [
-            {_id: mongoObjectId()}, {_id: mongoObjectId()}
+      {_id: mongoObjectId()}, {_id: mongoObjectId()}
     ]
     const flashcardRepository = new FlashcardsRepository()
     const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
     const context = {Flashcards: flashcardRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query ($_id: String!) {
-                        Flashcard(_id:$_id) {
-                            _id
-                        }
-                    },
-                `,
-              variables: {_id: flashcardsData[1]._id}
-            }))
+    .query({
+      query: gql`
+          query ($_id: String!) {
+              Flashcard(_id:$_id) {
+                  _id
+              }
+          },
+      `,
+      variables: {_id: flashcardsData[1]._id}
+    }))
     const dbFlashcard = result.data.Flashcard
 
     expect(dbFlashcard._id).toEqual(flashcardsData[1]._id)
@@ -275,7 +275,7 @@ describe('query.Lesson', () => {
   const generateContext = async () => {
     const lessonsRepository = new LessonsRepository()
 
-        // we have those in different order to make sure the query doesn't return the first inserted lesson.
+    // we have those in different order to make sure the query doesn't return the first inserted lesson.
     await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
     await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
     await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
@@ -300,17 +300,17 @@ describe('query.Lesson', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query ($courseId: String!) {
-                        Lesson(courseId:$courseId) {
-                            _id
-                            position
-                        }
-                    },
-                `,
-              variables: {courseId: 'testCourseId'}
-            }))
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lesson(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
     const lesson = result.data.Lesson
 
     expect(lesson).toEqual(expect.objectContaining({position: 1}))
@@ -329,17 +329,17 @@ describe('query.Lesson', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query ($courseId: String!) {
-                        Lesson(courseId:$courseId) {
-                            _id
-                            position
-                        }
-                    },
-                `,
-              variables: {courseId: 'testCourseId'}
-            }))
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lesson(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
     const lesson = result.data.Lesson
 
     expect(lesson).toEqual(expect.objectContaining({position: 3}))
@@ -412,20 +412,20 @@ describe('query.SessionCount', () => {
     const context = {Items: itemsRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-        .query({
-          query: gql`
-                query {
-                    SessionCount {
-                                newDone
-                                newTotal
-                                dueDone
-                                dueTotal
-                                reviewDone
-                                reviewTotal      
-                    }
-                  }
-            `
-        }))
+    .query({
+      query: gql`
+          query {
+              SessionCount {
+                  newDone
+                  newTotal
+                  dueDone
+                  dueTotal
+                  reviewDone
+                  reviewTotal
+              }
+          }
+      `
+    }))
     const sessionCount = result.data.SessionCount
 
     expect(sessionCount).toEqual({newDone: null, newTotal: null, dueDone: null, dueTotal: null, reviewDone: null, reviewTotal: null})
@@ -448,20 +448,20 @@ describe('query.SessionCount', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                query {
-                    SessionCount {
-                                newDone
-                                newTotal
-                                dueDone
-                                dueTotal
-                                reviewDone
-                                reviewTotal      
-                    }
-                  }
-            `
-            }))
+    .query({
+      query: gql`
+          query {
+              SessionCount {
+                  newDone
+                  newTotal
+                  dueDone
+                  dueTotal
+                  reviewDone
+                  reviewTotal
+              }
+          }
+      `
+    }))
     const sessionCount = result.data.SessionCount
 
     expect(sessionCount).toEqual(expect.objectContaining({
@@ -482,16 +482,16 @@ describe('query.CurrentUser', () => {
     })
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query {
-                        CurrentUser {
-                                    _id
-                                    email
-                        }
-                    }
-            `
-            }))
+    .query({
+      query: gql`
+          query {
+              CurrentUser {
+                  _id
+                  email
+              }
+          }
+      `
+    }))
     const currentUser = result.data.CurrentUser
 
     expect(currentUser).toEqual(context.user)
@@ -507,17 +507,17 @@ describe('query.UserDetails', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-            .query({
-              query: gql`
-                    query {
-                        UserDetails {
-                            hasDisabledTutorial
-                            selectedCourse
-                            isCasual
-                        }
-                    }
-            `
-            }))
+    .query({
+      query: gql`
+          query {
+              UserDetails {
+                  hasDisabledTutorial
+                  selectedCourse
+                  isCasual
+              }
+          }
+      `
+    }))
     const userDetails = result.data.UserDetails
 
     expect(userDetails).toEqual({'hasDisabledTutorial': null, 'isCasual': null, 'selectedCourse': null})
@@ -538,16 +538,16 @@ describe('query.UserDetails', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-          .query({
-            query: gql`
-                    query {
-                        UserDetails {
-                            hasDisabledTutorial
-                            selectedCourse
-                        }
-                    }
-            `
-          }))
+    .query({
+      query: gql`
+          query {
+              UserDetails {
+                  hasDisabledTutorial
+                  selectedCourse
+              }
+          }
+      `
+    }))
     const userDetails = result.data.UserDetails
 
     expect(userDetails).toEqual({selectedCourse: 'testCourse', hasDisabledTutorial: true})
@@ -581,23 +581,23 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
 
     await networkInterface.query({
       query: gql`
-                    mutation CreateItems($courseId: String!) {
-                            createItemsAndMarkLessonAsWatched(courseId: $courseId) {
-                              _id
-                            }
-                    },
-                `,
+          mutation CreateItems($courseId: String!) {
+              createItemsAndMarkLessonAsWatched(courseId: $courseId) {
+                  _id
+              }
+          },
+      `,
       variables: {courseId: 'testCourseId'}
     })
     let result = await networkInterface.query({
       query: gql`
-                    query ($courseId: String!) {
-                        Lesson(courseId:$courseId) {
-                            _id
-                            position
-                        }
-                    },
-                `,
+          query ($courseId: String!) {
+              Lesson(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
       variables: {courseId: 'testCourseId'}
     })
     const lesson = result.data.Lesson
@@ -626,25 +626,25 @@ describe('mutation.hideTutorial', () => {
 
     await networkInterface.query({
       query: gql`
-                    mutation  {
-                        hideTutorial {
-                            hasDisabledTutorial
-                        }
-                    },
-                `,
+          mutation  {
+              hideTutorial {
+                  hasDisabledTutorial
+              }
+          },
+      `,
       variables: {courseId: 'testCourseId'}
     })
 
     let result = await networkInterface.query({
       query: gql`
-                    query {
-                        UserDetails {
-                            hasDisabledTutorial
-                            selectedCourse
-                            isCasual
-                        }
-                    }
-            `
+          query {
+              UserDetails {
+                  hasDisabledTutorial
+                  selectedCourse
+                  isCasual
+              }
+          }
+      `
     })
     const userDetails = result.data.UserDetails
 

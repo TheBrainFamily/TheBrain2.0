@@ -31,7 +31,7 @@ export default class ResizableImage extends React.Component {
       imageSourceHeight: e.target.offsetHeight,
       imageSourceWidth: e.target.offsetWidth
     },
-      this.updateImageDimensions
+    this.updateImageDimensions
     )
   }
 
