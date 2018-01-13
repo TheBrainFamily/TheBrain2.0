@@ -27,11 +27,10 @@ export class UsersRepository extends MongoRepository {
     }
 
     const insertedUser = await this.userCollection.insert(newUser)
-    const addedUser = insertedUser.ops ? insertedUser.ops[0] : insertedUser[0]
+    const addedUser = insertedUser.ops[0]
 
     const newUserId = addedUser._id.toString()
-    // TODO changed this from new userDetailsRepository call
-    // - since this is not covered with test we need to test that it still works
+
     if (deviceId) {
       addedUser.currentAccessToken = await this.insertNewUserToken(newUserId, deviceId)
     }
