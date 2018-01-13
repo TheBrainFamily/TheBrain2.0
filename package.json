@@ -9,7 +9,9 @@
     "cypressTestCI": "BABEL_ENV=development cypress run",
     "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest cypress/integration/landingPage.test.js --config ./clientEnzymeTest.json",
     "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest testingMobile/App.test.js",
-    "enzymeTest:watch": "npm run enzymeTest -- --watch"
+    "enzymeTest:watch": "npm run enzymeTest -- --watch",
+    "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules",
+    "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install"
   },
   "repository": {
     "type": "git",
