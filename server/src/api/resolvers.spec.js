@@ -6,7 +6,6 @@ import moment from 'moment'
 import resolvers from './resolvers'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 import { CoursesRepository } from './repositories/CoursesRepository'
-import { LessonsRepository } from './repositories/LessonsRepository'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import { UsersRepository } from './repositories/UsersRepository'
@@ -63,30 +62,6 @@ casual.define('item', function () {
   }
 })
 
-type MakeFlashcardsData = {
-  number?: number,
-  flashcardsToExtend?: Array<Object>
-}
-
-async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
-  const addedFlashcards = []
-  _.times(number, (index) => {
-    let newFlashcard = casual.flashcard
-    if (flashcardsToExtend[index]) {
-      newFlashcard = {
-        ...newFlashcard,
-        ...flashcardsToExtend[index]
-      }
-    }
-    addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
-  }
-  )
-  await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
-
-  return addedFlashcards
-}
-
 type MakeItemsData = {
   number?: number,
   itemsToExtend?: Array<Object>
@@ -106,88 +81,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   })
   return addedItems.map(item => itemsCollection.insert(item))
 }
-
-// TODO: REMOVE this test after fixing problem with mock
-describe('query.flashcards', () => {
-  it('returns flashcards from the db 1', async () => {
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
-
-    const dbFlashcards = await resolvers.Query.Flashcards(undefined, undefined,
-      {Flashcards: flashcardRepository}
-    )
-
-    expect(dbFlashcards.length).toBe(3)
-    expect(dbFlashcards).toContainDocuments(flashcardsData)
-  })
-})
-
-describe('query.flashcard', () => {
-  it('returns a flashcard by id', async () => {
-    const flashcardsToExtend = [
-      {_id: mongoObjectId()}, {_id: mongoObjectId()}
-    ]
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
-
-    const dbFlashcards = await resolvers.Query.Flashcard(
-      undefined,
-      {_id: flashcardsData[1]._id},
-      {Flashcards: flashcardRepository}
-    )
-
-    expect(dbFlashcards._id).toEqual(flashcardsData[1]._id)
-  })
-})
-
-describe('query.Lesson', () => {
-  const generateContext = async () => {
-    const lessonsRepository = new LessonsRepository()
-
-    // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
-
-    return {
-      lessonsRepository,
-      userDetailsRepository: new UserDetailsRepository(),
-      userId: mongoObjectId()
-    }
-  }
-  it('returns first lesson for a new user', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-    const lesson = await resolvers.Query.Lesson(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson).toEqual(expect.objectContaining({position: 1}))
-  })
-  it('returns third lesson for a logged in user that already watched two lessons', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 3}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-    const lesson = await resolvers.Query.Lesson(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson).toEqual(expect.objectContaining({position: 3}))
-  })
-})
 
 describe('query.Item', () => {
   // TODO is this used on the frontend?
@@ -235,88 +128,6 @@ describe('query.Items', () => {
   })
 })
 
-describe('query.SessionCount', () => {
-  it('returns an empty object if no user exists', async () => {
-    const itemsRepository = new ItemsRepository()
-
-    const context = {Items: itemsRepository}
-
-    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
-
-    expect(sessionCount).toEqual({})
-  })
-  it('returns a session count', async () => {
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      casual: false,
-      selectedCourse: 'selectedCourse'
-    })
-    const itemsRepository = new ItemsRepository()
-
-    await itemsRepository.itemsCollection.insert({userId, actualTimesRepeated: 0, courseId: 'selectedCourse'})
-    const context = {
-      user: {_id: userId},
-      Items: itemsRepository,
-      UserDetails: userDetailsRepository
-    }
-
-    const sessionCount = await resolvers.Query.SessionCount(undefined, undefined, context)
-    expect(sessionCount).toEqual(expect.objectContaining({
-      newDone: 0,
-      newTotal: 1,
-      dueDone: 0,
-      dueTotal: 0,
-      reviewDone: 0,
-      reviewTotal: 0
-    }))
-  })
-})
-
-describe('query.CurrentUser', () => {
-  it('returns unchanged user from a context', () => {
-    const context = deepFreeze({
-      user: {_id: 'testId', email: 'test@email.com'}
-    })
-
-    const currentUser = resolvers.Query.CurrentUser(undefined, undefined, context)
-    expect(currentUser).toEqual(context.user)
-  })
-})
-
-describe('query.UserDetails', () => {
-  it('returns an empty object if no user exists', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-    const context = {
-      user: {},
-      UserDetails: userDetailsRepository
-    }
-
-    const userDetails = resolvers.Query.UserDetails(undefined, undefined, context)
-
-    expect(userDetails).toEqual(Promise.resolve({}))
-  })
-  it('returns user details by user id', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-
-    const userDetails = await resolvers.Query.UserDetails(undefined, undefined, context)
-
-    expect(userDetails.progress[0].lesson).toEqual(1)
-  })
-})
-
 describe('mutation.selectCourse', () => {
   let context
   beforeAll(async () => {
@@ -353,58 +164,6 @@ describe('mutation.selectCourse', () => {
     expect(result.userId).toBeDefined()
     expect(result.progress[0]).toEqual({courseId: 'testCourseId', lesson: 1})
     expect(result.selectedCourse).toEqual('testCourseId')
-  })
-})
-
-describe('mutation.createItemsAndMarkLessonAsWatched', () => {
-  it('returns the second lesson after watching the first one if you are a logged in user', async () => {
-    const Lessons = new LessonsRepository()
-    await Lessons.lessonsCollection.insert({position: 2, courseId: 'testCourseId', flashcardIds: []})
-    await Lessons.lessonsCollection.insert({position: 1, courseId: 'testCourseId', flashcardIds: []})
-
-    const userId = mongoObjectId()
-    const UserDetails = new UserDetailsRepository()
-    await UserDetails.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}],
-      casual: false
-    })
-
-    const context = {
-      UserDetails,
-      Lessons,
-      user: {_id: userId},
-      req: {
-        logIn: jest.fn()
-      }
-    }
-
-    const lesson = await resolvers.Mutation.createItemsAndMarkLessonAsWatched(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(lesson.position).toBe(2)
-  })
-})
-
-describe('mutation.hideTutorial', () => {
-  it('saves info that a tutorial should be disabled for a specific user', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository,
-      req: {
-        logIn: jest.fn()
-      }
-    }
-
-    const user = await resolvers.Mutation.hideTutorial(undefined, {courseId: 'testCourseId'}, context)
-
-    expect(user.hasDisabledTutorial).toBe(true)
   })
 })
 

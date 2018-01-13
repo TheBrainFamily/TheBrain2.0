@@ -12,30 +12,30 @@ export function extendExpect () {
         }
       })
       const pass = notFoundDocuments.length === 0
-      // let message
-      // if (!pass) {
-      //   message = `documents ${this.utils.printExpected(notFoundDocuments)} not found in the array ${this.utils.printReceived(received)}`
-      // }
+      let message
+      if (!pass) {
+        message = `documents ${this.utils.printExpected(notFoundDocuments)} not found in the array ${this.utils.printReceived(received)}`
+      }
 
-      const message = pass
-                ? () => this.utils.matcherHint('.not.toBe') + '\n\n' +
-            `Expected value to not be (using ===):\n` +
-            `  ${this.utils.printExpected(expected)}\n` +
-            `Received:\n` +
-            `  ${this.utils.printReceived(received)}`
-                : () => {
-                // const diffString = diff(expected, received, {
-                //     expand: this.expand,
-                // });
-                // TODO: fix message
-                  const diffString = ''
-                  return this.utils.matcherHint('.toBe') + '\n\n' +
-                    `Expected value to be (using ===):\n` +
-                    `  ${this.utils.printExpected(expected)}\n` +
-                    `Received:\n` +
-                    `  ${this.utils.printReceived(received)}` +
-                    (diffString ? `\n\nDifference:\n\n${diffString}` : '')
-                }
+      // const message = pass
+      //           ? () => this.utils.matcherHint('.not.toBe') + '\n\n' +
+      //       `Expected value to not be (using ===):\n` +
+      //       `  ${this.utils.printExpected(expected)}\n` +
+      //       `Received:\n` +
+      //       `  ${this.utils.printReceived(received)}`
+      //           : () => {
+      //           // const diffString = diff(expected, received, {
+      //           //     expand: this.expand,
+      //           // });
+      //           // TODO: fix message
+      //             const diffString = ''
+      //             return this.utils.matcherHint('.toBe') + '\n\n' +
+      //               `Expected value to be (using ===):\n` +
+      //               `  ${this.utils.printExpected(expected)}\n` +
+      //               `Received:\n` +
+      //               `  ${this.utils.printReceived(received)}` +
+      //               (diffString ? `\n\nDifference:\n\n${diffString}` : '')
+      //           }
 
       return {actual: received, message, pass}
     }
