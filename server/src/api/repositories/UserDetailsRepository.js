@@ -63,7 +63,7 @@ export class UserDetailsRepository extends MongoRepository {
 
   async resetLevelUpFlag (userId: string) {
     // TODO this requires a test, and a rewrite to work witn tingodb
-    return (await this.userDetailsCollection.findOneAndUpdate({userId: new ObjectId(userId)}, {$set: {'experience.showLevelUp': false}}, {
+    return (await this.userDetailsCollection.findOneAndUpdate({userId}, {$set: {'experience.showLevelUp': false}}, {
       upsert: true
     })).value
   }
