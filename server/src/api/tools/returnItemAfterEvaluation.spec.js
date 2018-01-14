@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { deepFreeze } from 'testHelpers/testHelpers'
+import { deepFreeze } from '../../testHelpers/testHelpers'
 import returnItemAfterEvaluation from './returnItemAfterEvaluation'
 
 const evaluationMap = {
