@@ -12,7 +12,7 @@
     "enzymeTest:watch": "npm run enzymeTest -- --watch",
     "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules",
     "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install",
-    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING ./node_modules/.bin/jest --projects testingMobile cypress server"
+    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testingMobile cypress server"
   },
   "repository": {
     "type": "git",
