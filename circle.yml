@@ -8,70 +8,115 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install wait-on
+          name: Install wait-on
           command: npm install -g wait-on
-      - run: mkdir -p ~/TheBrain2.0/server/artifacts
-      - run: mkdir -p ~/TheBrain2.0/client/artifacts
-      - run: mkdir -p ~/TheBrain2.0/mobileClient/artifacts
-      - run: ls -la ~/TheBrain2.0/
+      - run:
+          name: Create artifacts folders
+          command: |
+            mkdir -p ~/TheBrain2.0/server/artifacts
+            mkdir -p ~/TheBrain2.0/client/artifacts
+            mkdir -p ~/TheBrain2.0/mobileClient/artifacts
 #      - run: pushd ~/TheBrain2.0/server/
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
+
+### SERVER
       - restore_cache:
           keys:
             - npm-server-deps-{{ checksum "./server/package.json" }}
-      - run: pushd ~/TheBrain2.0/server/ ; npm install
-      - run: pushd ~/TheBrain2.0/server/ ; CI=true npm test
+      - run:
+          name: Install server packages
+          working_directory: "~/TheBrain2.0/server/"
+          command: npm install
+      - run:
+          name: Run server integration/unit tests
+          working_directory: "~/TheBrain2.0/server/"
+          command: npm test
+          environment:
+            - CI: true
       - save_cache:
           key: npm-server-deps-{{ checksum "./server/package.json" }}
           paths:
             - ~/TheBrain2.0/server/node_modules
-      - run: pushd ~/TheBrain2.0/server/artifacts ; CODECOV_TOKEN="c2740296-3f65-4994-beac-37a127192011" ../node_modules/.bin/codecov -f lcov.info
-      - run: pushd ~/TheBrain2.0/server/ ; npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
+      - run:
+          name: Collect server integration/unit tests coverage
+          working_directory: "~/TheBrain2.0/server/artifacts"
+          command: ../node_modules/.bin/codecov -f lcov.info
+          environment:
+            - CODECOV_TOKEN: "c2740296-3f65-4994-beac-37a127192011"
+      - run:
+          name: Validate standard linting rules on server
+          working_directory: "~/TheBrain2.0/server/"
+          command: npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
+
+### Web Client
       - restore_cache:
           keys:
             - npm-client-deps-{{ checksum "./client/package.json"  }}
-      - run: pushd ~/TheBrain2.0/client/ ; npm install
+      - run:
+          name: Install Web Client packages
+          working_directory: "~/TheBrain2.0/client/"
+          command: npm install
       - save_cache:
           key: npm-client-deps-{{ checksum "./client/package.json"  }}
           paths:
             - ~/TheBrain2.0/client/node_modules
-      - run: pushd ~/TheBrain2.0/client/ ; npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
+      - run:
+          name: Validate Standard linting rules on Web Client
+          working_directory: "~/TheBrain2.0/client/"
+          command: npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
+
+
+### Mobile Client
       - restore_cache:
           keys:
             - npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
-      - run: pushd ~/TheBrain2.0/mobileClient/ ; npm install
+      - run:
+          name: Install Mobile Client packages
+          working_directory: "~/TheBrain2.0/mobileClient/"
+          command: npm install
       - save_cache:
           key: npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
           paths:
             - ~/TheBrain2.0/mobileClient/node_modules
-      - run: pushd ~/TheBrain2.0/mobileClient/ ; npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
+      - run:
+          name: Validate Standard linting rules on Mobile Client
+          working_directory: "~/TheBrain2.0/mobileClient/"
+          command: npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
+
+### Testing package
       - restore_cache:
           keys:
             - npm-testing-deps-{{ checksum "./package.json"  }}
-      - run: pushd ~/TheBrain2.0/ ; npm install
+      - run:
+          name: Install Testing package packages (sic!)
+          working_directory: "~/TheBrain2.0/"
+          command: npm install
       - save_cache:
           key: npm-testing-deps-{{ checksum "./package.json"  }}
           paths:
             - ~/TheBrain2.0/node_modules
-      - run: pushd ~/TheBrain2.0/ ; npm run enzymeTest
-      - run: pushd ~/TheBrain2.0/ ; npm run enzymeTestMobile
       - run:
-          name: start the web client with "stateless" server
-          command: pushd ~/TheBrain2.0/client ; npm run startForCypress
+          name: Enzyme almost-end to end tests for Web
+          working_directory: "~/TheBrain2.0/"
+          command: npm run enzymeTest
+      - run:
+          name: Enzyme almost-end to end tests for Mobile
+          working_directory: "~/TheBrain2.0/"
+          command: npm run enzymeTestMobile
+      - run:
+          name: Start the Web Client with "stateless" Server
+          working_directory: "~/TheBrain2.0/client"
+          command: npm run startForCypress
           background: true
       - run:
-          name: wait for the web client to start up
+          name: Wait for the Web Client to start up
           command: wait-on "http://localhost:3000" -t 60000
       - run:
-          name: Cypress Integration test (without starting up the server)
-          command: pushd ~/TheBrain2.0/ ; npm run cypressTestCI
-#      - run: pushd ~/TheBrain2.0/ ; npm run cypressTestCI
-#      - run: pushd ~/TheBrain2.0/server/artifacts ; COVERALLS_SERVICE_NAME="circle" COVERALLS_REPO_TOKEN="ZWNKI8CkeOa1Fl292BmtSygJaakdxS34Y" COVERALLS_SERVICE_JOB_ID=$CIRCLE_BUILD_NUM cat lcov.info | ../node_modules/.bin/coveralls
+          name: Cypress Integration test (without starting up the server) for Web
+          working_directory: "~/TheBrain2.0/"
+          command: npm run cypressTestCI
       - store_artifacts:
           path: ~/TheBrain2.0/server/artifacts
-      - store_artifacts:
           path: ~/TheBrain2.0/client/artifacts
-      - store_artifacts:
           path: ~/TheBrain2.0/mobileClient/artifacts
-      - store_artifacts:
           path: ~/TheBrain2.0/cypress/videos
