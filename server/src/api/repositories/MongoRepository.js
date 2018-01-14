@@ -1,5 +1,6 @@
 // @flow
 import * as MongoClient from 'mongodb'
+import type { Db } from 'mongodb'
 
 const dbURI = 'mongodb://localhost/thebrain'
 const testingDBURI = 'mongodb://localhost/testing'
@@ -23,7 +24,7 @@ switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
 }
 
 export class MongoRepository {
-  db: any
+  db: Db
 
   constructor () {
     if (connectingToDb === false) {
