@@ -21,6 +21,9 @@ export class EnzymeElement {
     input.simulate('change')
   }
 
+  assertContentMatches(textToMatch) {
+    return assert(this.wrapper.find(this.selector).text().indexOf(textToMatch) > -1)
+  }
   _isVisible() {
     return this.wrapper.find(this.selector).length > 0
   }

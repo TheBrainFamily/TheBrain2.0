@@ -18,6 +18,14 @@ import CourseProgressBar from './CourseProgressBar'
 import LevelUpWrapper from './LevelUpWrapper'
 
 class Lecture extends React.Component {
+  _onEnd = async () => {
+    const courseId = (this.props.selectedCourse && this.props.selectedCourse._id) || this.props.match.params.courseId
+    await this.props.clearNotCasual()
+    this.props.lessonWatchedMutation({courseId}).then(() => {
+      this.props.dispatch(push('/questions'))
+    })
+  }
+
   render () {
     if (this.props.data.loading) {
       return (<p>Loading...</p>)
@@ -38,7 +46,7 @@ class Lecture extends React.Component {
       )
     }
 
-    const selectedCourse = (this.props.selectedCourse && this.props.selectedCourse._id) || this.props.match.params.courseId
+
 
     return (
       <span>
@@ -47,8 +55,9 @@ class Lecture extends React.Component {
           <div id='video'>
             <h2>Watch the video<br />
               and wait for the questions.</h2>
-            <LectureVideoWithRouter lesson={this.props.data.Lesson} courseId={selectedCourse} />
+            <LectureVideoWithRouter lesson={this.props.data.Lesson} onEnd={this._onEnd} />
             <br />
+            <div className='skipLecture' onClick={this._onEnd}>Skip intro and start learning</div>
             <CourseIcon simple size={100} name={this.props.courseData.Course.name} />
           </div>
         </FlexibleContentWrapper>
@@ -72,28 +81,14 @@ export class LectureVideo extends React.Component {
         className={'youTube-player'}
         videoId={this.props.lesson.youtubeId}
         opts={opts}
-        onEnd={this._onEnd}
+        onEnd={this.props.onEnd}
       />
     )
   }
 
-  _onEnd = async () => {
-    await this.props.clearNotCasual()
-    console.log('onYTend props:', this.props)
-    this.props.lessonWatchedMutation({courseId: this.props.courseId}).then(() => {
-      this.props.dispatch(push('/questions'))
-    })
-  }
 }
 
 const LectureVideoWithRouter = compose(
-  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
-  graphql(clearNotCasualItems, {
-    props: ({ownProps, mutate}) => ({
-      clearNotCasual: () => mutate({
-      })
-    })
-  }),
   withRouter,
   connect()
 )(LectureVideo)
@@ -106,6 +101,13 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  graphql(clearNotCasualItems, {
+    props: ({ownProps, mutate}) => ({
+      clearNotCasual: () => mutate({
+      })
+    })
+  }),
   graphql(currentLessonQuery, {
     options: (ownProps) => {
       const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId

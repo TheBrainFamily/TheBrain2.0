@@ -15,6 +15,9 @@ export class CypressElement {
     this.el.first().type(value)
   }
 
+  assertContentMatches(textToMatch) {
+    this.el.contains(textToMatch)
+  }
   assertIsVisible() {
     this.el.should('exist')
   }

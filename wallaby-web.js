@@ -1,6 +1,7 @@
 process.env.BABEL_ENV="test"
 process.env.ENZYME=true
 process.env.NODE_ENV="TESTING"
+process.env.WALLABY=true
 
 module.exports = (wallaby) => {
   return {
@@ -13,16 +14,20 @@ module.exports = (wallaby) => {
       'server/src/**/*.js',
       '!server/src/**/*.spec.js',
       'cypress/integration/pageObjects/*.js',
+      'cypress/integration/helpers/*.js',
       'testing/testHelpers/**/*.js',
-      'clientEnzymeTest.json'
+      'cypress/jest.config.js',
+      {pattern: './.enzymePreviewStyle.css', instrument: false}
     ],
     tests: [
       'cypress/integration/landingPage.test.js',
+      'cypress/integration/lecture.test.js',
     ],
     compilers: {'**/*.js': wallaby.compilers.babel()},
     env: {type: 'node'},
     setup: function (wallaby) {
-      const jestConfig = require('./clientEnzymeTest');
+      const jestConfig = require('./cypress/jest.config');
+      delete jestConfig.rootDir
       jestConfig.moduleDirectories = [
         'node_modules', '<rootDir>/server/node_modules', '<rootDir>/client/node_modules'
       ];
