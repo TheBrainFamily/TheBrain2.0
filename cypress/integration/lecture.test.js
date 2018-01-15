@@ -66,6 +66,6 @@ describe('Lecture', async () => {
 
   })
 
-})
+}, 10000)
 
 // create the logged in user with courses
