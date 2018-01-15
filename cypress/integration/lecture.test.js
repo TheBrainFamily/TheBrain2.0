@@ -64,8 +64,8 @@ describe('Lecture', async () => {
     // console.log(driver.wrapper.find(".flashcard-content-text").text().indexOf("What is"))
     // Then I see the first lecture form the series
 
-  })
+  }, 10000)
 
-}, 10000)
+})
 
 // create the logged in user with courses
