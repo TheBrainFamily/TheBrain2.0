@@ -14,7 +14,7 @@ export class FlashcardsRepository extends MongoRepository {
     return flashcards
   }
 
-  async getFlashcardsByIds (ids: [Object]) {
+  async getFlashcardsByIds (ids: [String]) {
     const flashcardsQuery = {_id: {$in: ids}}
     const flashcards = await this.flashcardsCollection.find(flashcardsQuery)
     return flashcards.toArray()
