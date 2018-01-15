@@ -60,7 +60,6 @@ describe('Lecture', async () => {
     await lecturePage.skipLecture()
 
     const questionsPage = new QuestionsPage(driver)
-    driver.saveHtml()
     await questionsPage.assertFlashcardShown("What is the name of this course")
     // console.log(driver.wrapper.find(".flashcard-content-text").text().indexOf("What is"))
     // Then I see the first lecture form the series
