@@ -46,8 +46,6 @@ class Lecture extends React.Component {
       )
     }
 
-
-
     return (
       <span>
         <CourseProgressBar />
@@ -85,7 +83,6 @@ export class LectureVideo extends React.Component {
       />
     )
   }
-
 }
 
 const LectureVideoWithRouter = compose(
