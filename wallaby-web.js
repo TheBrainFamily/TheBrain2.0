@@ -13,20 +13,19 @@ module.exports = (wallaby) => {
       '!client/src/**/*.test.js',
       'server/src/**/*.js',
       '!server/src/**/*.spec.js',
-      'cypress/integration/pageObjects/*.js',
-      'cypress/integration/helpers/*.js',
+      'testing/web/features/pageObjects/*.js',
       'testing/testHelpers/**/*.js',
-      'cypress/jest.config.js',
+      'testing/common/**/*.js',
+      'testing/web/jest.config.js',
       {pattern: './.enzymePreviewStyle.css', instrument: false}
     ],
     tests: [
-      'cypress/integration/landingPage.test.js',
-      'cypress/integration/lecture.test.js',
+      'testing/web/features/*.test.js',
     ],
     compilers: {'**/*.js': wallaby.compilers.babel()},
     env: {type: 'node'},
     setup: function (wallaby) {
-      const jestConfig = require('./cypress/jest.config');
+      const jestConfig = require('./testing/web/jest.config');
       delete jestConfig.rootDir
       jestConfig.moduleDirectories = [
         'node_modules', '<rootDir>/server/node_modules', '<rootDir>/client/node_modules'

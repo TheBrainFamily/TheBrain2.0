@@ -1,5 +1,5 @@
 module.exports = {
-  rootDir: '../.',
+  rootDir: '../../',
   "displayName": "mobile enzyme e2e",
   "haste": {
     "defaultPlatform": "ios",
@@ -12,7 +12,7 @@ module.exports = {
       "react-native"
     ]
   },
-  'testMatch': ['<rootDir>/testingMobile/App.test.js'],
+  'testMatch': ['<rootDir>/testing/mobile/App.test.js'],
   "moduleNameMapper": {
     "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$": "RelativeImageStub",
       "^React$": "<rootDir>/mobileClient/node_modules/react",

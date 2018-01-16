@@ -4,11 +4,11 @@
 // I want to see introduction info on the landing page and go to course selector
 
 /* eslint-env jest */
-import startApp from '../../testing/testHelpers/startApp'
+import startApp from '../../testHelpers/startApp'
 import { CourseSelectorPage } from './pageObjects/CourseSelectorPage'
 import { LandingPage } from './pageObjects/LandingPage'
 import { LecturePage } from './pageObjects/LecturePage'
-import { getCoursesRepoWithDefaults, getLessonsRepoWithDefaults } from './helpers/reposWithDefaults'
+import { getCoursesRepoWithDefaults, getLessonsRepoWithDefaults } from '../../common/serverStateHelpers/helpers/reposWithDefaults'
 
 const returnContext = async function () {
   const coursesRepository = await getCoursesRepoWithDefaults()

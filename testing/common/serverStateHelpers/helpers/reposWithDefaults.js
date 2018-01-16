@@ -1,6 +1,6 @@
-import { CoursesRepository } from '../../../server/src/api/repositories/CoursesRepository'
-import { LessonsRepository } from '../../../server/src/api/repositories/LessonsRepository'
-import { FlashcardsRepository } from '../../../server/src/api/repositories/FlashcardsRepository'
+import { CoursesRepository } from '../../../../server/src/api/repositories/CoursesRepository'
+import { LessonsRepository } from '../../../../server/src/api/repositories/LessonsRepository'
+import { FlashcardsRepository } from '../../../../server/src/api/repositories/FlashcardsRepository'
 
 let getCoursesRepoWithDefaults = async function () {
   const coursesRepository = new CoursesRepository()

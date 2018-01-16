@@ -1,3 +1,15 @@
 {
-
+  "baseUrl": null,
+  "fixturesFolder": "testing/web/cypress/fixtures",
+  "integrationFolder": "testing/web/features",
+  "pluginsFile": "testing/web/cypress/plugins",
+  "screenshotsFolder": "testing/web/cypress/screenshots",
+  "supportFile": "testing/web/cypress/support",
+  "testFiles": "*.js",
+  "videoUploadOnPasses": false,
+  "videosFolder": "testing/web/cypress/videos",
+  "viewportHeight": 660,
+  "viewportWidth": 1000,
+  "waitForAnimations": true,
+  "watchForFileChanges": true
 }

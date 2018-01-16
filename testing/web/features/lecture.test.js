@@ -1,13 +1,13 @@
 /* eslint-env jest */
-import startApp from '../../testing/testHelpers/startApp'
+import startApp from '../../testHelpers/startApp'
 import { LecturePage } from './pageObjects/LecturePage'
 import {
   getCoursesRepoWithDefaults, getFlashcardsRepoWithDefaults,
   getLessonsRepoWithDefaults
-} from './helpers/reposWithDefaults'
-import { UsersRepository } from '../../server/src/api/repositories/UsersRepository'
-import { UserDetailsRepository } from '../../server/src/api/repositories/UserDetailsRepository'
-import { FlashcardsRepository } from '../../server/src/api/repositories/FlashcardsRepository'
+} from '../../common/serverStateHelpers/helpers/reposWithDefaults'
+import { UsersRepository } from '../../../server/src/api/repositories/UsersRepository'
+import { UserDetailsRepository } from '../../../server/src/api/repositories/UserDetailsRepository'
+import { FlashcardsRepository } from '../../../server/src/api/repositories/FlashcardsRepository'
 import { QuestionsPage } from './pageObjects/QuestionsPage'
 
 const returnContext = async () => {
