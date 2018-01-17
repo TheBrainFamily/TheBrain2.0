@@ -62,6 +62,7 @@
     "react-scripts": "1.0.17",
     "react-transition-group": "^2.1.0",
     "react-youtube": "^7.3.0",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^4.9.1",
     "resolve-pathname": "^2.0.2",
     "smartlook-client": "^2.2.0",
