@@ -10,16 +10,16 @@ import { course } from '../actions'
 import update from 'immutability-helper'
 import _ from 'lodash'
 
-import coursesQuery from '../graphql/queries/courses'
-import userDetailsQuery from '../graphql/queries/userDetails'
+import coursesQuery from 'thebrain-shared/graphql/queries/courses'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import CourseIcon from './CourseIcon'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import YouTube from 'react-youtube'
 import androidIcon from '../img/google_play_en.svg'
 import iosIcon from '../img/app_store_en.svg'
 
-import currentUserQuery from '../graphql/queries/currentUser'
-import logInWithFacebook from '../graphql/mutations/logInWithFacebook'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import logInWithFacebook from 'thebrain-shared/graphql/mutations/logInWithFacebook'
 
 class Home extends React.Component {
   constructor (props) {

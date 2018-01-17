@@ -2,8 +2,8 @@ import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import cardsGreen from '../img/menu-cards-green.png'
 import cardsRed from '../img/menu-cards-red.png'
-import sessionCount from '../graphql/queries/sessionCount'
-import userDetailsQuery from '../graphql/queries/userDetails'
+import sessionCount from 'thebrain-shared/graphql/queries/sessionCount'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import levelConfig from '../helpers/levelConfig'
 
 class MenuProfile extends React.Component {
