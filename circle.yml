@@ -19,6 +19,19 @@ jobs:
 #      - run: pushd ~/TheBrain2.0/server/
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
 
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
+
 ### SERVER
       - restore_cache:
           keys:
