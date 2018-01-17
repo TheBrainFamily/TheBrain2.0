@@ -4,29 +4,15 @@
 // I want to see introduction info on the landing page and go to course selector
 
 /* eslint-env jest */
-import { CoursesRepository } from '../../server/src/api/repositories/CoursesRepository'
 import startApp from '../../testing/testHelpers/startApp'
 import { CourseSelectorPage } from './pageObjects/CourseSelectorPage'
 import { LandingPage } from './pageObjects/LandingPage'
-import { LessonsRepository } from '../../server/src/api/repositories/LessonsRepository'
 import { LecturePage } from './pageObjects/LecturePage'
+import { getCoursesRepoWithDefaults, getLessonsRepoWithDefaults } from './helpers/reposWithDefaults'
 
 const returnContext = async function () {
-  const coursesRepository = new CoursesRepository()
-  await coursesRepository.coursesCollection.insert({_id: 'testCourseId', name: 'testCourseName'})
-  await coursesRepository.coursesCollection.insert({_id: 'testCourse2Id', name: 'testCourseName2'})
-
-  const lessonsRepository = new LessonsRepository()
-  await lessonsRepository.lessonsCollection.insert(
-    {
-      _id: 'lessonId',
-      position: 1,
-      description: 'first lesson',
-      flashcardIds: [],
-      youtubeId: 'QnQe0xW_JY4',
-      courseId: 'testCourseId'
-    }
-  )
+  const coursesRepository = await getCoursesRepoWithDefaults()
+  const lessonsRepository = await getLessonsRepoWithDefaults()
   const context = {
     Courses: coursesRepository,
     Lessons: lessonsRepository,

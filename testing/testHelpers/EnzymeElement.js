@@ -21,6 +21,11 @@ export class EnzymeElement {
     input.simulate('change')
   }
 
+  assertContentMatches(textToMatch) {
+    const foundText = this.wrapper.find(this.selector).text()
+
+    return assert(foundText.indexOf(textToMatch) > -1, `found ${foundText} instead of ${textToMatch}`)
+  }
   _isVisible() {
     return this.wrapper.find(this.selector).length > 0
   }

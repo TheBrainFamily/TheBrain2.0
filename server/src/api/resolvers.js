@@ -176,28 +176,7 @@ const resolvers = {
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
       const flashcardIds = lesson.flashcardIds
-      console.log('Gandecki lesson', lesson)
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
-
-      // TODO this shouldn't be part of resolver, and also, we need to improve the code, get rid of m t i etc
-      const shuffle = (array) => {
-        let m = array.length
-        let t
-        let i
-
-        // While there remain elements to shuffle…
-        while (m) {
-          // Pick a remaining element…
-          i = Math.floor(Math.random() * m--)
-
-          // And swap it with the current element.
-          t = array[m]
-          array[m] = array[i]
-          array[i] = t
-        }
-
-        return array
-      }
 
       const ensureNoHardQuestionAtTheBeginning = (flashcards, casualsInRow = 3) => {
         const getCasualFlashcard = () => {
@@ -227,7 +206,6 @@ const resolvers = {
         }
       }
 
-      shuffle(flashcards)
       ensureNoHardQuestionAtTheBeginning(flashcards)
 
       flashcards.forEach((flashcard) => {
