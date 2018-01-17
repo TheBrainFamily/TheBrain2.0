@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 
 import ProgressBar from './ProgressBar'
 
-import currentLessonQuery from '../shared/graphql/queries/currentLesson'
-import lessonCountQuery from '../shared/graphql/queries/lessonCount'
+import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
+import lessonCountQuery from 'thebrain-shared/graphql/queries/lessonCount'
 import WithData from './WithData'
 
 class CourseProgressBar extends React.Component {

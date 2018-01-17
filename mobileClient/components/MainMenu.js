@@ -17,12 +17,12 @@ import Loading from './Loading'
 
 import styles from '../styles/styles'
 import appStyle from '../styles/appStyle'
-import levelConfig from '../shared/helpers/levelConfig'
+import levelConfig from 'thebrain-shared/helpers/levelConfig'
 
-import currentUserQuery from '../shared/graphql/queries/currentUser'
-import sessionCountQuery from '../shared/graphql/queries/sessionCount'
-import userDetailsQuery from '../shared/graphql/queries/userDetails'
-import closeCourseMutation from '../shared/graphql/mutations/closeCourse'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
 import WithData from './WithData'
 
 const MenuButton = (props) => (

@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cypress/base:6
+      - image: cypress/base:8
       - image: circleci/mongo:3
     working_directory: ~/TheBrain2.0
     steps:
@@ -18,6 +18,19 @@ jobs:
             mkdir -p ~/TheBrain2.0/mobileClient/artifacts
 #      - run: pushd ~/TheBrain2.0/server/
 #      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
+
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
 
 ### SERVER
       - restore_cache:

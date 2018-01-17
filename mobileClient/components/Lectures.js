@@ -7,8 +7,8 @@ import PageContainer from './PageContainer'
 import PageTitle from './PageTitle'
 import Video from './Video'
 
-import lessonsQuery from '../shared/graphql/queries/lessons'
-import currentLessonQuery from '../shared/graphql/queries/currentLesson'
+import lessonsQuery from 'thebrain-shared/graphql/queries/lessons'
+import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import WithData from './WithData'
 
 // TODO what do we do about this one?

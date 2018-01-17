@@ -12,8 +12,8 @@ import FBLoginButton from './FBLoginButton'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import TextField from 'material-ui/TextField'
 
-import currentUserQuery from '../graphql/queries/currentUser'
-import userDetailsQuery from '../graphql/queries/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 
 class Login extends React.Component {
   state = {

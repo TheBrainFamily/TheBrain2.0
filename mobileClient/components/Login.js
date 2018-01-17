@@ -13,8 +13,8 @@ import Loading from './Loading'
 
 import styles from '../styles/styles'
 
-import currentUserQuery from '../shared/graphql/queries/currentUser'
-import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import WithData from './WithData'
 
 class Login extends React.Component {

@@ -12,16 +12,19 @@ module.exports = (wallaby) => {
       'server/src/**/*.js',
       '!server/src/**/*.spec.js',
       'testing/testHelpers/**/*.js',
-      'testingMobile/**/*.snap'
+      'testing/common/**/*.js',
+      'testing/mobile/**/*.snap',
+      'testing/mobile/jest.config.js'
     ],
     tests: [
-      'testingMobile/App.test.js',
+      'testing/mobile/App.test.js',
     ],
     compilers: {'**/*.js': wallaby.compilers.babel()},
     env: {type: 'node'},
     setup: function (wallaby) {
       process.env.NODE_PATH = '';
-      const jestConfig = require('./package.json').jest;
+      const jestConfig = require('./testing/mobile/jest.config');
+      delete jestConfig.rootDir
       jestConfig.moduleDirectories = [
         'node_modules', '<rootDir>/server/node_modules', '<rootDir>/mobileClient/node_modules'
       ];

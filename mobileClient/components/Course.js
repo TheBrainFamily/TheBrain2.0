@@ -9,7 +9,7 @@ import courseLogos from '../helpers/courseLogos'
 import CircleButton from './CircleButton'
 import Lecture from './Lecture'
 
-import currentItemsExistQuery from '../shared/graphql/queries/currentItemsExist'
+import currentItemsExistQuery from 'thebrain-shared/graphql/queries/currentItemsExist'
 import WithData from './WithData'
 
 // TODO this is not really a Course, it's just a wrapper around a lecture, isn't it?

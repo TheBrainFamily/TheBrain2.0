@@ -5,8 +5,8 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import YouTube from 'react-youtube'
 
-import lessonsQuery from '../graphql/queries/lessons'
-import currentLessonQuery from '../graphql/queries/currentLesson'
+import lessonsQuery from 'thebrain-shared/graphql/queries/lessons'
+import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 
 class VideoPreview extends React.Component {
   state = { previewMode: true }

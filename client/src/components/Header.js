@@ -12,9 +12,9 @@ import { course } from '../actions'
 
 import logo from '../img/logo.svg'
 
-import currentUserQuery from '../graphql/queries/currentUser'
-import currentLessonQuery from '../graphql/queries/currentLesson'
-import closeCourseMutation from '../graphql/mutations/closeCourse'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
+import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
 import Hamburger from './Hamburger'
 import MenuProfile from './MenuProfile'
 

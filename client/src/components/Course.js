@@ -6,7 +6,7 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import currentItemsExistQuery from '../graphql/queries/currentItemsExist'
+import currentItemsExistQuery from 'thebrain-shared/graphql/queries/currentItemsExist'
 
 class Course extends React.Component {
   componentWillReceiveProps (nextProps) {

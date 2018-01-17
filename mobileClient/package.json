@@ -23,10 +23,12 @@
     "react-native-scripts": "1.8.1",
     "react-test-renderer": "16.0.0",
     "snazzy": "^7.0.0",
-    "standard": "^10.0.2"
+    "standard": "^10.0.2",
+    "thebrain-shared": "../shared"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
+    "preinstall": "npm link ../shared",
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",

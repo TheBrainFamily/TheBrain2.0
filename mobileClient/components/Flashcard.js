@@ -20,7 +20,7 @@ import {
 
 import styles from '../styles/styles'
 import { updateAnswerVisibility } from '../actions/FlashcardActions'
-import userDetailsQuery from '../shared/graphql/queries/userDetails'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 
 class Flashcard extends React.Component {
   state: {

@@ -7,9 +7,9 @@ import _ from 'lodash'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import levelConfig from '../helpers/levelConfig'
-import currentUserQuery from '../graphql/queries/currentUser'
-import userDetailsQuery from '../graphql/queries/userDetails'
-import confirmLevelUpMutation from '../graphql/mutations/confirmLevelUp'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import confirmLevelUpMutation from 'thebrain-shared/graphql/mutations/confirmLevelUp'
 
 class Congratulations extends React.Component {
   click = () => {
