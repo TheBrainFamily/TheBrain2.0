@@ -1,0 +1,17 @@
+{
+  "name": "thebrain-shared",
+  "version": "1.0.0",
+  "description": "shared modules for thebrain app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "graphql": "^0.10.5",
+    "graphql-tag": "^2.6.1",
+    "immutability-helper": "^2.6.4",
+    "react-apollo": "^2.0.4"
+  }
+}

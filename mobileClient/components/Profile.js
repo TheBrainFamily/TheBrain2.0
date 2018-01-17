@@ -12,11 +12,11 @@ import PageTitle from './PageTitle'
 import Separator from './Separator'
 
 import styles from '../styles/styles'
-import changePasswordMutation from '../shared/graphql/queries/changePasswordMutation'
-import switchUserIsCasualMutation from '../shared/graphql/mutations/switchUserIsCasual'
-import getPasswordValidationState from '../shared/helpers/getPasswordValidationState'
-import userDetailsQuery from '../shared/graphql/queries/userDetails'
-import currentUserQuery from '../shared/graphql/queries/currentUser'
+import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
+import switchUserIsCasualMutation from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
+import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
+import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import WithData from './WithData'
 
 class Profile extends React.Component {
