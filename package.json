@@ -10,8 +10,8 @@
     "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/web",
     "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile",
     "enzymeTest:watch": "npm run enzymeTest -- --watch",
-    "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules",
-    "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install",
+    "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules && rm -rf shared/node_modules",
+    "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install && ../shared && npm install",
     "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web server",
     "makeStandardHappy": "pushd mobileClient; npm run standardFix ; pushd ../server npm run standardFix ; pushd ../client; npm run standardFix"
   },
