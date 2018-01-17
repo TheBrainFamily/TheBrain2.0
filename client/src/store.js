@@ -17,10 +17,10 @@ const history = createHistory()
 
 const devToolsExtension = window && window.__REDUX_DEVTOOLS_EXTENSION__
 
-//TODO do only in dev
+// TODO do only in dev
 const logger = createLogger({
   predicate: (getState, action) => action.error
-});
+})
 
 const createTheBrainStore = (history) => {
   return createStore(
