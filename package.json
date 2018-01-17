@@ -7,7 +7,7 @@
     "test": "npm run cypressTestCI && npm run enzymeTest",
     "cypressTest": "BABEL_ENV=development cypress open",
     "cypressTestCI": "BABEL_ENV=development cypress run",
-    "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects cypress",
+    "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/web",
     "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile",
     "enzymeTest:watch": "npm run enzymeTest -- --watch",
     "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules",
