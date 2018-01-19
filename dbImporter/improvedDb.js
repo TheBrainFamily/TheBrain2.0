@@ -1,5 +1,5 @@
-var chemistry = db.courses.insertOne({_id: (new ObjectId()).valueOf(), name: 'Chemistry', color: '#662d91' });
 var biology = db.courses.insertOne({_id: (new ObjectId()).valueOf(), name: 'Biology', color: '#62c46c' });
+var chemistry = db.courses.insertOne({_id: (new ObjectId()).valueOf(), name: 'Chemistry', color: '#662d91' });
 var computerScience = db.courses.insertOne({_id: (new ObjectId()).valueOf(), name: 'Computer Science', color: '#000000', isDisabled: true });
 var history = db.courses.insertOne({_id: (new ObjectId()).valueOf(), name: 'History', color: '#000000', isDisabled: true });
 

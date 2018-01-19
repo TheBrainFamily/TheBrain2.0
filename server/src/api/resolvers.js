@@ -178,6 +178,7 @@ const resolvers = {
       const flashcardIds = lesson.flashcardIds
       const flashcards = await context.Flashcards.getFlashcardsByIds(flashcardIds)
 
+      // TODO this should be extracted ant it's functionality properly unit tested
       const ensureNoHardQuestionAtTheBeginning = (flashcards, casualsInRow = 3) => {
         const getCasualFlashcard = () => {
           for (let i = flashcards.length - 1; i >= 0; --i) {
@@ -207,12 +208,13 @@ const resolvers = {
       }
 
       ensureNoHardQuestionAtTheBeginning(flashcards)
-
-      flashcards.forEach((flashcard) => {
+      for (let index = 0; index < flashcards.length; index++) {
+        const flashcard = flashcards[index]
+        // TODO test for the isCasual case
         if (!userDetails.isCasual || (userDetails.isCasual && flashcard.isCasual)) {
-          context.Items.create(flashcard._id, userId, args.courseId, !!flashcard.isCasual)
+          await context.Items.create(flashcard._id, userId, args.courseId, !!flashcard.isCasual)
         }
-      })
+      }
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)

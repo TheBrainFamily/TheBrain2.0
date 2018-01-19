@@ -1,7 +1,5 @@
-import casual from 'casual'
 import gql from 'graphql-tag'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
-import _ from 'lodash'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
@@ -10,63 +8,10 @@ import { CoursesRepository } from './repositories/CoursesRepository'
 import { LessonsRepository } from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
 import { makeFlashcards } from '../testHelpers/makeFlashcards'
+import { mongoObjectId } from '../testHelpers/mongoObjectId'
+import { makeItems } from '../testHelpers/makeItems'
 
 extendExpect()
-
-// TODO extract the common functionality to a test helper
-const mongoObjectId = function () {
-  const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
-  return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
-    return (Math.random() * 16 | 0).toString(16)
-  }).toLowerCase()
-}
-
-casual.define('flashcard', function () {
-  return {
-    _id: mongoObjectId(),
-    question: casual.sentence,
-    answer: casual.sentence
-  }
-})
-
-casual.define('item', function () {
-  return {
-    flashcardId: mongoObjectId(),
-    userId: mongoObjectId(),
-    actualTimesRepeated: 0,
-    easinessFactor: 2.5,
-    extraRepeatToday: false,
-    lastRepetition: 0,
-    nextRepetition: 0,
-    previousDaysChange: 0,
-    timesRepeated: 0
-  }
-})
-
-type MakeItemsData = {
-  number?: number,
-  itemsToExtend?: Array<Object>
-}
-
-type MakeFlashcardsData = {
-  number?: number,
-  flashcardsToExtend?: Array<Object>
-}
-
-function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: MakeItemsData = {}) {
-  const addedItems = []
-  _.times(number, (index) => {
-    let newFlashcard = casual.item
-    if (itemsToExtend[index]) {
-      newFlashcard = {
-        ...newFlashcard,
-        ...itemsToExtend[index]
-      }
-    }
-    addedItems.push(newFlashcard)
-  })
-  return addedItems.map(item => itemsCollection.insert(item))
-}
 
 describe('Courses query', () => {
   it('returns all courses', async () => {
