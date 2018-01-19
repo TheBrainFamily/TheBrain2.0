@@ -8,15 +8,14 @@ export class LecturePage {
   }
 
   get skipLectureButton () {
-    return this.driver.getElement("#video .skipLecture")
+    return this.driver.getElement('#video .skipLecture')
   }
 
   assertIsVisible () {
     return this.lectureVideo.assertIsVisible()
   }
 
-  async skipLecture() {
+  async skipLecture () {
     await this.skipLectureButton.click()
   }
-
 }

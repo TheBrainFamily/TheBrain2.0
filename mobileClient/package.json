@@ -34,8 +34,7 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "standard": "standard --verbose | snazzy",
-    "standardFix": "standard --verbose --fix | snazzy"
+    "standard": "standard --verbose --fix | snazzy"
   },
   "jest": {
     "preset": "jest-expo",

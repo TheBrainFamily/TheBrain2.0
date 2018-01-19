@@ -55,6 +55,5 @@ describe('Landing Page', () => {
     const lecturePage = new LecturePage(driver)
 
     await lecturePage.assertIsVisible()
-
   })
 })

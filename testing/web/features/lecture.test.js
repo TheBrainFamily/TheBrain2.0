@@ -45,7 +45,6 @@ const returnContext = async () => {
   }
 }
 
-
 describe('Lecture', async () => {
   // In order to learn faster about a subject
   // As a student
@@ -54,18 +53,16 @@ describe('Lecture', async () => {
     // Given I am a new student
     // When I open the lecture page
     const context = await returnContext()
-    console.log("Gandecki context.Courses", context.Courses);
+    console.log('Gandecki context.Courses', context.Courses)
     const driver = await startApp('/lecture', context)
     const lecturePage = new LecturePage(driver)
     await lecturePage.skipLecture()
 
     const questionsPage = new QuestionsPage(driver)
-    await questionsPage.assertFlashcardShown("What is the name of this course")
+    await questionsPage.assertFlashcardShown('What is the name of this course')
     // console.log(driver.wrapper.find(".flashcard-content-text").text().indexOf("What is"))
     // Then I see the first lecture form the series
-
   }, 10000)
-
 })
 
 // create the logged in user with courses

@@ -9,17 +9,17 @@ let getCoursesRepoWithDefaults = async function () {
   return coursesRepository
 }
 
-let getFlashcardsRepoWithDefaults = async function() {
+let getFlashcardsRepoWithDefaults = async function () {
   const flashcardsRepository = new FlashcardsRepository()
   await flashcardsRepository.flashcardsCollection.insert({
-    _id: "fOneId",
-    "question" : "What is the name of this course",
-    "answer" : "Biology"
+    _id: 'fOneId',
+    'question': 'What is the name of this course',
+    'answer': 'Biology'
   })
   await flashcardsRepository.flashcardsCollection.insert({
-    _id: "fTwoId",
-    "question" : "How many letters are in the word 'Biology'?",
-    "answer" : "7"
+    _id: 'fTwoId',
+    'question': "How many letters are in the word 'Biology'?",
+    'answer': '7'
   })
   return flashcardsRepository
 }

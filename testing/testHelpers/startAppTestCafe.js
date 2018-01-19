@@ -1,31 +1,26 @@
 const TestCafeDriver = require('./TestCafeDriver').TestCafeDriver
 const t = require('testcafe').t
 
-//TODO extract this to separate function
+// TODO extract this to separate function
 const stringify = function (obj) {
-
   return JSON.stringify(obj, function (key, value) {
-    var fnBody;
-    if (value instanceof Function || typeof value == 'function') {
+    var fnBody
+    if (value instanceof Function || typeof value === 'function') {
+      fnBody = value.toString()
 
-
-      fnBody = value.toString();
-
-      if (fnBody.length < 8 || fnBody.substring(0, 8) !== 'function') { //this is ES6 Arrow Function
-        return '_NuFrRa_' + fnBody;
+      if (fnBody.length < 8 || fnBody.substring(0, 8) !== 'function') { // this is ES6 Arrow Function
+        return '_NuFrRa_' + fnBody
       }
-      return fnBody;
+      return fnBody
     }
     if (value instanceof RegExp) {
-      return '_PxEgEr_' + value;
+      return '_PxEgEr_' + value
     }
-    return value;
-  });
+    return value
+  })
 }
 
-
 const startAppTestCafe = async (path, typeDefs, resolvers) => {
-
   const stringifiedResolvers = stringify(resolvers)
   await t.eval(() => {
     if (window.__APOLLO_CLIENT__) {
@@ -37,7 +32,6 @@ const startAppTestCafe = async (path, typeDefs, resolvers) => {
       const newNetworkInterface = window.__APOLLO_TEST_TOOLS.mockNetworkInterfaceWithSchema({schema})
 
       Object.assign(window.__APOLLO_CLIENT__.networkInterface, newNetworkInterface)
-
     }
   }, {
     dependencies: {stringifiedResolvers, typeDefs}
@@ -47,4 +41,3 @@ const startAppTestCafe = async (path, typeDefs, resolvers) => {
 }
 
 exports.startAppTestCafe = startAppTestCafe
-
