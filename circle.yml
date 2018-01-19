@@ -34,6 +34,10 @@ jobs:
           name: Install shared packages
           working_directory: "~/TheBrain2.0/shared/"
           command: npm install
+      - run:
+          name: Linting of shared package
+          working_directory: "~/TheBrain2.0/shared"
+          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
       - save_cache:
           key: npm-shared-deps-{{ checksum "./shared/package.json" }}
           paths:
@@ -115,6 +119,10 @@ jobs:
           key: npm-testing-deps-{{ checksum "./package.json"  }}
           paths:
             - ~/TheBrain2.0/node_modules
+      - run:
+          name: Linting of test package
+          working_directory: "~/TheBrain2.0/testing"
+          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
       - run:
           name: Enzyme almost-end to end tests for Web
           working_directory: "~/TheBrain2.0/"
