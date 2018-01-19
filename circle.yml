@@ -34,10 +34,6 @@ jobs:
           name: Install shared packages
           working_directory: "~/TheBrain2.0/shared/"
           command: npm install
-      - run:
-          name: Linting of shared package
-          working_directory: "~/TheBrain2.0/shared"
-          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
       - save_cache:
           key: npm-shared-deps-{{ checksum "./shared/package.json" }}
           paths:
@@ -71,6 +67,10 @@ jobs:
           name: Validate standard linting rules on server
           working_directory: "~/TheBrain2.0/server/"
           command: npm run standard
+      - run:
+          name: Validate standard linting rules for the shared package
+          working_directory: "~/TheBrain2.0/shared"
+          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
 
 ### Web Client
       - restore_cache:
