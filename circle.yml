@@ -66,7 +66,7 @@ jobs:
       - run:
           name: Validate standard linting rules on server
           working_directory: "~/TheBrain2.0/server/"
-          command: npm run standard -- > ~/TheBrain2.0/server/artifacts/standardLintingOutput.txt
+          command: npm run standard
 
 ### Web Client
       - restore_cache:
@@ -83,7 +83,7 @@ jobs:
       - run:
           name: Validate Standard linting rules on Web Client
           working_directory: "~/TheBrain2.0/client/"
-          command: npm run standard -- > ~/TheBrain2.0/client/artifacts/standardLintingOutput.txt
+          command: npm run standard
 
 
 ### Mobile Client
@@ -101,7 +101,7 @@ jobs:
       - run:
           name: Validate Standard linting rules on Mobile Client
           working_directory: "~/TheBrain2.0/mobileClient/"
-          command: npm run standard -- > ~/TheBrain2.0/mobileClient/artifacts/standardLintingOutput.txt
+          command: npm run standard
 
 ### Testing package
       - restore_cache:
