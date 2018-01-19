@@ -10,5 +10,4 @@ export class QuestionsPage {
   assertFlashcardShown (text) {
     return this.flashcardQuestion.assertContentMatches(text)
   }
-
 }

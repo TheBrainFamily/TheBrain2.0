@@ -1,9 +1,11 @@
+/* global cy */
+
 export class CypressElement {
   constructor (selector) {
     this.selector = selector
   }
 
-  get el() {
+  get el () {
     return cy.get(this.selector)
   }
 
@@ -15,16 +17,15 @@ export class CypressElement {
     this.el.first().type(value)
   }
 
-  assertContentMatches(textToMatch) {
+  assertContentMatches (textToMatch) {
     this.el.contains(textToMatch)
   }
-  assertIsVisible() {
+  assertIsVisible () {
     this.el.should('exist')
   }
 
-  assertNotVisible() {
-    //TODO why is first() returning html here?
+  assertNotVisible () {
+    // TODO why is first() returning html here?
     this.el.should('not.exist')
   }
-
 }

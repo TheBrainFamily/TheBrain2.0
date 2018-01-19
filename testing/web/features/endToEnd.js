@@ -1,10 +1,12 @@
+/* eslint-env jest */
+/* global cy */
 import { CypressDriver } from '../../testHelpers/CypressDriver'
 import { LandingPage } from './pageObjects/LandingPage'
 import { CourseSelectorPage } from './pageObjects/CourseSelectorPage'
 import { LecturePage } from './pageObjects/LecturePage'
 import { QuestionsPage } from './pageObjects/QuestionsPage'
 
-const getADriver = function(){
+const getADriver = function () {
   cy.visit(`http://localhost:4000`, {
     onBeforeLoad: (win) => {
       win.sessionStorage.clear()
@@ -33,6 +35,6 @@ describe('TheBrainApp', () => {
     await lecturePage.skipLecture()
 
     const questionsPage = new QuestionsPage(driver)
-    await questionsPage.assertFlashcardShown("What is the name of this course")
+    await questionsPage.assertFlashcardShown('What is the name of this course')
   })
 })

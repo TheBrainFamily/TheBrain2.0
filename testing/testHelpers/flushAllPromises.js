@@ -1,2 +1,2 @@
-const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
+const flushAllPromises = () => new Promise(resolve => setImmediate(resolve))
 export default flushAllPromises

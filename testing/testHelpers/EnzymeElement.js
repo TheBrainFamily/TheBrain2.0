@@ -6,7 +6,6 @@ export class EnzymeElement {
     this.selector = selector
   }
 
-
   async click () {
     this.wrapper.find(this.selector).first()
       .simulate('click')
@@ -21,19 +20,19 @@ export class EnzymeElement {
     input.simulate('change')
   }
 
-  assertContentMatches(textToMatch) {
+  assertContentMatches (textToMatch) {
     const foundText = this.wrapper.find(this.selector).text()
 
     return assert(foundText.indexOf(textToMatch) > -1, `found ${foundText} instead of ${textToMatch}`)
   }
-  _isVisible() {
+  _isVisible () {
     return this.wrapper.find(this.selector).length > 0
   }
 
-  assertIsVisible() {
+  assertIsVisible () {
     assert(this._isVisible())
   }
-  assertNotVisible() {
+  assertNotVisible () {
     assert(!this._isVisible())
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-env jest */
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -15,9 +16,8 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-require("regenerator-runtime/runtime");
+require('regenerator-runtime/runtime')
 window.test = it
-
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
