@@ -9,6 +9,7 @@ import schema from './schema'
 import { CoursesRepository } from './repositories/CoursesRepository'
 import { LessonsRepository } from './repositories/LessonsRepository'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
+import { makeFlashcards } from '../testHelpers/makeFlashcards'
 
 extendExpect()
 
@@ -65,25 +66,6 @@ function makeItems ({number: number = 2, itemsToExtend = [], itemsCollection}: M
     addedItems.push(newFlashcard)
   })
   return addedItems.map(item => itemsCollection.insert(item))
-}
-
-async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], flashcardRepository}: MakeFlashcardsData = {}) {
-  const addedFlashcards = []
-  _.times(number, (index) => {
-    let newFlashcard = casual.flashcard
-    if (flashcardsToExtend[index]) {
-      newFlashcard = {
-        ...newFlashcard,
-        ...flashcardsToExtend[index]
-      }
-    }
-    addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
-  }
-  )
-  await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
-
-  return addedFlashcards
 }
 
 describe('Courses query', () => {
