@@ -118,11 +118,11 @@ jobs:
       - run:
           name: Validate standard linting rules for the testing package
           working_directory: "~/TheBrain2.0/testing"
-          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
+          command: npm run makeTestsStandardHappy
       - run:
           name: Validate standard linting rules for the shared package
           working_directory: "~/TheBrain2.0/shared"
-          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
+          command: npm run makeSharedStandardHappy
       - run:
           name: Enzyme almost-end to end tests for Web
           working_directory: "~/TheBrain2.0/"
