@@ -14,7 +14,7 @@ import styles from '../styles/styles'
 
 import lessonWatchedMutationParams from 'thebrain-shared/graphql/mutations/lessonWatchedMutationParams'
 import clearNotCasualItems from 'thebrain-shared/graphql/mutations/clearNotCasualItems'
-import lessonWatchedMutationSchema from '../../shared/graphql/queries/lessonWatchedMutation'
+import lessonWatchedMutationSchema from 'thebrain-shared/graphql/queries/lessonWatchedMutation'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import WithData from './WithData'
 import { mutationConnectionHandler } from './NoInternet'
