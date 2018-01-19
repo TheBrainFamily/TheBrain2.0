@@ -122,8 +122,8 @@ jobs:
           command: npm run startForCypress
           background: true
       - run:
-          name: Wait for the Web Client to start up
-          command: wait-on "http://localhost:3000" -t 60000
+          name: Wait for the "stateless" Web Client to start up
+          command: wait-on "http://localhost:3000" -t 30000
       - run:
           name: Cypress Integration test (without starting up the server) for Web
           working_directory: "~/TheBrain2.0/"
@@ -133,3 +133,28 @@ jobs:
           path: ~/TheBrain2.0/client/artifacts
           path: ~/TheBrain2.0/mobileClient/artifacts
           path: ~/TheBrain2.0/cypress/videos
+
+### End to end with web
+      - run:
+          name: Setup the database data
+          working_directory: ~/TheBrain2.0/server
+          command: npm run loadTestDBData
+      - run:
+          name: Start up the server
+          working_directory: ~/TheBrain2.0/server
+          command: npm start
+          background: true
+      - run:
+          name: Wait for the Server to start up
+          command: wait-on "http://localhost:8080/" -t 30000
+      - run:
+          name: Start the Web Client connecting to real server
+          working_directory: ~/TheBrain2.0/client
+          command: npm start
+          background: true
+      - run:
+          name: Wait for the "Real" Web Client to start up
+          command: wait-on "http://localhost:4000" -t 30000
+      - run:
+          name: Full end to end test run
+          command: npm run cypressTestEndToEndCI

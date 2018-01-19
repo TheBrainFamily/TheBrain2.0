@@ -1,8 +1,7 @@
 // @flow
-
+import _ from 'lodash'
 import casual from 'casual'
 import { mongoObjectId } from './mongoObjectId'
-
 
 casual.define('flashcard', function () {
   return {
@@ -18,20 +17,18 @@ type MakeFlashcardsData = {
 }
 
 export async function makeFlashcards ({number: number = 3, flashcardsToExtend = [], baseFlashcard, flashcardRepository, idPrefix}: MakeFlashcardsData = {}) {
-  console.log("Gandecki idPrefix", idPrefix);
   const addedFlashcards = []
   _.times(number, (index) => {
-      let newFlashcard = casual.flashcard
-      if (flashcardsToExtend[index] || baseFlashcard) {
-        newFlashcard = {
-          ...newFlashcard,
-          _id: `${idPrefix}${newFlashcard._id}`,
-          ...flashcardsToExtend[index] || baseFlashcard,
-        }
+    let newFlashcard = casual.flashcard
+    if (flashcardsToExtend[index] || baseFlashcard) {
+      newFlashcard = {
+        ...newFlashcard,
+        _id: `${idPrefix}${newFlashcard._id}`,
+        ...flashcardsToExtend[index] || baseFlashcard
       }
-      addedFlashcards.push(newFlashcard)
-      // await flashcardRepository.flashcardsCollection.insert(newFlashcard)
     }
+    addedFlashcards.push(newFlashcard)
+  }
   )
   await flashcardRepository.flashcardsCollection.insert(addedFlashcards)
 

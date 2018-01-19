@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import casual from 'casual'
 import { mongoObjectId } from './mongoObjectId'
 
@@ -14,7 +15,6 @@ casual.define('item', function () {
     timesRepeated: 0
   }
 })
-
 
 type MakeItemsData = {
   number?: number,

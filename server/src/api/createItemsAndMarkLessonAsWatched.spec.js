@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import _ from 'lodash';
+import _ from 'lodash'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
@@ -9,15 +9,13 @@ import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { mongoObjectId } from '../testHelpers/mongoObjectId'
 import { makeFlashcards } from '../testHelpers/makeFlashcards'
 
-
 describe('mutation.createItemsAndMarkLessonAsWatched', () => {
   it('creates an item for the next lesson, making sure the first two are casual', async () => {
     const Flashcards = new FlashcardsRepository()
-    const hardcoreFlashcards = await makeFlashcards({number: 4, baseFlashcard: {isCasual: false}, flashcardRepository: Flashcards, idPrefix: "hardcore"})
-    const casualFlashcards = await makeFlashcards({number: 4, baseFlashcard: {isCasual: true}, flashcardRepository: Flashcards, idPrefix: "casual"})
+    const hardcoreFlashcards = await makeFlashcards({number: 4, baseFlashcard: {isCasual: false}, flashcardRepository: Flashcards, idPrefix: 'hardcore'})
+    const casualFlashcards = await makeFlashcards({number: 4, baseFlashcard: {isCasual: true}, flashcardRepository: Flashcards, idPrefix: 'casual'})
 
-
-    const allFlashcardIds = _.map([...hardcoreFlashcards, ...casualFlashcards], "_id")
+    const allFlashcardIds = _.map([...hardcoreFlashcards, ...casualFlashcards], '_id')
     const Lessons = new LessonsRepository()
     await Lessons.lessonsCollection.insert({position: 2, courseId: 'testCourseId', flashcardIds: []})
     await Lessons.lessonsCollection.insert({position: 1, courseId: 'testCourseId', flashcardIds: allFlashcardIds})
@@ -65,7 +63,7 @@ describe('mutation.createItemsAndMarkLessonAsWatched', () => {
                   }
               }
           },
-      `,
+      `
     })
 
     const itemsWithFlashcards = result.data
