@@ -9,7 +9,7 @@ import { push } from 'react-router-redux'
 
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import lessonWatchedMutationParams from 'thebrain-shared/graphql/mutations/lessonWatchedMutationParams'
-import lessonWatchedMutationSchema from 'thebrain-shared/graphql/queries/lessonWatchedMutationSchema'
+import lessonWatchedMutation from '../../../shared/graphql/queries/lessonWatchedMutation'
 import clearNotCasualItems from 'thebrain-shared/graphql/mutations/clearNotCasualItems'
 import CourseIcon from './CourseIcon'
 import courseById from 'thebrain-shared/graphql/queries/courseById'
@@ -27,7 +27,7 @@ class Lecture extends React.Component {
   }
 
   render () {
-    if (this.props.data.loading) {
+    if (this.props.data.loading || this.props.courseData) {
       return (<p>Loading...</p>)
     }
 
@@ -98,7 +98,8 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
-  graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
+  graphql(lessonWatchedMutation, lessonWatchedMutationParams),
+  //TODO can't we simplify this?
   graphql(clearNotCasualItems, {
     props: ({ownProps, mutate}) => ({
       clearNotCasual: () => mutate({
