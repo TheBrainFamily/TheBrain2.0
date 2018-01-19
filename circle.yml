@@ -40,9 +40,9 @@ jobs:
             - ~/TheBrain2.0/shared/node_modules
 
 ### SERVER
-      - restore_cache:
-          keys:
-            - npm-server-deps-{{ checksum "./server/package.json" }}
+#      - restore_cache:
+#          keys:
+#            - npm-server-deps-{{ checksum "./server/package.json" }}
       - run:
           name: Install server packages
           working_directory: "~/TheBrain2.0/server/"
@@ -53,10 +53,10 @@ jobs:
           command: npm test
           environment:
             - CI: true
-      - save_cache:
-          key: npm-server-deps-{{ checksum "./server/package.json" }}
-          paths:
-            - ~/TheBrain2.0/server/node_modules
+#      - save_cache:
+#          key: npm-server-deps-{{ checksum "./server/package.json" }}
+#          paths:
+#            - ~/TheBrain2.0/server/node_modules
       - run:
           name: Collect server integration/unit tests coverage
           working_directory: "~/TheBrain2.0/server/artifacts"
@@ -139,7 +139,7 @@ jobs:
           working_directory: ~/TheBrain2.0/server
           command: npm run loadTestDBData
       - run:
-          name: Start up the server
+          name: Start up the serverser
           working_directory: ~/TheBrain2.0/server
           command: npm start
           background: true
