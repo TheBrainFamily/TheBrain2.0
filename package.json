@@ -1,6 +1,6 @@
 {
   "name": "thebrain2-testing",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper for all-thing TheBrain, mostly for testing purposes",
   "main": "index.js",
   "scripts": {

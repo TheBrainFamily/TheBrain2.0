@@ -1,6 +1,6 @@
 {
   "name": "playerNew",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "devDependencies": {
     "apollo-test-utils-with-context": "^0.3.5",
