@@ -145,7 +145,7 @@ jobs:
           background: true
       - run:
           name: Wait for the Server to start up
-          command: wait-on "http://localhost:8080/" -t 30000
+          command: wait-on "http://localhost:8080/graphiql" -t 30000
       - run:
           name: Start the Web Client connecting to real server
           working_directory: ~/TheBrain2.0/client
