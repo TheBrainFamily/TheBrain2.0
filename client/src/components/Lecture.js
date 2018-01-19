@@ -9,7 +9,7 @@ import { push } from 'react-router-redux'
 
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import lessonWatchedMutationParams from 'thebrain-shared/graphql/mutations/lessonWatchedMutationParams'
-import lessonWatchedMutation from '../../../shared/graphql/queries/lessonWatchedMutation'
+import lessonWatchedMutation from 'thebrain-shared/graphql/queries/lessonWatchedMutation'
 import clearNotCasualItems from 'thebrain-shared/graphql/mutations/clearNotCasualItems'
 import CourseIcon from './CourseIcon'
 import courseById from 'thebrain-shared/graphql/queries/courseById'
@@ -27,7 +27,7 @@ class Lecture extends React.Component {
   }
 
   render () {
-    if (this.props.data.loading || this.props.courseData) {
+    if (this.props.data.loading || this.props.courseData.loading) {
       return (<p>Loading...</p>)
     }
 

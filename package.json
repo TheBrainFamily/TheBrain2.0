@@ -15,12 +15,23 @@
     "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install && pushd ../shared && npm install",
     "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web server",
     "makeStandardHappy": "pushd mobileClient; npm run standardFix ; pushd ../server; npm run standardFix ; pushd ../client; npm run standardFix",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "precommit": "lint-staged"
   },
   "lint-staged": {
+    "mobileClient/**/*.js": [
+      "./mobileClient/node_modules/.bin/standard --fix",
+      "git add"
+    ],
+    "server/**/*.js": [
+      "./mobileClient/node_modules/.bin/standard --fix",
+      "git add"
+    ],
+    "client/**/*.js": [
+      "./mobileClient/node_modules/.bin/standard --fix",
+      "git add"
+    ],
     "*.js": [
-      "standard --fix",
-      "git add",
       "npm run testAll -- --bail --findRelatedTests"
     ]
   },
@@ -49,6 +60,7 @@
     "cypress": "^1.4.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.5",
+    "husky": "^0.14.3",
     "jest": "^22.0.4",
     "jest-expo": "^24.0.0",
     "jquery": "^3.2.1",
@@ -60,6 +72,7 @@
     "react-apollo": "^1.4.16",
     "react-dom": "^15.6.2",
     "react-test-renderer": "^15.6.2",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "standard": "^10.0.3"
   }
 }
