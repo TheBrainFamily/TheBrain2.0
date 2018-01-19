@@ -14,21 +14,23 @@
     "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules && rm -rf shared/node_modules",
     "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install && pushd ../shared && npm install",
     "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web server",
-    "makeStandardHappy": "pushd mobileClient; npm run standardFix ; pushd ../server; npm run standardFix ; pushd ../client; npm run standardFix",
-    "lint-staged": "lint-staged",
+    "makeWebStandardHappy": "pushd ./client; npm run standardFix",
+    "makeMobileStandardHappy": "pushd ./mobileClient; npm run standardFix",
+    "makeServerStandardHappy": "pushd ./server; npm run standardFix",
+    "makeStandardHappy": "npm run makeWebStandardHappy ; npm run makeWebStandardHappy ; npm run makeMobileStandardHappy",
     "precommit": "lint-staged"
   },
   "lint-staged": {
     "mobileClient/**/*.js": [
-      "./mobileClient/node_modules/.bin/standard --fix",
+      "npm run makeMobileStandardHappy -- ",
       "git add"
     ],
     "server/**/*.js": [
-      "./mobileClient/node_modules/.bin/standard --fix",
+      "npm run makeServerStandardHappy -- ",
       "git add"
     ],
     "client/**/*.js": [
-      "./mobileClient/node_modules/.bin/standard --fix",
+      "npm run makeClientStandardHappy -- ",
       "git add"
     ],
     "*.js": [
