@@ -159,7 +159,9 @@ jobs:
           working_directory: "~/TheBrain2.0/"
           command: npm run cypressTestCI
       - store_artifacts:
-           path: ~/TheBrain2.0/server/artifacts
-           path: ~/TheBrain2.0/client/artifacts
-           path: ~/TheBrain2.0/mobileClient/artifacts
-           path: ~/TheBrain2.0/cypress/videos
+           path: |
+            ~/TheBrain2.0/server/artifacts
+            ~/TheBrain2.0/client/artifacts
+            ~/TheBrain2.0/mobileClient/artifacts
+      - store_artifacts:
+           path: ~/TheBrain2.0/testing/web/cypress/videos
