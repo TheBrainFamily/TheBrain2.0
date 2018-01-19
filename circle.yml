@@ -67,10 +67,6 @@ jobs:
           name: Validate standard linting rules on server
           working_directory: "~/TheBrain2.0/server/"
           command: npm run standard
-      - run:
-          name: Validate standard linting rules for the shared package
-          working_directory: "~/TheBrain2.0/shared"
-          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
 
 ### Web Client
       - restore_cache:
@@ -120,8 +116,12 @@ jobs:
           paths:
             - ~/TheBrain2.0/node_modules
       - run:
-          name: Linting of test package
+          name: Validate standard linting rules for the testing package
           working_directory: "~/TheBrain2.0/testing"
+          command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
+      - run:
+          name: Validate standard linting rules for the shared package
+          working_directory: "~/TheBrain2.0/shared"
           command: ../node_modules/.bin/standard | ../node_modules/.bin/snazzy
       - run:
           name: Enzyme almost-end to end tests for Web
