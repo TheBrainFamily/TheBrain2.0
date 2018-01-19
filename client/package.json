@@ -86,7 +86,7 @@
   },
   "scripts": {
     "preinstall": "npm link ../shared",
-    "start": "react-app-rewired start",
+    "start": "PORT=4000 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
