@@ -27,3 +27,7 @@ class App extends Component {
   }
 }
 export default App
+
+process.on('uncaughtException', function (error) {
+  console.log('Uncaught exception error', error)
+})
