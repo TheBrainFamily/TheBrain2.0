@@ -99,7 +99,7 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   graphql(lessonWatchedMutation, lessonWatchedMutationParams),
-  //TODO can't we simplify this?
+  // TODO can't we simplify this?
   graphql(clearNotCasualItems, {
     props: ({ownProps, mutate}) => ({
       clearNotCasual: () => mutate({
