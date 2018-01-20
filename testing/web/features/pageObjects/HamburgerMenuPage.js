@@ -8,7 +8,7 @@ export class HamburgerMenuPage {
   }
 
   get calendarButton () {
-    return this.driver.getElement('#menu\\.btn\\.calendar')
+    return this.driver.getElement('#menu .btn-calendar')
   }
 
   async toggleMenuButton () {
