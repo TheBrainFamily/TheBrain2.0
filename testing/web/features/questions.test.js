@@ -72,14 +72,17 @@ const returnContext = async () => {
 }
 
 describe('Questions', async () => {
-  test('', async () => {
+  test('Student is answering questions and sees repeated flashcard after \'no clue\' answer.', async () => {
     const context = await returnContext()
     const driver = await startApp('/', context)
     const questionsPage = new QuestionsPage(driver)
 
+    await questionsPage.assertFlashcardShown('What is the name of this course')
     await questionsPage.showAnswer()
     await questionsPage.selectNoClue()
-
     questionsPage.assertFlashcardShown("How many letters are in the word 'Biology'?")
+    await questionsPage.showAnswer()
+    await questionsPage.selectEasy()
+    await questionsPage.assertFlashcardShown('What is the name of this course')
   }, 10000)
 })
