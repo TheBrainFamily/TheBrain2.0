@@ -81,5 +81,5 @@ describe('Questions', async () => {
     await questionsPage.selectNoClue()
 
     questionsPage.assertFlashcardShown("How many letters are in the word 'Biology'?")
-  })
+  }, 10000)
 })
