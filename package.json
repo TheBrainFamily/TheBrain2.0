@@ -19,7 +19,7 @@
     "makeServerStandardHappy": "pushd ./server; ./node_modules/.bin/standard --fix",
     "makeSharedStandardHappy": "pushd ./shared ; ../node_modules/.bin/standard --fix",
     "makeTestsStandardHappy": "pushd ./testing; ../node_modules/.bin/standard --fix",
-    "makeStandardHappy": "npm run makeWebStandardHappy ; npm run makeWebStandardHappy ; npm run makeMobileStandardHappy; npm run makeSharedStandardHappy ; npm run makeTestsStandardHappy",
+    "makeStandardHappy": "npm run makeWebStandardHappy ; npm run makeWebStandardHappy ; npm run makeMobileStandardHappy; npm run makeSharedStandardHappy ; npm run makeTestsStandardHappy; npm run makeServerStandardHappy",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -32,7 +32,7 @@
       "git add"
     ],
     "client/**/*.js": [
-      "npm run makeClientStandardHappy -- ",
+      "npm run makeWebStandardHappy -- ",
       "git add"
     ],
     "shared/**/*.js": [
@@ -75,6 +75,7 @@
     "husky": "^0.14.3",
     "jest": "^22.0.4",
     "jest-expo": "^24.0.0",
+    "jest-runner-standard": "0.0.2",
     "jquery": "^3.2.1",
     "lint-staged": "^6.0.1",
     "lodash": "^4.17.4",
