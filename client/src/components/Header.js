@@ -104,11 +104,11 @@ class AppHeader extends React.Component {
                 }
                 {currentUser &&
                 <div>
-                  { this.props.selectedCourse && <a onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
+                  { this.props.selectedCourse && <a id='menu.btn.lectures' onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
                   <a id='menu.btn.calendar'onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
                   <div className={'menu-separator menu-separator-visible'} />
-                  { this.props.selectedCourse && <a onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
+                  { this.props.selectedCourse && <a id='menu.btn.changeCourse' onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
                   {/* <a>ACHIEVEMENTS LIST</a> */}
                   {/* <div className={'menu-separator menu-separator-visible'} /> */}
