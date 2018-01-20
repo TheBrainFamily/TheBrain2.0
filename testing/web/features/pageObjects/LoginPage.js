@@ -3,11 +3,11 @@ export class LoginPage {
     this.driver = driver
   }
 
-  get usernameFiled () {
+  get usernameField () {
     return this.driver.getElement('.login-form .input-username input')
   }
 
-  get passwordFiled () {
+  get passwordField () {
     return this.driver.getElement('.login-form .input-password input')
   }
 
@@ -16,11 +16,11 @@ export class LoginPage {
   }
 
   async fillUsernameFieldWith (username) {
-    return this.usernameFiled.setValue(username)
+    return this.usernameField.setValue(username)
   }
 
   async fillPasswordFieldWith (password) {
-    return this.passwordFiled.setValue(password)
+    return this.passwordField.setValue(password)
   }
 
   async login () {
