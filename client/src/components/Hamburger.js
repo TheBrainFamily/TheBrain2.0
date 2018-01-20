@@ -40,7 +40,9 @@ export default class
     }
     return (
       <DropdownMenu {...menuOptions}>
-        {this.props.children}
+        <div id='menu'>
+          {this.props.children}
+        </div>
       </DropdownMenu>
     )
   }

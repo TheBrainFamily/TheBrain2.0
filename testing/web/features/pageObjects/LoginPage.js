@@ -4,15 +4,15 @@ export class LoginPage {
   }
 
   get usernameFiled () {
-    return this.driver.getElement(':nth-child(3) input')
+    return this.driver.getElement('.login-form .input-username input')
   }
 
   get passwordFiled () {
-    return this.driver.getElement(':nth-child(4) input')
+    return this.driver.getElement('.login-form .input-password input')
   }
 
   get loginButton () {
-    return this.driver.getElement('.login-button')
+    return this.driver.getElement('.login-form .login-button')
   }
 
   async fillUsernameFieldWith (username) {
