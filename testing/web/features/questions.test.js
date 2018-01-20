@@ -1,12 +1,12 @@
 /* eslint-env jest */
 import startApp from '../../testHelpers/startApp'
-import { LecturePage } from './pageObjects/LecturePage'
+import { UsersRepository } from '../../../server/src/api/repositories/UsersRepository'
+import { UserDetailsRepository } from '../../../server/src/api/repositories/UserDetailsRepository'
 import {
   getCoursesRepoWithDefaults, getFlashcardsRepoWithDefaults,
   getLessonsRepoWithDefaults
 } from '../../common/serverStateHelpers/helpers/reposWithDefaults'
-import { UsersRepository } from '../../../server/src/api/repositories/UsersRepository'
-import { UserDetailsRepository } from '../../../server/src/api/repositories/UserDetailsRepository'
+import { ItemsRepository } from '../../../server/src/api/repositories/ItemsRepository'
 import { QuestionsPage } from './pageObjects/QuestionsPage'
 
 const returnContext = async () => {
@@ -31,6 +31,34 @@ const returnContext = async () => {
   }
   const userDetailsRepository = new UserDetailsRepository()
   await userDetailsRepository.userDetailsCollection.insert(loggedInUserDetails)
+  const itemsRepository = new ItemsRepository()
+  itemsRepository.itemsCollection.insert([{
+    '_id': '5a630a5d6e0d7d7f71570e6b',
+    'flashcardId': 'fOneId',
+    'userId': '5a5cb174af92590d2571f849',
+    'courseId': 'testCourseId',
+    'actualTimesRepeated': 0,
+    'easinessFactor': 2.5,
+    'extraRepeatToday': false,
+    'lastRepetition': 0,
+    'nextRepetition': 0,
+    'previousDaysChange': 0,
+    'timesRepeated': 0,
+    'isCasual': false
+  }, {
+    '_id': '5a630a5d657b47ba7fa3a29d',
+    'flashcardId': 'fTwoId',
+    'userId': '5a5cb174af92590d2571f849',
+    'courseId': 'testCourseId',
+    'actualTimesRepeated': 0,
+    'easinessFactor': 2.5,
+    'extraRepeatToday': false,
+    'lastRepetition': 0,
+    'nextRepetition': 0,
+    'previousDaysChange': 0,
+    'timesRepeated': 0,
+    'isCasual': false
+  }])
 
   return {
     Courses: await getCoursesRepoWithDefaults(),
@@ -38,28 +66,20 @@ const returnContext = async () => {
     Flashcards: await getFlashcardsRepoWithDefaults(),
     Users: usersRepository,
     UserDetails: userDetailsRepository,
-    user: loggedInUser
+    user: loggedInUser,
+    Items: itemsRepository
   }
 }
 
-describe('Lecture', async () => {
-  // In order to learn faster about a subject
-  // As a student
-  // I want to watch a lecture
-  test('New student is watching the first lecture and sees the generated flashcards', async () => {
-    // Given I am a new student
-    // When I open the lecture page
+describe('Questions', async () => {
+  test('', async () => {
     const context = await returnContext()
-    console.log('Gandecki context.Courses', context.Courses)
-    const driver = await startApp('/lecture', context)
-    const lecturePage = new LecturePage(driver)
-    await lecturePage.skipLecture()
-
+    const driver = await startApp('/', context)
     const questionsPage = new QuestionsPage(driver)
-    await questionsPage.assertFlashcardShown('What is the name of this course')
-    // console.log(driver.wrapper.find(".flashcard-content-text").text().indexOf("What is"))
-    // Then I see the first lecture form the series
-  }, 10000)
-})
 
-// create the logged in user with courses
+    await questionsPage.showAnswer()
+    await questionsPage.selectNoClue()
+
+    questionsPage.assertFlashcardShown("How many letters are in the word 'Biology'?")
+  })
+})
