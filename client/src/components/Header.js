@@ -106,17 +106,17 @@ class AppHeader extends React.Component {
                 <div>
                   { this.props.selectedCourse && <a onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
-                  <a onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
+                  <a id='menu.btn.calendar'onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
                   <div className={'menu-separator menu-separator-visible'} />
                   { this.props.selectedCourse && <a onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
                   {/* <a>ACHIEVEMENTS LIST</a> */}
                   {/* <div className={'menu-separator menu-separator-visible'} /> */}
-                  <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
+                  <a id='menu.btn.profile' onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
                   <div className={'menu-separator menu-separator-visible'} />
                 </div>
                 }
-                <a onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
+                <a id='menu.btn.contact' onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
                 <div className={'menu-separator'} />
                 <div className={'menu-separator'} />
               </Hamburger>
