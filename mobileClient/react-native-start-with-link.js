@@ -96,7 +96,7 @@ function generateExpoConfig (configName) {
 
 function runBundlerWithConfig (configName) {
   exec(
-    `yarn start`,
+    `npm run runExpo`,
     { stdio: [0, 1, 2] }
   )
 }
