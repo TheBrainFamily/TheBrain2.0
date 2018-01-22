@@ -186,7 +186,7 @@ jobs:
       - run: ls -al
       - run:
           name: Install wait-on
-          command: npm install -g wait-on
+          command: yarn global add wait-on
       - run:
           name: Install server packages
           working_directory: "~/TheBrain2.0/server/"
@@ -217,4 +217,4 @@ workflows:
     jobs:
       - build
       - ios
-
+j
