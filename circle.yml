@@ -147,7 +147,7 @@ jobs:
           working_directory: ~/TheBrain2.0/server
           command: npm run loadTestDBData
       - run:
-          name: Start up the serverser
+          name: Start up the server
           working_directory: ~/TheBrain2.0/server
           command: npm start
           background: true
@@ -173,3 +173,43 @@ jobs:
             ~/TheBrain2.0/mobileClient/artifacts
       - store_artifacts:
            path: ~/TheBrain2.0/testing/web/cypress/videos
+
+  ios:
+    macos:
+      xcode: "9.0"
+    docker:
+      - image: circleci/mongo:3
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run: pwd
+      - run: ls -al
+      - run:
+          name: Install wait-on
+          command: npm install -g wait-on
+      - run:
+          name: Install server packages
+          working_directory: "~/TheBrain2.0/server/"
+          command: yarn install
+      - run:
+          name: Setup the database data
+          working_directory: ~/TheBrain2.0/server
+          command: yarn run loadTestDBData
+      - run:
+          name: Start up the server
+          working_directory: ~/TheBrain2.0/server
+          command: yarn start
+          background: true
+      - run:
+          name: Wait for the Server to start up
+          command: wait-on "http://localhost:8080/graphiql" -t 30000
+      - run:
+          name: Install mobile packages
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: yarn
+      - run:
+          name: E2E ios test
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: yarn run e2e
+
+
