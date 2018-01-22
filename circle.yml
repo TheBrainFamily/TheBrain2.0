@@ -183,6 +183,11 @@ jobs:
       - run: pwd
       - run: ls -al
       - run:
+          name: Startup MongoDB
+          command: |
+            brew install mongo
+            brew services start mongodb
+      - run:
           name: Install wait-on
           command: yarn global add wait-on
       - run:
@@ -205,6 +210,23 @@ jobs:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobileClient
           command: yarn
+      - run:
+          name: Setup macosx kernel settings
+          command: |
+            sudo sysctl -w kern.maxfiles=5242880
+            sudo sysctl -w kern.maxfilesperproc=524288
+      - run:
+          name: Installing ios dependencies
+          command: |
+            npm install -g react-native-cli
+            npm install -g detox-cli
+            brew tap wix/brew
+            brew install applesimutils --HEAD
+            npm install exp --global
+            exp install:ios
+      - run:
+          name: Start up mobile app
+          command: yarn start
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
