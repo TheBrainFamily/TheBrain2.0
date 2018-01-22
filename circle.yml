@@ -228,6 +228,7 @@ jobs:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient
           command: yarn start
+          background: true
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
