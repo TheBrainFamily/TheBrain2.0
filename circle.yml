@@ -211,5 +211,10 @@ jobs:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
           command: yarn run e2e
-
+workflows:
+  version: 2
+  test_release:
+    jobs:
+      - build
+      - ios
 
