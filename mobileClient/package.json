@@ -10,6 +10,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-node6": "^11.0.0",
     "concurrently": "^3.4.0",
+    "detox": "6.0.4",
+    "detox-expo-helpers": "^0.2.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "graphql-tools": "0.10.1",
@@ -35,7 +37,8 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "standard": "standard --verbose --fix | snazzy"
+    "standard": "standard --verbose --fix | snazzy",
+    "e2e": "detox test -c ios.sim --reuse"
   },
   "jest": {
     "preset": "jest-expo",
@@ -73,6 +76,17 @@
     "assets": [
       "./fonts"
     ]
+  },
+  "detox": {
+    "test-runner": "jest",
+    "runner-config": "tests/e2e/config.json",
+    "configurations": {
+      "ios.sim": {
+        "binaryPath": "/Users/lukaszgandecki/.expo/ios-simulator-app-cache/Exponent-2.2.0.app",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    }
   },
   "standard": {
     "parser": "babel-eslint",
