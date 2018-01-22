@@ -220,8 +220,6 @@ jobs:
           command: |
             npm install -g react-native-cli
             npm install -g detox-cli
-            brew tap wix/brew
-            brew install applesimutils --HEAD
             npm install exp --global
             exp install:ios
       - run:
