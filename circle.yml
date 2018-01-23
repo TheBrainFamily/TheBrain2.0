@@ -206,10 +206,17 @@ jobs:
       - run:
           name: Wait for the Server to start up
           command: wait-on "http://localhost:8080/graphiql" -t 30000
+      - restore_cache:
+          keys:
+            - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
       - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobileClient
           command: yarn
+      - save_cache:
+          key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+          paths:
+            - ~/TheBrain2.0/mobileClient/node_modules
       - run:
           name: Setup macosx kernel settings
           command: |
@@ -224,6 +231,7 @@ jobs:
             brew install applesimutils --HEAD
             npm install exp --global
             exp install:ios
+            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo
       - run:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient

@@ -81,7 +81,7 @@
     "runner-config": "tests/e2e/config.json",
     "configurations": {
       "ios.sim": {
-        "binaryPath": "/Users/lukaszgandecki/.expo/ios-simulator-app-cache/Exponent-2.2.0.app",
+        "binaryPath": ".expo/ios-simulator-app-cache/Exponent-2.3.0.app",
         "type": "ios.simulator",
         "name": "iPhone 7"
       }

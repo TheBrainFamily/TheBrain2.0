@@ -15,7 +15,7 @@ afterAll(async () => {
 // const timeout = ms => new Promise(res => setTimeout(res, ms))
 
 jest.setTimeout(14000)
-describe('Example', () => {
+describe('Example', async () => {
   beforeAll(async () => {
     await detox.init(config)
     await reloadApp()
