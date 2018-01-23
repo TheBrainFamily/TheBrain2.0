@@ -8,6 +8,8 @@ import {
 import { UsersRepository } from '../../../server/src/api/repositories/UsersRepository'
 import { UserDetailsRepository } from '../../../server/src/api/repositories/UserDetailsRepository'
 import { QuestionsPage } from './pageObjects/QuestionsPage'
+import { HamburgerMenuPage } from './pageObjects/HamburgerMenuPage'
+import { CalendarPage } from './pageObjects/CalendarPage'
 
 const returnContext = async () => {
   const loggedInUser = {
@@ -42,23 +44,23 @@ const returnContext = async () => {
   }
 }
 
-describe('Lecture', async () => {
-  // In order to learn faster about a subject
-  // As a student
-  // I want to watch a lecture
-  test('New student is watching the first lecture and sees the generated flashcards', async () => {
-    // Given I am a new student
-    // When I open the lecture page
+describe('Calendar', async () => {
+  test('User can see his repetitions scheduled in a calendar', async () => {
     const context = await returnContext()
-    console.log('Gandecki context.Courses', context.Courses)
     const driver = await startApp('/lecture', context)
     const lecturePage = new LecturePage(driver)
     await lecturePage.skipLecture()
 
     const questionsPage = new QuestionsPage(driver)
     await questionsPage.assertFlashcardShown('What is the name of this course')
-    // console.log(driver.wrapper.find(".flashcard-content-text").text().indexOf("What is"))
-    // Then I see the first lecture form the series
+
+    const hamburgerMenu = new HamburgerMenuPage(driver)
+    await hamburgerMenu.toggleMenuButton()
+    await hamburgerMenu.openCalendar()
+
+    const calendarPage = new CalendarPage(driver)
+    calendarPage.assertIsVisible()
+    // TODO: need to figure out how to check the repetitions
   }, 10000)
 })
 

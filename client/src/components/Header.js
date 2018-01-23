@@ -35,9 +35,9 @@ class LoginSwitcher extends React.Component {
 
   render () {
     if (this.props.activated) {
-      return <Link to='#' onClick={this.logout}>LOG OUT</Link>
+      return <Link className='btn-logout' to='#' onClick={this.logout}>LOG OUT</Link>
     }
-    return <Link to='/login'>LOG IN</Link>
+    return <Link className='btn-login' to='/login'>LOG IN</Link>
   }
 }
 
@@ -104,19 +104,19 @@ class AppHeader extends React.Component {
                 }
                 {currentUser &&
                 <div>
-                  { this.props.selectedCourse && <a onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
+                  { this.props.selectedCourse && <a className='btn-lectures' onClick={() => this.props.dispatch(push('/lectures'))}>LECTURES LIST</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
-                  <a onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
+                  <a className='btn-calendar'onClick={() => this.props.dispatch(push('/calendar'))}>REVIEWS CALENDAR</a>
                   <div className={'menu-separator menu-separator-visible'} />
-                  { this.props.selectedCourse && <a onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
+                  { this.props.selectedCourse && <a className='btn-changeCourse' onClick={this.closeCourse()}>CHANGE THE COURSE</a> }
                   { this.props.selectedCourse && <div className={'menu-separator menu-separator-visible'} /> }
                   {/* <a>ACHIEVEMENTS LIST</a> */}
                   {/* <div className={'menu-separator menu-separator-visible'} /> */}
-                  <a onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
+                  <a className='btn-profile' onClick={() => this.props.dispatch(push('/profile'))}>PROFILE</a>
                   <div className={'menu-separator menu-separator-visible'} />
                 </div>
                 }
-                <a onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
+                <a className='btn-contact' onClick={() => this.props.dispatch(push('/contact'))}>CONTACT</a>
                 <div className={'menu-separator'} />
                 <div className={'menu-separator'} />
               </Hamburger>

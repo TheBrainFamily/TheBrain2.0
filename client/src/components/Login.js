@@ -88,6 +88,7 @@ class Login extends React.Component {
           {this.state.error && <div className='text-error'>{ this.state.error }</div>}
           <div>
             <TextField
+              className='input-username'
               ref='username'
               hintText='Username'
               floatingLabelText='Username'
@@ -95,6 +96,7 @@ class Login extends React.Component {
           </div>
           <div>
             <TextField
+              className='input-password'
               ref='password'
               hintText='Password'
               floatingLabelText='Password'

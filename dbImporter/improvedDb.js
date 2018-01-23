@@ -15,6 +15,16 @@ var biologyFlashcard2 = db.flashcards.insertOne({
     "question" : "How many letters are in the word 'Biology'?", 
     "answer" : "7"
 });
+var biologyFlashcard3 = db.flashcards.insertOne({
+  _id: (new ObjectId()).valueOf(),
+  "question" : "Why do we have two holes in our nose?",
+  "answer" : "To smell things better"
+});
+var biologyFlashcard4 = db.flashcards.insertOne({
+  _id: (new ObjectId()).valueOf(),
+  "question" : "Why do we have two eyes",
+  "answer" : "To see things better, duh..."
+});
 
 db.lessons.insertOne({
     _id: (new ObjectId()).valueOf(),
@@ -26,6 +36,17 @@ db.lessons.insertOne({
         biologyFlashcard2.insertedId
     ], 
     "youtubeId" : "QnQe0xW_JY4"
+});
+db.lessons.insertOne({
+  _id: (new ObjectId()).valueOf(),
+  "courseId": biology.insertedId,
+  "position" : NumberInt(2),
+  "description" : "Second The best lesson",
+  "flashcardIds" : [
+    biologyFlashcard3.insertedId,
+    biologyFlashcard4.insertedId
+  ],
+  "youtubeId" : "HVT3Y3_gHGg"
 });
 
 var progress = [
