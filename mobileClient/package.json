@@ -50,6 +50,7 @@
     "graphql-tag": "^2.0.0",
     "immutability-helper": "^2.1.2",
     "lodash": "^4.17.4",
+    "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-apollo": "1.4.15",
     "react-dom": "^16.2.0",
