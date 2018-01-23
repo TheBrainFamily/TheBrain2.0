@@ -36,8 +36,10 @@ describe('TheBrainApp', () => {
     await lecturePage.skipLecture()
 
     const questionsPage = new QuestionsPage(driver)
+    await questionsPage.assertFlashcardShown('What is the name of this course')
     await questionsPage.showAnswer()
     await questionsPage.selectEasy()
+    await questionsPage.assertFlashcardShown('How many letters are in the word \'Biology\'?')
     await questionsPage.showAnswer()
     await questionsPage.selectEasy()
 
@@ -48,6 +50,8 @@ describe('TheBrainApp', () => {
 
     await lecturePage.assertIsVisible()
     await lecturePage.skipLecture()
+
+    await questionsPage.assertFlashcardShown('Why do we have two holes in our nose?')
 
     const hamburgerMenu = new HamburgerMenuPage(driver)
     await hamburgerMenu.toggleMenuButton()
