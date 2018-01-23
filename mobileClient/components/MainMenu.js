@@ -5,9 +5,7 @@ import { compose, graphql, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
-
 import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View, AsyncStorage } from 'react-native'
-import { FBLoginManager } from 'react-native-facebook-login'
 
 import * as courseActions from '../actions/CourseActions'
 import * as mainMenuActions from '../actions/MainMenuActions'
@@ -64,11 +62,6 @@ class MainMenu extends React.Component {
         .then(async () => {
           await this.props.userDetails.refetch()
           this.props.dispatch(courseActions.close())
-          FBLoginManager.getCredentials((error, data) => {
-            if (!error && data && data.credentials) {
-              FBLoginManager.logout(() => {}) // any callback is required
-            }
-          })
           this.props.client.resetStore()
           this.closeMenu()
           this.props.logoutAction && this.props.logoutAction()
