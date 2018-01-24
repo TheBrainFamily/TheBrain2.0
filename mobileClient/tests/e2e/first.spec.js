@@ -1,6 +1,7 @@
 /* eslint-env jest node */
 /* global jest element by device waitFor */
 require('babel-polyfill')
+const fs = require('fs')
 const { reloadApp } = require('detox-expo-helpers')
 const detox = require('detox')
 const config = require('../../package.json').detox
@@ -14,15 +15,22 @@ afterAll(async () => {
 
 // const timeout = ms => new Promise(res => setTimeout(res, ms))
 
-jest.setTimeout(14000)
+jest.setTimeout(20000)
+
+function readPackageJSON () {
+  return JSON.parse(fs.readFileSync('./package.json'))
+}
+
 describe('Example', async () => {
   beforeAll(async () => {
     await detox.init(config)
     if (process.env.DETOX_EXTERNAL_LINK) {
+      console.log('starting detox external link')
+      const expUrl = `https://expo.io/@thebrain/${readPackageJSON().name}`
+      console.log('Gandecki expUrl', expUrl)
       await device.launchApp({
         newInstance: true,
-        url: process.env.DETOX_EXTERNAL_LINK,
-        sourceApp: 'host.exp.exponent',
+        url: expUrl,
         launchArgs: {EXKernelDisableNuxDefaultsKey: true}
       })
     } else {
@@ -38,10 +46,10 @@ describe('Example', async () => {
 
     await element(by.id('skip_intro_button')).tap()
     await expect(element(by.id('skip_intro_button'))).toBeNotVisible()
-  }, 15000)
+  }, 20000)
 
   it('should show hello screen after tap', async () => {
     // await element(by.id('skip_intro_button')).tap();
     await expect(element(by.id('skip_intro_button'))).toBeNotVisible()
-  }, 15000)
+  }, 20000)
 })

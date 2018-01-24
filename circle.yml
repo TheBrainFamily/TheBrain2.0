@@ -236,8 +236,12 @@ jobs:
       - run:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient
-          command: yarn start
+          command: npm start
           background: true
+      - run:
+          name: Publish app with github notification
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: ./node_modules/.bin/appr-all-commits
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
