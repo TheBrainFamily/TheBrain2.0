@@ -17,7 +17,6 @@ import {
   BackHandler
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import { FBLoginManager } from 'react-native-facebook-login'
 
 import Header from './Header'
 import CircleButton from './CircleButton'
@@ -102,7 +101,6 @@ class Home extends React.Component {
       console.log('loguje z FB ', accessTokenFb)
       await this.props.logInWithFacebookAccessToken({ accessTokenFb }).catch(async () => {
         await AsyncStorage.removeItem('accessTokenFb')
-        FBLoginManager.logout(() => {})
         Alert.alert('Facebook login expired', 'Please log in again')
       })
     }
