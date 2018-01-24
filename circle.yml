@@ -241,7 +241,7 @@ jobs:
       - run:
           name: Publish app with github notification
           working_directory: ~/TheBrain2.0/mobileClient
-          command: ./node_modules/.bin/appr-all-commits
+          command: ./node_modules/.bin/appr
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
