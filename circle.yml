@@ -231,7 +231,8 @@ jobs:
             brew install applesimutils --HEAD
             npm install exp --global
             exp install:ios
-            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo
+            mkdir ~/TheBrain2.0/mobileClieng/.expo/
+            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
       - run:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient

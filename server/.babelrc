@@ -2,11 +2,20 @@
   "plugins": [
   ],
   "presets": [
-    "es2015",
+    "env",
     "stage-2",
     "flow"
   ],
   "env": {
+    "lambda": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "6.1.0"
+          }
+        }]
+      ]
+    },
     "test": {
       "plugins": [
         [

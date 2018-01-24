@@ -23,6 +23,8 @@ switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
     break
 }
 
+export { resolvedDBURI }
+
 export class MongoRepository {
   db: Db
 

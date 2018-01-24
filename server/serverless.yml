@@ -1,0 +1,45 @@
+## serverless.yml
+#service: thebrain-server
+#provider:
+#  name: aws
+#  runtime: nodejs6.10
+#
+##functions:
+##  api:
+##    handler: startup-serverlesse.handler
+##    events:
+##      - http: ANY {proxy+}
+#functions:
+#  api:
+#    handler: startup-serverless.helloWorld
+#    # The `events` block defines how to trigger the handler.helloWorld code
+#    events:
+#      - http:
+#          path: hello-world
+#          method: get
+#          cors: true
+
+
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: serverless-hello-world
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs6.10
+  environment:
+    BABEL_CACHE_PATH: "/tmp/babel_cache"
+
+# The `functions` block defines what code to deploy
+functions:
+  api:
+    handler: libLambda/startup-serverless.handler
+    # The `events` block defines how to trigger the handler.helloWorld code
+    events:
+      - http: ANY {proxy+}
