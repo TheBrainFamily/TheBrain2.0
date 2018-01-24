@@ -218,6 +218,10 @@ jobs:
           paths:
             - ~/TheBrain2.0/mobileClient/node_modules
       - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - run:
           name: Setup macosx kernel settings
           command: |
             sudo sysctl -w kern.maxfiles=5242880
