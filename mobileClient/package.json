@@ -38,7 +38,8 @@
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
     "standard": "standard --verbose --fix | snazzy",
-    "e2e": "detox test -c ios.sim --reuse"
+    "e2e": "detox test -c ios.sim",
+    "e2e:local": "npm run e2e -- --reuse"
   },
   "jest": {
     "preset": "jest-expo",
