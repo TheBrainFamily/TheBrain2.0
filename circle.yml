@@ -210,6 +210,10 @@ jobs:
           keys:
             - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
       - run:
+          name: Install shared packages
+          working_directory: ~/TheBrain2.0/shared/
+          command: yarn
+      - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobileClient
           command: yarn
@@ -217,10 +221,6 @@ jobs:
           key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
           paths:
             - ~/TheBrain2.0/mobileClient/node_modules
-      - run:
-          name: Install shared packages
-          working_directory: "~/TheBrain2.0/shared/"
-          command: npm install
       - run:
           name: Setup macosx kernel settings
           command: |
