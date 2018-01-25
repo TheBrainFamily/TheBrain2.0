@@ -210,12 +210,12 @@ jobs:
           keys:
             - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
       - run:
-          name: Install shared packages
-          working_directory: ~/TheBrain2.0/shared/
-          command: yarn
-      - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobileClient
+          command: yarn
+      - run:
+          name: Install shared packages
+          working_directory: ~/TheBrain2.0/shared/
           command: yarn
       - save_cache:
           key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
