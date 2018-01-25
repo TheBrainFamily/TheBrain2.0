@@ -262,6 +262,9 @@ jobs:
           working_directory: ~/TheBrain2.0/mobileClient
           command: ./node_modules/.bin/appr
       - run:
+          name: Sleep to make sure the binary is ready
+          command: sleep 120
+      - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
           command: npm run e2e
