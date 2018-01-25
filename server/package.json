@@ -78,7 +78,7 @@
     "babel-eslint": "^7.2.3",
     "babel-plugin-module-rewrite-with-root": "^0.3.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "babel-preset-aws-lambda": "^1.0.2",
+    "babel-preset-babel6-aws-lambda": "^1.0.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-flow": "^6.23.0",
