@@ -144,8 +144,10 @@ jobs:
           command: wait-on "http://localhost:3000" -t 30000
       - run:
           name: Setup the database data
-          working_directory: ~/TheBrain2.0/server
-          command: npm run loadTestDBData
+          working_directory: ~/TheBrain2.0/
+          environment:
+            - STAGING_MONGOURL: mongodb://localhost:27017/thebrain
+          command: npm run createDefaultDB
       - run:
           name: Start up the server
           working_directory: ~/TheBrain2.0/server
@@ -189,19 +191,32 @@ jobs:
             brew services start mongodb
       - run:
           name: Install wait-on
-          command: yarn global add wait-on
+          command: npm install -g wait-on
       - run:
           name: Install server packages
           working_directory: "~/TheBrain2.0/server/"
-          command: yarn install
+          command: npm install
+      - restore_cache:
+          keys:
+            - npm-testing-deps-{{ checksum "./package.json"  }}
+      - run:
+          name: Install Testing package packages (sic!)
+          working_directory: "~/TheBrain2.0/"
+          command: npm install
+      - save_cache:
+          key: npm-testing-deps-{{ checksum "./package.json"  }}
+          paths:
+            - ~/TheBrain2.0/node_modules
       - run:
           name: Setup the database data
-          working_directory: ~/TheBrain2.0/server
-          command: yarn run loadTestDBData
+          working_directory: ~/TheBrain2.0/
+          environment:
+            - STAGING_MONGOURL: mongodb://localhost:27017/thebrain
+          command: npm run createDefaultDB
       - run:
           name: Start up the server
           working_directory: ~/TheBrain2.0/server
-          command: yarn start
+          command: npm start
           background: true
       - run:
           name: Wait for the Server to start up
@@ -212,7 +227,7 @@ jobs:
       - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobileClient
-          command: yarn
+          command: npm install
       - save_cache:
           key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
           paths:
@@ -249,7 +264,7 @@ jobs:
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
-          command: yarn run e2e
+          command: npm run e2e
 workflows:
   version: 2
   test_release:

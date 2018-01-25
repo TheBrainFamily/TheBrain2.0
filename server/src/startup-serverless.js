@@ -1,7 +1,11 @@
-require('babel-core/register')
-require('babel-polyfill')
-const awsServerlessExpress = require('aws-serverless-express')
-const { app } = require('./app')
-const server = awsServerlessExpress.createServer(app)
+const serverless = require('serverless-http')
+const { createApp } = require('./app')
 
-exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, context)
+let cachedDb = null
+
+module.exports.handler = function (evt, ctx, callback) {
+  return createApp(cachedDb).then(({app, db}) => {
+    cachedDb = db
+    return serverless(app, {callbackWaitsForEmptyEventLoop: false})(evt, ctx, callback)
+  })
+}

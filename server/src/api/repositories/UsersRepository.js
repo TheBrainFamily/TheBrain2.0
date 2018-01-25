@@ -1,5 +1,5 @@
 // @flow
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import urlencode from 'urlencode'
 import moment from 'moment'
 import { Collection, ObjectId } from 'mongodb'

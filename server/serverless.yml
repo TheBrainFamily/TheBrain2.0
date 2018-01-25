@@ -29,11 +29,16 @@
 # The `service` block is the name of the service
 service: serverless-hello-world
 
+plugins:
+  - serverless-offline
+
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
   runtime: nodejs6.10
   environment:
+    NODE_ENV: "STAGING"
+    STAGING_MONGOURL: ${env:STAGING_MONGOURL}
     BABEL_CACHE_PATH: "/tmp/babel_cache"
 
 # The `functions` block defines what code to deploy
@@ -42,4 +47,5 @@ functions:
     handler: libLambda/startup-serverless.handler
     # The `events` block defines how to trigger the handler.helloWorld code
     events:
-      - http: ANY {proxy+}
+      - http: ANY /
+      - http: 'ANY {proxy+}'

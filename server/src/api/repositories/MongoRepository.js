@@ -7,7 +7,6 @@ const testingDBURI = 'mongodb://localhost/testing'
 let resolvedDBURI = ''
 
 let collectionInitQueue = []
-let connectingToDb = false
 let dbInstance = null
 
 switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
@@ -17,6 +16,9 @@ switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
   case 'PRODUCTION':
     resolvedDBURI = process.env.MONGOURL
     break
+  case 'STAGING':
+    resolvedDBURI = process.env.STAGING_MONGOURL
+    break
   case 'DEVELOPMENT':
   default:
     resolvedDBURI = dbURI
@@ -25,21 +27,29 @@ switch (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase()) {
 
 export { resolvedDBURI }
 
+export async function dbConnector (cachedDb) {
+  if (cachedDb && cachedDb.serverConfig.isConnected()) {
+    console.log('=> using cached database instance')
+    return Promise.resolve(cachedDb)
+  }
+
+  let db
+  try {
+    db = await MongoClient.connect(resolvedDBURI)
+  } catch (e) {
+    console.log(e)
+  }
+  console.log('connected', new Date())
+  dbInstance = db
+  collectionInitQueue.forEach(collectionInitCallback => collectionInitCallback())
+  return db
+}
+
+let dbConnectionPromise
 export class MongoRepository {
   db: Db
 
   constructor () {
-    if (connectingToDb === false) {
-      connectingToDb = true
-      MongoClient.connect(resolvedDBURI, (error, db) => {
-        if (error) {
-          throw new Error(error)
-        }
-        dbInstance = db
-        collectionInitQueue.forEach(collectionInitCallback => collectionInitCallback())
-      })
-    }
-
     if (dbInstance) {
       this.db = dbInstance
       this.init()
@@ -55,3 +65,5 @@ export class MongoRepository {
     throw Error('Not yet implemented')
   }
 }
+
+export {dbConnectionPromise}
