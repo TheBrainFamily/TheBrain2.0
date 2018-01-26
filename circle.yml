@@ -15,6 +15,9 @@ jobs:
           name: Install wait-on
           command: npm install -g wait-on serverless
       - run:
+          name: "check if we get the new env"
+          command: echo $BUILD_UNIQUE_NAME
+      - run:
           name: Install mongo client
           command: |
             apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
