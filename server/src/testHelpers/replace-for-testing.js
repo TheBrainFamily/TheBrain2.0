@@ -14,11 +14,6 @@ module.exports = function replaceImport (originalPath, sourcePath) {
     return newPath
   }
 
-  if (originalPath.indexOf('bcrypt') !== -1) {
-    const newPath = originalPath.replace('bcrypt', `apollo-test-utils-with-context`)
-    return newPath
-  }
-
   if (originalPath.indexOf('mongodb') !== -1) {
     return originalPath.replace('mongodb', `${process.cwd()}${prefix}/src/testHelpers/mockedMongodb`)
   }
