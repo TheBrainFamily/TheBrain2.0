@@ -178,7 +178,7 @@ jobs:
           command: |
             npm run build:lambda
             STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run deployToServerless
-            cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g > serviceEndpoint
+            cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g >  ~/TheBrain2.0/serviceEndpoint
       - run:
           name: Build and deploy the serverless web client
           working_directory: ~/TheBrain2.0/client
@@ -188,9 +188,9 @@ jobs:
             sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
             npm run deployToServerless
-            echo http://thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}.s3-website-us-east-1.amazonaws.com > webEndpoint
+            echo http://thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}.s3-website-us-east-1.amazonaws.com >  ~/TheBrain2.0/webEndpoint
       - persist_to_workspace:
-          root: ~/TheBrain2.0/server
+          root: ~/TheBrain2.0/
           paths:
             - serviceEndpoint
             - webEndpoint
