@@ -257,19 +257,22 @@ jobs:
           working_directory: ~/TheBrain2.0/mobileClient
           command: npm start
           background: true
-#      - run:
-#          name: Publish app with github notification
-#          working_directory: ~/TheBrain2.0/mobileClient
-#          command: ./node_modules/.bin/appr
+      - run:
+          name: Publish app with github notification
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: ./node_modules/.bin/appr
+      - run:
+          name: Boot up the simulator so its ready for testing
+          command: xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done
       - run:
           name: Sleep to make sure the binary is ready
           command: sleep 120
-#      - run:
-#          name: E2E ios test
-#          working_directory: ~/TheBrain2.0/mobileClient
-#          command: npm run e2e
-#          environment:
-#            - DETOX_EXTERNAL_LINK: true
+      - run:
+          name: E2E ios test
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: npm run e2e
+          environment:
+            - DETOX_EXTERNAL_LINK: true
 #      - run:
 #          name: E2E ios test
 #          working_directory: ~/TheBrain2.0/mobileClient
