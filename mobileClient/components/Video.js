@@ -42,7 +42,7 @@ export default class Video extends React.Component {
   }
   onFinished = () => {
     this.setState({playVideo: false})
-    this.props.onVideoWatched({event: {state: 'ended'}})
+    this.props.onVideoWatched && this.props.onVideoWatched({event: {state: 'ended'}})
   }
 
   render () {
