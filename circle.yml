@@ -8,6 +8,10 @@ jobs:
     steps:
       - checkout
       - run:
+      # $BUILD_UNIQUE_NAME
+          name: Set up env
+          command: export BUILD_UNIQUE_NAME="${CIRCLE_BUILD_NUM}_$(echo $CIRCLE_BRANCH | tr '[A-Z]' '[a-z]')"
+      - run:
           name: Install wait-on
           command: npm install -g wait-on serverless
       - run:
@@ -171,13 +175,13 @@ jobs:
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run createDefaultDB
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$BUILD_UNIQUE_NAME/` npm run createDefaultDB
       - run:
           name: Build and deploy the serverless server
           working_directory: ~/TheBrain2.0/server
           command: |
             npm run build:lambda
-            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run deployToServerless
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$BUILD_UNIQUE_NAME/` npm run deployToServerless
             cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g > serviceEndpoint
       - run:
           name: Build and deploy the serverless web client
@@ -185,10 +189,10 @@ jobs:
           command: |
             GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/server/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
-            sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
+            sed s/thebrain-web/thebrain-web-${BUILD_UNIQUE_NAME}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
             npm run deployToServerless
-            echo http://thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}.s3-website-us-east-1.amazonaws.com > webEndpoint
+            echo http://thebrain-web-${BUILD_UNIQUE_NAME}.s3-website-us-east-1.amazonaws.com > webEndpoint
       - persist_to_workspace:
           root: ~/TheBrain2.0/server
           paths:
