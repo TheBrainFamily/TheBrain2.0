@@ -292,9 +292,9 @@ jobs:
           name: Publish app with github notification
           working_directory: ~/TheBrain2.0/mobileClient
           command: |
-          GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
-          cat ./networkInterface.js
-          WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
+            GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
+            cat ./networkInterface.js
+            WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
