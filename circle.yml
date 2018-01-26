@@ -171,13 +171,13 @@ jobs:
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/` npm run createDefaultDB
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH}/` npm run createDefaultDB
       - run:
           name: Build and deploy the serverless server
           working_directory: ~/TheBrain2.0/server
           command: |
             npm run build:lambda
-            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH_/` npm run deployToServerless
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH}/` npm run deployToServerless
             cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g > serviceEndpoint
       - run:
           name: Build and deploy the serverless web client
@@ -185,7 +185,7 @@ jobs:
           command: |
             GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/server/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
-            sed -i '' s/thebrain-web/thebrain-web-$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/ ./serverless.yml
+            sed -i '' s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH}/ ./serverless.yml
             npm run build
             npm run deployToServerless
             echo http://thebrain-web-$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH.s3-website-us-east-1.amazonaws.com > webEndpoint
