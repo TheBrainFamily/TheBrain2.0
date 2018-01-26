@@ -36,28 +36,20 @@ const createApp = async function (cachedDb) {
     res.redirect('/')
   })
 
-// FIXES CORS ERROR
-  const whitelist = [
-    'http://localhost:3000',
-    'http://localhost:4000',
-    'http://localhost:9000',
-    'http://localhost:3040',
-    'http://new.thebrain.pro',
-    'https://new.thebrain.pro',
-    'http://thebrain.pro',
-    'https://thebrain.pro',
-    'http://sleepy-stream-93575.herokuapp.com',
-    'https://sleepy-stream-93575.herokuapp.com',
-    'https://stark-badlands-16845.herokuapp.com',
-    'https://stark-badlands-16845.herokuapp.com'
-  ]
+// FIXES CORS ERROR - LEAVING THIS AND THE LOGIC IN corsOption commented out
+// so if you need to block other domains, you have an example
+//   const whitelist = [
+//     'http://localhost:3000',
+//     'http://localhost:4000',
+//     'http://thebrain.pro',
+//     'https://thebrain.pro'
+//   ]
 
   const corsOptions = {
     origin: function (origin, callback) {
-      console.log('Gozdecki: origin', origin)
-      var originIsWhitelisted = whitelist.indexOf(origin) !== -1 || !origin
-      console.log('Gozdecki: originIsWhitelisted', originIsWhitelisted)
-      callback(null, originIsWhitelisted)
+      // var originIsWhitelisted = whitelist.indexOf(origin) !== -1 || !origin
+      // callback(null, originIsWhitelisted)
+      callback(null, true)
     },
     credentials: true
   }

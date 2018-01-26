@@ -1,3 +1,4 @@
 artifacts
+.stack.json
 libLambda/
 node_modules/

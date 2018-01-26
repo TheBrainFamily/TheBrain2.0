@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Install wait-on
-          command: npm install -g wait-on
+          command: npm install -g wait-on serverless
       - run:
           name: Install mongo client
           command: |
@@ -168,6 +168,32 @@ jobs:
           name: Cypress Integration and end to end test for Web
           working_directory: "~/TheBrain2.0/"
           command: npm run cypressTestCI
+      - run:
+          name: Configure the DB for the serverless server
+          working_directory: ~/TheBrain2.0/
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/${MY_DB_NAME}/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/` npm run createDefaultDB
+      - run:
+          name: Build and deploy the serverless server
+          working_directory: ~/TheBrain2.0/server
+          command: |
+            npm run build:lambda
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/${MY_DB_NAME}/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH_/` npm run deployToServerless
+            cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g > serviceEndpoint
+      - run:
+          name: Build and deploy the serverless web client
+          working_directory: ~/TheBrain2.0/client
+          command: |
+            GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/server/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
+            cat src/networkInterface.js
+            sed -i '' s/thebrain-web/thebrain-web-$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/ ./serverless.yml
+            npm run build
+            npm run deployToServerless
+            echo http://thebrain-web-$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH.s3-website-us-east-1.amazonaws.com > webEndpoint
+      - persist_to_workspace:
+          root: ~/TheBrain2.0/server
+          paths:
+            - serviceEndpoint
+            - webEndpoint
       - store_artifacts:
            path: |
             ~/TheBrain2.0/server/artifacts
@@ -260,26 +286,26 @@ jobs:
       - run:
           name: Boot up the simulator so its ready for testing
           command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Publish app with github notification
           working_directory: ~/TheBrain2.0/mobileClient
-          command: ./node_modules/.bin/appr
+          command: |
+          GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
+          cat ./networkInterface.js
+          WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
           command: npm run e2e
           environment:
             - DETOX_EXTERNAL_LINK: true
-#      - run:
-#          name: E2E ios test
-#          working_directory: ~/TheBrain2.0/mobileClient
-#          command: npm run e2e
-#          when: always
-#          environment:
-#            - DETOX_EXTERNAL_LINK: true
 workflows:
   version: 2
   test_release:
     jobs:
       - build
-      - ios
+      - ios:
+        requires:
+          - build

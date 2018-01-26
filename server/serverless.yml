@@ -31,6 +31,12 @@ service: serverless-hello-world
 
 plugins:
   - serverless-offline
+  - serverless-stack-output
+
+custom:
+  output:
+    file: .stack.json
+
 
 # The `provider` block defines where your service will be deployed
 provider:
