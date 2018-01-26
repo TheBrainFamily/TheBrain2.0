@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "apollo-test-utils-with-context": "^0.3.5",
-    "appr-all-commits": "^1.1.0",
+    "appr-all-commits": "^1.2.1",
     "babel-eslint": "^7.2.3",
     "babel-jest": "22.0.4",
     "babel-plugin-module-rewrite-with-root": "^0.3.1",
@@ -40,7 +40,8 @@
     "test": "node node_modules/jest/bin/jest.js --watch",
     "standard": "standard --verbose --fix | snazzy",
     "e2e": "detox test -c ios.sim",
-    "e2e:local": "npm run e2e -- --reuse"
+    "e2e:local": "npm run e2e -- --reuse",
+    "changeServerURL": "sed s#http://127.0.0.1:8080/graphql#$GRAPHQL_SERVER_URI# ./networkInterface.js > ./networkInterface.js.old ; mv ./networkInterface.js.old ./networkInterface.js"
   },
   "jest": {
     "preset": "jest-expo",
