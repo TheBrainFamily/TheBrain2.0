@@ -266,7 +266,7 @@ jobs:
           command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
       - run:
           name: Sleep to make sure the binary is ready
-          command: sleep 120
+          command: sleep 30
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
