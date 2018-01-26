@@ -1,10 +1,11 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-export default function ({ message = 'Loading...', lightStyle, backgroundColor }) {
+export default function ({ message = 'Loading...', lightStyle, backgroundColor, overlaying }) {
   const bgColor = backgroundColor ? { backgroundColor } : {}
+  const overlayingLoader = overlaying ? styles.overlay : {}
   return (
-    <View style={[styles.main, bgColor]}>
+    <View style={[styles.main, bgColor, overlayingLoader]}>
       <ActivityIndicator
         animating
         style={styles.centering}
@@ -38,5 +39,9 @@ const styles = StyleSheet.create({
     color: 'black',
 
     marginTop: 10
+  },
+  overlay: {
+    position: 'absolute',
+    zIndex: 999
   }
 })
