@@ -185,7 +185,7 @@ jobs:
           command: |
             GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/server/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
-            sed -i '' s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH}/ ./serverless.yml
+            sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH}/ ./serverless.yml > ./serverless.yml
             npm run build
             npm run deployToServerless
             echo http://thebrain-web-$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH.s3-website-us-east-1.amazonaws.com > webEndpoint

@@ -41,7 +41,7 @@
     "standard": "standard --verbose --fix | snazzy",
     "e2e": "detox test -c ios.sim",
     "e2e:local": "npm run e2e -- --reuse",
-    "changeServerURL": "sed -i '' s/'http:\/\/127.0.0.1:8080\/graphql'/$GRAPHQL_SERVER_URI/ ./networkInterface.js"
+    "changeServerURL": "sed s/'http:\/\/127.0.0.1:8080\/graphql'/$GRAPHQL_SERVER_URI/ ./networkInterface.js > ./networkInterface.js"
   },
   "jest": {
     "preset": "jest-expo",
