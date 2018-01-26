@@ -257,10 +257,10 @@ jobs:
           working_directory: ~/TheBrain2.0/mobileClient
           command: npm start
           background: true
-      - run:
-          name: Publish app with github notification
-          working_directory: ~/TheBrain2.0/mobileClient
-          command: ./node_modules/.bin/appr
+#      - run:
+#          name: Publish app with github notification
+#          working_directory: ~/TheBrain2.0/mobileClient
+#          command: ./node_modules/.bin/appr
       - run:
           name: Sleep to make sure the binary is ready
           command: sleep 120
