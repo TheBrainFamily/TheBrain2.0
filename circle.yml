@@ -263,7 +263,7 @@ jobs:
           command: ./node_modules/.bin/appr
       - run:
           name: Boot up the simulator so its ready for testing
-          command: xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done
+          command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
