@@ -239,6 +239,8 @@ jobs:
             exp install:ios
             mkdir ~/TheBrain2.0/mobileClient/.expo/
             ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
+            npm install -g detox@7.0.0
+      # maybe instead of installing it globally just run post install in mobileClient/node_modules/detox
       - run:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient
