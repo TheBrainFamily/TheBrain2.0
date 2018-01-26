@@ -306,7 +306,5 @@ workflows:
   test_release:
     jobs:
       - build
-      - ios:
-        requires:
-          - build
+      - ios
 
