@@ -474,6 +474,10 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     top: '48.75%',
     left: '38%'
+  },
+  overlay: {
+    position: 'absolute',
+    zIndex: 2
   }
 })
 
