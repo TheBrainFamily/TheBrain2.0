@@ -17,7 +17,8 @@
     "deploy": "./.scripts/deploy.sh",
     "heroku-postbuild": "npm install",
     "build": "BABEL_ENV=development NODE_ENV=production babel src --out-dir lib --watch",
-    "build:lambda": "BABEL_ENV=lambda NODE_ENV=production babel src --out-dir libLambda --watch",
+    "build:lambda": "BABEL_ENV=lambda NODE_ENV=production babel src --out-dir libLambda",
+    "build:lambda:watch": "npm run build:lambda -- --watch",
     "start:lambda": "NODE_PATH='libLambda' node libLambda/startup-serverless.js",
     "deployToServerless": "serverless deploy -v"
   },
