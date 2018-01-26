@@ -264,19 +264,19 @@ jobs:
       - run:
           name: Sleep to make sure the binary is ready
           command: sleep 120
-      - run:
-          name: E2E ios test
-          working_directory: ~/TheBrain2.0/mobileClient
-          command: npm run e2e
-          environment:
-            - DETOX_EXTERNAL_LINK: true
-      - run:
-          name: E2E ios test
-          working_directory: ~/TheBrain2.0/mobileClient
-          command: npm run e2e
-          when: always
-          environment:
-            - DETOX_EXTERNAL_LINK: true
+#      - run:
+#          name: E2E ios test
+#          working_directory: ~/TheBrain2.0/mobileClient
+#          command: npm run e2e
+#          environment:
+#            - DETOX_EXTERNAL_LINK: true
+#      - run:
+#          name: E2E ios test
+#          working_directory: ~/TheBrain2.0/mobileClient
+#          command: npm run e2e
+#          when: always
+#          environment:
+#            - DETOX_EXTERNAL_LINK: true
 workflows:
   version: 2
   test_release:
