@@ -171,7 +171,7 @@ jobs:
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/${MY_DB_NAME}/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/` ; npm run createDefaultDB
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH/` npm run createDefaultDB
       - run:
           name: Build and deploy the serverless server
           working_directory: ~/TheBrain2.0/server
