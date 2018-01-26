@@ -1,12 +1,19 @@
 {
   "plugins": [
+    "transform-es2015-modules-commonjs"
   ],
   "presets": [
-    "es2015",
-    "stage-2",
     "flow"
   ],
   "env": {
+    "lambda": {
+      "presets": [
+        "babel6-aws-lambda"
+      ]
+    },
+    "production": {
+      "presets": ["babel6-aws-lambda"]
+    },
     "test": {
       "plugins": [
         [

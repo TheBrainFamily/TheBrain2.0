@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 import { ApolloProvider } from 'react-apollo'
-import { AppRegistry } from 'react-native'
+import { AppRegistry, AsyncStorage } from 'react-native'
 import { Font } from 'expo'
 
 import store, { client } from './store'
@@ -15,6 +15,12 @@ export default class App extends Component {
 
   // TODO move this out
   async componentDidMount () {
+    // eslint-disable-next-line
+    if (true) { // TODO figure out how to make this only happen in e2e tests
+      if (await AsyncStorage.getAllKeys()) {
+        await AsyncStorage.clear()
+      }
+    }
     await Font.loadAsync({
       'Exo2-Regular': require('./fonts/Exo2-Regular.ttf'),
       'Exo2-Bold': require('./fonts/Exo2-Bold.ttf'),

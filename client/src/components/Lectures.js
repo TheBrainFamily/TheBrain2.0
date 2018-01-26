@@ -28,7 +28,7 @@ class VideoPreview extends React.Component {
         margin: '1%',
         opacity: this.props.lesson.position > this.props.currentLesson.Lesson.position ? 0.5 : 1
       }}>
-        { this.state.previewMode ? <img
+        { this.state.previewMode ? <img alt='togglePreviewMode'
           onClick={() => {
             if (!this.props.locked) {
               this.setState({ previewMode: false })

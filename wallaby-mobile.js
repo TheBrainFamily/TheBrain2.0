@@ -14,7 +14,8 @@ module.exports = (wallaby) => {
       'testing/testHelpers/**/*.js',
       'testing/common/**/*.js',
       'testing/mobile/**/*.snap',
-      'testing/mobile/jest.config.js'
+      'testing/mobile/jest.config.js',
+      {pattern: 'mobileClient/tests/e2e/**/*.js', ignore: true}
     ],
     tests: [
       'testing/mobile/App.test.js',

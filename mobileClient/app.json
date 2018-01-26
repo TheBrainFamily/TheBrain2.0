@@ -1,1 +1,1 @@
-{"expo":{"sdkVersion":"23.0.0","packagerOpts":{"projectRoots":"","assetExts":["ttf"],"config":"rn-cli-config-with-links.js"}}}
+{"expo":{"name":"The Brain Pro","icon":"./assets/icon.png","splash":{"image":"./assets/thebrainprologosplash1242x2208.png","backgroundColor":"#FEF9B0"},"version":"1.1.0","ios":{"bundleIdentifier":"com.thebrain.pro"},"sdkVersion":"23.0.0","packagerOpts":{"projectRoots":"","assetExts":["ttf"],"config":"rn-cli-config-with-links.js"}}}

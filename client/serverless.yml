@@ -1,0 +1,12 @@
+service: thebrain-serverless-web
+
+plugins:
+  - serverless-finch
+
+provider:
+  name: aws
+
+custom:
+  client:
+    bucketName: thebrain-web
+    distributionFolder: build
