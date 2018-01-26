@@ -177,7 +177,7 @@ jobs:
           working_directory: ~/TheBrain2.0/server
           command: |
             npm run build:lambda
-            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/${MY_DB_NAME}/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH_/` npm run deployToServerless
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_$CIRCLE_BUILD_NUM_$CIRCLE_BRANCH_/` npm run deployToServerless
             cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g > serviceEndpoint
       - run:
           name: Build and deploy the serverless web client
