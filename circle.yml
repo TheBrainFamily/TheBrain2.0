@@ -183,7 +183,7 @@ jobs:
           name: Build and deploy the serverless web client
           working_directory: ~/TheBrain2.0/client
           command: |
-            GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/server/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
+            GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
             sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
