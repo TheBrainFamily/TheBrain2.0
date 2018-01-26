@@ -99,7 +99,7 @@
     "postinstall": "npm run build",
     "startForCypress": "CYPRESS=true react-app-rewired start",
     "deployToServerless": "serverless client deploy -v",
-    "replaceGraphqlEndpoint": "sed -i '' 's/{%GRAPHQL_SERVER_URI%}/$GRAPHQL_SERVER_URI/' src/networkInterface.js"
+    "replaceGraphqlEndpoint": "sed 's/{%GRAPHQL_SERVER_URI%}/$GRAPHQL_SERVER_URI/' src/networkInterface.js > src/networkInterface.js"
   },
   "jest": {
     "collectCoverageFrom": [
