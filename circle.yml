@@ -348,7 +348,7 @@ jobs:
           name: Installing ios dependencies
           command: |
             npm install -g react-native-cli
-            brew tap wix/brew
+            npm install -g detox-cli
             brew install applesimutils --HEAD
             npm install exp --global
             exp install:ios
