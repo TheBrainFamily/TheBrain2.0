@@ -345,11 +345,10 @@ jobs:
           name: Boot up the simulator so its ready for testing
           command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
       - run:
-          name: Updating homebrew to allow Apple Simutils installation
-          command: brew tap wix/brew
-      - run:
           name: Installing Apple Simutils
-          command: brew install applesimutils --HEAD
+          command: |
+           curl "https://dl.dropboxusercontent.com/s/ycxj5wnaq8ocafz/applesimutils\?dl\=0" > /usr/local/bin/applesimutils
+          chmod +x /usr/local/bin/applesimutils
       - run:
           name: Installing expo CLI
           command: npm install exp --global
