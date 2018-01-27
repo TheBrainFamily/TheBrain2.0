@@ -4,3 +4,4 @@ bfg*.jar
 .enzymePreviewFile.html
 testing/web/cypress/videos
 rn-cli-config-with-links.js
+.serverless

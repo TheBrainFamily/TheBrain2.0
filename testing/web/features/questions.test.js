@@ -8,6 +8,7 @@ import {
 } from '../../common/serverStateHelpers/helpers/reposWithDefaults'
 import { ItemsRepository } from '../../../server/src/api/repositories/ItemsRepository'
 import { QuestionsPage } from './pageObjects/QuestionsPage'
+import { LecturePage } from './pageObjects/LecturePage'
 
 const returnContext = async () => {
   const loggedInUser = {
@@ -72,7 +73,7 @@ const returnContext = async () => {
 }
 
 describe('Questions', async () => {
-  test('Student is answering questions and sees repeated flashcard after \'no clue\' answer.', async () => {
+  test('When student answer is incorrect the flashcard is put at the end of the stack.', async () => {
     const context = await returnContext()
     const driver = await startApp('/', context)
     const questionsPage = new QuestionsPage(driver)
@@ -84,5 +85,9 @@ describe('Questions', async () => {
     await questionsPage.showAnswer()
     await questionsPage.selectEasy()
     await questionsPage.assertFlashcardShown('What is the name of this course')
+    await questionsPage.showAnswer()
+    await questionsPage.selectEasy()
+    const lecturePage = new LecturePage(driver)
+    await lecturePage.assertIsVisible()
   }, 10000)
 })

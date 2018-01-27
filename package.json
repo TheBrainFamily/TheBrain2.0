@@ -13,7 +13,7 @@
     "enzymeTest:watch": "npm run enzymeTest -- --watch",
     "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules && rm -rf shared/node_modules",
     "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install && pushd ../shared && npm install",
-    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web server",
+    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web/ server server/jest.standard.config.js testing/jest.standard.config.js shared/jest.config.js mobileClient/jest.standard.config.js client/jest.standard.config.js",
     "makeWebStandardHappy": "pushd ./client; ./node_modules/.bin/standard --fix",
     "makeMobileStandardHappy": "pushd ./mobileClient; ./node_modules/.bin/standard --fix",
     "makeServerStandardHappy": "pushd ./server; ./node_modules/.bin/standard --fix",
