@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import gql from 'graphql-tag'
 import moment from 'moment'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
@@ -712,5 +713,65 @@ describe('Mutation: hideTutorial', () => {
     const userDetails = result.data.UserDetails
 
     expect(userDetails.hasDisabledTutorial).toBe(true)
+  })
+})
+describe('Mutation: processEvaluation', () => {
+  it('returns a correct item after "Wrong" evaluation', async () => {
+    const itemsRepository = new ItemsRepository()
+    const flashcardsRepository = new FlashcardsRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    const userId = mongoObjectId()
+    const courseId = 'courseId'
+    await userDetailsRepository.create(userId, courseId)
+    const context = {
+      user: {_id: userId},
+      Items: itemsRepository,
+      Flashcards: flashcardsRepository,
+      UserDetails: userDetailsRepository
+    }
+    const itemsToExtend = [
+      {userId, _id: mongoObjectId(), courseId},
+      {userId, _id: mongoObjectId(), courseId}
+    ]
+
+    await makeItems({itemsToExtend, itemsCollection: itemsRepository.itemsCollection})
+    const args = {
+      itemId: itemsToExtend[1]._id,
+      evaluation: 2.5
+    }
+
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation processEvaluation($itemId: String!, $evaluation: Float!) {
+              processEvaluation(itemId: $itemId, evaluation: $evaluation) {
+                  _id
+                  actualTimesRepeated
+                  easinessFactor
+                  extraRepeatToday
+                  flashcardId
+                  lastRepetition
+                  nextRepetition
+                  previousDaysChange
+                  timesRepeated
+                  isCasual
+
+              }
+          },
+      `,
+      variables: {itemId: args.itemId, evaluation: args.evaluation}
+    })
+    const {processEvaluation: items} = data
+    const item = _.find(items, (item) => item._id === args.itemId)
+    expect(item.actualTimesRepeated).toEqual(1)
+    expect(item.easinessFactor).toEqual(2.27)
+    expect(item.extraRepeatToday).toEqual(true)
+    expect(item.flashcardId).toBeTruthy()
+    expect(item.lastRepetition).toBeGreaterThan(0)
+    expect(item.nextRepetition).toBeGreaterThan(0)
+    expect(item.previousDaysChange).toEqual(1)
+    expect(item.timesRepeated).toEqual(0)
+    // expect(item.isCasual).toEqual(0)
   })
 })
