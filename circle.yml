@@ -167,7 +167,7 @@ jobs:
       - store_artifacts:
            path: ~/TheBrain2.0/testing/web/cypress/videos
            
-  deploy:
+  deployServer:
     docker:
       - image: cypress/base:8
     working_directory: ~/TheBrain2.0
@@ -202,6 +202,43 @@ jobs:
          name: Install server packages
          working_directory: "~/TheBrain2.0/server/"
          command: npm install
+      - run:
+          name: Configure the DB for the serverless server
+          working_directory: ~/TheBrain2.0/
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run createDefaultDB
+      - run:
+          name: Build and deploy the serverless server
+          working_directory: ~/TheBrain2.0/server
+          command: |
+            npm run build:lambda
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run deployToServerless
+            cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g >  ~/TheBrain2.0/serviceEndpoint
+      - persist_to_workspace:
+          root: ~/TheBrain2.0/
+          paths:
+            - serviceEndpoint
+
+  deployWeb:
+    docker:
+      - image: cypress/base:8
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run:
+          name: Install serverless
+          command: npm install -g serverless
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
 ### Web Client
       - restore_cache:
           keys:
@@ -215,21 +252,6 @@ jobs:
           paths:
             - ~/TheBrain2.0/client/node_modules
       - run:
-          name: Validate Standard linting rules on Web Client
-          working_directory: "~/TheBrain2.0/client/"
-          command: npm run standard
-      - run:
-          name: Configure the DB for the serverless server
-          working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run createDefaultDB
-      - run:
-          name: Build and deploy the serverless server
-          working_directory: ~/TheBrain2.0/server
-          command: |
-            npm run build:lambda
-            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run deployToServerless
-            cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g >  ~/TheBrain2.0/serviceEndpoint
-      - run:
           name: Build and deploy the serverless web client
           working_directory: ~/TheBrain2.0/client
           command: |
@@ -242,9 +264,7 @@ jobs:
       - persist_to_workspace:
           root: ~/TheBrain2.0/
           paths:
-            - serviceEndpoint
             - webEndpoint
-
   ios:
     macos:
       xcode: "9.0"
@@ -312,7 +332,9 @@ workflows:
   test_release:
     jobs:
       - build
-      - deploy
+      - deployWeb
+      - deployServer
       - ios:
           requires:
-            - deploy
+            - deployWeb
+            - deployServer
