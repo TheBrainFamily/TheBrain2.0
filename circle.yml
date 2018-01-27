@@ -348,7 +348,7 @@ jobs:
           name: Installing Apple Simutils
           command: |
            curl "https://dl.dropboxusercontent.com/s/ycxj5wnaq8ocafz/applesimutils\?dl\=0" > /usr/local/bin/applesimutils
-          chmod +x /usr/local/bin/applesimutils
+           chmod +x /usr/local/bin/applesimutils
       - run:
           name: Installing expo CLI
           command: npm install exp --global
