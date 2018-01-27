@@ -9,22 +9,13 @@ jobs:
       - checkout
       - run:
           name: Install wait-on
-          command: npm install -g wait-on serverless
-      - run:
-          name: Install mongo client
-          command: |
-            apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
-            echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-            apt-get update
-            apt-get install -y mongodb-org-shell
+          command: npm install -g wait-on
       - run:
           name: Create artifacts folders
           command: |
             mkdir -p ~/TheBrain2.0/server/artifacts
             mkdir -p ~/TheBrain2.0/client/artifacts
             mkdir -p ~/TheBrain2.0/mobileClient/artifacts
-#      - run: pushd ~/TheBrain2.0/server/
-#      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
 
 ### SHARED PACKAGE
       - restore_cache:
@@ -168,6 +159,59 @@ jobs:
           name: Cypress Integration and end to end test for Web
           working_directory: "~/TheBrain2.0/"
           command: npm run cypressTestCI
+      - store_artifacts:
+           path: |
+            ~/TheBrain2.0/server/artifacts
+            ~/TheBrain2.0/client/artifacts
+            ~/TheBrain2.0/mobileClient/artifacts
+      - store_artifacts:
+           path: ~/TheBrain2.0/testing/web/cypress/videos
+           
+  deploy:
+    docker:
+      - image: cypress/base:8
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run:
+          name: Install wait-on
+          command: npm install -g serverless
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
+### SERVER
+#      - restore_cache:
+#          keys:
+#            - npm-server-deps-{{ checksum "./server/package.json" }}
+     - run:
+         name: Install server packages
+         working_directory: "~/TheBrain2.0/server/"
+         command: npm install
+### Web Client
+      - restore_cache:
+          keys:
+            - npm-client-deps-{{ checksum "./client/package.json"  }}
+      - run:
+          name: Install Web Client packages
+          working_directory: "~/TheBrain2.0/client/"
+          command: npm install
+      - save_cache:
+          key: npm-client-deps-{{ checksum "./client/package.json"  }}
+          paths:
+            - ~/TheBrain2.0/client/node_modules
+      - run:
+          name: Validate Standard linting rules on Web Client
+          working_directory: "~/TheBrain2.0/client/"
+          command: npm run standard
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
@@ -194,13 +238,6 @@ jobs:
           paths:
             - serviceEndpoint
             - webEndpoint
-      - store_artifacts:
-           path: |
-            ~/TheBrain2.0/server/artifacts
-            ~/TheBrain2.0/client/artifacts
-            ~/TheBrain2.0/mobileClient/artifacts
-      - store_artifacts:
-           path: ~/TheBrain2.0/testing/web/cypress/videos
 
   ios:
     macos:
@@ -269,6 +306,7 @@ workflows:
   test_release:
     jobs:
       - build
+      - deploy
       - ios:
           requires:
-            - build
+            - deploy
