@@ -251,11 +251,13 @@ jobs:
           key: npm-client-deps-{{ checksum "./client/package.json"  }}
           paths:
             - ~/TheBrain2.0/client/node_modules
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Build and deploy the serverless web client
           working_directory: ~/TheBrain2.0/client
           command: |
-            GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
+            GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
             sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
@@ -306,13 +308,16 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run:
-          name: Publish app with github notification
+          name: Publish app
           working_directory: ~/TheBrain2.0/mobileClient
           command: |
             GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
             cat ./networkInterface.js
             WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
-
+      - persist_to_workspace:
+          root: ~/TheBrain2.0/mobileClient
+          paths:
+            - package.json
 
   iosTest:
     macos:
@@ -354,21 +359,31 @@ jobs:
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
-          command: npm run e2e
+          command: DETOX_EXTERNAL_LINK=`node ./.scripts/getPackageName.js` npm run e2e
           environment:
-            - DETOX_EXTERNAL_LINK: true
+            - DETOX_EXTERNAL_LINK:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Github Notification
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: |
+          mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
+          ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
 
 workflows:
   version: 2
   test_release:
     jobs:
       - build
-      - deployWeb
       - deployServer
+      - deployWeb:
+          requires:
+            - deployServer
       - iosBuild:
           requires:
-            - deployWeb
             - deployServer
       - iosTest:
           requires:
+            - deployWeb
             - iosBuild

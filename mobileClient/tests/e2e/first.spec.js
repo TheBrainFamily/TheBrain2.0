@@ -21,7 +21,7 @@ describe('Example', async () => {
     await detox.init(config)
     if (process.env.DETOX_EXTERNAL_LINK) {
       console.log('starting detox external link')
-      const expUrl = `https://expo.io/@thebrain/thebrain-mobile-${process.env.CIRCLE_BRANCH}`
+      const expUrl = process.env.DETOX_EXTERNAL_LINK
       console.log('Gandecki expUrl', expUrl)
       await device.launchApp({
         newInstance: true,
