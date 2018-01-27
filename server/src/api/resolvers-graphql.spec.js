@@ -132,8 +132,8 @@ describe('Query: Flashcards', () => {
     const context = {Flashcards: flashcardRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-    .query({
-      query: gql`
+      .query({
+        query: gql`
           query {
               Flashcards {
                   question,
@@ -142,7 +142,7 @@ describe('Query: Flashcards', () => {
               }
           },
       `
-    }))
+      }))
     const dbFlashcards = result.data.Flashcards
 
     // WHY: _id is a string in response from GraphQL
@@ -165,16 +165,16 @@ describe('Query: Flashcard', () => {
     const context = {Flashcards: flashcardRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-    .query({
-      query: gql`
+      .query({
+        query: gql`
           query ($_id: String!) {
               Flashcard(_id:$_id) {
                   _id
               }
           },
       `,
-      variables: {_id: flashcardsData[1]._id}
-    }))
+        variables: {_id: flashcardsData[1]._id}
+      }))
     const dbFlashcard = result.data.Flashcard
 
     expect(dbFlashcard._id).toEqual(flashcardsData[1]._id)
@@ -209,8 +209,8 @@ describe('Query: Lesson', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-    .query({
-      query: gql`
+      .query({
+        query: gql`
           query ($courseId: String!) {
               Lesson(courseId:$courseId) {
                   _id
@@ -218,8 +218,8 @@ describe('Query: Lesson', () => {
               }
           },
       `,
-      variables: {courseId: 'testCourseId'}
-    }))
+        variables: {courseId: 'testCourseId'}
+      }))
     const lesson = result.data.Lesson
 
     expect(lesson).toEqual(expect.objectContaining({position: 1}))
@@ -238,8 +238,8 @@ describe('Query: Lesson', () => {
     }
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-    .query({
-      query: gql`
+      .query({
+        query: gql`
           query ($courseId: String!) {
               Lesson(courseId:$courseId) {
                   _id
@@ -247,8 +247,8 @@ describe('Query: Lesson', () => {
               }
           },
       `,
-      variables: {courseId: 'testCourseId'}
-    }))
+        variables: {courseId: 'testCourseId'}
+      }))
     const lesson = result.data.Lesson
 
     expect(lesson).toEqual(expect.objectContaining({position: 3}))
@@ -311,16 +311,16 @@ describe('Query: LessonCount', () => {
     const context = {Lessons: lessonsRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-    .query({
-      query: gql`
+      .query({
+        query: gql`
           query {
               LessonCount {
                   count
               }
           },
       `,
-      variables: {courseId: 'testCourseId'}
-    }))
+        variables: {courseId: 'testCourseId'}
+      }))
     const lessonCount = result.data.LessonCount
 
     expect(lessonCount).toEqual({count: 3})
@@ -547,7 +547,7 @@ describe('Query: UserDetails', () => {
 
 describe('Mutation: selectCourse', () => {
   let context = null
-  beforeAll(async () => {
+  beforeEach(async () => {
     const coursesRepository = new CoursesRepository()
     await coursesRepository.coursesCollection.insert({_id: 'testCourseId'})
     const usersRepository = new UsersRepository()
@@ -582,6 +582,9 @@ describe('Mutation: selectCourse', () => {
     })
     const {selectCourse: result} = data
 
+    const userDetailsDbo = await context.UserDetails.userDetailsCollection.findOne()
+    expect(userDetailsDbo.selectedCourse).toEqual('testCourseId')
+    expect(context.req.logIn.mock.calls.length).toEqual(1)
     expect(result.selectedCourse).toEqual('testCourseId')
     expect(result.experience).toEqual({value: 0, level: 0, showLevelUp: null})
   })
@@ -591,8 +594,8 @@ describe('Mutation: selectCourse', () => {
       userId,
       progress: [{courseId: 'testCourseId', lesson: 1}],
       experience: {
-        value: 0,
-        level: 0
+        value: 1,
+        level: 1
       }
     })
     context.user = {_id: userId}
@@ -616,8 +619,95 @@ describe('Mutation: selectCourse', () => {
       variables: {courseId: 'testCourseId'}
     })
     const {selectCourse: result} = data
+
+    const userDetailsDbo = await context.UserDetails.userDetailsCollection.findOne()
+    expect(userDetailsDbo.selectedCourse).toEqual('testCourseId')
+    expect(context.req.logIn.mock.calls.length).toEqual(0)
+    expect(result.selectedCourse).toEqual('testCourseId')
+    expect(result.experience).toEqual({value: 1, level: 1, showLevelUp: null})
+  })
+})
+describe('Mutation: selectCourseSaveToken', () => {
+  let context = null
+  beforeEach(async () => {
+    const coursesRepository = new CoursesRepository()
+    await coursesRepository.coursesCollection.insert({_id: 'testCourseId'})
+    const usersRepository = new UsersRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    context = {
+      user: {},
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  it('saves info about a course selected if no user exists', async () => {
+    const deviceId = 'testDeviceId'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation selectCourseSaveToken($courseId: String!, $deviceId: String) {
+              selectCourseSaveToken(courseId: $courseId, deviceId: $deviceId) {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId', deviceId}
+    })
+    const {selectCourseSaveToken: result} = data
+
+    expect(context.req.logIn.mock.calls.length).toEqual(1)
+    expect(context.req.logIn.mock.calls[0][0].currentAccessToken).toBeTruthy()
     expect(result.selectedCourse).toEqual('testCourseId')
     expect(result.experience).toEqual({value: 0, level: 0, showLevelUp: null})
+  })
+  it('saves info about a course selected by a user', async () => {
+    const userId = mongoObjectId()
+    await context.UserDetails.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}],
+      experience: {
+        value: 1,
+        level: 1
+      }
+    })
+    context.user = {_id: userId}
+
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation selectCourseSaveToken($courseId: String!, $deviceId: String) {
+              selectCourseSaveToken(courseId: $courseId, deviceId: $deviceId) {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId', deviceId: 'testDeviceId'}
+    })
+    const {selectCourseSaveToken: result} = data
+
+    const userDetailsDbo = await context.UserDetails.userDetailsCollection.findOne()
+    expect(userDetailsDbo.selectedCourse).toEqual('testCourseId')
+    expect(context.req.logIn.mock.calls.length).toEqual(0)
+    expect(result.selectedCourse).toEqual('testCourseId')
+    expect(result.experience).toEqual({value: 1, level: 1, showLevelUp: null})
   })
 })
 describe('Mutation: createItemsAndMarkLessonAsWatched', () => {
