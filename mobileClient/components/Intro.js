@@ -46,7 +46,7 @@ export default class Intro extends React.Component {
           </Text>
 
           <View style={{ marginVertical: 30, height: videoHeight, width: '100%' }}>
-            <Video height={videoHeight} videoId={'vvYTsbp2CRw'} />
+            <Video height={videoHeight} videoId={'vvYTsbp2CRw'} onVideoWatched={this.skipIntro} />
           </View>
 
           <TouchableOpacity testID='skip_intro_button' onPress={this.skipIntro}>

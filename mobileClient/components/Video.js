@@ -10,8 +10,7 @@ import YoutubeLoader from '../AppYtLoader'
 
 export default class Video extends React.Component {
   static defaultProps = {
-    height: '75%',
-    onChangeState: () => {}
+    height: '75%'
   }
   state = {
     playVideo: false,
@@ -41,8 +40,8 @@ export default class Video extends React.Component {
     this.setState({loading: false})
   }
   onFinished = () => {
-    this.setState({playVideo: false})
-    this.props.onVideoWatched({event: {state: 'ended'}})
+    this.setState({loading: false})
+    this.props.onVideoWatched && this.props.onVideoWatched({event: {state: 'ended'}})
   }
 
   render () {
@@ -57,7 +56,7 @@ export default class Video extends React.Component {
               <Image source={require('../images/yt-play-btn.png')}
                 resizeMode={'contain'}
                 style={{width: 100}} />
-              </TouchableOpacity>}
+            </TouchableOpacity>}
             {this.state.loading && <Loading overlaying message={''} />}
             <Image resizemode={'cover'}
               style={{height: this.props.height, width: '100%', justifyContent: 'center'}}
@@ -71,7 +70,6 @@ export default class Video extends React.Component {
           /> : null}
         </View>
       </TouchableWithoutFeedback>
-
     )
   }
 }
