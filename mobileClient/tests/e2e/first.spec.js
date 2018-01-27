@@ -1,7 +1,6 @@
 /* eslint-env jest node */
 /* global jest element by device waitFor */
 require('babel-polyfill')
-const fs = require('fs')
 const { reloadApp } = require('detox-expo-helpers')
 const detox = require('detox')
 const config = require('../../package.json').detox
@@ -17,16 +16,12 @@ afterAll(async () => {
 
 jest.setTimeout(20000)
 
-function readPackageJSON () {
-  return JSON.parse(fs.readFileSync('./package.json'))
-}
-
 describe('Example', async () => {
   beforeAll(async () => {
     await detox.init(config)
     if (process.env.DETOX_EXTERNAL_LINK) {
       console.log('starting detox external link')
-      const expUrl = `https://expo.io/@thebrain/${readPackageJSON().name}`
+      const expUrl = `https://expo.io/@thebrain/thebrain-mobile-${process.env.CIRCLE_BRANCH}`
       console.log('Gandecki expUrl', expUrl)
       await device.launchApp({
         newInstance: true,
