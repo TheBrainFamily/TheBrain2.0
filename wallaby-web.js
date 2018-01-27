@@ -27,6 +27,7 @@ module.exports = (wallaby) => {
     setup: function (wallaby) {
       const jestConfig = require('./testing/web/jest.config');
       delete jestConfig.rootDir
+      jestConfig.moduleNameMapper['\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$'] = '<rootDir>/testing/fileMock.js'
       jestConfig.moduleDirectories = [
         'node_modules', '<rootDir>/server/node_modules', '<rootDir>/client/node_modules'
       ];
