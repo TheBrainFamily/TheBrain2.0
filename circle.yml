@@ -347,7 +347,6 @@ jobs:
       - run:
           name: Installing ios dependencies
           command: |
-            npm install -g react-native-cli
             npm install -g detox-cli
             brew tap wix/brew
             brew install applesimutils --HEAD
@@ -356,7 +355,6 @@ jobs:
             mkdir ~/TheBrain2.0/mobileClient/.expo/
             ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
             npm install -g detox@7.0.0
-      # lets take a look at those dependencies on next run
       - attach_workspace:
           at: /tmp/workspace
       - run:
