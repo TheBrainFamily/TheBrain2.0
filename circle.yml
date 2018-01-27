@@ -356,20 +356,18 @@ jobs:
             mkdir ~/TheBrain2.0/mobileClient/.expo/
             ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
             npm install -g detox@7.0.0
-      - run:
-          name: E2E ios test
-          working_directory: ~/TheBrain2.0/mobileClient
-          command: DETOX_EXTERNAL_LINK=`node ./.scripts/getPackageName.js` npm run e2e
-          environment:
-            - DETOX_EXTERNAL_LINK:
       - attach_workspace:
           at: /tmp/workspace
       - run:
-          name: Github Notification
+          name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
           command: |
             mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
-            ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
+            DETOX_EXTERNAL_LINK=https://expo.io/@thebrain/`node ./.scripts/getPackageName.js` npm run e2e
+      - run:
+          name: Github Notification
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
 
 workflows:
   version: 2
