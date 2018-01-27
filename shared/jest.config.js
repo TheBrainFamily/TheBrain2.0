@@ -1,4 +1,6 @@
 module.exports = {
   runner: 'jest-runner-standard',
-  'testMatch': ['<rootDir>/**/*.js']
+  'rootDir': '../',
+  'testMatch': ['<rootDir>/shared/**/*.js'],
+  'displayName': 'standard linting'
 }
