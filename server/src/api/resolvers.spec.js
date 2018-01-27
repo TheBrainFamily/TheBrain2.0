@@ -1,11 +1,9 @@
 // @flow
 import casual from 'casual'
 import _ from 'lodash'
-import moment from 'moment'
 
 import resolvers from './resolvers'
 import { deepFreeze, extendExpect } from '../testHelpers/testHelpers'
-import { CoursesRepository } from './repositories/CoursesRepository'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { ItemsRepository } from './repositories/ItemsRepository'
 import { UsersRepository } from './repositories/UsersRepository'
@@ -39,13 +37,13 @@ const mongoObjectId = function () {
   }).toLowerCase()
 }
 
-casual.define('flashcard', function () {
-  return {
-    _id: mongoObjectId(),
-    question: casual.sentence,
-    answer: casual.sentence
-  }
-})
+// casual.define('flashcard', function () {
+//   return {
+//     _id: mongoObjectId(),
+//     question: casual.sentence,
+//     answer: casual.sentence
+//   }
+// })
 
 casual.define('item', function () {
   return {
@@ -81,91 +79,6 @@ async function makeItems ({number: number = 2, itemsToExtend = [], itemsCollecti
   })
   return addedItems.map(item => itemsCollection.insert(item))
 }
-
-describe('query.Item', () => {
-  // TODO is this used on the frontend?
-  it.skip('returns a specific item', async () => {
-    const userId = mongoObjectId()
-    const itemsRepository = new ItemsRepository()
-    await itemsRepository.itemsCollection.insert({userId, extraRepeatToday: true})
-    const newItemId = mongoObjectId()
-    await itemsRepository.itemsCollection.insert({userId, _id: newItemId, extraRepeatToday: false})
-    const context = {Items: itemsRepository, user: {_id: userId}}
-
-    const course = await resolvers.Query.Item(undefined, {_id: newItemId}, context)
-
-    expect(course.extraRepeatToday).toEqual(false)
-  })
-})
-
-describe('query.Items', () => {
-  it('returns 0 items if no user exists', async () => {
-    // XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
-    const context = {Items: new ItemsRepository()}
-
-    const items = await resolvers.Query.Items(undefined, undefined, context)
-
-    expect(items.length).toBe(0)
-  })
-
-  it('returns 0 items for a new user without any lessons watched', async () => {
-    // XXX This test doesn't really check anything, of course it's going to return 0 items, since there are no items in the db
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      casual: false
-    })
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository,
-      Items: new ItemsRepository()
-    }
-
-    const items = await resolvers.Query.Items(undefined, undefined, context)
-
-    expect(items.length).toBe(0)
-  })
-})
-
-describe('mutation.selectCourse', () => {
-  let context
-  beforeAll(async () => {
-    const coursesRepository = new CoursesRepository()
-    await coursesRepository.coursesCollection.insert({_id: 'testCourseId'})
-    const usersRepository = new UsersRepository()
-    const userDetailsRepository = new UserDetailsRepository()
-    context = {
-      user: {},
-      Users: usersRepository,
-      UserDetails: userDetailsRepository,
-      req: {
-        logIn: jest.fn()
-      }
-    }
-  })
-  // TODO mock the mongodb ObjectID so it doesn't require the 12 bytes for the next two
-  it.skip('saves info about a course selected if no user exists', async () => {
-    const result = await resolvers.Mutation.selectCourse(undefined, {courseId: 'testCourseId'}, context)
-    expect(result.userId).toBeDefined()
-    expect(result.progress[0]).toEqual({courseId: 'testCourseId', lesson: 1})
-    expect(result.selectedCourse).toEqual('testCourseId')
-  })
-  it.skip('saves info about a course selected by a user', async () => {
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    context.user = {_id: userId}
-
-    const result = await resolvers.Mutation.selectCourse(undefined, {courseId: 'testCourseId'}, context)
-    expect(result.userId).toBeDefined()
-    expect(result.progress[0]).toEqual({courseId: 'testCourseId', lesson: 1})
-    expect(result.selectedCourse).toEqual('testCourseId')
-  })
-})
 
 describe('mutation.processEvaluation', () => {
   it('returns a correct item after "Wrong" evaluation', async () => {
@@ -235,47 +148,5 @@ describe.skip('login with facebook', async () => {
 
     await logInWithFacebook(undefined, args, context)
     expect(context.req.logIn.mock.calls[0]).toContain(user)
-  })
-})
-
-describe('query.Reviews', () => {
-  it('returns empty list by default', async () => {
-    const itemsRepository = new ItemsRepository()
-    const userDetailsRepository = new UserDetailsRepository()
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
-
-    const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
-
-    expect(reviews.length).toBe(0)
-  })
-
-  it('returns list of reviews grouped by day timestamp', async () => {
-    const itemsRepository = new ItemsRepository()
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
-    const tomorrowDate = moment().add(1, 'day')
-    const dayAfterTomorrowDate = moment().add(2, 'day')
-    const itemsToExtend = [
-      {userId, nextRepetition: tomorrowDate.unix()}, {userId, nextRepetition: dayAfterTomorrowDate.unix()},
-      {userId, nextRepetition: dayAfterTomorrowDate.add(1, 'hour').unix()}
-    ]
-    await makeItems({itemsToExtend, number: itemsToExtend.length, itemsCollection: itemsRepository.itemsCollection})
-
-    const reviews = await resolvers.Query.Reviews(undefined, undefined, context)
-
-    expect(reviews).toEqual([
-      {ts: tomorrowDate.clone().utc().startOf('day').unix(), count: 1},
-      {ts: dayAfterTomorrowDate.clone().utc().startOf('day').unix(), count: 2}
-    ])
   })
 })

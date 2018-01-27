@@ -228,7 +228,6 @@ const resolvers = {
       }
       return true
     },
-
     async logInWithFacebookAccessToken (root: ?string, args: { accessTokenFb: string }, passedContext: Object) {
       const { accessTokenFb } = args
       const userIdRequest = `https://graph.facebook.com/me?access_token=${accessTokenFb}`
@@ -238,7 +237,6 @@ const resolvers = {
 
       return logInWithFacebook(root, {...args, userIdFb}, passedContext)
     },
-
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) {
       return logInWithFacebook(root, args, passedContext)
     },
