@@ -192,7 +192,7 @@ jobs:
 #      - restore_cache:
 #          keys:
 #            - npm-server-deps-{{ checksum "./server/package.json" }}
-     - run:
+      - run:
          name: Install server packages
          working_directory: "~/TheBrain2.0/server/"
          command: npm install
