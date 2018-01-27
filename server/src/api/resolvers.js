@@ -7,7 +7,7 @@ import returnItemAfterEvaluation from './tools/returnItemAfterEvaluation'
 // TODO Most probably the UsersRepository shouldnt be used directly here. Repository should be from the context.
 import { usersRepository, UsersRepository } from './repositories/UsersRepository'
 // import { sendMail } from './tools/emailService'
-import { renewTokenOnLogin } from '../configuration/common'
+import { facebookAppId, renewTokenOnLogin } from '../configuration/common'
 import { itemsRepository } from './repositories/ItemsRepository'
 import { lessonsRepository } from './repositories/LessonsRepository'
 import { userDetailsRepository } from './repositories/UserDetailsRepository'
@@ -420,7 +420,7 @@ const logInWithFacebook = async (root: ?string, args: { accessTokenFb: string, u
   const context = { ...repositoriesContext, ...passedContext }
   const { accessTokenFb, userIdFb } = args
 
-  const validFbAppId = process.env.FB_APP_ID || null
+  const validFbAppId = facebookAppId
   const appIdRequest = `https://graph.facebook.com/app/?access_token=${accessTokenFb}`
   const appIdResponse = await fetch(appIdRequest)
   const appIdParsedResponse = await appIdResponse.json()

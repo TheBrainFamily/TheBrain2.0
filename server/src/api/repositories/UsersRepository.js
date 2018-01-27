@@ -52,14 +52,12 @@ export class UsersRepository extends MongoRepository {
   }
 
   async updateFacebookUser (userId: string, facebookId: string, username: string, email: string) {
-    const userToBeUpdated = await this.userCollection.findOne({_id: userId})
-    userToBeUpdated.facebookId = facebookId
-    userToBeUpdated.username = username
-    userToBeUpdated.email = email
-    userToBeUpdated.activated = true
-
-    await this.userCollection.save(userToBeUpdated)
-    return userToBeUpdated
+    await this.userCollection.update({_id: userId}, {
+      $set: {
+        facebookId, username, email, activated: true
+      }
+    })
+    return this.userCollection.findOne({_id: userId})
   }
 
   async findByUsername (username: string) {

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import gql from 'graphql-tag'
 import moment from 'moment'
+import fetch from 'node-fetch'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 import { FlashcardsRepository } from './repositories/FlashcardsRepository'
 import { UserDetailsRepository } from './repositories/UserDetailsRepository'
@@ -14,6 +15,15 @@ import { mongoObjectId } from '../testHelpers/mongoObjectId'
 import { makeItems } from '../testHelpers/makeItems'
 import { UsersRepository } from './repositories/UsersRepository'
 
+jest.mock('node-fetch', () => {
+  return jest.fn()
+})
+
+jest.mock('../configuration/common', () => {
+  return {
+    facebookAppId: 'MOCKED_FB_APP_ID'
+  }
+})
 extendExpect()
 
 describe('Query: Courses', () => {
@@ -863,6 +873,94 @@ describe('Mutation: clearNotCasualItems', () => {
     const {clearNotCasualItems: serverResponse} = data
     expect(serverResponse).toBe(true)
     expect(context.Items.clearNotCasualItems).toHaveBeenCalledTimes(0)
+  })
+})
+describe('Mutation: logInWithFacebookAccessToken', () => {
+  let context = null
+
+  beforeEach(async () => {
+    fetch.mockClear()
+    fetch.mockImplementation(async (query) => {
+      if (query.includes(`https://graph.facebook.com/me?access_token=correctAccessToken`)) {
+        return {
+          json: () => ({id: 'testFbUserId'})
+        }
+      }
+      if (query.includes(`https://graph.facebook.com/app/?access_token=`)) {
+        return {
+          json: () => ({id: 'MOCKED_FB_APP_ID'})
+        }
+      }
+      if (query.includes(`https://graph.facebook.com/v2.10/`)) {
+        return {
+          json: () => ({id: 'testFbUserId', name: 'testUserName', email: 'test@thebrain.pro'})
+        }
+      }
+      return {
+        json: () => ({id: 'mock not yet implemented'})
+      }
+    })
+
+    const usersRepository = new UsersRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    context = {
+      user: {},
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+
+  it('logs in user with correct accessTokenFb', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+           mutation logInWithFacebookAccessToken($accessTokenFb: String)  {
+               logInWithFacebookAccessToken(accessTokenFb:$accessTokenFb) {
+                   _id
+                   password
+                   username
+                   email
+                   activated
+                   facebookId
+                   currentAccessToken
+               }
+           },
+       `,
+      variables: {accessTokenFb: 'correctAccessToken'}
+    })
+
+    const {logInWithFacebookAccessToken: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(1)
+    expect(serverResponse.username).toEqual('testUserName')
+    expect(serverResponse.email).toEqual('test@thebrain.pro')
+  })
+  it('doesn\'t login user with incorrect accessTokenFb', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logInWithFacebookAccessToken($accessTokenFb: String)  {
+              logInWithFacebookAccessToken(accessTokenFb:$accessTokenFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {accessTokenFb: 'invalidToken'}
+    })
+
+    const {logInWithFacebookAccessToken: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(0)
+    expect(serverResponse).toEqual(null)
   })
 })
 describe('Mutation: hideTutorial', () => {
