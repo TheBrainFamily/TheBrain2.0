@@ -710,6 +710,58 @@ describe('Mutation: selectCourseSaveToken', () => {
     expect(result.experience).toEqual({value: 1, level: 1, showLevelUp: null})
   })
 })
+describe('Mutation: closeCourse', () => {
+  it('closes users current course', async () => {
+    const coursesRepository = new CoursesRepository()
+    await coursesRepository.coursesCollection.insert({_id: 'testCourseId'})
+    const usersRepository = new UsersRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    const userId = mongoObjectId()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}],
+      experience: {
+        value: 1,
+        level: 1
+      },
+      selectedCourse: 'testCourseId'
+    })
+
+    const context = {
+      user: {_id: userId},
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation closeCourse {
+              closeCourse {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `
+    })
+    const {closeCourse: result} = data
+
+    const userDetailsDbo = await context.UserDetails.userDetailsCollection.findOne()
+    expect(userDetailsDbo.selectedCourse).toBeFalsy()
+    expect(context.req.logIn.mock.calls.length).toEqual(0)
+    expect(result.selectedCourse).toBeFalsy()
+    expect(result.experience).toEqual({value: 1, level: 1, showLevelUp: null})
+  })
+})
 describe('Mutation: createItemsAndMarkLessonAsWatched', () => {
   it('returns the second lesson after watching the first one if you are a logged in user', async () => {
     const Lessons = new LessonsRepository()
