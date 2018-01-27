@@ -298,18 +298,18 @@ jobs:
       xcode: "9.0"
     working_directory: ~/TheBrain2.0
     steps:
-          - checkout
-          - restore_cache:
-              keys:
-                - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
-          - run:
-              name: Install mobile packages
-              working_directory: ~/TheBrain2.0/mobileClient
-              command: npm install
-          - save_cache:
-              key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
-              paths:
-                - ~/TheBrain2.0/mobileClient/node_modules
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+      - run:
+          name: Install mobile packages
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: npm install
+      - save_cache:
+          key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+          paths:
+            - ~/TheBrain2.0/mobileClient/node_modules
       - run:
           name: Setup macosx kernel settings
           command: |
