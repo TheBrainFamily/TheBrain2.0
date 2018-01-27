@@ -813,6 +813,58 @@ describe('Mutation: createItemsAndMarkLessonAsWatched', () => {
     expect(lesson.position).toBe(2)
   })
 })
+describe('Mutation: clearNotCasualItems', () => {
+  let context = null
+  let userId = null
+
+  beforeEach(async () => {
+    const userDetailsRepository = new UserDetailsRepository()
+    userId = mongoObjectId()
+    const itemRepository = new ItemsRepository()
+    itemRepository.clearNotCasualItems = jest.fn()
+    context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository,
+      Items: itemRepository
+    }
+  })
+
+  it('clears non casual items if user is casual', async () => {
+    await context.UserDetails.userDetailsCollection.insert({
+      userId,
+      isCasual: true
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation clearNotCasualItems {
+              clearNotCasualItems
+          },
+      `
+    })
+    const {clearNotCasualItems: serverResponse} = data
+    expect(serverResponse).toBe(true)
+    expect(context.Items.clearNotCasualItems).toHaveBeenCalledTimes(1)
+    expect(context.Items.clearNotCasualItems).toHaveBeenCalledWith(userId)
+  })
+  it('doesn\'t clear non casual items if user is not casual', async () => {
+    await context.UserDetails.userDetailsCollection.insert({
+      userId,
+      isCasual: false
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation clearNotCasualItems {
+              clearNotCasualItems
+          },
+      `
+    })
+    const {clearNotCasualItems: serverResponse} = data
+    expect(serverResponse).toBe(true)
+    expect(context.Items.clearNotCasualItems).toHaveBeenCalledTimes(0)
+  })
+})
 describe('Mutation: hideTutorial', () => {
   it('saves info that a tutorial should be disabled for a specific user', async () => {
     const userDetailsRepository = new UserDetailsRepository()
