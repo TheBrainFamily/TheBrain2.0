@@ -61,5 +61,5 @@ workflows:
   version: 2
   test_release:
     jobs:
-      - iosTest:
+      - iosTest
 
