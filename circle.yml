@@ -368,8 +368,8 @@ jobs:
           name: Github Notification
           working_directory: ~/TheBrain2.0/mobileClient
           command: |
-          mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
-          ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
+            mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
+            ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
 
 workflows:
   version: 2
