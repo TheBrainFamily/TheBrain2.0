@@ -345,16 +345,23 @@ jobs:
           name: Boot up the simulator so its ready for testing
           command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
       - run:
-          name: Installing ios dependencies
+          name: Updating homebrew to allow Apple Simutils installation
+          command: brew tap wix/brew
+      - run:
+          name: Installing Apple Simutils
+          command: brew install applesimutils --HEAD
+      - run:
+          name: Installing expo CLI
+          command: npm install exp --global
+      - run:
+          name: Installing and link expo ios app
           command: |
-            npm install -g react-native-cli
-            npm install -g detox-cli
-            brew install applesimutils --HEAD
-            npm install exp --global
             exp install:ios
             mkdir ~/TheBrain2.0/mobileClient/.expo/
             ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
-            npm install -g detox@7.0.0
+      - run:
+          name: Installing Detox globally
+          command: npm install -g detox@7.0.0
       - attach_workspace:
           at: /tmp/workspace
       - run:
