@@ -875,7 +875,7 @@ describe('Mutation: clearNotCasualItems', () => {
     expect(context.Items.clearNotCasualItems).toHaveBeenCalledTimes(0)
   })
 })
-describe('Mutation: logInWithFacebookAccessToken', () => {
+describe('Mutation: logInWithFacebookAccessToken & logInWithFacebook', () => {
   let context = null
 
   beforeEach(async () => {
@@ -886,7 +886,7 @@ describe('Mutation: logInWithFacebookAccessToken', () => {
           json: () => ({id: 'testFbUserId'})
         }
       }
-      if (query.includes(`https://graph.facebook.com/app/?access_token=`)) {
+      if (query.includes(`https://graph.facebook.com/app/?access_token=correctAccessToken`)) {
         return {
           json: () => ({id: 'MOCKED_FB_APP_ID'})
         }
@@ -918,18 +918,18 @@ describe('Mutation: logInWithFacebookAccessToken', () => {
 
     const {data} = await networkInterface.query({
       query: gql`
-           mutation logInWithFacebookAccessToken($accessTokenFb: String)  {
-               logInWithFacebookAccessToken(accessTokenFb:$accessTokenFb) {
-                   _id
-                   password
-                   username
-                   email
-                   activated
-                   facebookId
-                   currentAccessToken
-               }
-           },
-       `,
+          mutation logInWithFacebookAccessToken($accessTokenFb: String)  {
+              logInWithFacebookAccessToken(accessTokenFb:$accessTokenFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
       variables: {accessTokenFb: 'correctAccessToken'}
     })
 
@@ -961,6 +961,106 @@ describe('Mutation: logInWithFacebookAccessToken', () => {
     const {logInWithFacebookAccessToken: serverResponse} = data
     expect(context.req.logIn).toHaveBeenCalledTimes(0)
     expect(serverResponse).toEqual(null)
+  })
+  it('logs in user with correct accessToken and userId', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logInWithFacebook($accessTokenFb: String!, $userIdFb: String!)  {
+              logInWithFacebook(accessTokenFb:$accessTokenFb, userIdFb: $userIdFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {accessTokenFb: 'correctAccessToken', userIdFb: 'testFbUserId'}
+    })
+
+    const {logInWithFacebook: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(1)
+    expect(serverResponse.username).toEqual('testUserName')
+    expect(serverResponse.email).toEqual('test@thebrain.pro')
+  })
+  it('doesn\'t login user with incorrect accessTokenFb', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logInWithFacebook($accessTokenFb: String!, $userIdFb: String!)  {
+              logInWithFacebook(accessTokenFb:$accessTokenFb, userIdFb: $userIdFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {accessTokenFb: 'invalidAccessToken', userIdFb: 'testFbUserId'}
+    })
+
+    const {logInWithFacebook: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(0)
+    expect(serverResponse).toEqual(null)
+  })
+  it('doesn\'t login user with incorrect userId', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logInWithFacebook($accessTokenFb: String!, $userIdFb: String!)  {
+              logInWithFacebook(accessTokenFb:$accessTokenFb, userIdFb: $userIdFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {accessTokenFb: 'correctAccessToken', userIdFb: 'invalidUserFbId'}
+    })
+
+    const {logInWithFacebook: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(0)
+    expect(serverResponse).toEqual(null)
+  })
+  it('existing user logs in user with correct accessToken and userId', async () => {
+    const userId = mongoObjectId()
+    context.user = {_id: userId}
+    context.Users.userCollection.insert({_id: userId, facebookId: 'testFbUserId', password: ''})
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logInWithFacebook($accessTokenFb: String!, $userIdFb: String!)  {
+              logInWithFacebook(accessTokenFb:$accessTokenFb, userIdFb: $userIdFb) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {accessTokenFb: 'correctAccessToken', userIdFb: 'testFbUserId'}
+    })
+    const {logInWithFacebook: serverResponse} = data
+    expect(context.req.logIn).toHaveBeenCalledTimes(1)
+    expect(serverResponse._id).toEqual(userId)
+    expect(serverResponse.username).toEqual('testUserName')
+    expect(serverResponse.email).toEqual('test@thebrain.pro')
   })
 })
 describe('Mutation: hideTutorial', () => {
