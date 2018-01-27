@@ -277,11 +277,11 @@ jobs:
             npm install -g react-native-cli
             npm install exp --global
       # maybe instead of installing it globally just run post install in mobileClient/node_modules/detox
-#      - run:
-#          name: Start up mobile app
-#          working_directory: ~/TheBrain2.0/mobileClient
-#          command: npm start
-#          background: true
+      - run:
+          name: Start up mobile app
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: npm start
+          background: true
       - attach_workspace:
           at: /tmp/workspace
       - run:
