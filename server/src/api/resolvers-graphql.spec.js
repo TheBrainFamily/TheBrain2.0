@@ -543,25 +543,15 @@ describe('Query: Reviews', () => {
     ])
   })
 })
-describe('Mutation.selectCourse', () => {
+describe('Mutation: selectCourse', () => {
   let context = null
   beforeAll(async () => {
     const coursesRepository = new CoursesRepository()
     await coursesRepository.coursesCollection.insert({_id: 'testCourseId'})
     const usersRepository = new UsersRepository()
     const userDetailsRepository = new UserDetailsRepository()
-    const userId = mongoObjectId()
-
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}],
-      experience: {
-        value: 0,
-        level: 0
-      }
-    })
     context = {
-      user: {_id: userId},
+      user: {},
       Users: usersRepository,
       UserDetails: userDetailsRepository,
       req: {
@@ -569,10 +559,7 @@ describe('Mutation.selectCourse', () => {
       }
     }
   })
-  // TODO mock the mongodb ObjectID so it doesn't require the 12 bytes for the next two
   it('saves info about a course selected if no user exists', async () => {
-    // const result = await resolvers.Mutation.selectCourse(undefined, {courseId: 'testCourseId'}, context)
-
     const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
     const {data} = await networkInterface.query({
       query: gql`
@@ -596,20 +583,40 @@ describe('Mutation.selectCourse', () => {
     expect(result.selectedCourse).toEqual('testCourseId')
     expect(result.experience).toEqual({value: 0, level: 0, showLevelUp: null})
   })
-  // it.skip('saves info about a course selected by a user', async () => {
-  //   const userId = mongoObjectId()
-  //   const userDetailsRepository = new UserDetailsRepository()
-  //   await userDetailsRepository.userDetailsCollection.insert({
-  //     userId,
-  //     progress: [{courseId: 'testCourseId', lesson: 1}]
-  //   })
-  //   context.user = {_id: userId}
-  //
-  //   const result = await resolvers.Mutation.selectCourse(undefined, {courseId: 'testCourseId'}, context)
-  //   expect(result.userId).toBeDefined()
-  //   expect(result.progress[0]).toEqual({courseId: 'testCourseId', lesson: 1})
-  //   expect(result.selectedCourse).toEqual('testCourseId')
-  // })
+  it('saves info about a course selected by a user', async () => {
+    const userId = mongoObjectId()
+    await context.UserDetails.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}],
+      experience: {
+        value: 0,
+        level: 0
+      }
+    })
+    context.user = {_id: userId}
+
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation selectCourse($courseId: String!) {
+              selectCourse(courseId: $courseId) {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    })
+    const {selectCourse: result} = data
+    expect(result.selectedCourse).toEqual('testCourseId')
+    expect(result.experience).toEqual({value: 0, level: 0, showLevelUp: null})
+  })
 })
 describe('Mutation: createItemsAndMarkLessonAsWatched', () => {
   it('returns the second lesson after watching the first one if you are a logged in user', async () => {
