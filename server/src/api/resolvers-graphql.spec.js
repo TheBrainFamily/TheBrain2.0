@@ -41,6 +41,62 @@ describe('Query: Courses', () => {
     expect(courses.length).toBe(2)
   })
 })
+describe('Query: Reviews', () => {
+  it('returns empty list by default', async () => {
+    const itemsRepository = new ItemsRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    const userId = mongoObjectId()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}]
+    })
+    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
+    const {data} = (await mockNetworkInterfaceWithSchema({schema, context}).query({
+      query: gql`
+          query {
+              Reviews {
+                  count
+                  ts
+              }
+          }
+      `
+    }))
+    const {Reviews: reviews} = data
+    expect(reviews.length).toBe(0)
+  })
+  it('returns list of reviews grouped by day timestamp', async () => {
+    const itemsRepository = new ItemsRepository()
+    const userId = mongoObjectId()
+    const userDetailsRepository = new UserDetailsRepository()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}]
+    })
+    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
+    const tomorrowDate = moment().add(1, 'day')
+    const dayAfterTomorrowDate = moment().add(2, 'day')
+    const itemsToExtend = [
+      {userId, nextRepetition: tomorrowDate.unix()}, {userId, nextRepetition: dayAfterTomorrowDate.unix()},
+      {userId, nextRepetition: dayAfterTomorrowDate.add(1, 'hour').unix()}
+    ]
+    await makeItems({itemsToExtend, number: itemsToExtend.length, itemsCollection: itemsRepository.itemsCollection})
+    const {data} = (await mockNetworkInterfaceWithSchema({schema, context}).query({
+      query: gql`
+          query {
+              Reviews {
+                  count
+                  ts
+              }
+          }
+      `
+    }))
+    const {Reviews: reviews} = data
+    expect(reviews).toEqual([
+      {ts: tomorrowDate.clone().utc().startOf('day').unix(), count: 1},
+      {ts: dayAfterTomorrowDate.clone().utc().startOf('day').unix(), count: 2}
+    ])
+  })
+})
 describe('Query: Course', () => {
   it('returns a specific course', async () => {
     let coursesRepository = new CoursesRepository()
@@ -67,6 +123,135 @@ describe('Query: Course', () => {
     const course = result.data.Course
 
     expect(course.name).toEqual('testCourseName2')
+  })
+})
+describe('Query: Flashcards', () => {
+  it('returns flashcards from the db 1', async () => {
+    const flashcardRepository = new FlashcardsRepository()
+    const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
+    const context = {Flashcards: flashcardRepository}
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query {
+              Flashcards {
+                  question,
+                  answer,
+                  _id
+              }
+          },
+      `
+    }))
+    const dbFlashcards = result.data.Flashcards
+
+    // WHY: _id is a string in response from GraphQL
+    // Expected value to be (using ===):
+    // [{"_id": 2, "answer": "Consectetur qua
+    //   Received:
+    //     [{"_id": "2", "answer": "Consectetur q
+
+    expect(dbFlashcards.length).toBe(3)
+    expect(dbFlashcards).toContainDocuments(flashcardsData)
+  })
+})
+describe('Query: Flashcard', () => {
+  it('returns a flashcard by id', async () => {
+    const flashcardsToExtend = [
+      {_id: mongoObjectId()}, {_id: mongoObjectId()}
+    ]
+    const flashcardRepository = new FlashcardsRepository()
+    const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
+    const context = {Flashcards: flashcardRepository}
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($_id: String!) {
+              Flashcard(_id:$_id) {
+                  _id
+              }
+          },
+      `,
+      variables: {_id: flashcardsData[1]._id}
+    }))
+    const dbFlashcard = result.data.Flashcard
+
+    expect(dbFlashcard._id).toEqual(flashcardsData[1]._id)
+  })
+})
+describe('Query: Lesson', () => {
+  const generateContext = async () => {
+    const lessonsRepository = new LessonsRepository()
+
+    // we have those in different order to make sure the query doesn't return the first inserted lesson.
+    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
+    await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
+
+    return {
+      lessonsRepository,
+      userDetailsRepository: new UserDetailsRepository(),
+      userId: mongoObjectId()
+    }
+  }
+  it('returns first lesson for a new user', async () => {
+    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 1}]
+    })
+
+    const context = {
+      Lessons: lessonsRepository,
+      user: {_id: userId},
+      UserDetails: userDetailsRepository
+    }
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lesson(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
+    const lesson = result.data.Lesson
+
+    expect(lesson).toEqual(expect.objectContaining({position: 1}))
+  })
+  it('returns third lesson for a logged in user that already watched two lessons', async () => {
+    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      progress: [{courseId: 'testCourseId', lesson: 3}]
+    })
+
+    const context = {
+      Lessons: lessonsRepository,
+      user: {_id: userId},
+      UserDetails: userDetailsRepository
+    }
+
+    let result = (await mockNetworkInterfaceWithSchema({schema, context})
+    .query({
+      query: gql`
+          query ($courseId: String!) {
+              Lesson(courseId:$courseId) {
+                  _id
+                  position
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    }))
+    const lesson = result.data.Lesson
+
+    expect(lesson).toEqual(expect.objectContaining({position: 3}))
   })
 })
 describe('Query: Lessons', () => {
@@ -126,148 +311,19 @@ describe('Query: LessonCount', () => {
     const context = {Lessons: lessonsRepository}
 
     let result = (await mockNetworkInterfaceWithSchema({schema, context})
-      .query({
-        query: gql`
+    .query({
+      query: gql`
           query {
               LessonCount {
                   count
               }
           },
       `,
-        variables: {courseId: 'testCourseId'}
-      }))
+      variables: {courseId: 'testCourseId'}
+    }))
     const lessonCount = result.data.LessonCount
 
     expect(lessonCount).toEqual({count: 3})
-  })
-})
-describe('Query: flashcards', () => {
-  it('returns flashcards from the db 1', async () => {
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await deepFreeze(makeFlashcards({flashcardRepository}))
-    const context = {Flashcards: flashcardRepository}
-
-    let result = (await mockNetworkInterfaceWithSchema({schema, context})
-      .query({
-        query: gql`
-          query {
-              Flashcards {
-                  question,
-                  answer,
-                  _id
-              }
-          },
-      `
-      }))
-    const dbFlashcards = result.data.Flashcards
-
-    // WHY: _id is a string in response from GraphQL
-    // Expected value to be (using ===):
-    // [{"_id": 2, "answer": "Consectetur qua
-    //   Received:
-    //     [{"_id": "2", "answer": "Consectetur q
-
-    expect(dbFlashcards.length).toBe(3)
-    expect(dbFlashcards).toContainDocuments(flashcardsData)
-  })
-})
-describe('Query: flashcard', () => {
-  it('returns a flashcard by id', async () => {
-    const flashcardsToExtend = [
-      {_id: mongoObjectId()}, {_id: mongoObjectId()}
-    ]
-    const flashcardRepository = new FlashcardsRepository()
-    const flashcardsData = await makeFlashcards({flashcardsToExtend, flashcardRepository})
-    const context = {Flashcards: flashcardRepository}
-
-    let result = (await mockNetworkInterfaceWithSchema({schema, context})
-      .query({
-        query: gql`
-          query ($_id: String!) {
-              Flashcard(_id:$_id) {
-                  _id
-              }
-          },
-      `,
-        variables: {_id: flashcardsData[1]._id}
-      }))
-    const dbFlashcard = result.data.Flashcard
-
-    expect(dbFlashcard._id).toEqual(flashcardsData[1]._id)
-  })
-})
-describe('Query: Lesson', () => {
-  const generateContext = async () => {
-    const lessonsRepository = new LessonsRepository()
-
-    // we have those in different order to make sure the query doesn't return the first inserted lesson.
-    await lessonsRepository.lessonsCollection.insert({position: 2, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 1, courseId: 'testCourseId'})
-    await lessonsRepository.lessonsCollection.insert({position: 3, courseId: 'testCourseId'})
-
-    return {
-      lessonsRepository,
-      userDetailsRepository: new UserDetailsRepository(),
-      userId: mongoObjectId()
-    }
-  }
-  it('returns first lesson for a new user', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-
-    let result = (await mockNetworkInterfaceWithSchema({schema, context})
-      .query({
-        query: gql`
-          query ($courseId: String!) {
-              Lesson(courseId:$courseId) {
-                  _id
-                  position
-              }
-          },
-      `,
-        variables: {courseId: 'testCourseId'}
-      }))
-    const lesson = result.data.Lesson
-
-    expect(lesson).toEqual(expect.objectContaining({position: 1}))
-  })
-  it('returns third lesson for a logged in user that already watched two lessons', async () => {
-    const {userDetailsRepository, lessonsRepository, userId} = await generateContext()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 3}]
-    })
-
-    const context = {
-      Lessons: lessonsRepository,
-      user: {_id: userId},
-      UserDetails: userDetailsRepository
-    }
-
-    let result = (await mockNetworkInterfaceWithSchema({schema, context})
-      .query({
-        query: gql`
-          query ($courseId: String!) {
-              Lesson(courseId:$courseId) {
-                  _id
-                  position
-              }
-          },
-      `,
-        variables: {courseId: 'testCourseId'}
-      }))
-    const lesson = result.data.Lesson
-
-    expect(lesson).toEqual(expect.objectContaining({position: 3}))
   })
 })
 describe('Query: Items ', async () => {
@@ -488,62 +544,7 @@ describe('Query: UserDetails', () => {
     expect(userDetails).toEqual({selectedCourse: 'testCourse', hasDisabledTutorial: true})
   })
 })
-describe('Query: Reviews', () => {
-  it('returns empty list by default', async () => {
-    const itemsRepository = new ItemsRepository()
-    const userDetailsRepository = new UserDetailsRepository()
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
-    const {data} = (await mockNetworkInterfaceWithSchema({schema, context}).query({
-      query: gql`
-          query {
-              Reviews {
-                  count
-                  ts
-              }
-          }
-      `
-    }))
-    const {Reviews: reviews} = data
-    expect(reviews.length).toBe(0)
-  })
-  it('returns list of reviews grouped by day timestamp', async () => {
-    const itemsRepository = new ItemsRepository()
-    const userId = mongoObjectId()
-    const userDetailsRepository = new UserDetailsRepository()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      progress: [{courseId: 'testCourseId', lesson: 1}]
-    })
-    const context = {user: {_id: userId}, Items: itemsRepository, UserDetails: userDetailsRepository}
-    const tomorrowDate = moment().add(1, 'day')
-    const dayAfterTomorrowDate = moment().add(2, 'day')
-    const itemsToExtend = [
-      {userId, nextRepetition: tomorrowDate.unix()}, {userId, nextRepetition: dayAfterTomorrowDate.unix()},
-      {userId, nextRepetition: dayAfterTomorrowDate.add(1, 'hour').unix()}
-    ]
-    await makeItems({itemsToExtend, number: itemsToExtend.length, itemsCollection: itemsRepository.itemsCollection})
-    const {data} = (await mockNetworkInterfaceWithSchema({schema, context}).query({
-      query: gql`
-          query {
-              Reviews {
-                  count
-                  ts
-              }
-          }
-      `
-    }))
-    const {Reviews: reviews} = data
-    expect(reviews).toEqual([
-      {ts: tomorrowDate.clone().utc().startOf('day').unix(), count: 1},
-      {ts: dayAfterTomorrowDate.clone().utc().startOf('day').unix(), count: 2}
-    ])
-  })
-})
+
 describe('Mutation: selectCourse', () => {
   let context = null
   beforeAll(async () => {
