@@ -174,7 +174,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install wait-on
+          name: Install serverless
           command: npm install -g serverless
 ### SHARED PACKAGE
       - restore_cache:
@@ -188,6 +188,12 @@ jobs:
           key: npm-shared-deps-{{ checksum "./shared/package.json" }}
           paths:
             - ~/TheBrain2.0/shared/node_modules
+      - run:
+          name: Install Testing package packages (sic!)
+          working_directory: "~/TheBrain2.0/"
+          command: |
+            grep -v cypress package.json > package.json.new ; mv package.json.new package.json
+            npm install
 ### SERVER
 #      - restore_cache:
 #          keys:
