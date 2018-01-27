@@ -9,22 +9,13 @@ jobs:
       - checkout
       - run:
           name: Install wait-on
-          command: npm install -g wait-on serverless
-      - run:
-          name: Install mongo client
-          command: |
-            apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
-            echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-            apt-get update
-            apt-get install -y mongodb-org-shell
+          command: npm install -g wait-on
       - run:
           name: Create artifacts folders
           command: |
             mkdir -p ~/TheBrain2.0/server/artifacts
             mkdir -p ~/TheBrain2.0/client/artifacts
             mkdir -p ~/TheBrain2.0/mobileClient/artifacts
-#      - run: pushd ~/TheBrain2.0/server/
-#      - run: pushd ~/TheBrain2.0/server/ ; npm run startTestingDB
 
 ### SHARED PACKAGE
       - restore_cache:
@@ -168,6 +159,49 @@ jobs:
           name: Cypress Integration and end to end test for Web
           working_directory: "~/TheBrain2.0/"
           command: npm run cypressTestCI
+      - store_artifacts:
+           path: |
+            ~/TheBrain2.0/server/artifacts
+            ~/TheBrain2.0/client/artifacts
+            ~/TheBrain2.0/mobileClient/artifacts
+      - store_artifacts:
+           path: ~/TheBrain2.0/testing/web/cypress/videos
+           
+  deployServer:
+    docker:
+      - image: cypress/base:8
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run:
+          name: Install serverless
+          command: npm install -g serverless
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
+      - run:
+          name: Install Testing package packages (sic!)
+          working_directory: "~/TheBrain2.0/"
+          command: |
+            grep -v cypress package.json > package.json.new ; mv package.json.new package.json
+            npm install
+### SERVER
+#      - restore_cache:
+#          keys:
+#            - npm-server-deps-{{ checksum "./server/package.json" }}
+      - run:
+         name: Install server packages
+         working_directory: "~/TheBrain2.0/server/"
+         command: npm install
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
@@ -179,11 +213,51 @@ jobs:
             npm run build:lambda
             STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run deployToServerless
             cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g >  ~/TheBrain2.0/serviceEndpoint
+      - persist_to_workspace:
+          root: ~/TheBrain2.0/
+          paths:
+            - serviceEndpoint
+
+  deployWeb:
+    docker:
+      - image: cypress/base:8
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - run:
+          name: Install serverless
+          command: npm install -g serverless
+### SHARED PACKAGE
+      - restore_cache:
+          keys:
+            - npm-shared-deps-{{ checksum "./shared/package.json" }}
+      - run:
+          name: Install shared packages
+          working_directory: "~/TheBrain2.0/shared/"
+          command: npm install
+      - save_cache:
+          key: npm-shared-deps-{{ checksum "./shared/package.json" }}
+          paths:
+            - ~/TheBrain2.0/shared/node_modules
+### Web Client
+      - restore_cache:
+          keys:
+            - npm-client-deps-{{ checksum "./client/package.json"  }}
+      - run:
+          name: Install Web Client packages
+          working_directory: "~/TheBrain2.0/client/"
+          command: npm install
+      - save_cache:
+          key: npm-client-deps-{{ checksum "./client/package.json"  }}
+          paths:
+            - ~/TheBrain2.0/client/node_modules
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Build and deploy the serverless web client
           working_directory: ~/TheBrain2.0/client
           command: |
-            GRAPHQL_SERVER_URI=`cat ~/TheBrain2.0/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
+            GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
             sed s/thebrain-web/thebrain-web-${CIRCLE_BUILD_NUM}-${CIRCLE_BRANCH,,}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
@@ -192,17 +266,9 @@ jobs:
       - persist_to_workspace:
           root: ~/TheBrain2.0/
           paths:
-            - serviceEndpoint
             - webEndpoint
-      - store_artifacts:
-           path: |
-            ~/TheBrain2.0/server/artifacts
-            ~/TheBrain2.0/client/artifacts
-            ~/TheBrain2.0/mobileClient/artifacts
-      - store_artifacts:
-           path: ~/TheBrain2.0/testing/web/cypress/videos
 
-  ios:
+  iosBuild:
     macos:
       xcode: "9.0"
     working_directory: ~/TheBrain2.0
@@ -232,43 +298,95 @@ jobs:
           name: Installing ios dependencies
           command: |
             npm install -g react-native-cli
-            npm install -g detox-cli
-            brew tap wix/brew
-            brew install applesimutils --HEAD
             npm install exp --global
-            exp install:ios
-            mkdir ~/TheBrain2.0/mobileClient/.expo/
-            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
-            npm install -g detox@7.0.0
       # maybe instead of installing it globally just run post install in mobileClient/node_modules/detox
       - run:
           name: Start up mobile app
           working_directory: ~/TheBrain2.0/mobileClient
           command: npm start
           background: true
-      - run:
-          name: Boot up the simulator so its ready for testing
-          command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
       - attach_workspace:
           at: /tmp/workspace
       - run:
-          name: Publish app with github notification
+          name: Publish app
           working_directory: ~/TheBrain2.0/mobileClient
           command: |
             GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
             cat ./networkInterface.js
             WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
+      - persist_to_workspace:
+          root: ~/TheBrain2.0/mobileClient
+          paths:
+            - package.json
+
+  iosTest:
+    macos:
+      xcode: "9.0"
+    working_directory: ~/TheBrain2.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+      - run:
+          name: Install mobile packages
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: npm install
+      - save_cache:
+          key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+          paths:
+            - ~/TheBrain2.0/mobileClient/node_modules
+      - run:
+          name: Setup macosx kernel settings
+          command: |
+            sudo sysctl -w kern.maxfiles=5242880
+            sudo sysctl -w kern.maxfilesperproc=524288
+      - run:
+          name: Boot up the simulator so its ready for testing
+          command: 'xcrun simctl list | grep "Phone: iphone 7 (" -i | cut -d "(" -f 2 | cut -d ")" -f 1 | while read sim ; do xcrun simctl boot $sim ; done'
+      - run:
+          name: Installing Apple Simutils
+          command: |
+           curl "https://dl.dropboxusercontent.com/s/ycxj5wnaq8ocafz/applesimutils\?dl\=0" > /usr/local/bin/applesimutils
+           chmod +x /usr/local/bin/applesimutils
+      - run:
+          name: Installing expo CLI
+          command: npm install exp --global
+      - run:
+          name: Installing and link expo ios app
+          command: |
+            exp install:ios
+            mkdir ~/TheBrain2.0/mobileClient/.expo/
+            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
+      - run:
+          name: Installing Detox globally
+          command: npm install -g detox@7.0.0
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: E2E ios test
           working_directory: ~/TheBrain2.0/mobileClient
-          command: npm run e2e
-          environment:
-            - DETOX_EXTERNAL_LINK: true
+          command: |
+            mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
+            DETOX_EXTERNAL_LINK=https://expo.io/@thebrain/`node ./.scripts/getPackageName.js` npm run e2e
+      - run:
+          name: Github Notification
+          working_directory: ~/TheBrain2.0/mobileClient
+          command: ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
+
 workflows:
   version: 2
   test_release:
     jobs:
       - build
-      - ios:
+      - deployServer
+      - deployWeb:
           requires:
-            - build
+            - deployServer
+      - iosBuild:
+          requires:
+            - deployServer
+      - iosTest:
+          requires:
+            - deployWeb
+            - iosBuild
