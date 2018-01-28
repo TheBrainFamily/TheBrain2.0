@@ -2,9 +2,6 @@
   "name": "thebrain-web",
   "version": "0.1.1",
   "private": true,
-  "engines": {
-    "node": "8.9.4"
-  },
   "dependencies": {
     "apollo-client": "1.8.1",
     "autoprefixer": "6.7.2",
@@ -83,7 +80,11 @@
     "babel-plugin-module-rewrite-with-root": "^0.3.0",
     "react-app-rewired": "^1.4.0",
     "snazzy": "^7.0.0",
-    "testdouble": "^3.3.0"
+    "testdouble": "^3.3.0",
+    "@storybook/react": "^3.3.11",
+    "@storybook/addon-actions": "^3.3.11",
+    "@storybook/addon-links": "^3.3.11",
+    "@storybook/addons": "^3.3.11"
   },
   "scripts": {
     "preinstall": "npm link ../shared",
@@ -99,7 +100,9 @@
     "postinstall": "npm run build",
     "startForCypress": "CYPRESS=true react-app-rewired start",
     "deployToServerless": "serverless client deploy -v",
-    "replaceGraphqlEndpoint": "sed s#{%GRAPHQL_SERVER_URI%}#$GRAPHQL_SERVER_URI# src/networkInterface.js > src/networkInterface.js.new ; mv src/networkInterface.js.new src/networkInterface.js"
+    "replaceGraphqlEndpoint": "sed s#{%GRAPHQL_SERVER_URI%}#$GRAPHQL_SERVER_URI# src/networkInterface.js > src/networkInterface.js.new ; mv src/networkInterface.js.new src/networkInterface.js",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "jest": {
     "collectCoverageFrom": [
