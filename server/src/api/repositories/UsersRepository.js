@@ -122,7 +122,7 @@ export class UsersRepository extends MongoRepository {
   }
 
   async removeToken (userId: string, token: string) {
-    await this.authTokenCollection.removeOne({
+    await this.authTokenCollection.remove({
       userId,
       token
     })
