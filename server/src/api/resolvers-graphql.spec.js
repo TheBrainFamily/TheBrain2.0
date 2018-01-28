@@ -1423,6 +1423,51 @@ describe('Mutation: switchUserIsCasual', () => {
     expect(serverResponse.isCasual).toEqual(!isCasual)
   })
 })
+describe('Mutation: setUserIsCasual', () => {
+  let context = null
+  const userId = mongoObjectId()
+  beforeEach(() => {
+    const userDetailsRepository = new UserDetailsRepository()
+    context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository,
+      req: {
+        logOut: jest.fn()
+      }
+    }
+  })
+  it('switches user to casual mode', async () => {
+    const isCasual = false
+    context.UserDetails.userDetailsCollection.insert({
+      userId,
+      isCasual,
+      hasDisabledTutorial: false,
+      selectedCourse: ''
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation setUserIsCasual($isCasual: Boolean!) {
+              setUserIsCasual(isCasual: $isCasual) {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `,
+      variables: {isCasual: true}
+    })
+    const {setUserIsCasual: serverResponse} = data
+
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.isCasual).toEqual(true)
+  })
+})
 describe('Mutation: hideTutorial', () => {
   it('saves info that a tutorial should be disabled for a specific user', async () => {
     const userDetailsRepository = new UserDetailsRepository()
