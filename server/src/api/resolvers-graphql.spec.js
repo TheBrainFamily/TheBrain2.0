@@ -877,7 +877,6 @@ describe('Mutation: clearNotCasualItems', () => {
 })
 describe('Mutation: logInWithFacebookAccessToken & logInWithFacebook', () => {
   let context = null
-
   beforeEach(async () => {
     fetch.mockClear()
     fetch.mockImplementation(async (query) => {
@@ -1061,6 +1060,124 @@ describe('Mutation: logInWithFacebookAccessToken & logInWithFacebook', () => {
     expect(serverResponse._id).toEqual(userId)
     expect(serverResponse.username).toEqual('testUserName')
     expect(serverResponse.email).toEqual('test@thebrain.pro')
+  })
+})
+describe('Mutation: logIn', () => {
+  let context = null
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    context = {
+      user: {},
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  it('logs in user if correct parameters are passed', async () => {
+    const userId = mongoObjectId()
+    const deviceId = 'correctDeviceId'
+    context.Users.userCollection.insert({
+      _id: userId,
+      username: 'correctUserName',
+      password: '$2a$10$x/TfI44OnblUFmlkFMsdXu.5PfkF44OsntYBhoaI9Z8aqJw.DMYUa',
+      activated: 'false'
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean)  {
+              logIn(username:$username, password: $password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {username: 'correctUserName', password: 'correctPassword', deviceId, saveToken: true}
+    })
+
+    const {logIn: serverResponse} = data
+    const authToken = await context.Users.authTokenCollection.findOne()
+
+    expect(authToken).toBeTruthy()
+    expect(authToken.userId).toEqual(userId)
+    expect(authToken.deviceId).toEqual(deviceId)
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse._id).toEqual(userId)
+    expect(serverResponse.currentAccessToken.length).toEqual(60)
+  })
+  it('does not log in user if incorrect password is passed', async () => {
+    const userId = mongoObjectId()
+    const deviceId = 'correctDeviceId'
+    context.Users.userCollection.insert({
+      _id: userId,
+      username: 'correctUserName',
+      password: '$2a$10$x/TfI44OnblUFmlkFMsdXu.5PfkF44OsntYBhoaI9Z8aqJw.DMYUa',
+      activated: 'false'
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean)  {
+              logIn(username:$username, password: $password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {username: 'correctUserName', password: 'inCorrectPassword', deviceId, saveToken: true}
+    })
+
+    const {logIn: serverResponse} = data
+    const authToken = await context.Users.authTokenCollection.findOne()
+
+    expect(authToken).toBeFalsy()
+    expect(serverResponse).toBeFalsy()
+  })
+  it('does not log in user if incorrect username is passed', async () => {
+    const userId = mongoObjectId()
+    const deviceId = 'correctDeviceId'
+    context.Users.userCollection.insert({
+      _id: userId,
+      username: 'correctUserName',
+      password: '$2a$10$x/TfI44OnblUFmlkFMsdXu.5PfkF44OsntYBhoaI9Z8aqJw.DMYUa',
+      activated: 'false'
+    })
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean)  {
+              logIn(username:$username, password: $password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  password
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {username: 'inCorrectUserName', password: 'correctPassword', deviceId, saveToken: true}
+    })
+
+    const {logIn: serverResponse} = data
+    const authToken = await context.Users.authTokenCollection.findOne()
+
+    expect(authToken).toBeFalsy()
+    expect(serverResponse).toBeFalsy()
   })
 })
 describe('Mutation: hideTutorial', () => {
