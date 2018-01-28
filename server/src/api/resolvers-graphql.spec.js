@@ -81,7 +81,7 @@ describe('Query: Reviews', () => {
     const {Reviews: reviews} = data
     expect(reviews.length).toBe(0)
   })
-  it('returns list of reviews grouped by day timestamp', async () => {
+  it.skip('returns list of reviews grouped by day timestamp', async () => {
     const itemsRepository = new ItemsRepository()
     const userId = mongoObjectId()
     const userDetailsRepository = new UserDetailsRepository()
@@ -1324,6 +1324,59 @@ describe('Mutation: logInWithToken', () => {
     expect(authToken).toBeFalsy()
     expect(errors.length).toEqual(1)
     expect(errors[0].message).toEqual('User not found')
+  })
+})
+describe('Mutation: logOut', () => {
+  let context = null
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    const userDetailsRepository = new UserDetailsRepository()
+    const userId = mongoObjectId()
+    const accessToken = 'correctAccessToken'
+    const deviceId = 'correctDeviceId'
+    usersRepository.userCollection.insert({
+      _id: userId,
+      username: 'correctUserName',
+      password: '',
+      activated: 'false'
+    })
+    usersRepository.authTokenCollection.insert({
+      userId,
+      token: accessToken,
+      deviceId,
+      createdAt: moment().unix()
+    })
+    context = {
+      user: {_id: userId, currentAccessToken: accessToken},
+      Users: usersRepository,
+      UserDetails: userDetailsRepository,
+      req: {
+        logOut: jest.fn()
+      }
+    }
+  })
+  it('logs in user if correct parameters are passed', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation logOut {
+              logOut {
+                  _id
+                  username
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `
+    })
+    const {logOut: serverResponse} = data
+    const authToken = await context.Users.authTokenCollection.findOne()
+
+    expect(authToken).toBeFalsy()
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse._id).toEqual('loggedOut')
   })
 })
 describe('Mutation: hideTutorial', () => {
