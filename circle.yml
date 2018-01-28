@@ -158,7 +158,7 @@ jobs:
       - run:
           name: Cypress Integration and end to end test for Web
           working_directory: "~/TheBrain2.0/"
-          command: npm run cypressTestCI -- --record --key $CYPRESS_KEY
+          command: npm run cypressTestCI
       - store_artifacts:
            path: |
             ~/TheBrain2.0/server/artifacts
