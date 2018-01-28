@@ -123,10 +123,8 @@ export class UserDetailsRepository extends MongoRepository {
   }
 
   async closeCourse (userId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId})
-    userDetails.selectedCourse = null
-    await this.userDetailsCollection.save(userDetails)
-    return userDetails
+    await this.userDetailsCollection.update({userId}, {$set: {selectedCourse: null}})
+    return this.userDetailsCollection.findOne({userId})
   }
 }
 
