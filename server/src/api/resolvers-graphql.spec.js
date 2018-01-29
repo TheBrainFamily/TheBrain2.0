@@ -1744,3 +1744,43 @@ describe('Mutation: processEvaluation', () => {
     // expect(item.isCasual).toEqual(0)
   })
 })
+// TODO: restore when tingodb is updated with new mongo api
+describe.skip('Mutation: confirmLevelUp', () => {
+  let context = null
+  const userId = mongoObjectId()
+  beforeEach(() => {
+    const userDetailsRepository = new UserDetailsRepository()
+    userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      experience: {
+        showLevelUp: true
+      }
+    })
+    context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository
+    }
+  })
+  it('resets level up flag', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation confirmLevelUp {
+              confirmLevelUp {
+                  hasDisabledTutorial
+                  selectedCourse
+                  experience {
+                      value
+                      level
+                      showLevelUp
+                  }
+                  isCasual
+              }
+          },
+      `
+    })
+    const {confirmLevelUp: serverResponse} = data
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.experience.showLevelUp).toEqual(false)
+  })
+})
