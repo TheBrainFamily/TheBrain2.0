@@ -1379,6 +1379,51 @@ describe('Mutation: logOut', () => {
     expect(serverResponse._id).toEqual('loggedOut')
   })
 })
+describe('Mutation: hideTutorial', () => {
+  it('saves info that a tutorial should be disabled for a specific user', async () => {
+    const userDetailsRepository = new UserDetailsRepository()
+
+    const userId = mongoObjectId()
+    await userDetailsRepository.userDetailsCollection.insert({
+      userId,
+      selectedCourse: 'testCourseId'
+    })
+    const context = {
+      user: {_id: userId},
+      UserDetails: userDetailsRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+
+    await networkInterface.query({
+      query: gql`
+          mutation  {
+              hideTutorial {
+                  hasDisabledTutorial
+              }
+          },
+      `,
+      variables: {courseId: 'testCourseId'}
+    })
+
+    let result = await networkInterface.query({
+      query: gql`
+          query {
+              UserDetails {
+                  hasDisabledTutorial
+                  selectedCourse
+                  isCasual
+              }
+          }
+      `
+    })
+    const userDetails = result.data.UserDetails
+
+    expect(userDetails.hasDisabledTutorial).toBe(true)
+  })
+})
 describe('Mutation: switchUserIsCasual', () => {
   let context = null
   const userId = mongoObjectId()
@@ -1468,49 +1513,128 @@ describe('Mutation: setUserIsCasual', () => {
     expect(serverResponse.isCasual).toEqual(true)
   })
 })
-describe('Mutation: hideTutorial', () => {
-  it('saves info that a tutorial should be disabled for a specific user', async () => {
-    const userDetailsRepository = new UserDetailsRepository()
-
-    const userId = mongoObjectId()
-    await userDetailsRepository.userDetailsCollection.insert({
-      userId,
-      selectedCourse: 'testCourseId'
+describe('Mutation: setUsernameAndPasswordForGuest', () => {
+  let context = null
+  const userId = mongoObjectId()
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    usersRepository.userCollection.insert({
+      _id: userId,
+      username: '',
+      password: ''
     })
-    const context = {
-      user: {_id: userId},
-      UserDetails: userDetailsRepository,
+
+    context = {
+      Users: usersRepository,
       req: {
         logIn: jest.fn()
       }
     }
+  })
+  it('assign username and password to guest user', async () => {
+    const username = 'testUsername'
+    const password = 'MOCK_HASH'
+    const deviceId = 'correctDeviceId'
     const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
-
-    await networkInterface.query({
+    const {data} = await networkInterface.query({
       query: gql`
-          mutation  {
-              hideTutorial {
-                  hasDisabledTutorial
+          mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
+              setUsernameAndPasswordForGuest(username: $username, password:$password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  username
+                  password
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
               }
           },
       `,
-      variables: {courseId: 'testCourseId'}
+      variables: {username, password, deviceId, saveToken: true}
     })
 
-    let result = await networkInterface.query({
+    const {setUsernameAndPasswordForGuest: serverResponse} = data
+
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.username).toEqual(username)
+    expect(serverResponse.password).toEqual(password)
+    expect(context.req.logIn).toHaveBeenCalledTimes(2)
+  })
+  it('fails if username is not unique', async () => {
+    const username = 'testUsername'
+    context.Users.userCollection.insert({
+      _id: mongoObjectId(),
+      username: username
+    })
+    const password = 'MOCK_HASH'
+    const deviceId = 'correctDeviceId'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {errors} = await networkInterface.query({
       query: gql`
-          query {
-              UserDetails {
-                  hasDisabledTutorial
-                  selectedCourse
-                  isCasual
+          mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
+              setUsernameAndPasswordForGuest(username: $username, password:$password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  username
+                  password
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
               }
-          }
-      `
+          },
+      `,
+      variables: {username, password, deviceId, saveToken: true}
     })
-    const userDetails = result.data.UserDetails
-
-    expect(userDetails.hasDisabledTutorial).toBe(true)
+    expect(errors.length).toEqual(1)
+    expect(errors[0].message).toEqual('Username is already taken')
+  })
+  it('fails if username is empty', async () => {
+    const username = ''
+    const password = 'MOCK_HASH'
+    const deviceId = 'correctDeviceId'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {errors} = await networkInterface.query({
+      query: gql`
+          mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
+              setUsernameAndPasswordForGuest(username: $username, password:$password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  username
+                  password
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {username, password, deviceId, saveToken: true}
+    })
+    expect(errors.length).toEqual(1)
+    expect(errors[0].message).toEqual('Username and password cannot be empty')
+  })
+  it('fails if password is empty', async () => {
+    const username = 'testUsername'
+    const password = ''
+    const deviceId = 'correctDeviceId'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {errors} = await networkInterface.query({
+      query: gql`
+          mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
+              setUsernameAndPasswordForGuest(username: $username, password:$password, deviceId:$deviceId, saveToken:$saveToken) {
+                  _id
+                  username
+                  password
+                  email
+                  activated
+                  facebookId
+                  currentAccessToken
+              }
+          },
+      `,
+      variables: {username, password, deviceId, saveToken: true}
+    })
+    expect(errors.length).toEqual(1)
+    expect(errors[0].message).toEqual('Username and password cannot be empty')
   })
 })
 describe('Mutation: processEvaluation', () => {

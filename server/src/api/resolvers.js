@@ -256,6 +256,7 @@ const resolvers = {
             user.currentAccessToken = await context.Users.insertNewUserToken(user._id, args.deviceId)
           }
           context.req.logIn(user, (err) => { if (err) throw err })
+          // TODO: remove password field from user object before returning it
           return user
         }
         throw new Error('Wrong username or password')
