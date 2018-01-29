@@ -10,10 +10,10 @@ module.exports = (wallaby) => {
     files: [
       'src/**/*.js',
       'package.json',
-      {pattern: 'src/**/*.spec.js', ignore: true},
+      {pattern: 'src/**/*.spec.js', ignore: true}
     ],
     tests: [
-      'src/**/*.spec.js',
+      'src/**/*.spec.js'
     ],
     compilers: {'**/*.js': wallaby.compilers.babel()},
     env: {type: 'node'}
