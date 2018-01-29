@@ -76,7 +76,11 @@ export class UsersRepository extends MongoRepository {
     const userToBeUpdated = await this.findByUsername(username)
     if (userToBeUpdated) {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
-      await this.userCollection.save(userToBeUpdated)
+      await this.userCollection.update({_id: userToBeUpdated._id}, {
+        $set: {
+          resetPasswordToken: userToBeUpdated.resetPasswordToken
+        }
+      })
       return userToBeUpdated
     } else {
       return null

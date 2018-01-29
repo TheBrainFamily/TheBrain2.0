@@ -1784,3 +1784,55 @@ describe.skip('Mutation: confirmLevelUp', () => {
     expect(serverResponse.experience.showLevelUp).toEqual(false)
   })
 })
+describe('Mutation: resetPassword', () => {
+  let context = null
+  const userId = mongoObjectId()
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    usersRepository.userCollection.insert({
+      _id: userId,
+      username: 'testUsername'
+    })
+    context = {
+      user: {},
+      Users: usersRepository,
+      req: {
+        logIn: jest.fn()
+      }
+    }
+  })
+  it('resets users password', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation resetPassword($username: String!)  {
+              resetPassword(username:$username) {
+                  success
+              }
+          },
+      `,
+      variables: {username: 'testUsername'}
+    })
+
+    const {resetPassword: serverResponse} = data
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.success).toEqual(true)
+  })
+  it('doesn\'t reset users password if incorrect username is passed', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation resetPassword($username: String!)  {
+              resetPassword(username:$username) {
+                  success
+              }
+          },
+      `,
+      variables: {username: 'incorrectUsername'}
+    })
+
+    const {resetPassword: serverResponse} = data
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.success).toEqual(false)
+  })
+})
