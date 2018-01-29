@@ -1637,6 +1637,53 @@ describe('Mutation: setUsernameAndPasswordForGuest', () => {
     expect(errors[0].message).toEqual('Username and password cannot be empty')
   })
 })
+describe('Mutation: clearToken', () => {
+  let context = null
+  const userId = mongoObjectId()
+  const token = 'userToken'
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    usersRepository.authTokenCollection.insert({
+      userId,
+      token
+    })
+    context = {
+      Users: usersRepository
+    }
+  })
+  it('assign username and password to guest user', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation clearToken($userId: String!, $token: String!) {
+              clearToken(userId: $userId, token: $token)
+          },
+      `,
+      variables: {userId, token}
+    })
+
+    const {clearToken: serverResponse} = data
+    const authTokens = await context.Users.authTokenCollection.find().toArray()
+    expect(serverResponse).toBeTruthy()
+    expect(authTokens.length).toEqual(0)
+  })
+  it('doesn\'t remove anything if incorrect token is passed', async () => {
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation clearToken($userId: String!, $token: String!) {
+              clearToken(userId: $userId, token: $token)
+          },
+      `,
+      variables: {userId, token: 'incorrectToken'}
+    })
+
+    const {clearToken: serverResponse} = data
+    const authTokens = await context.Users.authTokenCollection.find().toArray()
+    expect(serverResponse).toBeTruthy()
+    expect(authTokens.length).toEqual(1)
+  })
+})
 describe('Mutation: processEvaluation', () => {
   it('returns a correct item after "Wrong" evaluation', async () => {
     const itemsRepository = new ItemsRepository()
