@@ -5,7 +5,7 @@ import { EnzymeDriver } from './EnzymeDriver'
 import { createTheBrainStore, createHistory } from '../../client/src/store'
 import { ApolloProvider } from 'react-apollo'
 
-import Adapter from 'enzyme-adapter-react-15'
+import Adapter from 'enzyme-adapter-react-16'
 
 configure({ adapter: new Adapter() })
 

@@ -9,7 +9,7 @@ import ProgressBar from './ProgressBar'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import lessonCountQuery from 'thebrain-shared/graphql/queries/lessonCount'
 
-class CourseProgressBar extends React.Component {
+export class CourseProgressBar extends React.Component {
   render () {
     if (this.props.currentLesson.loading || this.props.lessonCount.loading || !this.props.selectedCourse) {
       return <div />

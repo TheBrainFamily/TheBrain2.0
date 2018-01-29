@@ -50,7 +50,6 @@ describe('Lecture', async () => {
     // Given I am a new student
     // When I open the lecture page
     const context = await returnContext()
-    console.log('Gandecki context.Courses', context.Courses)
     const driver = await startApp('/lecture', context)
     const lecturePage = new LecturePage(driver)
     await lecturePage.skipLecture()

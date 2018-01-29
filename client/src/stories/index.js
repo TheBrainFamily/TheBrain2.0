@@ -1,13 +1,15 @@
-import React from 'react'
-
 import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
 
-import { Button, Welcome } from '@storybook/react/demo'
+import './disableJestGlobals'
+import withTests from './withTests'
+import { ListWithThreeElements } from './List.test'
+console.log("Gandecki withTests('List')", withTests('List'))
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
-
-storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>)
+storiesOf('List', module)
+  .addDecorator(withTests('List', 'List element with 3 items'))
+  .add('3 items', () => (
+    ListWithThreeElements
+  ))
+  .add('4 items', () => (
+    ListWithThreeElements
+  ))
