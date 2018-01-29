@@ -1836,3 +1836,75 @@ describe('Mutation: resetPassword', () => {
     expect(serverResponse.success).toEqual(false)
   })
 })
+describe('Mutation: changePassword', () => {
+  let context = null
+  const userId = mongoObjectId()
+  beforeEach(() => {
+    const usersRepository = new UsersRepository()
+    usersRepository.userCollection.insert({
+      _id: userId,
+      username: 'testUsername',
+      password: 'oldPassword'
+    })
+    context = {
+      user: {_id: userId},
+      Users: usersRepository
+    }
+  })
+  it('changes users password', async () => {
+    const oldPassword = 'oldPassword'
+    const newPassword = 'newPassword'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {data} = await networkInterface.query({
+      query: gql`
+          mutation changePassword($oldPassword: String!, $newPassword: String!)  {
+              changePassword(oldPassword:$oldPassword, newPassword:$newPassword) {
+                  success
+              }
+          },
+      `,
+      variables: {oldPassword, newPassword}
+    })
+
+    const {changePassword: serverResponse} = data
+    expect(serverResponse).toBeTruthy()
+    expect(serverResponse.success).toEqual(true)
+  })
+  it('doesn\'t change users password if incorrect old password is passed', async () => {
+    const oldPassword = 'incorrectPassword'
+    const newPassword = 'newPassword'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {errors} = await networkInterface.query({
+      query: gql`
+          mutation changePassword($oldPassword: String!, $newPassword: String!)  {
+              changePassword(oldPassword:$oldPassword, newPassword:$newPassword) {
+                  success
+              }
+          },
+      `,
+      variables: {oldPassword, newPassword}
+    })
+
+    expect(errors.length).toEqual(1)
+    expect(errors[0].message).toEqual('Old Password is not correct')
+  })
+  it('return an error if user not exist', async () => {
+    const oldPassword = 'oldPassword'
+    const newPassword = 'newPassword'
+    context.user._id = 'incorrectId'
+    const networkInterface = mockNetworkInterfaceWithSchema({schema, context})
+    const {errors} = await networkInterface.query({
+      query: gql`
+          mutation changePassword($oldPassword: String!, $newPassword: String!)  {
+              changePassword(oldPassword:$oldPassword, newPassword:$newPassword) {
+                  success
+              }
+          },
+      `,
+      variables: {oldPassword, newPassword}
+    })
+
+    expect(errors.length).toEqual(1)
+    expect(errors[0].message).toEqual('User not found')
+  })
+})
