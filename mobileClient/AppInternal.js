@@ -3,7 +3,6 @@ import Congratulations from './components/Congratulations'
 import NoInternet from './components/NoInternet'
 import Contact from './components/Contact'
 import Calendar from './components/Calendar'
-import Achievements from './components/Achievements'
 import styles from './styles/styles'
 import Lectures from './components/Lectures'
 import Profile from './components/Profile'
@@ -29,7 +28,6 @@ export class AppInternal extends Component {
             <Route exact path='/login' component={Login} />
             <Route exact path='/lectures' component={Lectures} />
             <Route exact path='/calendar' component={Calendar} />
-            <Route exact path='/achievements' component={Achievements} />
             <Route exact path='/profile' component={Profile} />
             <Route exact path='/contact' component={Contact} />
             <Route exact path='/nointernet' component={NoInternet} />

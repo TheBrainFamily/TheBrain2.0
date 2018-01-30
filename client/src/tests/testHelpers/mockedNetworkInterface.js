@@ -5,16 +5,7 @@ import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
 
 const gql = a => a
 
-const typeDefs = gql`
-    type Achievement {
-        _id: String,
-        name: String,
-        description: String,
-        sortOrder: Int,
-        targetValue: Float,
-        value: Float,
-        isCollected: Boolean
-    }
+const typeDefs = gql`  
     type Course {
         _id: String,
         name: String,
@@ -100,7 +91,6 @@ const typeDefs = gql`
     }
 
     type Query {
-        Achievements: [Achievement]!,
         Reviews: [ReviewsPerDay],
         Courses: [Course]!,
         Course(_id: String!): Course,

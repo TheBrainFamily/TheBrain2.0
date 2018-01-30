@@ -11,7 +11,6 @@ import { facebookAppId, renewTokenOnLogin } from '../configuration/common'
 import { itemsRepository } from './repositories/ItemsRepository'
 import { lessonsRepository } from './repositories/LessonsRepository'
 import { userDetailsRepository } from './repositories/UserDetailsRepository'
-import { achievementsRepository } from './repositories/AchievementsRepository'
 import { coursesRepository } from './repositories/CoursesRepository'
 import { flashcardRepository } from './repositories/FlashcardsRepository'
 
@@ -21,34 +20,13 @@ const repositoriesContext = {
   Lessons: lessonsRepository,
   Items: itemsRepository,
   UserDetails: userDetailsRepository,
-  Users: usersRepository,
-  Achievements: achievementsRepository
+  Users: usersRepository
 }
 // TODO split up the resolvers
 // TODO Split up repositories to actions?
 
 const resolvers = {
   Query: {
-    async Achievements (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
-      let userId = context.user && context.user._id
-      if (!userId) {
-        throw Error(`Invalid userId: ${userId}`)
-      }
-      const userDetails = await context.UserDetails.getById(userId)
-
-      if (!userDetails) {
-        throw Error(`Cannot fetch userDetials for userId: ${userId}`)
-      }
-
-      const userAchievements = await context.Achievements.getUserAchievements(userDetails)
-
-      const collectedAchievementIds = userAchievements.filter(achievement => achievement.isCollected).map(achievement => achievement._id)
-      await context.UserDetails.updateCollectedAchievements(userId, collectedAchievementIds)
-
-      return userAchievements
-    },
     Courses (root: ?string, args: ?Object, passedContext: Object) {
       const context = {...repositoriesContext, ...passedContext}
       return context.Courses.getCourses()
