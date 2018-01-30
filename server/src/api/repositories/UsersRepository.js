@@ -38,17 +38,17 @@ export class UsersRepository extends MongoRepository {
   }
 
   async updateUser (userId: string, username: string, password: string) {
-    const userToBeUpdated = await this.userCollection.findOne({_id: userId})
-
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
     const hash = await bcrypt.hash(password, salt)
-
-    userToBeUpdated.username = username
-    userToBeUpdated.password = hash
-    userToBeUpdated.activated = true
-
-    await this.userCollection.save(userToBeUpdated)
-    return userToBeUpdated
+    await this.userCollection.update({_id: userId},
+      {
+        $set: {
+          username,
+          password: hash,
+          activated: true
+        }
+      })
+    return this.userCollection.findOne({_id: userId})
   }
 
   async updateFacebookUser (userId: string, facebookId: string, username: string, email: string) {
@@ -76,7 +76,11 @@ export class UsersRepository extends MongoRepository {
     const userToBeUpdated = await this.findByUsername(username)
     if (userToBeUpdated) {
       userToBeUpdated.resetPasswordToken = await generateResetPasswordToken(userToBeUpdated._id)
-      await this.userCollection.save(userToBeUpdated)
+      await this.userCollection.update({_id: userToBeUpdated._id}, {
+        $set: {
+          resetPasswordToken: userToBeUpdated.resetPasswordToken
+        }
+      })
       return userToBeUpdated
     } else {
       return null
@@ -122,7 +126,7 @@ export class UsersRepository extends MongoRepository {
   }
 
   async removeToken (userId: string, token: string) {
-    await this.authTokenCollection.removeOne({
+    await this.authTokenCollection.remove({
       userId,
       token
     })
