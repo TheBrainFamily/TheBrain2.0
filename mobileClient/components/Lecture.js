@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Animated, Easing, Text, View, BackHandler } from 'react-native'
+import { Animated, Easing, Text, View, BackHandler, TouchableOpacity, Image } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
@@ -102,7 +102,15 @@ class Lecture extends React.Component {
         <Animatable.View animation='bounceIn' style={{ height: '60%' }}>
           <Video videoId={this.props.data.Lesson.youtubeId} onVideoWatched={this.onVideoWatched}
             loading={this.props.data.loading} />
+          <TouchableOpacity style={{position: 'absolute', bottom: 30, right: 5}} testID='skip_lecture_button'
+            onPress={this.onVideoWatched}>
+            <Image
+              source={require(`../images/Icon_skip.png`)}
+              style={{height: 50, width: 50, alignSelf: 'center'}}
+            />
+          </TouchableOpacity>
         </Animatable.View>
+
         }
       </View>
     )
