@@ -1,13 +1,4 @@
 
-type Achievement {
-    _id: String,
-    name: String,
-    description: String,
-    sortOrder: Int,
-    targetValue: Float,
-    value: Float,
-    isCollected: Boolean
-}
 type Course {
     _id: String,
     name: String,
@@ -93,7 +84,6 @@ type ReviewsPerDay {
 }
 
 type Query {
-    Achievements: [Achievement]!,
     Reviews: [ReviewsPerDay],
     Courses: [Course]!,
     Course(_id: String!): Course,

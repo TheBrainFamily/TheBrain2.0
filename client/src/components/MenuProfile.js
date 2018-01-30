@@ -4,7 +4,7 @@ import cardsGreen from '../img/menu-cards-green.png'
 import cardsRed from '../img/menu-cards-red.png'
 import sessionCount from 'thebrain-shared/graphql/queries/sessionCount'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import levelConfig from '../helpers/levelConfig'
+import levelConfig from 'thebrain-shared/helpers/levelConfig'
 
 class MenuProfile extends React.Component {
   render () {

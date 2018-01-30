@@ -13,7 +13,7 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 import FlexibleContentWrapper from './FlexibleContentWrapper'
 import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import switchUserIsCasualMutation from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
-import getPasswordValidationState from '../helpers/getPasswordValidationState'
+import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 

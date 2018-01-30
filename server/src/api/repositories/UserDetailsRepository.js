@@ -20,11 +20,6 @@ export class UserDetailsRepository extends MongoRepository {
       // TODO selected course was set to empty string originally -double check that we are not braking anything by adding it here
       // TODO when you create a guest account courseId is undefined, so we probably shouldn't be setting the progress here
       progress: [{courseId, lesson: 1}],
-      collectedAchievements: [],
-      achievementStats: {
-        watchedMovies: 0,
-        answeredQuestions: 0
-      },
       experience: {
         value: 0,
         level: 0
@@ -99,10 +94,6 @@ export class UserDetailsRepository extends MongoRepository {
     // userId: new ObjectId(userId),
     //   'progress.courseId': courseId
     // }, {$inc: {'progress.$.lesson': 1}})
-  }
-
-  async updateCollectedAchievements (userId: string, collectedAchievementIds) {
-    await this.userDetailsCollection.update({userId}, {$set: {'collectedAchievements': collectedAchievementIds}})
   }
 
   async disableTutorial (userId: string) {
