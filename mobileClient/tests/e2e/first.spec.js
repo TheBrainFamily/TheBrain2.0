@@ -1,10 +1,10 @@
 /* eslint-env jest node */
 /* global jest element by device waitFor */
-import { LandingView } from '../../../testing/mobile/viewObjects/LandingView'
-import { CourseSelector } from '../../../testing/mobile/viewObjects/CourseSelector'
+import { LandingView } from './viewObjects/LandingView'
+import { CourseSelector } from './viewObjects/CourseSelector'
 import { DetoxDriver } from './helpers/DetoxDriver'
-import { LectureView } from '../../../testing/mobile/viewObjects/LectureView'
-import { QuestionsView } from '../../../testing/mobile/viewObjects/QuestionsView'
+import { LectureView } from './viewObjects/LectureView'
+import { QuestionsView } from './viewObjects/QuestionsView'
 
 require('babel-polyfill')
 const { reloadApp } = require('detox-expo-helpers')

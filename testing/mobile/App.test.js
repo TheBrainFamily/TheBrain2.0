@@ -1,14 +1,14 @@
 /* eslint-env jest */
 import { startAppMobileEnzyme } from './startAppMobileEnzyme'
-import { LandingView } from './viewObjects/LandingView'
-import { CourseSelector } from './viewObjects/CourseSelector'
+import { LandingView } from '../../mobileClient/tests/e2e/viewObjects/LandingView'
+import { CourseSelector } from '../../mobileClient/tests/e2e/viewObjects/CourseSelector'
 import {
   getCoursesRepoWithDefaults,
   getFlashcardsRepoWithDefaults,
   getLessonsRepoWithDefaults
 } from '../common/serverStateHelpers/helpers/reposWithDefaults'
-import { LectureView } from './viewObjects/LectureView'
-import { QuestionsView } from './viewObjects/QuestionsView'
+import { LectureView } from '../../mobileClient/tests/e2e/viewObjects/LectureView'
+import { QuestionsView } from '../../mobileClient/tests/e2e/viewObjects/QuestionsView'
 
 const returnContext = async function () {
   const coursesRepository = await getCoursesRepoWithDefaults()
