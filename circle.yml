@@ -207,6 +207,12 @@ jobs:
           working_directory: ~/TheBrain2.0/
           command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${CIRCLE_BUILD_NUM}_${CIRCLE_BRANCH,,}/` npm run createDefaultDB
       - run:
+          name: Extend the serverless service name with a build number
+          working_directory: ~/TheBrain2.0/server
+          command: |
+            sed s/serverless-hello-world/serverless-hello-world-${CIRCLE_BUILD_NUM}/ serverless.yml > serverless.yml.new
+            mv serverless.yml.new serverless.yml
+      - run:
           name: Build and deploy the serverless server
           working_directory: ~/TheBrain2.0/server
           command: |
