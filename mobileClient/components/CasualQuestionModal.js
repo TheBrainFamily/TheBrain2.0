@@ -39,8 +39,8 @@ class CasualQuestionModal extends React.Component {
         <View style={{ flexDirection: 'row' }}>
           <Text onPress={() => this.setUserIsCasual(true)}
             style={[styles.button, { backgroundColor: '#662d91' }]}>Hide hard questions</Text>
-          <Text onPress={() => this.setUserIsCasual(false)}
-            style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Don't show it again</Text>
+          <Text testID='show_hardcore_questions' onPress={() => this.setUserIsCasual(false)}
+            style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}>Bring them on!</Text>
         </View>
       </View>
     )

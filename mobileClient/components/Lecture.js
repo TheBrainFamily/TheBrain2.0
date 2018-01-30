@@ -1,3 +1,4 @@
+/* global __DEV__ */
 // @flow
 
 import React from 'react'
@@ -38,6 +39,9 @@ class Lecture extends React.Component {
       duration: 500,
       easing: Easing.elastic(1)
     }).start(() => this.setState({ showLecture: true }))
+    if (__DEV__) {
+      this.setState({ showLecture: true })
+    }
   }
 
   componentWillUnmount = () => {

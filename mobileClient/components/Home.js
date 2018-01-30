@@ -1,3 +1,4 @@
+/* global __DEV__ */
 import _ from 'lodash'
 import React from 'react'
 import Expo from 'expo'
@@ -161,32 +162,34 @@ class Home extends React.Component {
     if (!this.refs[`${selectedCourseId}courseSelectorContainer`]) {
       return
     }
-    this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
-      const scale = 0.75
-      const desiredBottomYOffset = 10
-      const newSizeY = height * scale
-      const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
-      let iPhoneOffset = 0
-      if (Platform.OS === 'ios' && this.height === 568) iPhoneOffset = 20
-      if (Platform.OS === 'ios' && this.height === 667) iPhoneOffset = 31
-      if (Platform.OS === 'ios' && this.height === 736) iPhoneOffset = 38.5
-      const elementHeightChangeAfterScaling = (height - newSizeY) / 2
-      const translateYValue = this.height - pageYOffset - desiredElementTopYOffset - elementHeightChangeAfterScaling - iPhoneOffset
+    if (!__DEV__) {
+      this.refs[`${selectedCourseId}courseSelectorContainer`].measure((fx, fy, width, height, pageXOffset, pageYOffset) => {
+        const scale = 0.75
+        const desiredBottomYOffset = 10
+        const newSizeY = height * scale
+        const desiredElementTopYOffset = desiredBottomYOffset + newSizeY
+        let iPhoneOffset = 0
+        if (Platform.OS === 'ios' && this.height === 568) iPhoneOffset = 20
+        if (Platform.OS === 'ios' && this.height === 667) iPhoneOffset = 31
+        if (Platform.OS === 'ios' && this.height === 736) iPhoneOffset = 38.5
+        const elementHeightChangeAfterScaling = (height - newSizeY) / 2
+        const translateYValue = this.height - pageYOffset - desiredElementTopYOffset - elementHeightChangeAfterScaling - iPhoneOffset
 
-      const newSizeX = width * scale
-      const centeredLeftXOffset = (this.width - newSizeX) / 2
-      const elementWidthChangeAfterScaling = (width - newSizeX) / 2
-      const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
-      const courseLogoIsRendered = width && height
+        const newSizeX = width * scale
+        const centeredLeftXOffset = (this.width - newSizeX) / 2
+        const elementWidthChangeAfterScaling = (width - newSizeX) / 2
+        const translateXValue = centeredLeftXOffset - pageXOffset - elementWidthChangeAfterScaling
+        const courseLogoIsRendered = width && height
 
-      if (Platform.OS === 'ios' && courseLogoIsRendered) {
-        this.refs[`${selectedCourseId}courseSelector`].transitionTo({ transform: [{ translateX: translateXValue }, { translateY: translateYValue }, { scale }] }, 2000)
-      } else {
-        this.refs[`${selectedCourseId}courseSelector`].bounceOut(1000)
-      }
+        if (Platform.OS === 'ios' && courseLogoIsRendered) {
+          this.refs[`${selectedCourseId}courseSelector`].transitionTo({transform: [{translateX: translateXValue}, {translateY: translateYValue}, {scale}]}, 2000)
+        } else {
+          this.refs[`${selectedCourseId}courseSelector`].bounceOut(1000)
+        }
 
-      this.animateCourseSelectorsFadeOut(selectedCourseId)
-    })
+        this.animateCourseSelectorsFadeOut(selectedCourseId)
+      })
+    }
   }
 
   selectCourse = async (course) => {
@@ -197,6 +200,9 @@ class Home extends React.Component {
       await mutationConnectionHandler(this.props.history, () => {
         this.props.selectCourseSaveToken({ courseId: course._id, deviceId }).then(async () => {
           if (this.props.currentUser.CurrentUser) {
+            if (__DEV__) {
+              this.setState({isExitAnimationFinished: true})
+            }
             return
           } else {
             await this.props.currentUser.refetch()
@@ -206,6 +212,9 @@ class Home extends React.Component {
           if (userId && accessToken) {
             await AsyncStorage.setItem('accessToken', accessToken)
             await AsyncStorage.setItem('userId', userId)
+            if (__DEV__) {
+              this.setState({isExitAnimationFinished: true})
+            }
           }
         })
       })
@@ -290,8 +299,9 @@ class Home extends React.Component {
                 <Animatable.View key={course._id} style={{ elevation: 100, width: '45%' }}
                   ref={`${course._id}courseSelector`}>
                   <View ref={`${course._id}courseSelectorContainer`}
-                    onLayout={() => {}}>
+                    onLayout={() => {}} >
                     <CircleButton
+                      courseName={course.name}
                       color={courseColor}
                       onPress={onPressAction}
                       disableCourseSelector={courseSelectorDisabler}

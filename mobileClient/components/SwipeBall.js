@@ -121,6 +121,7 @@ class SwipeBall extends React.Component {
     return (
       <View style={styles.draggableContainer}>
         <Animated.View
+          testID='swipe-ball'
           {...this.panResponder.panHandlers}
           style={[styles.answerSwipeBall, this.state.pan.getLayout()]}
         >

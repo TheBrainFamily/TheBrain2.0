@@ -58,22 +58,22 @@ class Flashcard extends React.Component {
       outputRange: ['0deg', '180deg']
     })
     this.flipEventLaunched = false
-    this.currentlyVisibleAnswer = false
+    this.isAnswerCurrentlyVisible = false
   }
 
   eventLauncher = (value) => {
     if (!this.flipEventLaunched) {
-      if (this.currentlyVisibleAnswer) {
+      if (this.isAnswerCurrentlyVisible) {
         if (value < 90.0) {
           this.flipEventLaunched = true
-          this.currentlyVisibleAnswer = false
+          this.isAnswerCurrentlyVisible = false
           this.props.dispatch(updateAnswerVisibility(false))
           this.updateFlashcardContent(this.props)
         }
       } else {
         if (value > 90.0) {
           this.flipEventLaunched = true
-          this.currentlyVisibleAnswer = true
+          this.isAnswerCurrentlyVisible = true
           this.props.dispatch(updateAnswerVisibility(true))
           this.updateFlashcardContent(this.props)
         }
@@ -98,7 +98,7 @@ class Flashcard extends React.Component {
   animate = () => {
     const toAnswerSide = 180
     const toQuestionSide = 0
-    const value = this.currentlyVisibleAnswer ? toQuestionSide : toAnswerSide
+    const value = this.isAnswerCurrentlyVisible ? toQuestionSide : toAnswerSide
     Animated.spring(this.animatedValue, {
       toValue: value,
       friction: 8,
@@ -118,7 +118,7 @@ class Flashcard extends React.Component {
 
   componentWillUpdate = (nextProps) => {
     if (nextProps.flashcard.visibleAnswer !== this.props.flashcard.visibleAnswer) {
-      this.currentlyVisibleAnswer = this.props.flashcard.visibleAnswer
+      this.isAnswerCurrentlyVisible = this.props.flashcard.visibleAnswer
       this.flipCard()
     }
 
@@ -156,7 +156,7 @@ class Flashcard extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={() =>
+      <TouchableWithoutFeedback testID='flashcard_side' onPress={() =>
         this.props.userDetails.UserDetails.isCasual !== null || this.props.isQuestionCasual ? this.flipCard() : null}>
         <Animatable.View onLayout={this.onLayout} animation='zoomInLeft'>
           <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
@@ -165,7 +165,7 @@ class Flashcard extends React.Component {
                 question={this.state.currentQuestion} answer={this.state.currentAnswer}
                 image={this.props.image}
                 answerImage={this.props.answerImage}
-                visibleAnswer={this.currentlyVisibleAnswer}
+                visibleAnswer={this.isAnswerCurrentlyVisible}
                 isCasualFlashcard={this.props.isQuestionCasual} />
               <View
                 style={{ width: '90%', alignItems: 'flex-end', marginLeft: 0, flexDirection: 'row', marginTop: -1 }}>

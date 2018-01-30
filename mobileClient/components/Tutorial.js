@@ -43,6 +43,7 @@ class Tutorial extends React.Component {
             style={[styles.button, { backgroundColor: '#662d91' }]}
           >OK, go on</Text>
           <Text
+            testID={'dismiss-tutorial'}
             onPress={this.hideTutorialPermanently}
             style={[styles.button, { backgroundColor: '#62c46c', marginLeft: 5 }]}
           >Don't show it again</Text>

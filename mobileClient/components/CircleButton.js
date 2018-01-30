@@ -32,7 +32,8 @@ export default class CircleButton extends React.Component {
           toValue: 20,
           duration: 1000
         })
-      ]).start(this.props.onPress)
+      ]).start()
+      this.props.onPress()
     }
   }
 
@@ -74,7 +75,7 @@ export default class CircleButton extends React.Component {
     const componentOpacity = this.props.isDisabled ? 0.5 : 1
 
     return (
-      <TouchableWithoutFeedback onPress={this.onPress} style={{opacity: componentOpacity}}>
+      <TouchableWithoutFeedback testID={`${this.props.courseName}-courseSelector`} onPress={this.onPress} style={{opacity: componentOpacity}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <View style={{
             backgroundColor: this.props.color,
