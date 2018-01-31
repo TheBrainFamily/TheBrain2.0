@@ -52,8 +52,12 @@ class Flashcard extends React.Component {
       currentQuestion: props.question,
       currentAnswer: props.answer
     }
+  }
+
+  componentWillMount () {
     this.animatedValue = new Animated.Value(0)
-    const throttledEventLauncher = _.throttle(this.eventLauncher, 60)
+    const throttledEventLauncher = _.throttle(this.eventLauncher, 50)
+
     this.animatedValue.addListener(({value}) => throttledEventLauncher(value))
     this.frontInterpolate = this.interpolateWrapper({
       inputRange: [0, 180],
