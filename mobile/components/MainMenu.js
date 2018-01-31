@@ -204,8 +204,6 @@ class MainMenu extends React.Component {
                   this.props.closeCourse ? this.props.closeCourse() : this.closeCourse()
                 }} /> : null}
               {this.props.selectedCourse ? <Separator /> : null}
-              {/* <MenuButton text="ACHIEVEMENTS LIST" onPress={this.go('/achievements')} /> */}
-              {/* <Separator /> */}
               <MenuButton text='PROFILE' onPress={this.go('/profile')} />
               <Separator />
             </View>
