@@ -4,13 +4,13 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 
-import courseLogos from '../helpers/courseLogos'
+import courseLogos from '../../helpers/courseLogos'
 
-import CircleButton from './CircleButton'
-import Lecture from './Lecture'
+import CircleButton from '../../components/CircleButton'
+import Lecture from './scenes/Lecture/Lecture'
 
 import currentItemsExistQuery from 'thebrain-shared/graphql/queries/currentItemsExist'
-import WithData from './WithData'
+import WithData from '../../../../components/WithData'
 
 // TODO this is not really a Course, it's just a wrapper around a lecture, isn't it?
 class Course extends React.Component {

@@ -8,19 +8,19 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-native'
 import * as Animatable from 'react-native-animatable'
 
-import Video from './Video'
-import LevelUpWrapper from './LevelUpWrapper'
+import Video from '../../../../../../components/Video'
+import LevelUpWrapper from '../../../../../../components/LevelUpWrapper'
 
-import styles from '../styles/styles'
+import styles from '../../../../../../styles/styles'
 
 import lessonWatchedMutationParams from 'thebrain-shared/graphql/mutations/lessonWatchedMutationParams'
 import clearNotCasualItems from 'thebrain-shared/graphql/mutations/clearNotCasualItems'
 import lessonWatchedMutationSchema from 'thebrain-shared/graphql/queries/lessonWatchedMutation'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import WithData from './WithData'
-import { mutationConnectionHandler } from './NoInternet'
-import Loading from './Loading'
-import * as mainMenuActions from '../actions/MainMenuActions'
+import WithData from '../../../../../../components/WithData'
+import { mutationConnectionHandler } from '../../../../../../components/NoInternet'
+import Loading from '../../../../../../components/Loading'
+import * as mainMenuActions from '../../../../../../actions/MainMenuActions'
 
 class Lecture extends React.Component {
   state = {
@@ -109,7 +109,7 @@ class Lecture extends React.Component {
           <TouchableOpacity style={{position: 'absolute', bottom: 30, right: 5}} testID='skip_lecture_button'
             onPress={this.onVideoWatched}>
             <Image
-              source={require(`../images/Icon_skip.png`)}
+              source={require(`./images/Icon_skip.png`)}
               style={{height: 50, width: 50, alignSelf: 'center'}}
             />
           </TouchableOpacity>

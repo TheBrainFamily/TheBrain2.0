@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { View, TouchableWithoutFeedback } from 'react-native'
-import NetworkImage from './NetworkImage'
-import * as fullscreenActions from '../actions/FullscreenActions'
+import NetworkImage from '../../../../../../../components/NetworkImage'
+import * as fullscreenActions from '../../../../../../../actions/FullscreenActions'
 import { connect } from 'react-redux'
 import { compose } from 'react-apollo'
 

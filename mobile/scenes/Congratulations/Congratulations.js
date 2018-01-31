@@ -8,10 +8,10 @@ import levelConfig from 'thebrain-shared/helpers/levelConfig'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import confirmLevelUpMutation from 'thebrain-shared/graphql/mutations/confirmLevelUp'
-import PageContainer from './PageContainer'
+import PageContainer from '../../components/PageContainer'
 
-import styles from '../styles/styles'
-import WithData from './WithData'
+import styles from '../../styles/styles'
+import WithData from '../../components/WithData'
 
 class Congratulations extends React.Component {
   click = () => {

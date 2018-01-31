@@ -1,9 +1,9 @@
 import React from 'react'
 import { AsyncStorage, Text, TouchableOpacity, View, BackHandler } from 'react-native'
-import PageContainer from './PageContainer'
-import Video from './Video'
+import PageContainer from '../../components/PageContainer'
+import Video from '../../components/Video'
 
-import styles from '../styles/styles'
+import styles from '../../styles/styles'
 
 export default class Intro extends React.Component {
   componentDidMount = () => {
