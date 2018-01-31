@@ -7,7 +7,7 @@ import passport from 'passport'
 import session from 'express-session'
 import schedule from 'node-schedule'
 import cors from 'cors'
-import schema from './api/schema'
+import schema from './api/graphql/schema'
 import { usersRepository } from './api/repositories/UsersRepository'
 import {resolvedDBURI, dbConnector, dbConnectionPromise} from './api/repositories/MongoRepository'
 

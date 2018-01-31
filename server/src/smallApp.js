@@ -5,7 +5,7 @@ import passport from 'passport'
 import schedule from 'node-schedule'
 import cors from 'cors'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express/dist/index'
-import schema from './api/schema'
+import schema from './api/graphql/schema'
 import bodyParser from 'body-parser'
 import { usersRepository } from './api/repositories/UsersRepository'
 

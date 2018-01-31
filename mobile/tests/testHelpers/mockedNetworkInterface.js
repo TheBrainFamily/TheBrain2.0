@@ -1,5 +1,5 @@
 import { makeExecutableSchema, addMockFunctionsToSchema, mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
-import schema from '../../../server/src/api/schema'
+import schema from '../../../server/src/api/graphql/schema'
 
 // TODO leaving this here since it might possibly be used by detox, if not, delete the whole madness
 window.__APOLLO_TEST_TOOLS = {
