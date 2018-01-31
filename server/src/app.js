@@ -56,18 +56,6 @@ const createApp = async function (cachedDb) {
   app.use(bodyParser.urlencoded({extended: true}))
   app.use(bodyParser.json())
 
-  app.get('/auth/facebook',
-    passport.authenticate('facebook'),
-    function (req, res) {
-      console.log('starting facebook authentication')
-    })
-  app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', {failureRedirect: '/'}),
-    function (req, res) {
-      res.redirect('/')
-    }
-  )
-
   app.use('/graphql', graphqlExpress((req) => {
     // Get the query, the same way express-graphql does it
     // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
