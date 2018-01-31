@@ -8,9 +8,9 @@ module.exports = (wallaby) => {
     debug: true,
     testFramework: 'jest',
     files: [
-      'client/src/**/*.js',
-      'client/tests/testHelpers/**/*.js',
-      '!client/src/**/*.test.js',
+      'web/src/**/*.js',
+      'web/tests/testHelpers/**/*.js',
+      '!web/src/**/*.test.js',
       'server/src/**/*.js',
       '!server/src/**/*.spec.js',
       'testing/web/features/pageObjects/*.js',
@@ -29,7 +29,7 @@ module.exports = (wallaby) => {
       delete jestConfig.rootDir
       jestConfig.moduleNameMapper['\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$'] = '<rootDir>/testing/fileMock.js'
       jestConfig.moduleDirectories = [
-        'node_modules', '<rootDir>/server/node_modules', '<rootDir>/client/node_modules'
+        'node_modules', '<rootDir>/server/node_modules', '<rootDir>/web/node_modules'
       ];
       wallaby.testFramework.configure(jestConfig);
     }// --config ./clientEnzymeTest.json

@@ -9,14 +9,14 @@ import { MobileEnzymeDriver } from './helpers/MobileEnzymeDriver'
 
 const schema = makeExecutableSchema({typeDefs, resolvers})
 
-const { React, Enzyme, ApolloProvider } = require('../../mobileClient/tests/helpers/setup')
+const { React, Enzyme, ApolloProvider } = require('../../mobile/tests/helpers/setup')
 // const React = require('react')
 // const Enzyme = require('enzyme');
 // const ApolloProvider = require('react-apollo').default
-const {returnStore} = require('../../mobileClient/store')
+const {returnStore} = require('../../mobile/store')
 
-// const Separator = require('../mobileClient/components/Separator').default
-const { AppInternal } = require('../../mobileClient/AppInternal')
+// const Separator = require('../mobile/components/Separator').default
+const { AppInternal } = require('../../mobile/AppInternal')
 // console.log("Gandecki AppInternal", AppInternal);
 // const store = require('../store').default
 

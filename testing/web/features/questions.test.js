@@ -13,8 +13,8 @@ import { LecturePage } from './pageObjects/LecturePage'
 const returnContext = async () => {
   const loggedInUser = {
     _id: '5a5cb174af92590d2571f849',
-    username: 'guest',
-    password: 'notSet',
+    username: 'lgandecki',
+    password: '$2a$10$KRhNThKG12HxkQFFfZWaGefDRSBiXhnnT7E2eQS277GipNu2TrpYW',
     activated: true,
     createdAt: 1516024180
   }

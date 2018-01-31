@@ -7,8 +7,8 @@ module.exports = (wallaby) => {
     debug: true,
     testFramework: 'jest',
     files: [
-      'mobileClient/**/*.js',
-      '!mobileClient/node_modules/**',
+      'mobile/**/*.js',
+      '!mobile/node_modules/**',
       'server/src/**/*.js',
       '!server/src/**/*.spec.js',
       'testing/testHelpers/**/*.js',
@@ -17,7 +17,8 @@ module.exports = (wallaby) => {
       'testing/mobile/jest.config.js',
       'testing/mobile/**/*.js',
       {pattern: 'testing/mobile/**/*.test.js', ignore: true},
-      {pattern: 'mobileClient/tests/e2e/**/*.js', ignore: true}
+      {pattern: 'mobile/tests/e2e/**/spec.*.js', ignore: true},
+      'mobile/tests/e2e/**/*.js'
     ],
     tests: [
       'testing/mobile/App.test.js',
@@ -29,7 +30,7 @@ module.exports = (wallaby) => {
       const jestConfig = require('./testing/mobile/jest.config');
       delete jestConfig.rootDir
       jestConfig.moduleDirectories = [
-        'node_modules', '<rootDir>/server/node_modules', '<rootDir>/mobileClient/node_modules'
+        'node_modules', '<rootDir>/server/node_modules', '<rootDir>/mobile/node_modules'
       ];
       wallaby.testFramework.configure(jestConfig);
     }

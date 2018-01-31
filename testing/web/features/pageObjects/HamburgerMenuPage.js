@@ -11,11 +11,19 @@ export class HamburgerMenuPage {
     return this.driver.getElement('#menu .btn-calendar')
   }
 
+  get loginButton () {
+    return this.driver.getElement('#menu .btn-login')
+  }
+
   async toggleMenuButton () {
     return this.menuButton.click()
   }
 
   async openCalendar () {
     return this.calendarButton.click()
+  }
+
+  async openLogin () {
+    await this.loginButton.click()
   }
 }
