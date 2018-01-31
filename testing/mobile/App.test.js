@@ -61,4 +61,6 @@ it('renders the whole app without crashing', async () => {
 
   await timeout(200) // TODO ugly hack, but will have to do for now
   await questionsView.flashcard.assertFlashcardShown('Biology')
+  // TODO somehow make it happen even if the lines above fail
+  driver.wrapper.unmount()
 })
