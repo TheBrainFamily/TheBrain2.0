@@ -14,7 +14,6 @@ import {resolvedDBURI, dbConnector, dbConnectionPromise} from './api/repositorie
 const createApp = async function (cachedDb) {
   const db = await dbConnector(cachedDb)
   await dbConnectionPromise
-  console.log('after db promise')
   const app = express()
 
   passport.serializeUser((user, cb) => cb(null, user))
@@ -27,7 +26,6 @@ const createApp = async function (cachedDb) {
     resave: false,
     saveUninitialized: false
   }))
-  console.log('after session')
   app.use(passport.initialize())
   app.use(passport.session())
 
@@ -66,7 +64,6 @@ const createApp = async function (cachedDb) {
   app.get('/auth/facebook/callback',
     passport.authenticate('facebook', {failureRedirect: '/'}),
     function (req, res) {
-      console.log('Gozdecki: correct')
       res.redirect('/')
     }
   )
@@ -75,25 +72,11 @@ const createApp = async function (cachedDb) {
     // Get the query, the same way express-graphql does it
     // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
     const query = req.query.query || req.body.query
-    console.log('Gandecki query', query)
     if (query && query.length > 2000) {
       // None of our app's queries are this long
       // Probably indicates someone trying to send an overly expensive query
       throw new Error('Query too large.')
     }
-    // console.log('Gozdecki: req.user in graphql', req.user)
-    // let user;
-    // if (req.user) {
-    //     // We get req.user from passport-github with some pretty oddly named fields,
-    //     // let's convert that to the fields in our schema, which match the GitHub
-    //     // API field names.
-    //     user = {
-    //         login: req.user.username,
-    //         html_url: req.user.profileUrl,
-    //         avatar_url: req.user.photos[0].value,
-    //     };
-    // }
-
     return {
       schema,
       context: {

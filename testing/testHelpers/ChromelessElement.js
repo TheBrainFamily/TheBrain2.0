@@ -7,7 +7,6 @@ export class ChromelessElement {
   }
 
   async click () {
-    // console.log("Gandecki this.selector", this.selector);
     await this.wrapper.click(this.selector)
   }
 

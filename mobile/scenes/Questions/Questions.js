@@ -77,12 +77,9 @@ class Questions extends React.Component {
     if (nextProps.currentItems.loading || !itemsWithFlashcard || (itemsWithFlashcard && itemsWithFlashcard.length > 0)) {
       return
     }
-    // console.log(nextProps.currentItems)
     if (nextProps.currentUser.CurrentUser && nextProps.currentUser.CurrentUser.activated) {
-      // console.log('redirecting / ')
       nextProps.history.push('/')
     } else {
-      // console.log('redirecting /login ')
       nextProps.history.push('/login')
     }
   }
@@ -186,7 +183,6 @@ export default compose(
       closeCourse: () => mutate({
         updateQueries: {
           UserDetails: (prev, { mutationResult }) => {
-            // console.log('mutation close course: ', mutationResult.data.closeCourse)
             return update(prev, {
               UserDetails: {
                 $set: mutationResult.data.closeCourse

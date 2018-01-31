@@ -195,8 +195,6 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            // console.log('Gozdecki: mutationResult', mutationResult)
-            // console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.setUsernameAndPasswordForGuest
@@ -218,8 +216,6 @@ export default compose(
         },
         updateQueries: {
           CurrentUser: (prev, { mutationResult }) => {
-            // console.log('Gozdecki: mutationResult', mutationResult)
-            // console.log('Gozdecki: prev', prev)
             return update(prev, {
               CurrentUser: {
                 $set: mutationResult.data.logIn
