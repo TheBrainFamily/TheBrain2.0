@@ -3,13 +3,13 @@ import { FlatList, Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import PageContainer from './PageContainer'
-import PageTitle from './PageTitle'
-import Video from './Video'
+import PageContainer from '../../components/PageContainer'
+import PageTitle from '../../components/PageTitle'
+import Video from '../../components/Video'
 
 import lessonsQuery from 'thebrain-shared/graphql/queries/lessons'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import WithData from './WithData'
+import WithData from '../../components/WithData'
 
 // TODO what do we do about this one?
 class Lectures extends React.Component {

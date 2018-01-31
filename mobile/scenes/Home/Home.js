@@ -19,18 +19,18 @@ import {
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 
-import Header from './Header'
-import CircleButton from './CircleButton'
-import CourseHeader from './CourseHeader'
-import CourseProgressBar from './CourseProgressBar'
-import Course from './Course'
-import MainMenu from './MainMenu'
+import Header from '../../components/Header'
+import CircleButton from './components/CircleButton'
+import CourseHeader from '../../components/CourseHeader'
+import CourseProgressBar from './components/CourseProgressBar'
+import Course from './scenes/Course/Course'
+import MainMenu from '../../components/MainMenu'
 
-import * as courseActions from '../actions/CourseActions'
+import * as courseActions from '../../actions/CourseActions'
 
-import styles from '../styles/styles'
-import appStyle from '../styles/appStyle'
-import courseLogos from '../helpers/courseLogos'
+import styles from '../../styles/styles'
+import appStyle from '../../styles/appStyle'
+import courseLogos from './helpers/courseLogos'
 
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
 import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
@@ -38,9 +38,9 @@ import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
-import WithData from './WithData'
-import { mutationConnectionHandler } from './NoInternet'
-import * as mainMenuActions from '../actions/MainMenuActions'
+import WithData from '../../components/WithData'
+import { mutationConnectionHandler } from '../../components/NoInternet'
+import * as mainMenuActions from '../../actions/MainMenuActions'
 
 class Home extends React.Component {
   constructor (props) {

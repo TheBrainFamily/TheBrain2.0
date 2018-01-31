@@ -4,11 +4,11 @@ import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import ProgressBar from './ProgressBar'
+import ProgressBar from '../../../components/ProgressBar'
 
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import lessonCountQuery from 'thebrain-shared/graphql/queries/lessonCount'
-import WithData from './WithData'
+import WithData from '../../../components/WithData'
 
 class CourseProgressBar extends React.Component {
   render () {

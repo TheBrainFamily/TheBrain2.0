@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import { graphql, compose } from 'react-apollo'
 
-import Card from './Card'
-import type { Direction } from '../helpers/SwipeHelpers'
-import { DIRECTIONS } from '../helpers/SwipeHelpers'
+import Card from './scenes/Card/Card'
+import type { Direction } from '../../../../helpers/SwipeHelpers'
+import { DIRECTIONS } from '../../../../helpers/SwipeHelpers'
 
 import {
   TouchableWithoutFeedback,
@@ -19,8 +19,8 @@ import {
   Image
 } from 'react-native'
 
-import styles from '../styles/styles'
-import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import styles from '../../../../styles/styles'
+import { updateAnswerVisibility } from '../../../../actions/FlashcardActions'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 
 class Flashcard extends React.Component {
@@ -180,7 +180,7 @@ class Flashcard extends React.Component {
                   height: '100%',
                   backgroundColor: 'white'
                 }}><Text /></View>
-                <Image style={{ width: 200, height: 22.5 }} source={require('../images/pageCorner.png')} />
+                <Image style={{ width: 200, height: 22.5 }} source={require('./images/pageCorner.png')} />
               </View>
             </View>
           </Animated.View>

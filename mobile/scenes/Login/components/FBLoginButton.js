@@ -7,8 +7,8 @@ import { AsyncStorage, Alert, TouchableOpacity, View, Image } from 'react-native
 import { connect } from 'react-redux'
 import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import * as courseActions from '../actions/CourseActions'
-import fbButtonImg from '../images/loginwfb.png'
+import * as courseActions from '../../../actions/CourseActions'
+import fbButtonImg from './images/loginwfb.png'
 
 const FB_APP_ID = '1621044308126388'
 

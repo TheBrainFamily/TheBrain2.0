@@ -7,17 +7,17 @@ import { withRouter } from 'react-router'
 import { TextField } from 'react-native-material-textfield'
 import update from 'immutability-helper'
 
-import PageContainer from './PageContainer'
-import PageTitle from './PageTitle'
-import Separator from './Separator'
+import PageContainer from '../../components/PageContainer'
+import PageTitle from '../../components/PageTitle'
+import Separator from '../../components/Separator'
 
-import styles from '../styles/styles'
+import styles from '../../styles/styles'
 import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import switchUserIsCasualMutation from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import WithData from './WithData'
+import WithData from '../../components/WithData'
 
 class Profile extends React.Component {
   state = {

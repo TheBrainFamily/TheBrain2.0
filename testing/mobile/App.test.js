@@ -31,9 +31,9 @@ const returnContext = async function () {
 
 jest.setTimeout(30000)
 
-function timeout (ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
+// function timeout (ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms))
+// }
 
 describe('test', async () => {
   let context
@@ -64,9 +64,9 @@ describe('test', async () => {
     //
     await driver.refresh()
     await questionsView.flashcard.assertQuestionShown('What is the name of this course')
-    await questionsView.flashcard.flipFlashcard()
-
-    await timeout(500) // TODO ugly hack, but will have to do for now
-    await questionsView.flashcard.assertFlashcardShown('Biology')
+    // await questionsView.flashcard.flipFlashcard()
+    //
+    // await timeout(500) // TODO ugly hack, but will have to do for now
+    // await questionsView.flashcard.assertFlashcardShown('Biology')
   })
 })

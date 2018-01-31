@@ -2,8 +2,8 @@ import React from 'react'
 import { Linking, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
-import PageContainer from './PageContainer'
-import PageTitle from './PageTitle'
+import PageContainer from '../../components/PageContainer'
+import PageTitle from '../../components/PageTitle'
 
 class Contact extends React.Component {
   render () {

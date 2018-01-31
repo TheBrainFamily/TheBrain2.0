@@ -16,27 +16,27 @@ import {
   BackHandler
 } from 'react-native'
 
-import MainMenu from './MainMenu'
-import Flashcard from './Flashcard'
-import CourseHeader from './CourseHeader'
-import AnswerEvaluator from './AnswerEvaluator'
-import ProgressBar from './ProgressBar'
-import Loading from './Loading'
+import MainMenu from '../../components/MainMenu'
+import Flashcard from './scenes/Flashcard/Flashcard'
+import CourseHeader from '../../components/CourseHeader'
+import AnswerEvaluator from '../../components/AnswerEvaluator'
+import ProgressBar from '../../components/ProgressBar'
+import Loading from '../../components/Loading'
 
-import * as courseActions from '../actions/CourseActions'
+import * as courseActions from '../../actions/CourseActions'
 
-import styles from '../styles/styles'
-import appStyle from '../styles/appStyle'
+import styles from '../../styles/styles'
+import appStyle from '../../styles/appStyle'
 
-import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import { updateAnswerVisibility } from '../../actions/FlashcardActions'
 
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import currentItemsQuery from 'thebrain-shared/graphql/queries/itemsWithFlashcard'
 import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
 import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
-import WithData from './WithData'
-import { mutationConnectionHandler } from './NoInternet'
-import * as mainMenuActions from '../actions/MainMenuActions'
+import WithData from '../../components/WithData'
+import { mutationConnectionHandler } from '../../components/NoInternet'
+import * as mainMenuActions from '../../actions/MainMenuActions'
 
 class Questions extends React.Component {
   constructor (props) {

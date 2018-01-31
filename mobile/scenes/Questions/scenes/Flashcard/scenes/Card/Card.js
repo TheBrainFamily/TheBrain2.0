@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { Text, View, Image, TouchableOpacity } from 'react-native'
-import TouchableImage from './TouchableImage'
-import styles from '../styles/styles'
+import TouchableImage from './components/TouchableImage'
+import styles from '../../../../../../styles/styles'
 
 export default class Card extends React.Component {
   constructor (props) {
@@ -38,7 +38,7 @@ export default class Card extends React.Component {
         </View>
           : <Image
             style={{ width: 21, height: 19, marginTop: 5, marginRight: 5 }}
-            source={require('../images/exclamation.png')}
+            source={require('./images/exclamation.png')}
           />}
       </TouchableOpacity>
 

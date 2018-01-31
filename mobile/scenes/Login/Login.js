@@ -6,16 +6,16 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import * as courseActions from '../actions/CourseActions'
-import PageContainer from './PageContainer'
-import FBLoginButton from './FBLoginButton'
-import Loading from './Loading'
+import * as courseActions from '../../actions/CourseActions'
+import PageContainer from '../../components/PageContainer'
+import FBLoginButton from './components/FBLoginButton'
+import Loading from '../../components/Loading'
 
-import styles from '../styles/styles'
+import styles from '../../styles/styles'
 
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import WithData from './WithData'
+import WithData from '../../components/WithData'
 
 class Login extends React.Component {
   constructor (props) {
