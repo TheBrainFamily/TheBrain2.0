@@ -5,7 +5,7 @@ import FlexibleContentWrapper from '../../components/FlexibleContentWrapper'
 
 import _ from 'lodash'
 
-import levelConfig from '../../helpers/levelConfig'
+import levelConfig from 'thebrain-shared/helpers/levelConfig'
 import { congratulationsWrapper } from './congratulationsWrapper'
 
 class Congratulations extends React.Component {
