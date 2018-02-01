@@ -282,13 +282,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - npm-mobile-deps-{{ checksum "./mobile/package.json" }}
+            - npm-mobile-deps-v2-{{ checksum "./mobile/package.json" }}
       - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobile
           command: npm install
       - save_cache:
-          key: npm-mobile-deps-{{ checksum "./mobile/package.json" }}
+          key: npm-mobile-deps-v2-{{ checksum "./mobile/package.json" }}
           paths:
             - ~/TheBrain2.0/mobile/node_modules
       - run:
@@ -333,13 +333,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - npm-mobile-deps-{{ checksum "./mobile/package.json" }}
+            - npm-mobile-deps-v2-{{ checksum "./mobile/package.json" }}
       - run:
           name: Install mobile packages
           working_directory: ~/TheBrain2.0/mobile
           command: npm install
       - save_cache:
-          key: npm-mobile-deps-{{ checksum "./mobile/package.json" }}
+          key: npm-mobile-deps-v2-{{ checksum "./mobile/package.json" }}
           paths:
             - ~/TheBrain2.0/mobile/node_modules
       - run:
