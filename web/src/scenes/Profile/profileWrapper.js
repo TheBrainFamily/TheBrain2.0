@@ -1,11 +1,10 @@
-import update from 'immutability-helper'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import switchUserIsCasualMutation from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
+import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
 
 export const profileWrapper = compose(
   connect(),
@@ -31,19 +30,5 @@ export const profileWrapper = compose(
       })
     })
   }),
-  graphql(switchUserIsCasualMutation, {
-    props: ({ownProps, mutate}) => ({
-      switchUserIsCasual: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, {mutationResult}) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.switchUserIsCasual
-              }
-            })
-          }
-        }
-      })
-    })
-  })
+  getGraphqlForSwitchUserIsCasual(graphql)
 )
