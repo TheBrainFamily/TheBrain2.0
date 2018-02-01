@@ -10,8 +10,6 @@ const logInWithFacebookMutation = gql`
     }
 `
 
-export default logInWithFacebookMutation
-
 export const getGraphqlForLogInWithFacebookMutation = (graphql) => {
   return graphql(logInWithFacebookMutation, {
     props: ({ownProps, mutate}) => ({

@@ -2,8 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import { connect } from 'react-redux'
 import { Animated, Dimensions, Image, Keyboard, Text, TouchableHighlight, View, AsyncStorage } from 'react-native'
 
@@ -21,6 +19,7 @@ import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
+import { getGraphqlForLogout } from 'thebrain-shared/graphql/mutations/logout'
 import WithData from './WithData'
 
 const MenuButton = (props) => (
@@ -236,14 +235,6 @@ MainMenu.defaultProps = {
   topMargin: appStyle.header.height
 }
 
-const logOutQuery = gql`
-    mutation logOut {
-        logOut {
-            _id, username, activated, facebookId, currentAccessToken
-        }
-    }
-`
-
 const mapStateToProps = (state) => {
   return {
     selectedCourse: state.course.selectedCourse
@@ -256,21 +247,7 @@ export default compose(
   connect(mapStateToProps),
   connect(state => state),
   getGraphqlForCloseCourseMutation(graphql),
-  graphql(logOutQuery, {
-    props: ({ ownProps, mutate }) => ({
-      logout: () => mutate({
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logOut
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForLogout(graphql),
   graphql(sessionCountQuery, {
     name: 'sessionCount',
     options: {
