@@ -1,12 +1,6 @@
 // @flow
 import { loginWithGuest } from '../../services/loginService'
-import { coursesRepository } from '../../repositories/CoursesRepository'
-import { userDetailsRepository } from '../../repositories/UserDetailsRepository'
-
-const repositoriesContext = {
-  Courses: coursesRepository,
-  UserDetails: userDetailsRepository
-}
+import repositoriesContext from '../repositoriesContext'
 
 export const coursesResolvers = {
   Query: {

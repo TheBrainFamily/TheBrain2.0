@@ -1,9 +1,5 @@
 // @flow
-import { flashcardRepository } from '../../repositories/FlashcardsRepository'
-
-const repositoriesContext = {
-  Flashcards: flashcardRepository
-}
+import repositoriesContext from '../repositoriesContext'
 
 export const flashcardsResolvers = {
   Query: {
