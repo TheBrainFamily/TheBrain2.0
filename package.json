@@ -21,7 +21,8 @@
     "makeTestsStandardHappy": "pushd ./testing; ../node_modules/.bin/standard --fix",
     "makeStandardHappy": "npm run makeWebStandardHappy ; npm run makeWebStandardHappy ; npm run makeMobileStandardHappy; npm run makeSharedStandardHappy ; npm run makeTestsStandardHappy; npm run makeServerStandardHappy",
     "precommit": "lint-staged",
-    "createDefaultDB": "NODE_ENV=staging babel-node ./testing/common/serverStateHelpers/createDefaultDB"
+    "createDefaultDB": "NODE_ENV=staging babel-node ./testing/common/serverStateHelpers/createDefaultDB",
+    "createDefaultDevDB": "NODE_ENV=DEVELOPMENT babel-node ./testing/common/serverStateHelpers/createDefaultDB"
   },
   "lint-staged": {
     "mobile/**/*.js": [
