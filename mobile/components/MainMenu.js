@@ -20,7 +20,7 @@ import levelConfig from 'thebrain-shared/helpers/levelConfig'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
+import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
 import WithData from './WithData'
 
 const MenuButton = (props) => (
@@ -255,21 +255,7 @@ export default compose(
   withRouter,
   connect(mapStateToProps),
   connect(state => state),
-  graphql(closeCourseMutation, {
-    props: ({ ownProps, mutate }) => ({
-      closeCourseMutation: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, { mutationResult }) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.closeCourse
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForCloseCourseMutation(graphql),
   graphql(logOutQuery, {
     props: ({ ownProps, mutate }) => ({
       logout: () => mutate({

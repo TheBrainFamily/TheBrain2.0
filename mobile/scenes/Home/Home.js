@@ -34,7 +34,7 @@ import courseLogos from './helpers/courseLogos'
 
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
 import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
-import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
+import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
@@ -424,21 +424,7 @@ export default compose(
       })
     })
   }),
-  graphql(closeCourseMutation, {
-    props: ({ mutate }) => ({
-      closeCourse: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, { mutationResult }) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.closeCourse
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForCloseCourseMutation(graphql),
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
   graphql(userDetailsQuery, { name: 'userDetails' })

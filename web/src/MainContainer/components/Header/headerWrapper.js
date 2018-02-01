@@ -1,10 +1,8 @@
-import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
+import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
-
-import update from 'immutability-helper/index'
 
 const mapStateToProps = (state) => {
   return {
@@ -30,20 +28,6 @@ export const headerWrapper = compose(
       })
     }
   }),
-  graphql(closeCourseMutation, {
-    props: ({ ownProps, mutate }) => ({
-      closeCourse: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, { mutationResult }) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.closeCourse
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForCloseCourseMutation(graphql),
   graphql(currentUserQuery)
 )
