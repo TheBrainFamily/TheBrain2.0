@@ -3,10 +3,10 @@ import { Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import update from 'immutability-helper'
-import styles from '../styles/styles'
+import styles from '../../../styles/styles'
 import currentItemsQuery from 'thebrain-shared/graphql/queries/itemsWithFlashcard'
 import setUserIsCasualMutation from 'thebrain-shared/graphql/mutations/setUserIsCasual'
-import { mutationConnectionHandler } from './NoInternet'
+import { mutationConnectionHandler } from '../../../components/NoInternet'
 import { withRouter } from 'react-router'
 
 class CasualQuestionModal extends React.Component {

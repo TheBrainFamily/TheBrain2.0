@@ -19,7 +19,7 @@ import {
 import MainMenu from '../../components/MainMenu'
 import Flashcard from './scenes/Flashcard/Flashcard'
 import CourseHeader from '../../components/CourseHeader'
-import AnswerEvaluator from '../../components/AnswerEvaluator'
+import AnswerEvaluator from './components/AnswerEvaluator'
 import ProgressBar from '../../components/ProgressBar'
 import Loading from '../../components/Loading'
 

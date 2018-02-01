@@ -5,15 +5,15 @@ import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
 import _ from 'lodash'
 
-import styles from '../styles/styles'
-import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import styles from '../../../styles/styles'
+import { updateAnswerVisibility } from '../../../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
 
 import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import submitEval from 'thebrain-shared/graphql/mutations/processEvaluation'
 import currentItemsQuery from 'thebrain-shared/graphql/queries/itemsWithFlashcard'
-import { mutationConnectionHandler } from './NoInternet'
+import { mutationConnectionHandler } from '../../../components/NoInternet'
 import { LinearGradient } from 'expo'
 
 const defaultBallColors = ['#7c45d2', '#672f92']

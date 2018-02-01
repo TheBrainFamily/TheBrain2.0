@@ -7,8 +7,8 @@ import * as Animatable from 'react-native-animatable'
 import { graphql, compose } from 'react-apollo'
 
 import Card from './scenes/Card/Card'
-import type { Direction } from '../../../../helpers/SwipeHelpers'
-import { DIRECTIONS } from '../../../../helpers/SwipeHelpers'
+import type { Direction } from '../../helpers/SwipeHelpers'
+import { DIRECTIONS } from '../../helpers/SwipeHelpers'
 
 import {
   TouchableWithoutFeedback,

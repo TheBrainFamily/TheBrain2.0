@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import styles from '../styles/styles'
+import styles from '../../../styles/styles'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import WithData from './WithData'
-import { mutationConnectionHandler } from './NoInternet'
+import WithData from '../../../components/WithData'
+import { mutationConnectionHandler } from '../../../components/NoInternet'
 
 class Tutorial extends React.Component {
   constructor (props) {
