@@ -6,8 +6,8 @@ import { compose, graphql } from 'react-apollo'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
-import logInWithFacebook from 'thebrain-shared/graphql/mutations/logInWithFacebook'
 import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
+import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/mutations/logInWithFacebook'
 
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
@@ -33,28 +33,7 @@ export const homeWrapper = compose(
   connect(mapStateToProps),
   graphql(currentUserQuery, { name: 'currentUser' }),
   getGraphqlForLogInWithTokenMutation(graphql),
-  graphql(logInWithFacebook, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
-        variables: {
-          accessTokenFb,
-          userIdFb
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
-              }
-            })
-          }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
+  getGraphqlForLogInWithFacebookMutation(graphql),
   graphql(selectCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       selectCourse: ({ courseId }) => mutate({
