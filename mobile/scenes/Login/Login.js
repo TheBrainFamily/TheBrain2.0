@@ -15,6 +15,7 @@ import styles from '../../styles/styles'
 
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import { getGraphqlForSignup } from 'thebrain-shared/graphql/mutations/setUsernameAndPasswordForGuest'
 import WithData from '../../components/WithData'
 
 class Login extends React.Component {
@@ -151,14 +152,6 @@ class Login extends React.Component {
   }
 }
 
-const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
-        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
-            _id, username, activated, facebookId, currentAccessToken
-        }
-    }
-`
-
 const logIn = gql`
     mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean){
         logIn(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
@@ -184,27 +177,7 @@ export default compose(
       })
     })
   }),
-  graphql(signup, {
-    props: ({ ownProps, mutate }) => ({
-      signup: ({ username, password, deviceId, saveToken }) => mutate({
-        variables: {
-          username,
-          password,
-          deviceId,
-          saveToken
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.setUsernameAndPasswordForGuest
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForSignup(graphql),
   graphql(logIn, {
     props: ({ ownProps, mutate }) => ({
       login: ({ username, password, deviceId, saveToken }) => mutate({
