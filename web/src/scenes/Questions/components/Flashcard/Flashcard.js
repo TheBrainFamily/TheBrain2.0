@@ -81,6 +81,21 @@ class Flashcard extends React.Component {
     </div>)
   }
 
+  renderButtons = (itemId, shouldAnimate) => {
+    return (
+      <div className={`answer-buttons-container slide-animation ${shouldAnimate ? 'slide-out' : ''}`}>
+        <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(1, itemId)} />
+        <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
+        <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
+        <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(6, itemId)} />
+      </div>
+    )
+  }
+
   render () {
     let image
     let question = 'Loading...'
@@ -126,16 +141,7 @@ class Flashcard extends React.Component {
               <div className='flashcard-footer'>Click the card to see the answer!</div>
             </div>
           </FlexibleContentWrapper>
-          <div className={`answer-buttons-container slide-animation ${this.state.shouldAnimate ? 'slide-out' : ''}`}>
-            <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(1, itemId)} />
-            <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
-            <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
-            <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(6, itemId)} />
-          </div>
+          {this.renderButtons(itemId, this.state.shouldAnimate)}
         </div>
       )
     }
@@ -159,16 +165,7 @@ class Flashcard extends React.Component {
             <div className='flashcard-footer'>How would you describe experience answering this question?</div>
           </div>
         </FlexibleContentWrapper>
-        <div className='answer-buttons-container slide-animation slide-in'>
-          <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(1, itemId)} />
-          <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
-          <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
-          <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(6, itemId)} />
-        </div>
+        {this.renderButtons(itemId, false)}
       </div>
     )
   }
