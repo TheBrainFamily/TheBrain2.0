@@ -37,9 +37,8 @@ export async function dbConnector (cachedDb) {
   try {
     db = await MongoClient.connect(resolvedDBURI)
   } catch (e) {
-    console.log('error connecting to: ', resolvedDBURI, ' ', e)
+    console.log('error connecting to db', e)
   }
-  console.log('connected to: ', resolvedDBURI, ' time: ', new Date())
   dbInstance = db
   collectionInitQueue.forEach(collectionInitCallback => collectionInitCallback())
   return db
