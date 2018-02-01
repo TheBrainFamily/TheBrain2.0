@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
-const logouMutation = gql`
+const logoutMutation = gql`
     mutation logOut {
         logOut {
             _id, username, activated, facebookId, currentAccessToken
@@ -10,7 +10,7 @@ const logouMutation = gql`
 `
 
 export const getGraphqlForLogout = (graphql) => {
-  return graphql(logouMutation, {
+  return graphql(logoutMutation, {
     props: ({ownProps, mutate}) => ({
       logout: () => mutate({
         updateQueries: {
