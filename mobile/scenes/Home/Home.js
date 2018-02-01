@@ -35,6 +35,7 @@ import courseLogos from './helpers/courseLogos'
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
 import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
 import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
+import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import update from 'immutability-helper'
@@ -351,39 +352,9 @@ const selectCourseSaveTokenMutation = gql`
     }
 `
 
-const logInWithTokenMutation = gql`
-    mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {
-        logInWithToken(accessToken:$accessToken, userId:$userId, deviceId:$deviceId) {
-            _id, username, activated, email, facebookId, currentAccessToken
-        }
-    }
-`
-
 export default compose(
   connect(state => state),
-  graphql(logInWithTokenMutation, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
-        variables: {
-          accessToken,
-          userId,
-          deviceId
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithToken
-              }
-            })
-          }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
+  getGraphqlForLogInWithTokenMutation(graphql),
   graphql(logInWithFacebookAccessToken, {
     props: ({ ownProps, mutate }) => ({
       logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
