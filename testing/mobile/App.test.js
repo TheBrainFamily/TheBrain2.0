@@ -21,7 +21,6 @@ const returnContext = async function () {
     Flashcards: flashcardsRepository,
     req: {
       logIn: (user) => {
-        console.log('Gandecki user', user)
         context.user = user
       }
     }

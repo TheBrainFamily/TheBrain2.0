@@ -12,7 +12,6 @@ export class jQueryElement {
     return $(`${this.selector}`).length > 0
   }
   assertIsVisible () {
-    console.log('Gandecki this.selector', this.selector)
     assert(this._isVisible())
   }
   assertNotVisible () {

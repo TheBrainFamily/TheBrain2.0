@@ -8,7 +8,7 @@ import swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
 import FlexibleContentWrapper from '../../components/FlexibleContentWrapper'
-import getPasswordValidationState from './getPasswordValidationState'
+import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
 import { profileWrapper } from './profileWrapper'
 
 class Profile extends React.Component {

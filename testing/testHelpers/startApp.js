@@ -2,8 +2,8 @@ import {
   makeExecutableSchema
 } from 'graphql-tools'
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils-with-context'
-import { typeDefs } from '../../server/src/api/schema'
-import resolvers from '../../server/src/api/resolvers'
+import { typeDefs } from '../../server/src/api/graphql/schema'
+import resolvers from '../../server/src/api/graphql/resolvers'
 
 const isEnzyme = process.env.ENZYME
 const isTestCafe = process.env.TESTCAFE

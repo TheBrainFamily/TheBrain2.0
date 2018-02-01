@@ -87,7 +87,6 @@ class Home extends React.Component {
     const accessTokenFb = await AsyncStorage.getItem('accessTokenFb')
 
     if (userId && accessToken) {
-      console.log('loguje z TOKEN', accessToken, userId)
       this.props.logInWithToken({ accessToken, userId, deviceId }).then(async () => {
         const newAccessToken = this.props.currentUser.CurrentUser.currentAccessToken
         await AsyncStorage.setItem('accessToken', newAccessToken)
@@ -99,7 +98,6 @@ class Home extends React.Component {
     }
 
     if (accessTokenFb) {
-      console.log('loguje z FB ', accessTokenFb)
       await this.props.logInWithFacebookAccessToken({ accessTokenFb }).catch(async () => {
         await AsyncStorage.removeItem('accessTokenFb')
         Alert.alert('Facebook login expired', 'Please log in again')
@@ -195,7 +193,6 @@ class Home extends React.Component {
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
       const deviceId = Expo.Constants.deviceId
-      console.log('selecting course', course)
       this.props.dispatch(courseActions.select(course))
       await mutationConnectionHandler(this.props.history, () => {
         this.props.selectCourseSaveToken({ courseId: course._id, deviceId }).then(async () => {

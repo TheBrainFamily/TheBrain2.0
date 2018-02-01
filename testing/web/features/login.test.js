@@ -27,8 +27,6 @@
 //     'hasDisabledTutorial': true,
 //     'selectedCourse': 'testCourseId',
 //     'progress': [{'lesson': 1}, {'courseId': 'testCourseId', 'lesson': 1}],
-//     'collectedAchievements': [],
-//     'achievementStats': {'watchedMovies': 0, 'answeredQuestions': 0},
 //     'experience': {'value': 0, 'level': 0}
 //   }
 //   const userDetailsRepository = new UserDetailsRepository()

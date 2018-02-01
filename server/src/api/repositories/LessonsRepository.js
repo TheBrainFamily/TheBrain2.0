@@ -22,7 +22,6 @@ export class LessonsRepository extends MongoRepository {
   }
 
   async getLessonById (_id: string) {
-    // console.log("_id ", _id);
     return this.lessonsCollection.findOne({_id})
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import cardsGreen from './img/menu-cards-green.png'
 import cardsRed from './img/menu-cards-red.png'
-import levelConfig from '../../../../../helpers/levelConfig'
+import levelConfig from 'thebrain-shared/helpers/levelConfig'
 import { menuProfileWrapper } from './menuProfileWrapper'
 
 class MenuProfile extends React.Component {

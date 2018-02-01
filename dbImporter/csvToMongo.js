@@ -117,7 +117,6 @@ const getClasses = (strLines, youtubeLinksArray, courseId, images) => {
           // skip flashcards with images as an answer
           return
         }
-        // console.log('JMOZGAWA: flashcard', flashcard)
       }
       allFlashCards.push(flashcard)
       lesson.flashcardIds.push(flashcard._id)

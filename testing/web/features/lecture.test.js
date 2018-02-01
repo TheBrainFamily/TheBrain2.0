@@ -25,8 +25,6 @@ const returnContext = async () => {
     'hasDisabledTutorial': true,
     'selectedCourse': 'testCourseId',
     'progress': [{'lesson': 1}, {'courseId': 'testCourseId', 'lesson': 1}],
-    'collectedAchievements': [],
-    'achievementStats': {'watchedMovies': 0, 'answeredQuestions': 0},
     'experience': {'value': 0, 'level': 0}
   }
   const userDetailsRepository = new UserDetailsRepository()
@@ -50,7 +48,6 @@ describe('Lecture', async () => {
     // Given I am a new student
     // When I open the lecture page
     const context = await returnContext()
-    console.log('Gandecki context.Courses', context.Courses)
     const driver = await startApp('/lecture', context)
     const lecturePage = new LecturePage(driver)
     await lecturePage.skipLecture()
