@@ -33,7 +33,7 @@ import appStyle from '../../styles/appStyle'
 import courseLogos from './helpers/courseLogos'
 
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
-import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
+import { getGraphqlForLogInWithFacebookAccessToken } from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
 import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
 import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
@@ -355,27 +355,7 @@ const selectCourseSaveTokenMutation = gql`
 export default compose(
   connect(state => state),
   getGraphqlForLogInWithTokenMutation(graphql),
-  graphql(logInWithFacebookAccessToken, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
-        variables: {
-          accessTokenFb
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithFacebookAccessToken
-              }
-            })
-          }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
+  getGraphqlForLogInWithFacebookAccessToken(graphql),
   graphql(selectCourseSaveTokenMutation, {
     props: ({ ownProps, mutate }) => ({
       selectCourseSaveToken: ({ courseId, deviceId }) => mutate({
