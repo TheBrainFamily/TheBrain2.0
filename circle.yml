@@ -14,8 +14,8 @@ jobs:
           name: Create artifacts folders
           command: |
             mkdir -p ~/TheBrain2.0/server/artifacts
-            mkdir -p ~/TheBrain2.0/client/artifacts
-            mkdir -p ~/TheBrain2.0/mobileClient/artifacts
+            mkdir -p ~/TheBrain2.0/web/artifacts
+            mkdir -p ~/TheBrain2.0/mobile/artifacts
 
 ### SHARED PACKAGE
       - restore_cache:
@@ -62,36 +62,36 @@ jobs:
 ### Web Client
       - restore_cache:
           keys:
-            - npm-client-deps-{{ checksum "./client/package.json"  }}
+            - npm-web-deps-{{ checksum "./web/package.json"  }}
       - run:
           name: Install Web Client packages
-          working_directory: "~/TheBrain2.0/client/"
+          working_directory: "~/TheBrain2.0/web/"
           command: npm install
       - save_cache:
-          key: npm-client-deps-{{ checksum "./client/package.json"  }}
+          key: npm-web-deps-{{ checksum "./web/package.json"  }}
           paths:
-            - ~/TheBrain2.0/client/node_modules
+            - ~/TheBrain2.0/web/node_modules
       - run:
           name: Validate Standard linting rules on Web Client
-          working_directory: "~/TheBrain2.0/client/"
+          working_directory: "~/TheBrain2.0/web/"
           command: npm run standard
 
 
 ### Mobile Client
       - restore_cache:
           keys:
-            - npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
+            - npm-mobile-deps-{{ checksum "./mobile/package.json"  }}
       - run:
           name: Install Mobile Client packages
-          working_directory: "~/TheBrain2.0/mobileClient/"
+          working_directory: "~/TheBrain2.0/mobile/"
           command: npm install
       - save_cache:
-          key: npm-mobileClient-deps-{{ checksum "./mobileClient/package.json"  }}
+          key: npm-mobile-deps-{{ checksum "./mobile/package.json"  }}
           paths:
-            - ~/TheBrain2.0/mobileClient/node_modules
+            - ~/TheBrain2.0/mobile/node_modules
       - run:
           name: Validate Standard linting rules on Mobile Client
-          working_directory: "~/TheBrain2.0/mobileClient/"
+          working_directory: "~/TheBrain2.0/mobile/"
           command: npm run standard
 
 ### Testing package
@@ -127,7 +127,7 @@ jobs:
 ### End to end with web
       - run:
           name: Start the Web Client with "stateless" Server
-          working_directory: "~/TheBrain2.0/client"
+          working_directory: "~/TheBrain2.0/web"
           command: npm run startForCypress
           background: true
       - run:
@@ -149,7 +149,7 @@ jobs:
           command: wait-on "http://localhost:8080/graphiql" -t 30000
       - run:
           name: Start the Web Client connecting to real server
-          working_directory: ~/TheBrain2.0/client
+          working_directory: ~/TheBrain2.0/web
           command: npm start
           background: true
       - run:
@@ -162,8 +162,8 @@ jobs:
       - store_artifacts:
            path: |
             ~/TheBrain2.0/server/artifacts
-            ~/TheBrain2.0/client/artifacts
-            ~/TheBrain2.0/mobileClient/artifacts
+            ~/TheBrain2.0/web/artifacts
+            ~/TheBrain2.0/mobile/artifacts
       - store_artifacts:
            path: ~/TheBrain2.0/testing/web/cypress/videos
            
@@ -248,20 +248,20 @@ jobs:
 ### Web Client
       - restore_cache:
           keys:
-            - npm-client-deps-{{ checksum "./client/package.json"  }}
+            - npm-web-deps-{{ checksum "./web/package.json"  }}
       - run:
           name: Install Web Client packages
-          working_directory: "~/TheBrain2.0/client/"
+          working_directory: "~/TheBrain2.0/web/"
           command: npm install
       - save_cache:
-          key: npm-client-deps-{{ checksum "./client/package.json"  }}
+          key: npm-web-deps-{{ checksum "./web/package.json"  }}
           paths:
-            - ~/TheBrain2.0/client/node_modules
+            - ~/TheBrain2.0/web/node_modules
       - attach_workspace:
           at: /tmp/workspace
       - run:
           name: Build and deploy the serverless web client
-          working_directory: ~/TheBrain2.0/client
+          working_directory: ~/TheBrain2.0/web
           command: |
             GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
@@ -282,15 +282,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+            - npm-mobile-deps-{{ checksum "./mobile/package.json" }}
       - run:
           name: Install mobile packages
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: npm install
       - save_cache:
-          key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+          key: npm-mobile-deps-{{ checksum "./mobile/package.json" }}
           paths:
-            - ~/TheBrain2.0/mobileClient/node_modules
+            - ~/TheBrain2.0/mobile/node_modules
       - run:
           name: Install shared packages
           working_directory: "~/TheBrain2.0/shared/"
@@ -305,23 +305,23 @@ jobs:
           command: |
             npm install -g react-native-cli
             npm install exp --global
-      # maybe instead of installing it globally just run post install in mobileClient/node_modules/detox
+      # maybe instead of installing it globally just run post install in mobile/node_modules/detox
       - run:
           name: Start up mobile app
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: npm start
           background: true
       - attach_workspace:
           at: /tmp/workspace
       - run:
           name: Publish app
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: |
             GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run changeServerURL
             cat ./networkInterface.js
             WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
       - persist_to_workspace:
-          root: ~/TheBrain2.0/mobileClient
+          root: ~/TheBrain2.0/mobile
           paths:
             - package.json
 
@@ -333,15 +333,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+            - npm-mobile-deps-{{ checksum "./mobile/package.json" }}
       - run:
           name: Install mobile packages
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: npm install
       - save_cache:
-          key: npm-mobile-deps-{{ checksum "./mobileClient/package.json" }}
+          key: npm-mobile-deps-{{ checksum "./mobile/package.json" }}
           paths:
-            - ~/TheBrain2.0/mobileClient/node_modules
+            - ~/TheBrain2.0/mobile/node_modules
       - run:
           name: Setup macosx kernel settings
           command: |
@@ -362,8 +362,8 @@ jobs:
           name: Installing and link expo ios app
           command: |
             exp install:ios
-            mkdir ~/TheBrain2.0/mobileClient/.expo/
-            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobileClient/.expo/
+            mkdir ~/TheBrain2.0/mobile/.expo/
+            ln -s ~/.expo/ios-simulator-app-cache ~/TheBrain2.0/mobile/.expo/
       - run:
           name: Installing Detox globally
           command: npm install -g detox@7.0.0
@@ -371,13 +371,13 @@ jobs:
           at: /tmp/workspace
       - run:
           name: E2E ios test
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: |
-            mv /tmp/workspace/package.json ~/TheBrain2.0/mobileClient/package.json
+            mv /tmp/workspace/package.json ~/TheBrain2.0/mobile/package.json
             DETOX_EXTERNAL_LINK=https://expo.io/@thebrain/`node ./.scripts/getPackageName.js` npm run e2e
       - run:
           name: Github Notification
-          working_directory: ~/TheBrain2.0/mobileClient
+          working_directory: ~/TheBrain2.0/mobile
           command: ONLY_NOTIFY_GITHUB=true WEB_ENDPOINT=`cat /tmp/workspace/webEndpoint` GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql ./node_modules/.bin/appr
 
 workflows:

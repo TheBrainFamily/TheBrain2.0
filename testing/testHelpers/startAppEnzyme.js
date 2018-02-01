@@ -2,10 +2,10 @@ import React from 'react'
 import { mount, configure } from 'enzyme'
 import { ApolloClient } from 'apollo-client'
 import { EnzymeDriver } from './EnzymeDriver'
-import { createTheBrainStore, createHistory } from '../../client/src/store'
+import { createTheBrainStore, createHistory } from '../../web/src/store'
 import { ApolloProvider } from 'react-apollo'
 
-import Adapter from 'enzyme-adapter-react-15'
+import Adapter from 'enzyme-adapter-react-16'
 
 configure({ adapter: new Adapter() })
 
@@ -52,7 +52,7 @@ const startAppEnzyme = (path, networkInterface) => {
 // //This and attachTo Div we do only because we have some jQuery code that runs outside of react
 //   const div = document.createElement('div');
 //   document.body.appendChild(div);
-  const MainContainer = require('../../client/src/components/MainContainer').default
+  const MainContainer = require('../../web/src/MainContainer/MainContainer').default
 
   const client = new ApolloClient({networkInterface})
 

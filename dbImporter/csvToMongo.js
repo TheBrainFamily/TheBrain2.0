@@ -156,7 +156,7 @@ const importChemistry = () => {
     if (err) {
       return console.log(err)
     }
-    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/client/public/img/chemistry', 'chemistry', '59c006d7e7fcb5110c2dc5a7', chemistryYoutubeLinks)
+    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/web/public/img/chemistry', 'chemistry', '59c006d7e7fcb5110c2dc5a7', chemistryYoutubeLinks)
   })
 }
 
@@ -165,7 +165,7 @@ const importBiology = () => {
     if (err) {
       return console.log(err)
     }
-    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/client/public/img/biology', 'biology', '59b6aecade3d69efc0253b6c')
+    onCSVLoaded(data, '/Users/jmozgawa/Projects/TheBrain2.0/web/public/img/biology', 'biology', '59b6aecade3d69efc0253b6c')
   })
 }
 

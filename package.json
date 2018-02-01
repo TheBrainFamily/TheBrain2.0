@@ -11,11 +11,11 @@
     "enzymeTest": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/web",
     "enzymeTestMobile": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile",
     "enzymeTest:watch": "npm run enzymeTest -- --watch",
-    "cleanAll": "rm -rf node_modules && rm -rf client/node_modules && rm -rf mobileClient/node_modules && rm -rf server/node_modules && rm -rf shared/node_modules",
-    "buildAll": "npm install && pushd client && npm install && pushd ../mobileClient && npm install && pushd ../server && npm install && pushd ../shared && npm install",
-    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web/ server server/jest.standard.config.js testing/jest.standard.config.js shared/jest.config.js mobileClient/jest.standard.config.js client/jest.standard.config.js",
-    "makeWebStandardHappy": "pushd ./client; ./node_modules/.bin/standard --fix",
-    "makeMobileStandardHappy": "pushd ./mobileClient; ./node_modules/.bin/standard --fix",
+    "cleanAll": "rm -rf node_modules && rm -rf web/node_modules && rm -rf mobile/node_modules && rm -rf server/node_modules && rm -rf shared/node_modules",
+    "buildAll": "npm install && pushd web && npm install && pushd ../mobile && npm install && pushd ../server && npm install && pushd ../shared && npm install",
+    "testAll": "ENZYME=true BABEL_ENV=test NODE_ENV=TESTING jest --projects testing/mobile testing/web/ server server/jest.standard.config.js testing/jest.standard.config.js shared/jest.config.js mobile/jest.standard.config.js web/jest.standard.config.js",
+    "makeWebStandardHappy": "pushd ./web; ./node_modules/.bin/standard --fix",
+    "makeMobileStandardHappy": "pushd ./mobile; ./node_modules/.bin/standard --fix",
     "makeServerStandardHappy": "pushd ./server; ./node_modules/.bin/standard --fix",
     "makeSharedStandardHappy": "pushd ./shared ; ../node_modules/.bin/standard --fix",
     "makeTestsStandardHappy": "pushd ./testing; ../node_modules/.bin/standard --fix",
@@ -24,7 +24,7 @@
     "createDefaultDB": "NODE_ENV=staging babel-node ./testing/common/serverStateHelpers/createDefaultDB"
   },
   "lint-staged": {
-    "mobileClient/**/*.js": [
+    "mobile/**/*.js": [
       "npm run makeMobileStandardHappy -- ",
       "git add"
     ],
@@ -32,7 +32,7 @@
       "npm run makeServerStandardHappy -- ",
       "git add"
     ],
-    "client/**/*.js": [
+    "web/**/*.js": [
       "npm run makeWebStandardHappy -- ",
       "git add"
     ],
@@ -73,19 +73,18 @@
     "casual": "^1.5.19",
     "cypress": "^1.4.1",
     "enzyme": "^3.3.0",
-    "enzyme-adapter-react-15": "^1.0.5",
     "husky": "^0.14.3",
     "jest": "^22.0.4",
     "jest-expo": "^24.0.0",
-    "jest-runner-standard": "0.0.2",
+    "jest-runner-standard": "^0.0.12",
     "jquery": "^3.2.1",
     "lint-staged": "^6.0.1",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "opn": "^5.1.0",
-    "react": "^15.5.3",
+    "react": "^16.2.0",
     "react-apollo": "^1.4.16",
-    "react-dom": "^15.6.2",
+    "react-dom": "^16.2.0",
     "react-test-renderer": "^15.6.2",
     "regenerator-runtime": "^0.11.1",
     "standard": "^10.0.3"

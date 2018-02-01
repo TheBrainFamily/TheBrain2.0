@@ -1,0 +1,29 @@
+{
+  "presets": [
+    "react-app"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
+            "optionalRoot": "web/"
+          }
+        ]
+      ]
+    },
+    "development": {
+      "plugins": [
+        [
+          "module-rewrite-with-root",
+          {
+            "replaceFunc": "./tests/testHelpers/replace-for-testing.js",
+            "optionalRoot": "web/"
+          }
+        ]
+      ]
+    }
+  }
+}
