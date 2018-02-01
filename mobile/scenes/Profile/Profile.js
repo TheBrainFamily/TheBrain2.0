@@ -11,7 +11,7 @@ import PageTitle from '../../components/PageTitle'
 import Separator from '../../components/Separator'
 
 import styles from '../../styles/styles'
-import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
+import { getGraphqlForChangePasswordMutation } from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
@@ -161,16 +161,7 @@ class Profile extends React.Component {
 export default compose(
   connect(),
   withRouter,
-  graphql(changePasswordMutation, {
-    props: ({ mutate }) => ({
-      submit: ({ oldPassword, newPassword }) => mutate({
-        variables: {
-          oldPassword,
-          newPassword
-        }
-      })
-    })
-  }),
+  getGraphqlForChangePasswordMutation(graphql),
   graphql(userDetailsQuery, {
     name: 'userDetails',
     options: {

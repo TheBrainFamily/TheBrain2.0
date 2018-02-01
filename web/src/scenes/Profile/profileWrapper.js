@@ -2,8 +2,8 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
+import { getGraphqlForChangePasswordMutation } from 'thebrain-shared/graphql/queries/changePasswordMutation'
 import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
 
 export const profileWrapper = compose(
@@ -20,15 +20,6 @@ export const profileWrapper = compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(changePasswordMutation, {
-    props: ({ mutate }) => ({
-      submit: ({ oldPassword, newPassword }) => mutate({
-        variables: {
-          oldPassword,
-          newPassword
-        }
-      })
-    })
-  }),
+  getGraphqlForChangePasswordMutation(graphql),
   getGraphqlForSwitchUserIsCasual(graphql)
 )
