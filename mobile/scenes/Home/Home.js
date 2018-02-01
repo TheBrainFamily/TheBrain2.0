@@ -3,7 +3,6 @@ import _ from 'lodash'
 import React from 'react'
 import Expo from 'expo'
 import { compose, graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import {
   AsyncStorage,
@@ -36,9 +35,9 @@ import coursesQuery from 'thebrain-shared/graphql/queries/courses'
 import { getGraphqlForLogInWithFacebookAccessToken } from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
 import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
 import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
+import { getGraphqlForSelectCourseSaveTokenMutation } from 'thebrain-shared/graphql/mutations/selectCourseSaveToken'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import update from 'immutability-helper'
 import WithData from '../../components/WithData'
 import { mutationConnectionHandler } from '../../components/NoInternet'
 import * as mainMenuActions from '../../actions/MainMenuActions'
@@ -338,43 +337,11 @@ class Home extends React.Component {
   }
 }
 
-const selectCourseSaveTokenMutation = gql`
-    mutation selectCourseSaveToken($courseId: String!, $deviceId: String) {
-        selectCourseSaveToken(courseId: $courseId, deviceId: $deviceId) {
-            selectedCourse
-            hasDisabledTutorial
-            isCasual
-            experience {
-                level
-                showLevelUp
-            }
-        }
-    }
-`
-
 export default compose(
   connect(state => state),
   getGraphqlForLogInWithTokenMutation(graphql),
   getGraphqlForLogInWithFacebookAccessToken(graphql),
-  graphql(selectCourseSaveTokenMutation, {
-    props: ({ ownProps, mutate }) => ({
-      selectCourseSaveToken: ({ courseId, deviceId }) => mutate({
-        variables: {
-          courseId,
-          deviceId
-        },
-        updateQueries: {
-          UserDetails: (prev, { mutationResult }) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.selectCourseSaveToken
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForSelectCourseSaveTokenMutation(graphql),
   getGraphqlForCloseCourseMutation(graphql),
   graphql(currentUserQuery, { name: 'currentUser' }),
   graphql(coursesQuery, { name: 'courses' }),
