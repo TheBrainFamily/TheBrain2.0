@@ -69,6 +69,18 @@ class Flashcard extends React.Component {
     this.props.setUserIsCasual(isCasual)
   }
 
+  renderCasualSwitchPopup = () => {
+    return (<div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
+      <strong>Challenging question!</strong> <br />
+      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
+      You will still broaden your mind and impress your friends/coworkers!<br />
+      <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
+      <div>You can always change this setting on the <strong>profile</strong> page.</div>
+      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
+      <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
+    </div>)
+  }
+
   render () {
     let image
     let question = 'Loading...'
@@ -90,16 +102,6 @@ class Flashcard extends React.Component {
       userIsCasual = this.props.userDetails.UserDetails.isCasual
     }
 
-    const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
-      <strong>Challenging question!</strong> <br />
-      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
-          You will still broaden your mind and impress your friends/coworkers!<br />
-      <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
-      <div>You can always change this setting on the <strong>profile</strong> page.</div>
-      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
-      <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
-    </div>
-
     if (!this.props.isAnswerVisible) {
       return (
         <div>
@@ -110,7 +112,7 @@ class Flashcard extends React.Component {
                   <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
                 </div> : null }
                 {userIsCasual === null && !isCasual
-                  ? casualSwitchPopup : null
+                  ? this.renderCasualSwitchPopup() : null
                 }
               </div>
               <div className='flashcard-content'>
@@ -146,7 +148,7 @@ class Flashcard extends React.Component {
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
               {userIsCasual === null && !isCasual
-                ? casualSwitchPopup : null
+                ? this.renderCasualSwitchPopup() : null
               }
             </div>
             <div className='flashcard-content'>
