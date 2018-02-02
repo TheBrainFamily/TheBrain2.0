@@ -104,18 +104,19 @@ class Home extends React.Component {
       })
     }
   }
-  shouldComponentUpdate (nextProps, nextState) {
-    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-      nextProps.courses.loading || !nextProps.currentUser || nextProps.currentUser.loading) {
-      return false
-    }
 
-    return true
+  isStillLoading (nextProps) {
+    return !nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error ||
+      !nextProps.courses || nextProps.courses.loading ||
+      !nextProps.currentUser || nextProps.currentUser.loading
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !this.isStillLoading(nextProps)
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.userDetails || nextProps.userDetails.loading || nextProps.userDetails.error || !nextProps.courses ||
-      nextProps.courses.loading || !nextProps.currentUser || nextProps.currentUser.loading) {
+    if (this.isStillLoading(nextProps)) {
       return
     }
 
