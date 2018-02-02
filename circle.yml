@@ -173,8 +173,9 @@ jobs:
     working_directory: ~/TheBrain2.0
     steps:
       - checkout
-      - run: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
-      - run: echo $BRANCH_NAME
+      - run:
+          name: Generating branch name
+          command: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
       - run:
           name: Install serverless
           command: npm install -g serverless
@@ -232,8 +233,9 @@ jobs:
     working_directory: ~/TheBrain2.0
     steps:
       - checkout
-      - run: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
-      - run: echo $BRANCH_NAME
+      - run:
+          name: Generating branch name
+          command: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
       - run:
           name: Install serverless
           command: npm install -g serverless
