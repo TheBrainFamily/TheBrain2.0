@@ -7,7 +7,7 @@ import PageContainer from '../../components/PageContainer'
 import PageTitle from '../../components/PageTitle'
 import Video from '../../components/Video'
 
-import lessonsQuery from 'thebrain-shared/graphql/queries/lessons'
+import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/queries/lessons'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
 import WithData from '../../components/WithData'
 
@@ -92,20 +92,5 @@ export default compose(
       })
     }
   }),
-  graphql(lessonsQuery, {
-    name: 'lessons',
-    options: (ownProps) => {
-      if (!ownProps.selectedCourse) {
-        return ({
-          variables: {
-            courseId: ''
-          }
-        })
-      }
-      const courseId = ownProps.selectedCourse._id
-      return {
-        variables: { courseId }
-      }
-    }
-  })
+  getGraphqlForLessonsQuery(graphql)
 )(WithData(Lectures, ['currentLesson', 'lessons']))
