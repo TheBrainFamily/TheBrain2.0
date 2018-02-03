@@ -15,7 +15,7 @@ import {
   BackHandler
 } from 'react-native'
 
-import MainMenu from '../../components/MainMenu'
+import MainMenu from '../MainMenu/MainMenu'
 import Flashcard from './scenes/Flashcard/Flashcard'
 import CourseHeader from '../../components/CourseHeader'
 import AnswerEvaluator from './components/AnswerEvaluator'
