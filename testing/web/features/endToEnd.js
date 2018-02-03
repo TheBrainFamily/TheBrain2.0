@@ -16,13 +16,6 @@ const getADriver = function () {
     }
   })
 
-  // This is workaround for an issue in cypress causing tests to fail on CI
-  // due to improper sound card detection
-  cy.on('uncaught:exception', (err, runnable) => {
-    expect(err.message).to.include('ALSA lib conf.c:4259:(_snd_config_evaluate) function snd_func_card_driver returned error: No such file or directory')
-    return false
-  })
-
   return new CypressDriver()
 }
 
