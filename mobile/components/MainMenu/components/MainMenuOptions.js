@@ -1,6 +1,6 @@
 import React from 'react'
 import { AsyncStorage, Text, TouchableHighlight, View } from 'react-native'
-import Separator from '../../../components/Separator'
+import Separator from '../../Separator'
 import styles from '../../../styles/styles'
 import * as courseActions from '../../../actions/CourseActions'
 import { withRouter } from 'react-router'
