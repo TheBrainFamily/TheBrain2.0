@@ -3,17 +3,12 @@ import { connect } from 'react-redux'
 import { Animated, PanResponder, View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
-import _ from 'lodash'
 
-import styles from '../styles/styles'
-import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import { getGraphqlForProcessEvaluationMutation } from 'thebrain-shared/graphql/mutations/processEvaluation'
+import styles from '../../../styles/styles'
+import { updateAnswerVisibility } from '../../../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
-
-import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import submitEval from 'thebrain-shared/graphql/mutations/processEvaluation'
-import currentItemsQuery from 'thebrain-shared/graphql/queries/itemsWithFlashcard'
-import { mutationConnectionHandler } from './NoInternet'
+import { mutationConnectionHandler } from '../../../components/NoInternet'
 import { LinearGradient } from 'expo'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
@@ -137,52 +132,6 @@ class SwipeBall extends React.Component {
 
 export default compose(
   withRouter,
-  graphql(submitEval, {
-    props: ({ ownProps, mutate }) => ({
-      submit: ({ itemId, evaluation }) => mutate({
-        variables: {
-          itemId,
-          evaluation
-        },
-        optimisticResponse: {
-          processEvaluation: {
-            // With this fake data we get warnings in the client on every evaluation :-(
-            '_id': '-1',
-            'flashcardId': '',
-            'extraRepeatToday': false,
-            'actualTimesRepeated': 0,
-            '__typename': 'Item',
-            'flashcard': {
-              '_id': '-1',
-              'question': '',
-              'answer': '',
-              'isCasual': true,
-              'image': null,
-              'answerImage': null,
-              '__typename': 'Flashcard'
-            },
-            switchFlashcards: true
-          }
-        },
-        update: (proxy, { data: { processEvaluation } }) => {
-          const data = proxy.readQuery({ query: currentItemsQuery })
-          if (processEvaluation.switchFlashcards) {
-            const newFlashcards = [_.last(data.Items)]
-            data.Items = newFlashcards
-          } else {
-            data.Items = processEvaluation
-          }
-          proxy.writeQuery({ query: currentItemsQuery, data })
-        },
-        refetchQueries: [{
-          query: sessionCountQuery
-        },
-        {
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
-
+  getGraphqlForProcessEvaluationMutation(graphql),
   connect()
 )(SwipeBall)

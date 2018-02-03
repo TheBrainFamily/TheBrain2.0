@@ -6,7 +6,8 @@ import { compose, graphql } from 'react-apollo'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import coursesQuery from 'thebrain-shared/graphql/queries/courses'
-import logInWithFacebook from 'thebrain-shared/graphql/mutations/logInWithFacebook'
+import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
+import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/mutations/logInWithFacebook'
 
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {
@@ -22,14 +23,6 @@ const selectCourseMutation = gql`
     }
 `
 
-const logInWithTokenMutation = gql`
-    mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {
-        logInWithToken(accessToken:$accessToken, userId:$userId, deviceId:$deviceId) {
-            _id, username, activated, email, facebookId, currentAccessToken
-        }
-    }
-`
-
 const mapStateToProps = (state) => {
   return {
     selectedCourse: state.course.selectedCourse
@@ -39,51 +32,8 @@ const mapStateToProps = (state) => {
 export const homeWrapper = compose(
   connect(mapStateToProps),
   graphql(currentUserQuery, { name: 'currentUser' }),
-  graphql(logInWithTokenMutation, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithToken: ({ accessToken, userId, deviceId }) => mutate({
-        variables: {
-          accessToken,
-          userId,
-          deviceId
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithToken
-              }
-            })
-          }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
-  graphql(logInWithFacebook, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
-        variables: {
-          accessTokenFb,
-          userIdFb
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithFacebook
-              }
-            })
-          }
-        },
-        refetchQueries: [{
-          query: userDetailsQuery
-        }]
-      })
-    })
-  }),
+  getGraphqlForLogInWithTokenMutation(graphql),
+  getGraphqlForLogInWithFacebookMutation(graphql),
   graphql(selectCourseMutation, {
     props: ({ ownProps, mutate }) => ({
       selectCourse: ({ courseId }) => mutate({

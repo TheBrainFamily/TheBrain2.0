@@ -69,6 +69,33 @@ class Flashcard extends React.Component {
     this.props.setUserIsCasual(isCasual)
   }
 
+  renderCasualSwitchPopup = () => {
+    return (<div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
+      <strong>Challenging question!</strong> <br />
+      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
+      You will still broaden your mind and impress your friends/coworkers!<br />
+      <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
+      <div>You can always change this setting on the <strong>profile</strong> page.</div>
+      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
+      <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
+    </div>)
+  }
+
+  renderButtons = (itemId, shouldAnimate) => {
+    return (
+      <div className={`answer-buttons-container slide-animation ${shouldAnimate ? 'slide-out' : ''}`}>
+        <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(1, itemId)} />
+        <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
+        <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
+        <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
+          onClick={() => this.onSubmitEvaluation(6, itemId)} />
+      </div>
+    )
+  }
+
   render () {
     let image
     let question = 'Loading...'
@@ -90,16 +117,6 @@ class Flashcard extends React.Component {
       userIsCasual = this.props.userDetails.UserDetails.isCasual
     }
 
-    const casualSwitchPopup = <div onClick={(e) => e.stopPropagation()} className={'flashcard-not-casual-popup'}>
-      <strong>Challenging question!</strong> <br />
-      <strong>Casual learner?</strong> Feel free to skip them for more fun ride!
-          You will still broaden your mind and impress your friends/coworkers!<br />
-      <strong>Preparing for an exam or professional work?</strong> Ignore me and keep rocking!
-      <div>You can always change this setting on the <strong>profile</strong> page.</div>
-      <p onClick={() => this.setUserIsCasual(true)}>HIDE PRO QUESTIONS</p>
-      <p onClick={() => this.setUserIsCasual(false)}>CLOSE THIS POPUP</p>
-    </div>
-
     if (!this.props.isAnswerVisible) {
       return (
         <div>
@@ -110,7 +127,7 @@ class Flashcard extends React.Component {
                   <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
                 </div> : null }
                 {userIsCasual === null && !isCasual
-                  ? casualSwitchPopup : null
+                  ? this.renderCasualSwitchPopup() : null
                 }
               </div>
               <div className='flashcard-content'>
@@ -124,16 +141,7 @@ class Flashcard extends React.Component {
               <div className='flashcard-footer'>Click the card to see the answer!</div>
             </div>
           </FlexibleContentWrapper>
-          <div className={`answer-buttons-container slide-animation ${this.state.shouldAnimate ? 'slide-out' : ''}`}>
-            <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(1, itemId)} />
-            <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
-            <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
-            <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
-              onClick={() => this.onSubmitEvaluation(6, itemId)} />
-          </div>
+          {this.renderButtons(itemId, this.state.shouldAnimate)}
         </div>
       )
     }
@@ -146,7 +154,7 @@ class Flashcard extends React.Component {
                 <div className={'flashcard-title-not-casual-tooltip'}>This is a hard question</div>
               </div> : null }
               {userIsCasual === null && !isCasual
-                ? casualSwitchPopup : null
+                ? this.renderCasualSwitchPopup() : null
               }
             </div>
             <div className='flashcard-content'>
@@ -157,16 +165,7 @@ class Flashcard extends React.Component {
             <div className='flashcard-footer'>How would you describe experience answering this question?</div>
           </div>
         </FlexibleContentWrapper>
-        <div className='answer-buttons-container slide-animation slide-in'>
-          <img alt={'No clue'} src={answerButtonImage4} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(1, itemId)} />
-          <img alt={'Wrong'} src={answerButtonImage3} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(2.5, itemId)} />
-          <img alt={'Correct'} src={answerButtonImage2} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(4.5, itemId)} />
-          <img alt={'Easy'} src={answerButtonImage1} className='answer-button'
-            onClick={() => this.onSubmitEvaluation(6, itemId)} />
-        </div>
+        {this.renderButtons(itemId, false)}
       </div>
     )
   }

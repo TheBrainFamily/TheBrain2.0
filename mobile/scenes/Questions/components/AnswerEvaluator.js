@@ -7,14 +7,14 @@ import * as Animatable from 'react-native-animatable'
 
 import SwipeBall from './SwipeBall'
 import Triangle from './Triangle'
-import LevelUpWrapper from './LevelUpWrapper'
+import LevelUpWrapper from '../../../components/LevelUpWrapper'
 import Tutorial from './Tutorial'
 import CasualQuestionModal from './CasualQuestionModal'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import { updateAnswerVisibility } from '../actions/FlashcardActions'
+import { updateAnswerVisibility } from '../../../actions/FlashcardActions'
 
-import styles from '../styles/styles'
-import WithData from './WithData'
+import styles from '../../../styles/styles'
+import WithData from '../../../components/WithData'
 
 console.disableYellowBox = true
 

@@ -4,8 +4,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
 import FacebookLogin from 'react-facebook-login'
-import update from 'immutability-helper'
-import logInWithFacebook from 'thebrain-shared/graphql/mutations/logInWithFacebook'
+import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/mutations/logInWithFacebook'
 
 class FBLoginButton extends React.Component {
   responseFacebook = async (response: { accessToken: string, userID: string }) => {
@@ -36,23 +35,4 @@ class FBLoginButton extends React.Component {
   }
 }
 
-export default graphql(logInWithFacebook, {
-  props: ({ ownProps, mutate }) => ({
-    logInWithFacebook: ({ accessTokenFb, userIdFb }) => mutate({
-      variables: {
-        accessTokenFb,
-        userIdFb
-      },
-      updateQueries: {
-        CurrentUser: (prev, { mutationResult }) => {
-          return update(prev, {
-            CurrentUser: {
-              $set: mutationResult.data.logInWithFacebook
-            }
-          })
-        }
-      }
-    })
-  })
-}
-)(FBLoginButton)
+export default getGraphqlForLogInWithFacebookMutation(graphql)(FBLoginButton)

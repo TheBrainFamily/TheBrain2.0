@@ -1,7 +1,7 @@
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import lessonsQuery from 'thebrain-shared/graphql/queries/lessons'
+import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/queries/lessons'
 
 const mapStateToProps = (state) => {
   return {
@@ -27,20 +27,5 @@ export const lecturesWrapper = compose(
       })
     }
   }),
-  graphql(lessonsQuery, {
-    name: 'lessons',
-    options: (ownProps) => {
-      if (!ownProps.selectedCourse) {
-        return ({
-          variables: {
-            courseId: ''
-          }
-        })
-      }
-      const courseId = ownProps.selectedCourse._id
-      return {
-        variables: { courseId }
-      }
-    }
-  })
+  getGraphqlForLessonsQuery(graphql)
 )

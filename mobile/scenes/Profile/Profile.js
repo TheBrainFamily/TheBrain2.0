@@ -5,15 +5,14 @@ import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { TextField } from 'react-native-material-textfield'
-import update from 'immutability-helper'
 
 import PageContainer from '../../components/PageContainer'
 import PageTitle from '../../components/PageTitle'
 import Separator from '../../components/Separator'
 
 import styles from '../../styles/styles'
-import changePasswordMutation from 'thebrain-shared/graphql/queries/changePasswordMutation'
-import switchUserIsCasualMutation from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
+import { getGraphqlForChangePasswordMutation } from 'thebrain-shared/graphql/queries/changePasswordMutation'
+import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
 import getPasswordValidationState from 'thebrain-shared/helpers/getPasswordValidationState'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
@@ -162,16 +161,7 @@ class Profile extends React.Component {
 export default compose(
   connect(),
   withRouter,
-  graphql(changePasswordMutation, {
-    props: ({ mutate }) => ({
-      submit: ({ oldPassword, newPassword }) => mutate({
-        variables: {
-          oldPassword,
-          newPassword
-        }
-      })
-    })
-  }),
+  getGraphqlForChangePasswordMutation(graphql),
   graphql(userDetailsQuery, {
     name: 'userDetails',
     options: {
@@ -184,19 +174,5 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(switchUserIsCasualMutation, {
-    props: ({ownProps, mutate}) => ({
-      switchUserIsCasual: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, {mutationResult}) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.switchUserIsCasual
-              }
-            })
-          }
-        }
-      })
-    })
-  })
+  getGraphqlForSwitchUserIsCasual(graphql)
 )(WithData(Profile, ['userDetails', 'currentUser']))

@@ -5,7 +5,6 @@ import { TextField } from 'react-native-material-textfield'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import update from 'immutability-helper'
 import * as courseActions from '../../actions/CourseActions'
 import PageContainer from '../../components/PageContainer'
 import FBLoginButton from './components/FBLoginButton'
@@ -15,6 +14,8 @@ import styles from '../../styles/styles'
 
 import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import { getGraphqlForSignup } from 'thebrain-shared/graphql/mutations/setUsernameAndPasswordForGuest'
+import { getGraphqlForLogin } from 'thebrain-shared/graphql/mutations/logIn'
 import WithData from '../../components/WithData'
 
 class Login extends React.Component {
@@ -151,21 +152,6 @@ class Login extends React.Component {
   }
 }
 
-const signup = gql`
-    mutation setUsernameAndPasswordForGuest($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean) {
-        setUsernameAndPasswordForGuest(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
-            _id, username, activated, facebookId, currentAccessToken
-        }
-    }
-`
-
-const logIn = gql`
-    mutation logIn($username: String!, $password: String!, $deviceId: String!, $saveToken: Boolean){
-        logIn(username: $username, password: $password, deviceId: $deviceId, saveToken: $saveToken) {
-            _id, username, activated, facebookId, currentAccessToken
-        }
-    }
-`
 const clearTokenMutation = gql`
     mutation clearToken($userId: String!, $token: String!){
         clearToken(userId: $userId, token: $token)
@@ -184,48 +170,8 @@ export default compose(
       })
     })
   }),
-  graphql(signup, {
-    props: ({ ownProps, mutate }) => ({
-      signup: ({ username, password, deviceId, saveToken }) => mutate({
-        variables: {
-          username,
-          password,
-          deviceId,
-          saveToken
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.setUsernameAndPasswordForGuest
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
-  graphql(logIn, {
-    props: ({ ownProps, mutate }) => ({
-      login: ({ username, password, deviceId, saveToken }) => mutate({
-        variables: {
-          username,
-          password,
-          deviceId,
-          saveToken
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logIn
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForSignup(graphql),
+  getGraphqlForLogin(graphql),
   graphql(currentUserQuery, {
     name: 'currentUser',
     options: {

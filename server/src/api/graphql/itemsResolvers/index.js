@@ -1,15 +1,5 @@
 import returnItemAfterEvaluation from '../../tools/returnItemAfterEvaluation'
-import { userDetailsRepository } from '../../repositories/UserDetailsRepository'
-import { flashcardRepository } from '../../repositories/FlashcardsRepository'
-import { itemsRepository } from '../../repositories/ItemsRepository'
-import { lessonsRepository } from '../../repositories/LessonsRepository'
-
-const repositoriesContext = {
-  Items: itemsRepository,
-  Flashcards: flashcardRepository,
-  UserDetails: userDetailsRepository,
-  Lessons: lessonsRepository
-}
+import repositoriesContext from '../repositoriesContext'
 
 export const itemsResolvers = {
   Query: {
