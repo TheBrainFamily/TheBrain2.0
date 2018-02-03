@@ -174,8 +174,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Generating branch name
-          command: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
+          name: Generating build version label
+          command: BUILD_VERSION_LABEL=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BUILD_VERSION_LABEL=$BUILD_VERSION_LABEL" >> $BASH_ENV
       - run:
           name: Install serverless
           command: npm install -g serverless
@@ -208,19 +208,19 @@ jobs:
       - run:
           name: Configure the DB for the serverless server
           working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BRANCH_NAME}/` npm run createDefaultDB
+          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BUILD_VERSION_LABEL}/` npm run createDefaultDB
       - run:
           name: Extend the serverless service name with a build number
           working_directory: ~/TheBrain2.0/server
           command: |
-            sed s/thebrain-server/thebrain-server-${BRANCH_NAME}/ serverless.yml > serverless.yml.new
+            sed s/thebrain-server/thebrain-server-${BUILD_VERSION_LABEL}/ serverless.yml > serverless.yml.new
             mv serverless.yml.new serverless.yml
       - run:
           name: Build and deploy the serverless server
           working_directory: ~/TheBrain2.0/server
           command: |
             npm run build:lambda
-            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BRANCH_NAME}/` npm run deployToServerless
+            STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BUILD_VERSION_LABEL}/` npm run deployToServerless
             cat .stack.json| grep ServiceEndpoint | awk '{print $2}' | sed s/,// | sed s/\"//g >  ~/TheBrain2.0/serviceEndpoint
       - persist_to_workspace:
           root: ~/TheBrain2.0/
@@ -234,8 +234,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Generating branch name
-          command: BRANCH_NAME=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BRANCH_NAME=$BRANCH_NAME" >> $BASH_ENV
+          name: Generating build version label
+          command: BUILD_VERSION_LABEL=$(echo ${CIRCLE_BRANCH,,} | md5sum | awk -v branch=$CIRCLE_BRANCH '{ print tolower(substr(branch,0,15))"-"substr($1,0,8) }') && echo "export BUILD_VERSION_LABEL=$BUILD_VERSION_LABEL" >> $BASH_ENV
       - run:
           name: Install serverless
           command: npm install -g serverless
@@ -271,10 +271,10 @@ jobs:
           command: |
             GRAPHQL_SERVER_URI=`cat /tmp/workspace/serviceEndpoint`/graphql npm run replaceGraphqlEndpoint
             cat src/networkInterface.js
-            sed s/thebrain-web/thebrain-web-${BRANCH_NAME}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
+            sed s/thebrain-web/thebrain-web-${BUILD_VERSION_LABEL}/ ./serverless.yml > ./serverless.yml.new ; mv ./serverless.yml.new ./serverless.yml
             npm run build
             npm run deployToServerless
-            echo http://thebrain-web-${BRANCH_NAME}.s3-website-us-east-1.amazonaws.com >  ~/TheBrain2.0/webEndpoint
+            echo http://thebrain-web-${BUILD_VERSION_LABEL}.s3-website-us-east-1.amazonaws.com >  ~/TheBrain2.0/webEndpoint
       - persist_to_workspace:
           root: ~/TheBrain2.0/
           paths:
