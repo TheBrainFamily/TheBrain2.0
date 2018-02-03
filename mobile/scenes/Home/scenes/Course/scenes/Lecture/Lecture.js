@@ -16,7 +16,7 @@ import styles from '../../../../../../styles/styles'
 import lessonWatchedMutationParams from 'thebrain-shared/graphql/lessons/lessonWatchedMutationParams'
 import clearNotCasualItems from 'thebrain-shared/graphql/items/clearNotCasualItems'
 import lessonWatchedMutationSchema from 'thebrain-shared/graphql/items/lessonWatchedMutation'
-import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
+import { getGraphqlForCurrentLesson } from 'thebrain-shared/graphql/lessons/currentLesson'
 import WithData from '../../../../../../components/WithData'
 import { mutationConnectionHandler } from '../../../../../../components/NoInternet'
 import Loading from '../../../../../../components/Loading'
@@ -136,15 +136,7 @@ export default compose(
       clearNotCasual: () => mutate({})
     })
   }),
-  graphql(currentLessonQuery, {
-    options: (ownProps) => {
-      const courseId = ownProps.selectedCourse._id
-      return ({
-        variables: { courseId },
-        fetchPolicy: 'network-only'
-      })
-    }
-  }),
+  getGraphqlForCurrentLesson(graphql),
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   LevelUpWrapper
 )(WithData(Lecture, ['data']))

@@ -5,7 +5,7 @@ import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 import WithData from '../../../components/WithData'
 import ProgressBar from '../../../components/ProgressBar'
-import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
+import { getGraphqlForCurrentLesson } from 'thebrain-shared/graphql/lessons/currentLesson'
 import lessonCountQuery from 'thebrain-shared/graphql/lessons/lessonCount'
 
 class CourseProgressBar extends React.Component {
@@ -34,16 +34,6 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
-  graphql(currentLessonQuery, {
-    name: 'currentLesson',
-    skip: props => !props.selectedCourse,
-    options: (ownProps) => {
-      const selectedCourse = ownProps.selectedCourse._id
-      return ({
-        variables: { courseId: selectedCourse },
-        fetchPolicy: 'network-only'
-      })
-    }
-  }),
+  getGraphqlForCurrentLesson(graphql, 'currentLesson', props => !props.selectedCourse),
   graphql(lessonCountQuery, { name: 'lessonCount' })
 )(WithData(CourseProgressBar, ['currentLesson']))
