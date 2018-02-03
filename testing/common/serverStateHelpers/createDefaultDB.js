@@ -5,7 +5,8 @@ import {
 import { dbConnectionPromise, dbConnector } from '../../../server/src/api/repositories/MongoRepository'
 
 let createDefaultDb = async() => {
-  await dbConnector()
+  const db = await dbConnector()
+  db.dropDatabase()
   await dbConnectionPromise
   await getCoursesRepoWithDefaults()
   await getLessonsRepoWithDefaults()
