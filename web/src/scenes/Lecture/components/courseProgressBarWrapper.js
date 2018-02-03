@@ -13,6 +13,10 @@ const mapStateToProps = (state) => {
 export const courseProgressBarWrapper = compose(
   connect(mapStateToProps),
   withRouter,
-  getGraphqlForCurrentLesson(graphql, 'currentLesson', null, ownProps => (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId),
+  getGraphqlForCurrentLesson({
+    graphql,
+    name: 'currentLesson',
+    courseIdSelector: ownProps => (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
+  }),
   graphql(lessonCountQuery, {name: 'lessonCount'})
 )

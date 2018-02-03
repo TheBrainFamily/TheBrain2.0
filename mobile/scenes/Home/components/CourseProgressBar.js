@@ -34,6 +34,9 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
-  getGraphqlForCurrentLesson(graphql, 'currentLesson', props => !props.selectedCourse),
-  graphql(lessonCountQuery, { name: 'lessonCount' })
+  getGraphqlForCurrentLesson({
+    graphql,
+    name: 'currentLesson',
+    skipCondition: props => !props.selectedCourse}),
+  graphql(lessonCountQuery, {name: 'lessonCount'})
 )(WithData(CourseProgressBar, ['currentLesson']))

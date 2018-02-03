@@ -136,7 +136,7 @@ export default compose(
       clearNotCasual: () => mutate({})
     })
   }),
-  getGraphqlForCurrentLesson(graphql),
+  getGraphqlForCurrentLesson({graphql}),
   graphql(lessonWatchedMutationSchema, lessonWatchedMutationParams),
   LevelUpWrapper
 )(WithData(Lecture, ['data']))

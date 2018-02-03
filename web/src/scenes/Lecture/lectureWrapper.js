@@ -23,7 +23,10 @@ export const lectureWrapper = compose(
       })
     })
   }),
-  getGraphqlForCurrentLesson(graphql, null, null, ownProps => (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId),
+  getGraphqlForCurrentLesson({
+    graphql,
+    courseIdSelector: ownProps => (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
+  }),
   graphql(courseById, {
     options: (ownProps) => {
       const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId

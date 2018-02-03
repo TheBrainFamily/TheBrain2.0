@@ -10,10 +10,10 @@ const currentLessonQuery = gql`
     }
 `
 
-export const getGraphqlForCurrentLesson = (graphql, name, skip, courseIdSelector = (ownProps) => ownProps.selectedCourse._id) => {
+export const getGraphqlForCurrentLesson = ({graphql, name, skipCondition, courseIdSelector = (ownProps) => ownProps.selectedCourse._id}) => {
   return graphql(currentLessonQuery, {
     name,
-    skip,
+    skip: skipCondition,
     options: (ownProps) => {
       const courseId = courseIdSelector(ownProps)
       return ({
