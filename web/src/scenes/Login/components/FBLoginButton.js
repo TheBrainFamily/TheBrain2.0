@@ -4,7 +4,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
 import FacebookLogin from 'react-facebook-login'
-import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/mutations/logInWithFacebook'
+import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/account/logInWithFacebook'
 
 class FBLoginButton extends React.Component {
   responseFacebook = async (response: { accessToken: string, userID: string }) => {

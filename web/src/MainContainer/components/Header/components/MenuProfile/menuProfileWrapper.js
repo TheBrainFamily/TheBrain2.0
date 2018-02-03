@@ -1,6 +1,6 @@
 import { graphql, compose } from 'react-apollo'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import sessionCount from 'thebrain-shared/graphql/queries/sessionCount'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import sessionCount from 'thebrain-shared/graphql/items/sessionCount'
 
 export const menuProfileWrapper = compose(
   graphql(sessionCount, {

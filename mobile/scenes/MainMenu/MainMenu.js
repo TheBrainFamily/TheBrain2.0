@@ -9,9 +9,9 @@ import styles from '../../styles/styles'
 import appStyle from '../../styles/appStyle'
 import levelConfig from 'thebrain-shared/helpers/levelConfig'
 
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import sessionCountQuery from 'thebrain-shared/graphql/items/sessionCount'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 
 import WithData from '../../components/WithData'
 import MainMenuHeader from './components/MainMenuHeader'

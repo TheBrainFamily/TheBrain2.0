@@ -2,7 +2,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import currentItemsExistQuery from 'thebrain-shared/graphql/queries/currentItemsExist'
+import currentItemsExistQuery from 'thebrain-shared/graphql/items/currentItemsExist'
 
 export const courseWrapper = compose(
   connect(),

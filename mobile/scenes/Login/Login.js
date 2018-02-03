@@ -12,10 +12,10 @@ import Loading from '../../components/Loading'
 
 import styles from '../../styles/styles'
 
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import { getGraphqlForSignup } from 'thebrain-shared/graphql/mutations/setUsernameAndPasswordForGuest'
-import { getGraphqlForLogin } from 'thebrain-shared/graphql/mutations/logIn'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import { getGraphqlForSignup } from 'thebrain-shared/graphql/account/setUsernameAndPasswordForGuest'
+import { getGraphqlForLogin } from 'thebrain-shared/graphql/account/logIn'
 import WithData from '../../components/WithData'
 
 class Login extends React.Component {

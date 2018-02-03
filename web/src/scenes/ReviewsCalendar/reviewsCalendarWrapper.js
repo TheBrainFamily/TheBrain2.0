@@ -2,7 +2,7 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
+import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
 
 const reviewsQuery = gql`
     query Reviews {

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import currentItemsQuery from '../queries/itemsWithFlashcard'
+import currentItemsQuery from '../items/itemsWithFlashcard'
 
 const setUserIsCasualMutation = gql`
     mutation setUserIsCasual($isCasual: Boolean!) {

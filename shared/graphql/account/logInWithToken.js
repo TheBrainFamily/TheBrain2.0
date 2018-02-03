@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import userDetailsQuery from '../queries/userDetails'
+import userDetailsQuery from '../userDetails/userDetails'
 
 const logInWithTokenMutation = gql`
     mutation logInWithToken($accessToken: String!, $userId: String!, $deviceId: String!) {

@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import styles from '../../../styles/styles'
-import { getGraphqlFotSetUserIsCasualMutation } from 'thebrain-shared/graphql/mutations/setUserIsCasual'
+import { getGraphqlFotSetUserIsCasualMutation } from 'thebrain-shared/graphql/userDetails/setUserIsCasual'
 import { mutationConnectionHandler } from '../../../components/NoInternet'
 import { withRouter } from 'react-router'
 

@@ -3,11 +3,11 @@ import update from 'immutability-helper/index'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import coursesQuery from 'thebrain-shared/graphql/queries/courses'
-import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/mutations/logInWithToken'
-import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/mutations/logInWithFacebook'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import coursesQuery from 'thebrain-shared/graphql/courses/courses'
+import { getGraphqlForLogInWithTokenMutation } from 'thebrain-shared/graphql/account/logInWithToken'
+import { getGraphqlForLogInWithFacebookMutation } from 'thebrain-shared/graphql/account/logInWithFacebook'
 
 const selectCourseMutation = gql`
     mutation selectCourse($courseId: String!) {

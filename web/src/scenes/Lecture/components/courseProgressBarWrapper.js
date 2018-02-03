@@ -1,8 +1,8 @@
 import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import lessonCountQuery from 'thebrain-shared/graphql/queries/lessonCount'
+import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
+import lessonCountQuery from 'thebrain-shared/graphql/lessons/lessonCount'
 
 const mapStateToProps = (state) => {
   return {
