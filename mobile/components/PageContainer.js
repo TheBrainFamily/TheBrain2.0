@@ -2,7 +2,7 @@ import React from 'react'
 
 import { View, BackHandler, Platform } from 'react-native'
 import Header from './Header'
-import MainMenu from '../scenes/MainMenu/MainMenu'
+import MainMenu from './MainMenu'
 import { withRouter } from 'react-router'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from 'react-redux'

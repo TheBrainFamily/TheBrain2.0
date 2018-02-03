@@ -23,7 +23,7 @@ import CircleButton from './components/CircleButton'
 import CourseHeader from '../../components/CourseHeader'
 import CourseProgressBar from './components/CourseProgressBar'
 import Course from './scenes/Course/Course'
-import MainMenu from '../MainMenu/MainMenu'
+import MainMenu from '../../components/MainMenu/'
 
 import * as courseActions from '../../actions/CourseActions'
 

@@ -4,16 +4,15 @@ import { compose, graphql, withApollo } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { Animated, Dimensions, Keyboard, View } from 'react-native'
-import Loading from '../../components/Loading'
+import Loading from '../Loading'
 import styles from '../../styles/styles'
 import appStyle from '../../styles/appStyle'
 import levelConfig from 'thebrain-shared/helpers/levelConfig'
-
 import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
 import sessionCountQuery from 'thebrain-shared/graphql/items/sessionCount'
 import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 
-import WithData from '../../components/WithData'
+import WithData from '../WithData'
 import MainMenuHeader from './components/MainMenuHeader'
 import MainMenuOptions from './components/MainMenuOptions'
 
@@ -32,21 +31,22 @@ class MainMenu extends React.Component {
     ).start()
   }
 
-  render () {
-    const height = Dimensions.get('window').height - this.props.topMargin
+  get isStillLoading () {
+    return this.props.loading || this.props.currentUser.loading || this.props.sessionCount.loading || this.props.userDetails.loading
+  }
 
-    if (this.props.loading || this.props.currentUser.loading || this.props.sessionCount.loading || this.props.userDetails.loading) {
-      return <View style={[styles.headerWithShadow, styles.menuOverlay, {
-        backgroundColor: '#fff',
-        top: this.props.topMargin,
-        justifyContent: 'space-between',
-        height
-      }]}>
-        <Loading lightStyle />
-      </View>
-    }
-    let { fadeAnim } = this.state
+  renderLoadingView (height) {
+    return <View style={[styles.headerWithShadow, styles.menuOverlay, {
+      backgroundColor: '#fff',
+      top: this.props.topMargin,
+      justifyContent: 'space-between',
+      height
+    }]}>
+      <Loading lightStyle />
+    </View>
+  }
 
+  renderContentView (height) {
     const currentUser = this.props.currentUser.CurrentUser
     const activated = currentUser && currentUser.activated
     const sessionCount = this.props.sessionCount.SessionCount
@@ -54,6 +54,16 @@ class MainMenu extends React.Component {
     const userLevel = _.get(this.props, 'userDetails.UserDetails.experience.level', 1)
     const levelCap = levelConfig.levelCap
     const level = Math.min(userLevel, levelCap)
+
+    return <View style={[{height}]}>
+      <MainMenuHeader level={level} currentUser={currentUser} username={username} sessionCount={sessionCount} />
+      <MainMenuOptions activated={activated} currentUser={currentUser} />
+    </View>
+  }
+
+  render () {
+    const height = Dimensions.get('window').height - this.props.topMargin
+    let { fadeAnim } = this.state
     Keyboard.dismiss()
 
     return (
@@ -64,8 +74,7 @@ class MainMenu extends React.Component {
         justifyContent: 'space-between',
         height
       }]}>
-        <MainMenuHeader level={level} currentUser={currentUser} username={username} sessionCount={sessionCount} />
-        <MainMenuOptions activated={activated} currentUser={currentUser} />
+        { this.isStillLoading ? this.renderLoadingView(height) : this.renderContentView(height) }
       </Animated.View>
     )
   }

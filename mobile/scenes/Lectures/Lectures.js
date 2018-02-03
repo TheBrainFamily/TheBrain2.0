@@ -8,7 +8,7 @@ import PageTitle from '../../components/PageTitle'
 import Video from '../../components/Video'
 
 import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/lessons/lessons'
-import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
+import { getGraphqlForCurrentLessonOptionalCourse } from 'thebrain-shared/graphql/lessons/currentLesson'
 import WithData from '../../components/WithData'
 
 // TODO what do we do about this one?
@@ -75,22 +75,7 @@ const mapStateToProps = (state) => {
 }
 
 export default compose(
+  getGraphqlForCurrentLessonOptionalCourse(graphql),
   connect(mapStateToProps),
-  graphql(currentLessonQuery, {
-    name: 'currentLesson',
-    options: (ownProps) => {
-      if (!ownProps.selectedCourse) {
-        return ({
-          variables: {
-            courseId: ''
-          }
-        })
-      }
-      const courseId = ownProps.selectedCourse._id
-      return ({
-        variables: { courseId }
-      })
-    }
-  }),
   getGraphqlForLessonsQuery(graphql)
 )(WithData(Lectures, ['currentLesson', 'lessons']))
