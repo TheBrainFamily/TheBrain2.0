@@ -4,7 +4,7 @@ import styles from '../../../styles/styles'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 import WithData from '../../../components/WithData'
 import { mutationConnectionHandler } from '../../../components/NoInternet'
 

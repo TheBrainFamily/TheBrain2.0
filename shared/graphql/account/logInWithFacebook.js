@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import userDetailsQuery from '../queries/userDetails'
+import userDetailsQuery from '../userDetails/userDetails'
 
 const logInWithFacebookMutation = gql`
     mutation logInWithFacebook($accessTokenFb: String!, $userIdFb: String!){

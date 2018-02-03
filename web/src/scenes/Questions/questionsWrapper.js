@@ -1,7 +1,7 @@
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
+import sessionCountQuery from 'thebrain-shared/graphql/items/sessionCount'
 const mapStateToProps = (state) => {
   return {
     selectedCourse: state.course.selectedCourse

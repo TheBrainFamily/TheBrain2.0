@@ -1,10 +1,10 @@
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import { getGraphqlForChangePasswordMutation } from 'thebrain-shared/graphql/queries/changePasswordMutation'
-import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/mutations/switchUserIsCasual'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import { getGraphqlForChangePasswordMutation } from 'thebrain-shared/graphql/account/changePasswordMutation'
+import { getGraphqlForSwitchUserIsCasual } from 'thebrain-shared/graphql/userDetails/switchUserIsCasual'
 
 export const profileWrapper = compose(
   connect(),

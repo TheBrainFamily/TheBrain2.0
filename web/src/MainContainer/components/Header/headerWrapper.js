@@ -1,6 +1,6 @@
-import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/mutations/closeCourse'
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
+import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/courses/closeCourse'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
 
