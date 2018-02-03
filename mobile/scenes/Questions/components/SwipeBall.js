@@ -4,7 +4,7 @@ import { Animated, PanResponder, View } from 'react-native'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
 
-import { getGraphqlForProcessEvaluationMutation } from 'thebrain-shared/graphql/mutations/processEvaluation'
+import { getGraphqlForProcessEvaluationMutation } from 'thebrain-shared/graphql/items/processEvaluation'
 import styles from '../../../styles/styles'
 import { updateAnswerVisibility } from '../../../actions/FlashcardActions'
 import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'

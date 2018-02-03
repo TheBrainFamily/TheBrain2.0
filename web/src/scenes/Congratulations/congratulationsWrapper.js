@@ -1,8 +1,8 @@
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import confirmLevelUpMutation from 'thebrain-shared/graphql/mutations/confirmLevelUp'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import confirmLevelUpMutation from 'thebrain-shared/graphql/userDetails/confirmLevelUp'
 
 export const congratulationsWrapper = compose(
   connect(),

@@ -7,8 +7,8 @@ import PageContainer from '../../components/PageContainer'
 import PageTitle from '../../components/PageTitle'
 import Video from '../../components/Video'
 
-import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/queries/lessons'
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
+import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/lessons/lessons'
+import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
 import WithData from '../../components/WithData'
 
 // TODO what do we do about this one?

@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import gql from 'graphql-tag'
-import currentItemsQuery from '../queries/itemsWithFlashcard'
-import sessionCountQuery from '../queries/sessionCount'
-import userDetailsQuery from '../queries/userDetails'
+import currentItemsQuery from './itemsWithFlashcard'
+import sessionCountQuery from './sessionCount'
+import userDetailsQuery from '../userDetails/userDetails'
 
 const processEvaluationMutation = gql`
     mutation processEvaluation($itemId: String!, $evaluation: Float!){

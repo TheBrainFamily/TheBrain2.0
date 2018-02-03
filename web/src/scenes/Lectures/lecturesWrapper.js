@@ -1,7 +1,7 @@
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/queries/lessons'
+import currentLessonQuery from 'thebrain-shared/graphql/lessons/currentLesson'
+import { getGraphqlForLessonsQuery } from 'thebrain-shared/graphql/lessons/lessons'
 
 const mapStateToProps = (state) => {
   return {
