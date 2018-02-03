@@ -4,6 +4,14 @@ import styles from '../../../styles/styles'
 import { Image, Text, View } from 'react-native'
 
 export default class MainMenuHeader extends React.Component {
+  renderStats = (label, doneCount, totalCount, backgroundColor) => (
+    <View style={{width: '50%', padding: 10, alignItems: 'center'}}>
+      <Text style={style.text}>{label}</Text>
+      <Text style={style.textBold}>{doneCount}/{totalCount}</Text>
+      <View style={[style.card, {backgroundColor}]} />
+    </View>
+  )
+
   render () {
     const {level, currentUser, username, sessionCount} = this.props
 
@@ -30,11 +38,7 @@ export default class MainMenuHeader extends React.Component {
             {username}
           </Text>
           <View style={{width: '100%', marginTop: 5, flexDirection: 'row'}}>
-            <View style={{width: '50%', padding: 10, alignItems: 'center'}}>
-              <Text style={style.text}>DUE</Text>
-              <Text style={style.textBold}>{sessionCount.dueDone}/{sessionCount.dueTotal}</Text>
-              <View style={[style.card, {backgroundColor: '#4ba695'}]} />
-            </View>
+            {this.renderStats('DUE', sessionCount.dueDone, sessionCount.dueTotal, '#4ba695')}
             <View style={{position: 'relative', width: 1, backgroundColor: '#999', elevation: 1000}}>
               <View style={{
                 position: 'absolute',
@@ -55,11 +59,7 @@ export default class MainMenuHeader extends React.Component {
                 backgroundColor: '#999'
               }} />
             </View>
-            <View style={{width: '50%', padding: 10, alignItems: 'center'}}>
-              <Text style={style.text}>REVIEW</Text>
-              <Text style={style.textBold}>{sessionCount.reviewDone}/{sessionCount.reviewTotal}</Text>
-              <View style={[style.card, {backgroundColor: '#c64f34'}]} />
-            </View>
+            {this.renderStats('REVIEW', sessionCount.reviewDone, sessionCount.reviewTotal, '#c64f34')}
           </View>
         </View>
         }
