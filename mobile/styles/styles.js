@@ -319,6 +319,17 @@ const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
     zIndex: 2
+  },
+  answerEvaluatorOverlay: {
+    position: 'absolute',
+    backgroundColor: '#fffd',
+    top: 0,
+    bottom: 0,
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignContent: 'center',
+    padding: '5%'
   }
 })
 

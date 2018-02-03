@@ -151,16 +151,5 @@ export default StyleSheet.create({
     overflow: 'hidden',
     width: '100%',
     height: 200
-  },
-  answerEvaluatorOverlay: {
-    position: 'absolute',
-    backgroundColor: '#fffd',
-    top: 0,
-    bottom: 0,
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignContent: 'center',
-    padding: '5%'
   }
 })
