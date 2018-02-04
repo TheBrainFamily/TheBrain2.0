@@ -10,7 +10,7 @@
     "start": "BABEL_ENV=production NODE_PATH='src' babel-node src/startup.js",
     "startLocalDB": "docker stop mongo_instance_001 || true && docker rm mongo_instance_001 || true && docker run -p 27017:27017 --name mongo_instance_001 -d mongo",
     "loadTestDBData": "mongo localhost:27017/thebrain < ../dbImporter/improvedDb.js",
-    "startTestingDB": "docker run -d -p 27017:27017 mongo",
+    "startDockerizedMongo": "docker run -d -p 27017:27017 mongo",
     "flow": "flow",
     "standard": "standard --verbose --fix | snazzy",
     "deploySetup": "./.scripts/deploySetup.sh",
