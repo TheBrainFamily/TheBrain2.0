@@ -1,25 +1,19 @@
-import repositoriesContext from '../repositoriesContext'
+import { withRepositories } from '../withRepositories'
 
 export const lessonsResolvers = {
   Query: {
-    async Lesson (root: ?string, args: { courseId: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    Lesson: withRepositories(async (root, args: {courseId: string}, context) => {
       if (context.user) {
         const lessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, context.user._id)
         return context.Lessons.getCourseLessonByPosition(args.courseId, lessonPosition)
       }
       return null
-    },
-    Lessons (root: ?string, args: { courseId: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    Lessons: withRepositories(async (root, args, context) => {
       return context.Lessons.getLessons(args.courseId)
-    },
-    LessonCount (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    LessonCount: withRepositories((root, args, context) => {
       return context.Lessons.getLessonCount()
-    }
+    })
   }
 }

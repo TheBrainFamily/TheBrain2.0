@@ -1,36 +1,23 @@
-import repositoriesContext from '../repositoriesContext'
+import { withRepositories } from '../withRepositories'
 
 export const userDetailsResolvers = {
   Query: {
-    async UserDetails (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    UserDetails: withRepositories((root: ?string, args: ?Object, context: Object) => {
       let userId = context.user && context.user._id
       if (!userId) {
         return {}
       }
       return context.UserDetails.getById(context.user._id)
-    }
+    })
   },
   Mutation: {
-    async confirmLevelUp (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
-      return context.UserDetails.resetLevelUpFlag(context.user._id)
-    },
-    async switchUserIsCasual (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
-      return context.UserDetails.switchUserIsCasual(context.user._id)
-    },
-    async setUserIsCasual (root: ?string, args: { isCasual: boolean }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
-      return context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)
-    },
-    async hideTutorial (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
-      return context.UserDetails.disableTutorial(context.user._id)
-    }
+    confirmLevelUp: withRepositories((root: ?string, args: ?Object, context: Object) =>
+      context.UserDetails.resetLevelUpFlag(context.user._id)),
+    switchUserIsCasual: withRepositories((root: ?string, args: ?Object, context: Object) =>
+      context.UserDetails.switchUserIsCasual(context.user._id)),
+    setUserIsCasual: withRepositories((root: ?string, args: { isCasual: boolean }, context: Object) =>
+      context.UserDetails.setUserIsCasual(context.user._id, args.isCasual)),
+    hideTutorial: withRepositories((root: ?string, args: ?Object, context: Object) =>
+      context.UserDetails.disableTutorial(context.user._id))
   }
 }
