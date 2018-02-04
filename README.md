@@ -1,13 +1,13 @@
 # TheBrain 2.0 
 This is a repository for TheBrain 2.0 - The app that will make you remember everything forever.
-It is live at [https://thebrain.pro], but also currently under a very heavy Work in Progress mode, please give us some time - we will be launching this early February 2018.
+It is live at [thebrain.pro](https://thebrain.pro), but also currently under a very heavy Work in Progress mode, please give us some time - we will be launching this early February 2018.
 ## Motivation
 We build this because of our passion to effective learning, and also as a showcase of how can you structure, code, and automate test/builds with the great modern tools of JS ecosystem.
 ## Our stack
-* Web: react (create-react-app)
-* Mobile: react-native (expo)
-* Server: node.js (express/apollo/graphql)
-* DB: MongoDB
+* Web: [react](https://reactjs.org/) (create-react-app)
+* Mobile: [react-native](https://facebook.github.io/react-native/), ([expo](https://expo.io/))
+* Server: [node.js](https://nodejs.org) ([express](https://expressjs.com/)/[apollo/graphql](https://www.apollographql.com/))
+* DB: [MongoDB](https://www.mongodb.com)
 ##### Testing frameworks:
 * web - jest with enzyme and cypress both with our custom "universal page objects pattern" (we will give you more info soon! very excited about this stuff)
 * mobile - jest with enzyme and detox, again, with our custom "universal page objects pattern"
@@ -49,7 +49,7 @@ cd web
 npm start
 ```
 #### Starting mobile client
-**Recommended way:** Please refer to [https://docs.expo.io/versions/latest/introduction/installation.html] for guidance how to start/develop expo based mobile apps.
+**Recommended way:** Please refer to [expo docs](https://docs.expo.io/versions/latest/introduction/installation.html) for guidance how to start/develop expo based mobile apps.
 * You can also start react-native packager yourself by typing:
 ```
 cd mobile
