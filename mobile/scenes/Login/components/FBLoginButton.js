@@ -1,12 +1,11 @@
 import React from 'react'
 import Expo from 'expo'
 import { withRouter } from 'react-router'
-import update from 'immutability-helper'
 import { withApollo, graphql, compose } from 'react-apollo'
 import { AsyncStorage, Alert, TouchableOpacity, View, Image } from 'react-native'
 import { connect } from 'react-redux'
-import logInWithFacebookAccessToken from 'thebrain-shared/graphql/mutations/logInWithFacebookAccessToken'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import { getGraphqlForLogInWithFacebookAccessToken } from 'thebrain-shared/graphql/account/logInWithFacebookAccessToken'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 import * as courseActions from '../../../actions/CourseActions'
 import fbButtonImg from './images/loginwfb.png'
 
@@ -50,24 +49,7 @@ class FBLoginButton extends React.Component {
 
 export default withRouter(withApollo(compose(
   connect(),
-  graphql(logInWithFacebookAccessToken, {
-    props: ({ ownProps, mutate }) => ({
-      logInWithFacebookAccessToken: ({ accessTokenFb }) => mutate({
-        variables: {
-          accessTokenFb
-        },
-        updateQueries: {
-          CurrentUser: (prev, { mutationResult }) => {
-            return update(prev, {
-              CurrentUser: {
-                $set: mutationResult.data.logInWithFacebookAccessToken
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForLogInWithFacebookAccessToken(graphql),
   graphql(userDetailsQuery, {
     name: 'userDetails',
     options: {

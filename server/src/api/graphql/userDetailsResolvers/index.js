@@ -1,10 +1,4 @@
-import { usersRepository } from '../../repositories/UsersRepository'
-import { userDetailsRepository } from '../../repositories/UserDetailsRepository'
-
-const repositoriesContext = {
-  Users: usersRepository,
-  UserDetails: userDetailsRepository
-}
+import repositoriesContext from '../repositoriesContext'
 
 export const userDetailsResolvers = {
   Query: {

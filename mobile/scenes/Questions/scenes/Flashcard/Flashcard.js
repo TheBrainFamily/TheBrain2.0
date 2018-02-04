@@ -7,8 +7,8 @@ import * as Animatable from 'react-native-animatable'
 import { graphql, compose } from 'react-apollo'
 
 import Card from './scenes/Card/Card'
-import type { Direction } from '../../../../helpers/SwipeHelpers'
-import { DIRECTIONS } from '../../../../helpers/SwipeHelpers'
+import type { Direction } from '../../helpers/SwipeHelpers'
+import { DIRECTIONS } from '../../helpers/SwipeHelpers'
 
 import {
   TouchableWithoutFeedback,
@@ -21,7 +21,7 @@ import {
 
 import styles from '../../../../styles/styles'
 import { updateAnswerVisibility } from '../../../../actions/FlashcardActions'
-import userDetailsQuery from 'thebrain-shared/graphql/queries/userDetails'
+import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 
 class Flashcard extends React.Component {
   state: {

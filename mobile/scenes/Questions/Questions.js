@@ -5,7 +5,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
-import update from 'immutability-helper'
 import {
   Text,
   View,
@@ -19,7 +18,7 @@ import {
 import MainMenu from '../../components/MainMenu'
 import Flashcard from './scenes/Flashcard/Flashcard'
 import CourseHeader from '../../components/CourseHeader'
-import AnswerEvaluator from '../../components/AnswerEvaluator'
+import AnswerEvaluator from './components/AnswerEvaluator'
 import ProgressBar from '../../components/ProgressBar'
 import Loading from '../../components/Loading'
 
@@ -30,10 +29,10 @@ import appStyle from '../../styles/appStyle'
 
 import { updateAnswerVisibility } from '../../actions/FlashcardActions'
 
-import currentUserQuery from 'thebrain-shared/graphql/queries/currentUser'
-import currentItemsQuery from 'thebrain-shared/graphql/queries/itemsWithFlashcard'
-import sessionCountQuery from 'thebrain-shared/graphql/queries/sessionCount'
-import closeCourseMutation from 'thebrain-shared/graphql/mutations/closeCourse'
+import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
+import currentItemsQuery from 'thebrain-shared/graphql/items/itemsWithFlashcard'
+import sessionCountQuery from 'thebrain-shared/graphql/items/sessionCount'
+import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/courses/closeCourse'
 import WithData from '../../components/WithData'
 import { mutationConnectionHandler } from '../../components/NoInternet'
 import * as mainMenuActions from '../../actions/MainMenuActions'
@@ -178,20 +177,6 @@ export default compose(
       fetchPolicy: 'network-only'
     }
   }),
-  graphql(closeCourseMutation, {
-    props: ({ ownProps, mutate }) => ({
-      closeCourse: () => mutate({
-        updateQueries: {
-          UserDetails: (prev, { mutationResult }) => {
-            return update(prev, {
-              UserDetails: {
-                $set: mutationResult.data.closeCourse
-              }
-            })
-          }
-        }
-      })
-    })
-  }),
+  getGraphqlForCloseCourseMutation(graphql),
   connect(state => state)
 )(WithData(Questions, ['currentUser', 'currentItems', 'sessionCount']))

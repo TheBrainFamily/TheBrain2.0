@@ -2,11 +2,8 @@
 import fetch from 'node-fetch'
 import { logInWithFacebook, loginWithGuest } from '../../services/loginService'
 import { renewTokenOnLogin } from '../../../configuration/common'
-import { UsersRepository, usersRepository } from '../../repositories/UsersRepository'
-
-const repositoriesContext = {
-  Users: usersRepository
-}
+import { UsersRepository } from '../../repositories/UsersRepository'
+import repositoriesContext from '../repositoriesContext'
 
 export const accountResolvers = {
   Query: {

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { compose, graphql } from 'react-apollo'
-import lessonWatchedMutation from 'thebrain-shared/graphql/queries/lessonWatchedMutation'
-import currentLessonQuery from 'thebrain-shared/graphql/queries/currentLesson'
-import clearNotCasualItems from 'thebrain-shared/graphql/mutations/clearNotCasualItems'
-import courseById from 'thebrain-shared/graphql/queries/courseById'
+import lessonWatchedMutation from 'thebrain-shared/graphql/items/lessonWatchedMutation'
+import { getGraphqlForCurrentLesson } from 'thebrain-shared/graphql/lessons/currentLesson'
+import clearNotCasualItems from 'thebrain-shared/graphql/items/clearNotCasualItems'
+import courseById from 'thebrain-shared/graphql/courses/courseById'
+import lessonWatchedMutationParams from 'thebrain-shared/graphql/lessons/lessonWatchedMutationParams'
 import LevelUpWrapper from '../../components/LevelUpWrapper'
-import lessonWatchedMutationParams from 'thebrain-shared/graphql/mutations/lessonWatchedMutationParams'
 
 const mapStateToProps = (state) => {
   return {
@@ -23,14 +23,9 @@ export const lectureWrapper = compose(
       })
     })
   }),
-  graphql(currentLessonQuery, {
-    options: (ownProps) => {
-      const selectedCourse = (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
-      return ({
-        variables: {courseId: selectedCourse},
-        fetchPolicy: 'network-only'
-      })
-    }
+  getGraphqlForCurrentLesson({
+    graphql,
+    courseIdSelector: ownProps => (ownProps.selectedCourse && ownProps.selectedCourse._id) || ownProps.match.params.courseId
   }),
   graphql(courseById, {
     options: (ownProps) => {

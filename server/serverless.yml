@@ -27,7 +27,7 @@
 # uses to deploy your code to your provider of choice
 
 # The `service` block is the name of the service
-service: serverless-hello-world
+service: thebrain-server
 
 plugins:
   - serverless-offline
