@@ -3,14 +3,16 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { Animated, TouchableOpacity, View, Platform, Image } from 'react-native'
-import Hamburger from './Hamburger'
+import Hamburger from '../Hamburger'
 
-import logoBig from '../images/logoBig.png'
-import styles from '../styles/styles'
-import appStyle from '../styles/appStyle'
-import * as mainMenuActions from '../actions/MainMenuActions'
+import logoBig from '../../images/logoBig.png'
+import appStyle from '../../styles/appStyle'
+import globalStyles from '../../styles/styles'
+import localStyles from './styles'
+import * as mainMenuActions from '../../actions/MainMenuActions'
 import { connect } from 'react-redux'
 import { compose } from 'react-apollo'
+const styles = {...globalStyles, ...localStyles}
 
 class Header extends React.Component {
   constructor (props) {

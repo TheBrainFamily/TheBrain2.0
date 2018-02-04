@@ -5,8 +5,6 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { Animated, Dimensions, Keyboard, View } from 'react-native'
 import Loading from '../Loading'
-import styles from '../../styles/styles'
-import appStyle from '../../styles/appStyle'
 import levelConfig from 'thebrain-shared/helpers/levelConfig'
 import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
 import sessionCountQuery from 'thebrain-shared/graphql/items/sessionCount'
@@ -15,6 +13,11 @@ import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 import WithData from '../WithData'
 import MainMenuHeader from './components/MainMenuHeader'
 import MainMenuOptions from './components/MainMenuOptions'
+
+import appStyle from '../../styles/appStyle'
+import globalStyles from '../../styles/styles'
+import localStyles from './styles'
+const styles = {...globalStyles, ...localStyles}
 
 class MainMenu extends React.Component {
   state = {

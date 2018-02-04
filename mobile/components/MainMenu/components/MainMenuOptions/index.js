@@ -1,14 +1,14 @@
 import React from 'react'
 import { AsyncStorage, Text, TouchableHighlight, View } from 'react-native'
-import Separator from '../../Separator'
-import styles from '../../../styles/styles'
-import * as courseActions from '../../../actions/CourseActions'
+import Separator from '../../../Separator'
+import * as courseActions from '../../../../actions/CourseActions'
 import { withRouter } from 'react-router'
 import { compose, graphql, withApollo } from 'react-apollo'
 import { getGraphqlForLogout } from 'thebrain-shared/graphql/account/logout'
 import { getGraphqlForCloseCourseMutation } from 'thebrain-shared/graphql/courses/closeCourse'
 import { connect } from 'react-redux'
-import * as mainMenuActions from '../../../actions/MainMenuActions'
+import * as mainMenuActions from '../../../../actions/MainMenuActions'
+import styles from './styles'
 
 const MenuButton = (props) => (
   <TouchableHighlight

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import styles from '../../../styles/styles'
+import styles from './styles'
 
 export default class Triangle extends React.Component {
   render () {

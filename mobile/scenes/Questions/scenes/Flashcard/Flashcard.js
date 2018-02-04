@@ -19,9 +19,11 @@ import {
   Image
 } from 'react-native'
 
-import styles from '../../../../styles/styles'
 import { updateAnswerVisibility } from '../../../../actions/FlashcardActions'
 import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
+import globalStyles from '../../../../styles/styles'
+import localStyles from './styles'
+const styles = {...globalStyles, ...localStyles}
 
 class Flashcard extends React.Component {
   state: {

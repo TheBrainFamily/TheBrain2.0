@@ -3,10 +3,11 @@
 import React from 'react'
 import {Image, TouchableWithoutFeedback, View, TouchableOpacity} from 'react-native'
 
-import Loading from './Loading'
-
-import styles from '../styles/styles'
-import YoutubeLoader from '../AppYtLoader'
+import Loading from '../Loading'
+import YoutubeLoader from '../../AppYtLoader'
+import globalStyles from '../../styles/styles'
+import localStyles from './styles'
+const styles = {...globalStyles, ...localStyles}
 
 export default class Video extends React.Component {
   static defaultProps = {
@@ -53,7 +54,7 @@ export default class Video extends React.Component {
         <View style={{height: '100%'}}>
           <View style={styles.videoPlaceholder}>
             {!this.state.loading && <TouchableOpacity onPress={this.playVideo} style={styles.overlay}>
-              <Image source={require('../images/yt-play-btn.png')}
+              <Image source={require('../../images/yt-play-btn.png')}
                 resizeMode={'contain'}
                 style={{width: 100}} />
             </TouchableOpacity>}

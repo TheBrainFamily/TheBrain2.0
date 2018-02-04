@@ -3,7 +3,7 @@
 import React from 'react'
 import { Text, View, Image, TouchableOpacity } from 'react-native'
 import TouchableImage from './components/TouchableImage'
-import styles from '../../../../../../styles/styles'
+import styles from './styles'
 
 export default class Card extends React.Component {
   constructor (props) {

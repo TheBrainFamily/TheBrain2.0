@@ -10,13 +10,14 @@ import PageContainer from '../../components/PageContainer'
 import FBLoginButton from './components/FBLoginButton'
 import Loading from '../../components/Loading'
 
-import styles from '../../styles/styles'
-
 import currentUserQuery from 'thebrain-shared/graphql/account/currentUser'
 import userDetailsQuery from 'thebrain-shared/graphql/userDetails/userDetails'
 import { getGraphqlForSignup } from 'thebrain-shared/graphql/account/setUsernameAndPasswordForGuest'
 import { getGraphqlForLogin } from 'thebrain-shared/graphql/account/logIn'
 import WithData from '../../components/WithData'
+import globalStyles from '../../styles/styles'
+import localStyles from './styles'
+const styles = {...globalStyles, ...localStyles}
 
 class Login extends React.Component {
   constructor (props) {
