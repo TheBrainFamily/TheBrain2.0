@@ -9,9 +9,9 @@ We build this because of our passion to effective learning, and also as a showca
 * Server: [node.js](https://nodejs.org) ([express](https://expressjs.com/)/[apollo/graphql](https://www.apollographql.com/))
 * DB: [MongoDB](https://www.mongodb.com)
 ##### Testing frameworks:
-* web - jest with enzyme and cypress both with our custom "universal page objects pattern" (we will give you more info soon! very excited about this stuff)
-* mobile - jest with enzyme and detox, again, with our custom "universal page objects pattern"
-* server - jest
+* web - [jest](https://facebook.github.io/jest/) with [enzyme](https://github.com/airbnb/enzyme) and [cypress](https://www.cypress.io/) both with our custom "universal page objects pattern" (we will give you more info soon! very excited about this stuff)
+* mobile - [jest](https://facebook.github.io/jest/) with [enzyme](https://github.com/airbnb/enzyme) and [detox](https://github.com/wix/detox), again, with our custom "universal page objects pattern"
+* server - [jest](https://facebook.github.io/jest/)
 ## Getting Started
 #### Prerequisites
 ```
@@ -49,7 +49,7 @@ cd web
 npm start
 ```
 #### Starting mobile client
-**Recommended way:** Please refer to [expo docs](https://docs.expo.io/versions/latest/introduction/installation.html) for guidance how to start/develop expo based mobile apps.
+*Recommended way:* Please refer to [expo docs](https://docs.expo.io/versions/latest/introduction/installation.html) for guidance how to start/develop expo based mobile apps.
 * You can also start react-native packager yourself by typing:
 ```
 cd mobile
