@@ -3,14 +3,11 @@ import fetch from 'node-fetch'
 import { logInWithFacebook, loginWithGuest } from '../../services/loginService'
 import { renewTokenOnLogin } from '../../../configuration/common'
 import { UsersRepository } from '../../repositories/UsersRepository'
-import repositoriesContext from '../repositoriesContext'
+import { withRepositories } from '../withRepositories'
 
 export const accountResolvers = {
   Query: {
-    CurrentUser (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-      return context.user
-    }
+    CurrentUser: withRepositories((root, args, context) => context.user)
   },
   Mutation: {
     async logInWithFacebookAccessToken (root: ?string, args: { accessTokenFb: string }, passedContext: Object) {
@@ -25,9 +22,7 @@ export const accountResolvers = {
     async logInWithFacebook (root: ?string, args: { accessTokenFb: string, userIdFb: string }, passedContext: Object) {
       return logInWithFacebook(root, args, passedContext)
     },
-    async logIn (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    logIn: withRepositories(async (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) => {
       try {
         const user = await context.Users.findByUsername(args.username)
 
@@ -48,10 +43,8 @@ export const accountResolvers = {
       } catch (e) {
         throw e
       }
-    },
-    async logInWithToken (root: ?string, args: { userId: string, accessToken: string, deviceId: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    logInWithToken: withRepositories(async (root: ?string, args: { userId: string, accessToken: string, deviceId: string }, context: Object) => {
       try {
         const user = await context.Users.getById(args.userId)
 
@@ -74,10 +67,8 @@ export const accountResolvers = {
       } catch (e) {
         throw e
       }
-    },
-    async logOut (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    logOut: withRepositories(async(root: ?string, args: ?Object, context: Object) => {
       if (context.user) {
         const userId = context.user._id
         const accessToken = context.user.currentAccessToken
@@ -85,15 +76,12 @@ export const accountResolvers = {
         context.req.logOut()
       }
       return {_id: 'loggedOut', username: '', activated: false, facebookId: null, accessToken: null}
-    },
-    async clearToken (root: ?string, args: { userId: string, token: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    }),
+    clearToken: withRepositories(async (root: ?string, args: { userId: string, token: string }, context: Object) => {
       await context.Users.removeToken(args.userId, args.token)
       return true
-    },
-    async setUsernameAndPasswordForGuest (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    setUsernameAndPasswordForGuest: withRepositories(async (root: ?string, args: { username: string, password: string, deviceId: string, saveToken: boolean }, context: Object) => {
       try {
         const username = args.username.trim()
         if (!username || !args.password) {
@@ -123,10 +111,8 @@ export const accountResolvers = {
       } catch (e) {
         throw e
       }
-    },
-    async resetPassword (root: ?string, args: { username: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    resetPassword: withRepositories(async(root: ?string, args: { username: string }, context: Object) => {
       const updatedUser = await context.Users.resetUserPassword(args.username)
       if (updatedUser) {
         // TODO check after domain successfully verified, send email with reset link
@@ -140,9 +126,8 @@ export const accountResolvers = {
       } else {
         return {success: false}
       }
-    },
-    async changePassword (root: ?string, args: { oldPassword: string, newPassword: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    }),
+    changePassword: withRepositories(async (root: ?string, args: { oldPassword: string, newPassword: string }, context: Object) => {
       try {
         const userId = context.user._id
         const user = await context.Users.getById(userId)
@@ -165,6 +150,6 @@ export const accountResolvers = {
       } catch (e) {
         throw e
       }
-    }
+    })
   }
 }

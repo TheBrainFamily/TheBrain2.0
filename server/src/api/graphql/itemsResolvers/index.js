@@ -1,44 +1,36 @@
 import returnItemAfterEvaluation from '../../tools/returnItemAfterEvaluation'
-import repositoriesContext from '../repositoriesContext'
+import { withRepositories } from '../withRepositories'
 
 export const itemsResolvers = {
   Query: {
-    async Items (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    Items: withRepositories(async (root: ?string, args: ?Object, context: Object) => {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
         return context.Items.getItems(userDetails)
       }
       return []
-    },
-    async Reviews (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    Reviews: withRepositories(async (root: ?string, args: ?Object, context: Object) => {
       if (!context.user) {
         return []
       }
       const userDetails = await context.UserDetails.getById(context.user._id)
       return context.Items.getReviews(context.user._id, userDetails.isCasual)
-    },
-    async SessionCount (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    }),
+    SessionCount: withRepositories(async (root: ?string, args: ?Object, context: Object) => {
       if (context.user) {
         const userDetails = await context.UserDetails.getById(context.user._id)
         return context.Items.getSessionCount(context.user._id, userDetails)
       } else {
         return {}
       }
-    }
+    })
   },
   Item: {
-    flashcard (parentItem, input, passedContext) {
-      const context = {...repositoriesContext, ...passedContext}
-      return context.Flashcards.getFlashcard(parentItem.flashcardId)
-    }
+    flashcard: withRepositories((parentItem, input, context) => context.Flashcards.getFlashcard(parentItem.flashcardId))
   },
   Mutation: {
-    async createItemsAndMarkLessonAsWatched (root: ?string, args: { courseId: string }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
+    createItemsAndMarkLessonAsWatched: withRepositories(async (root: ?string, args: { courseId: string }, context: Object) => {
       let userId = context.user && context.user._id
       if (!userId) {
         console.log('Gozdecki: guestUser')
@@ -92,19 +84,15 @@ export const itemsResolvers = {
       await context.UserDetails.updateNextLessonPosition(args.courseId, userId)
       const nextLessonPosition = await context.UserDetails.getNextLessonPosition(args.courseId, userId)
       return context.Lessons.getCourseLessonByPosition(args.courseId, nextLessonPosition)
-    },
-    async clearNotCasualItems (root: ?string, args: ?Object, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    clearNotCasualItems: withRepositories(async (root: ?string, args: ?Object, context: Object) => {
       const userDetails = await context.UserDetails.getById(context.user._id)
       if (userDetails.isCasual) {
         context.Items.clearNotCasualItems(context.user._id)
       }
       return true
-    },
-    async processEvaluation (root: ?string, args: { itemId: string, evaluation: number }, passedContext: Object) {
-      const context = {...repositoriesContext, ...passedContext}
-
+    }),
+    processEvaluation: withRepositories(async (root: ?string, args: { itemId: string, evaluation: number }, context: Object) => {
       await context.UserDetails.updateUserXp(context.user._id, 'processEvaluation')
       const item = await context.Items.getItemById(args.itemId, context.user._id)
 
@@ -113,6 +101,6 @@ export const itemsResolvers = {
       await context.Items.update(args.itemId, newItem, context.user._id)
       const userDetails = await context.UserDetails.getById(context.user._id)
       return context.Items.getItems(userDetails)
-    }
+    })
   }
 }
