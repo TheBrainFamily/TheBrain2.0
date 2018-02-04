@@ -3,13 +3,13 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { connect } from 'react-redux'
 import { Text, TouchableOpacity, View, Image } from 'react-native'
-import Hamburger from './Hamburger'
+import Hamburger from '../Hamburger'
 
-import styles from '../styles/styles'
-import appStyle from '../styles/appStyle'
-import WithData from './WithData'
+import styles from './styles'
+import appStyle from '../../styles/appStyle'
+import WithData from '../WithData'
 
-import * as mainMenuActions from '../actions/MainMenuActions'
+import * as mainMenuActions from '../../actions/MainMenuActions'
 
 class CourseHeader extends React.Component {
   toggleMenu = () => {
@@ -29,16 +29,16 @@ class CourseHeader extends React.Component {
 
   render () {
     if (!this.props.currentCourse) {
-      return <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]} />
+      return <View style={[styles.courseHeader, {backgroundColor: this.props.backgroundColor}, {height: this.props.height}]} />
     }
     return (
-      <View style={[style.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
+      <View style={[styles.courseHeader, {backgroundColor: this.props.backgroundColor, height: this.props.height}]}>
         <View style={styles.questionHeaderFluxContainer}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity onPress={this.closeCourse}>
               <Image
                 style={{ width: 100, height: 49 }}
-                source={require('../images/logo.png')}
+                source={require('../../images/logo.png')}
                 resizeMode={'contain'}
               />
             </TouchableOpacity>
@@ -57,16 +57,6 @@ class CourseHeader extends React.Component {
         {this.props.children}
       </View>
     )
-  }
-}
-
-const style = {
-  courseHeader: {
-    margin: 0,
-    height: appStyle.header.height,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 }
 

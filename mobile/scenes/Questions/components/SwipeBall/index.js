@@ -5,11 +5,11 @@ import { graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router'
 
 import { getGraphqlForProcessEvaluationMutation } from 'thebrain-shared/graphql/items/processEvaluation'
-import styles from '../../../styles/styles'
-import { updateAnswerVisibility } from '../../../actions/FlashcardActions'
-import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../helpers/SwipeHelpers'
-import { mutationConnectionHandler } from '../../../components/NoInternet'
+import { updateAnswerVisibility } from '../../../../actions/FlashcardActions'
+import { getSwipeDirection, getDragLength, getDirectionEvaluationValue } from '../../helpers/SwipeHelpers'
+import { mutationConnectionHandler } from '../../../../components/NoInternet'
 import { LinearGradient } from 'expo'
+import styles from './styles'
 
 const defaultBallColors = ['#7c45d2', '#672f92']
 const ballColors = {
