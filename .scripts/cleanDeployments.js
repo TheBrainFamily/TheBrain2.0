@@ -1,22 +1,28 @@
 const AWS = require('aws-sdk')
 const Promise = require('promise')
+const moment = require('moment')
+const MongoClient = require('mongodb')
+
 AWS.config.update({region: 'us-east-1'})
 
 class CleanDeployments {
   constructor () {
     this.cloudFormation = new AWS.CloudFormation()
     this.s3 = new AWS.S3()
+    this.baseMongoUrl = process.env.BASE_STAGING_MONGOURL
+    this.db = undefined
   }
 
   async clean () {
     const stacks = await this.getStacks()
     for (let i = 0; i < stacks.length; i++) {
       const stack = stacks[i]
-        console.log('Stack to delete: ', stack.StackName)
-      if (/serverless-hello-world-1.*/.test(stack.StackName)) {
-        console.log('Stack to delete: ', stack.StackName)
-        process.stdout.write('Checking for S3 bucket resources: ')
-        const stackS3Resource = await this.getStackS3BucketResource(stack.StackName)
+      const {StackName} = stack
+
+      if (this.isStackOlderThan(7, stack)) {
+        console.log('Stack to delete: ', StackName)
+        process.stdout.write('Checking for S3 bucket resources...')
+        const stackS3Resource = await this.getStackS3BucketResource(StackName)
         if (stackS3Resource) {
           console.log('Yes')
           const bucket = stackS3Resource.PhysicalResourceId
@@ -27,10 +33,45 @@ class CleanDeployments {
             await this.deleteS3BucketContents(bucket, contentKeys)
           }
         }
-        else console.log('No')
+        else console.log('There is no S3 bucket resources')
 
-        console.log('Deleting stack: ', stack.StackName, "\n")
-        await this.deleteStack(stack.StackName)
+        console.log('Deleting stack: ', StackName, '\n')
+        await this.deleteStack(StackName)
+
+        const branchVersionLabel = this.getBranchVersionLabel(StackName)
+
+        process.stdout.write('Trying to connect to Mongo db...')
+        if (this.isMongoUrlExist()) {
+          try {
+            await this.connectToDatabase(branchVersionLabel)
+            console.log('connected')
+            console.log('Dropping database...')
+            await this.dropDatabase(branchVersionLabel)
+            console.log('Done')
+          }
+          catch (e) {
+            console.log('Can\'t connect to db')
+          }
+        }
+        else console.log('There is no Mongo url present in system environment')
+
+        process.stdout.write('Checking for Web deployment...')
+        try {
+          const webDeploymentBucket = `thebrain-web-${branchVersionLabel}`
+          const webDeploymentContentKeys = await this.getS3BucketContentsKeys(webDeploymentBucket)
+          console.log('Yes')
+          console.log('Checking for S3 bucket content...')
+          if (this.s3BucketHasContent(webDeploymentContentKeys)) {
+            console.log('Found, deleting...')
+            await this.deleteS3BucketContents(webDeploymentBucket, webDeploymentContentKeys)
+          }
+          console.log(`Deleting Web bucket: ${webDeploymentBucket}`)
+          await this.deleteS3Bucket(webDeploymentBucket)
+
+        }
+        catch (e) {
+          console.log('There is no Web deployment')
+        }
       }
     }
   }
@@ -111,6 +152,43 @@ class CleanDeployments {
 
   s3BucketHasContent (content) {
     return content.length > 0
+  }
+
+  isStackOlderThan (days, stack) {
+    return true
+    const stackTime = stack.StackStatus === 'CREATE_COMPLETE' ? stack.CreationTime : stack.LastUpdatedTime
+    const currentTimeObject = moment()
+    const stackTimeObject = moment(stackTime)
+    const diffDays = currentTimeObject.diff(stackTimeObject, 'days')
+    return diffDays > days
+  }
+
+  getBranchVersionLabel (stackName) {
+    return stackName.replace(/^thebrain-server-/, '').replace(/-dev$/, '')
+  }
+
+  deleteS3Bucket (Bucket) {
+    return new Promise((resolve, reject) => {
+      this.s3.deleteBucket({Bucket}, (err, data) => {
+        if (err) reject(err)
+        else resolve(data)
+      })
+    })
+  }
+
+  isMongoUrlExist () {
+    return this.baseMongoUrl !== undefined && this.baseMongoUrl !== ''
+  }
+
+  async connectToDatabase (branchVersionLabel) {
+    const mongoUrl = this.baseMongoUrl.replace('${MY_DB_NAME}', branchVersionLabel)
+    this.db = await MongoClient.connect(mongoUrl)
+  }
+
+  async dropDatabase (branchVersionLabel) {
+    const database = await this.db.db(branchVersionLabel)
+    await database.dropDatabase()
+    await this.db.close()
   }
 
 }
