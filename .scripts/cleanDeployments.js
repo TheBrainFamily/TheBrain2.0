@@ -10,6 +10,7 @@ class CleanDeployments {
     this.cloudFormation = new AWS.CloudFormation()
     this.s3 = new AWS.S3()
     this.baseMongoUrl = process.env.BASE_STAGING_MONGOURL
+    this.buildVersionLabel = process.env.BUILD_VERSION_LABEL
     this.db = undefined
   }
 
@@ -18,8 +19,9 @@ class CleanDeployments {
     for (let i = 0; i < stacks.length; i++) {
       const stack = stacks[i]
       const {StackName} = stack
+      const branchVersionLabel = this.getBranchVersionLabel(StackName)
 
-      if (this.isStackOlderThan(7, stack)) {
+      if (branchVersionLabel !== this.buildVersionLabel && this.isStackOlderThan(7, stack)) {
         console.log('Stack to delete: ', StackName)
         process.stdout.write('Checking for S3 bucket resources...')
         const stackS3Resource = await this.getStackS3BucketResource(StackName)
@@ -37,8 +39,6 @@ class CleanDeployments {
 
         console.log('Deleting stack: ', StackName, '\n')
         await this.deleteStack(StackName)
-
-        const branchVersionLabel = this.getBranchVersionLabel(StackName)
 
         process.stdout.write('Trying to connect to Mongo db...')
         if (this.isMongoUrlExist()) {
@@ -155,7 +155,6 @@ class CleanDeployments {
   }
 
   isStackOlderThan (days, stack) {
-    return true
     const stackTime = stack.StackStatus === 'CREATE_COMPLETE' ? stack.CreationTime : stack.LastUpdatedTime
     const currentTimeObject = moment()
     const stackTimeObject = moment(stackTime)
