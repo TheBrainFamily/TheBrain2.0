@@ -2,6 +2,7 @@ const AWS = require('aws-sdk')
 const Promise = require('promise')
 const moment = require('moment')
 const MongoClient = require('mongodb')
+const crypto = require('crypto')
 
 AWS.config.update({region: 'us-east-1'})
 
@@ -12,6 +13,8 @@ class CleanDeployments {
     this.baseMongoUrl = process.env.BASE_STAGING_MONGOURL
     this.buildVersionLabel = process.env.BUILD_VERSION_LABEL
     this.db = undefined
+    this.protectedBranches = ['master', 'develop']
+    this.updateProtectedBranches()
   }
 
   async clean () {
@@ -20,58 +23,126 @@ class CleanDeployments {
       const stack = stacks[i]
       const {StackName} = stack
       const branchVersionLabel = this.getBranchVersionLabel(StackName)
+      let isStackDeleted = false
 
-      if (branchVersionLabel !== this.buildVersionLabel && this.isStackOlderThan(7, stack)) {
-        console.log('Stack to delete: ', StackName)
-        process.stdout.write('Checking for S3 bucket resources...')
-        const stackS3Resource = await this.getStackS3BucketResource(StackName)
-        if (stackS3Resource) {
-          console.log('Yes')
-          const bucket = stackS3Resource.PhysicalResourceId
-          const contentKeys = await this.getS3BucketContentsKeys(bucket)
-          console.log('Checking for S3 bucket content...')
-          if (this.s3BucketHasContent(contentKeys)) {
-            console.log('Found, deleting...')
-            await this.deleteS3BucketContents(bucket, contentKeys)
-          }
-        }
-        else console.log('There is no S3 bucket resources')
+      if (!this.isProtectedBranch(branchVersionLabel) && this.isStackOlderThan(7, stack)) {
+        console.log(`[Current stack] ${StackName}'\n`)
 
-        console.log('Deleting stack: ', StackName, '\n')
-        await this.deleteStack(StackName)
-
-        process.stdout.write('Trying to connect to Mongo db...')
-        if (this.isMongoUrlExist()) {
-          try {
-            await this.connectToDatabase(branchVersionLabel)
-            console.log('connected')
-            console.log('Dropping database...')
-            await this.dropDatabase(branchVersionLabel)
-            console.log('Done')
-          }
-          catch (e) {
-            console.log('Can\'t connect to db')
-          }
-        }
-        else console.log('There is no Mongo url present in system environment')
-
-        process.stdout.write('Checking for Web deployment...')
+        // Server deploy
+        process.stdout.write('[Server deploy] Checking for S3 bucket resources...\t\t\t\t')
+        let stackS3Resource
         try {
-          const webDeploymentBucket = `thebrain-web-${branchVersionLabel}`
-          const webDeploymentContentKeys = await this.getS3BucketContentsKeys(webDeploymentBucket)
-          console.log('Yes')
-          console.log('Checking for S3 bucket content...')
-          if (this.s3BucketHasContent(webDeploymentContentKeys)) {
-            console.log('Found, deleting...')
-            await this.deleteS3BucketContents(webDeploymentBucket, webDeploymentContentKeys)
-          }
-          console.log(`Deleting Web bucket: ${webDeploymentBucket}`)
-          await this.deleteS3Bucket(webDeploymentBucket)
-
+          stackS3Resource = await this.getStackS3BucketResource(StackName)
         }
         catch (e) {
-          console.log('There is no Web deployment')
+          console.log('[ERROR] ', e.message)
+          if (e.statusCode === 400) {
+            console.log('[Server deploy] Probably Stack was deleted by different process few seconds ago')
+          }
         }
+
+        if (stackS3Resource) {
+          console.log('[OK] Found')
+          const bucket = stackS3Resource.PhysicalResourceId
+          process.stdout.write('[Server deploy] Checking for S3 bucket content...\t\t\t\t')
+          let contentKeys
+          try {
+            contentKeys = await this.getS3BucketContentsKeys(bucket)
+          }
+          catch (e) {
+            console.log('[ERROR] There is no S3 bucket')
+          }
+
+          if (contentKeys) {
+            if (this.s3BucketHasContent(contentKeys)) {
+              console.log('[OK] Found')
+              process.stdout.write('[Server deploy] Deleting S3 bucket content...\t\t\t\t\t')
+              try {
+                      await this.deleteS3BucketContents(bucket, contentKeys)
+                console.log('[OK] Done')
+              }
+              catch (e) {
+                console.log('[ERROR] There is a problem deleting content')
+              }
+            }
+            else console.log('[OK] S3 bucket is empty')
+          }
+        }
+        else console.log('[Server deploy] There is no S3 bucket resources')
+
+        process.stdout.write(`[Server deploy] Deleting stack deploy...\t\t\t\t\t`)
+        try {
+            await this.deleteStack(StackName)
+          console.log('[OK] Done\n')
+          isStackDeleted = true
+        }
+        catch (e) {
+          console.log('[ERROR] There is problem deleting stack')
+        }
+
+        if (isStackDeleted) {
+          // Server DB
+          process.stdout.write('[Server DB] Trying to connect to Mongo db...\t\t\t\t\t')
+          if (this.isMongoUrlExist()) {
+            try {
+              await this.connectToDatabase(branchVersionLabel)
+              console.log('[OK] Connected')
+            }
+            catch (e) {
+              console.log('[ERROR] Can\'t connect to db')
+            }
+
+            if (this.isConnectedToDb()) {
+              process.stdout.write('[Server DB] Dropping database...\t\t\t\t\t\t')
+              try {
+                await this.dropDatabase(branchVersionLabel)
+                console.log('[OK] Done')
+              }
+              catch (e) {
+                console.log('[ERROR] There is problem deleting db')
+              }
+              this.closeDbConnection()
+            }
+          }
+          else console.log('[ERROR] There is no Mongo url present in system environment')
+        }
+
+        // Web deploy
+        process.stdout.write('\n[Web deploy] Checking for Web deployment...\t\t\t\t\t')
+        let webDeploymentContentKeys
+        const webDeploymentBucket = `thebrain-web-${branchVersionLabel}`
+        try {
+          webDeploymentContentKeys = await this.getS3BucketContentsKeys(webDeploymentBucket)
+        }
+        catch (e) {
+          console.log('[ERROR] There is no Web deployment')
+        }
+
+        if (webDeploymentContentKeys) {
+          if (this.s3BucketHasContent(webDeploymentContentKeys)) {
+            console.log('[OK] Found')
+            process.stdout.write('[Web deploy] Deleting S3 bucket content...\t\t\t\t\t')
+            try {
+              await this.deleteS3BucketContents(webDeploymentBucket, webDeploymentContentKeys)
+              console.log('[OK] Done')
+            }
+            catch (e) {
+              console.log('[ERROR] There is a problem deleting content')
+            }
+          }
+          else console.log('[OK] S3 bucket is empty')
+        }
+
+        process.stdout.write(`[Web deploy] Deleting web deploy...\t\t\t\t\t\t`)
+        try {
+          await this.deleteS3Bucket(webDeploymentBucket)
+          console.log('[OK] Done')
+        }
+        catch (e) {
+          console.log('[ERROR] ', e.message)
+        }
+
+        console.log('\n---\n')
       }
     }
   }
@@ -187,7 +258,31 @@ class CleanDeployments {
   async dropDatabase (branchVersionLabel) {
     const database = await this.db.db(branchVersionLabel)
     await database.dropDatabase()
+  }
+
+  async closeDbConnection () {
     await this.db.close()
+    this.db = undefined
+  }
+
+  isConnectedToDb () {
+    return this.db !== undefined
+  }
+
+  updateProtectedBranches () {
+    this.protectedBranches = this.protectedBranches.map(protectedBranch => {
+      const truncatedBranchName = protectedBranch.substr(0, 14)
+      const md5Hash = this.generateMd5Hash(protectedBranch)
+      return `${truncatedBranchName}-${md5Hash}`
+    })
+  }
+
+  generateMd5Hash (string) {
+    return crypto.createHash('md5').update(`${string}\n`).digest('hex').substr(0, 7)
+  }
+
+  isProtectedBranch (branchVersionLabel) {
+    return this.protectedBranches.indexOf(branchVersionLabel) > -1 || branchVersionLabel === this.buildVersionLabel
   }
 
 }
