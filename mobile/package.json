@@ -27,7 +27,8 @@
     "react-test-renderer": "16.0.0",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2",
-    "thebrain-shared": "../shared"
+    "thebrain-shared": "../shared",
+    "flow-bin": "^0.40.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -52,7 +53,6 @@
   "dependencies": {
     "events": "^1.1.1",
     "expo": "^23.0.4",
-    "flow-bin": "^0.40.0",
     "graphql-tag": "^2.0.0",
     "immutability-helper": "^2.1.2",
     "lodash": "^4.17.4",
