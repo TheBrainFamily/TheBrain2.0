@@ -122,6 +122,10 @@ jobs:
           name: Enzyme almost-end to end tests for Mobile
           working_directory: "~/TheBrain2.0/"
           command: npm run enzymeTestMobile
+      - run:
+          name: Removing old deploys
+          working_directory: "~/TheBrain2.0/.scripts/"
+          command: node cleanDeployments.js
 
 
 ### End to end with web
