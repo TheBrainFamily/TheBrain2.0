@@ -2,19 +2,27 @@ const AWS = require('aws-sdk')
 const Promise = require('promise')
 const moment = require('moment')
 const MongoClient = require('mongodb')
-const crypto = require('crypto')
+
+// ------
+
+const BranchHelper = require('./helpers/branchHelper')
 
 AWS.config.update({region: 'us-east-1'})
+
+// ------
+
+const branchHelper = new BranchHelper()
+branchHelper.addProtectedBranch('master')
+branchHelper.addProtectedBranch('develop')
+branchHelper.updateProtectedBranches()
+
 
 class CleanDeployments {
   constructor () {
     this.cloudFormation = new AWS.CloudFormation()
     this.s3 = new AWS.S3()
     this.baseMongoUrl = process.env.BASE_STAGING_MONGOURL
-    this.buildVersionLabel = process.env.BUILD_VERSION_LABEL
     this.db = undefined
-    this.protectedBranches = ['master', 'develop']
-    this.updateProtectedBranches()
   }
 
   async clean () {
@@ -22,10 +30,10 @@ class CleanDeployments {
     for (let i = 0; i < stacks.length; i++) {
       const stack = stacks[i]
       const {StackName} = stack
-      const branchVersionLabel = this.getBranchVersionLabel(StackName)
+      const branchVersionLabel = branchHelper.getBranchVersionLabel(StackName)
       let isStackDeleted = false
 
-      if (!this.isProtectedBranch(branchVersionLabel) && this.isStackOlderThan(7, stack)) {
+      if (!branchHelper.isProtectedBranch(branchVersionLabel) && this.isStackOlderThan(7, stack)) {
         console.log(`[Current stack] ${StackName}'\n`)
 
         // Server deploy
@@ -58,7 +66,7 @@ class CleanDeployments {
               console.log('[OK] Found')
               process.stdout.write('[Server deploy] Deleting S3 bucket content...\t\t\t\t\t')
               try {
-                      await this.deleteS3BucketContents(bucket, contentKeys)
+                await this.deleteS3BucketContents(bucket, contentKeys)
                 console.log('[OK] Done')
               }
               catch (e) {
@@ -72,7 +80,7 @@ class CleanDeployments {
 
         process.stdout.write(`[Server deploy] Deleting stack deploy...\t\t\t\t\t`)
         try {
-            await this.deleteStack(StackName)
+          await this.deleteStack(StackName)
           console.log('[OK] Done\n')
           isStackDeleted = true
         }
@@ -233,10 +241,6 @@ class CleanDeployments {
     return diffDays > days
   }
 
-  getBranchVersionLabel (stackName) {
-    return stackName.replace(/^thebrain-server-/, '').replace(/-dev$/, '')
-  }
-
   deleteS3Bucket (Bucket) {
     return new Promise((resolve, reject) => {
       this.s3.deleteBucket({Bucket}, (err, data) => {
@@ -245,46 +249,6 @@ class CleanDeployments {
       })
     })
   }
-
-  isMongoUrlExist () {
-    return this.baseMongoUrl !== undefined && this.baseMongoUrl !== ''
-  }
-
-  async connectToDatabase (branchVersionLabel) {
-    const mongoUrl = this.baseMongoUrl.replace('${MY_DB_NAME}', branchVersionLabel)
-    this.db = await MongoClient.connect(mongoUrl)
-  }
-
-  async dropDatabase (branchVersionLabel) {
-    const database = await this.db.db(branchVersionLabel)
-    await database.dropDatabase()
-  }
-
-  async closeDbConnection () {
-    await this.db.close()
-    this.db = undefined
-  }
-
-  isConnectedToDb () {
-    return this.db !== undefined
-  }
-
-  updateProtectedBranches () {
-    this.protectedBranches = this.protectedBranches.map(protectedBranch => {
-      const truncatedBranchName = protectedBranch.substr(0, 14)
-      const md5Hash = this.generateMd5Hash(protectedBranch)
-      return `${truncatedBranchName}-${md5Hash}`
-    })
-  }
-
-  generateMd5Hash (string) {
-    return crypto.createHash('md5').update(`${string}\n`).digest('hex').substr(0, 7)
-  }
-
-  isProtectedBranch (branchVersionLabel) {
-    return this.protectedBranches.indexOf(branchVersionLabel) > -1 || branchVersionLabel === this.buildVersionLabel
-  }
-
 }
 
 const cleanDeployments = new CleanDeployments()
