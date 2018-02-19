@@ -49,12 +49,6 @@ jobs:
 #          paths:
 #            - ~/TheBrain2.0/server/node_modules
       - run:
-          name: Collect server integration/unit tests coverage
-          working_directory: "~/TheBrain2.0/server/artifacts"
-          command: ../node_modules/.bin/codecov -f lcov.info
-          environment:
-            - CODECOV_TOKEN: "c2740296-3f65-4994-beac-37a127192011"
-      - run:
           name: Validate standard linting rules on server
           working_directory: "~/TheBrain2.0/server/"
           command: npm run standard
@@ -117,16 +111,31 @@ jobs:
       - run:
           name: Enzyme almost-end to end tests for Web
           working_directory: "~/TheBrain2.0/"
-          command: npm run enzymeTest
+          command: npm run enzymeTest -- --coverage --coverageDirectory coverageWeb
       - run:
           name: Enzyme almost-end to end tests for Mobile
           working_directory: "~/TheBrain2.0/"
-          command: npm run enzymeTestMobile
+          command: npm run enzymeTestMobile -- --coverage --coverageDirectory coverageMobile
+      - run:
+          name: Uploading the coverage to Code Climate
+          working_directory: "~/TheBrain2.0/"
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            mv coverageWeb coverage
+             ./cc-test-reporter -d format-coverage -o codeclimate.web.json
+            rm -rf coverage
+            mv coverageMobile coverage
+             ./cc-test-reporter -d format-coverage -o codeclimate.mobile.json
+            rm -rf coverage
+            mv server/artifacts coverage
+            ./cc-test-reporter -d format-coverage -o codeclimate.server.json
+            ./cc-test-reporter sum-coverage codeclimate.*.json -p 3 -o total.json
+            ./cc-test-reporter upload-coverage -i total.json
 #      - run:
 #          name: Removing old deploys
 #          working_directory: "~/TheBrain2.0/.scripts/"
 #          command: node cleanDeployments.js
-
 
 ### End to end with web
       - run:

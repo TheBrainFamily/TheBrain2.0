@@ -103,7 +103,7 @@ class CleanDeployments {
             if (this.isConnectedToDb()) {
               process.stdout.write('[Server DB] Dropping database...\t\t\t\t\t\t')
               try {
-                await this.dropDatabase(branchVersionLabel)
+                await this.dropDatabase(`CI_${branchVersionLabel}`)
                 console.log('[OK] Done')
               }
               catch (e) {
