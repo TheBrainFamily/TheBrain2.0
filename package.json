@@ -92,6 +92,7 @@
     "react-dom": "^16.2.0",
     "react-test-renderer": "^15.6.2",
     "regenerator-runtime": "^0.11.1",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "testdouble": "^3.5.0"
   }
 }

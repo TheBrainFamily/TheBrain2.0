@@ -1,11 +1,12 @@
 const AWS = require('aws-sdk')
-const Promise = require('promise')
-const moment = require('moment')
 const MongoClient = require('mongodb')
 
 // ------
 
 const BranchHelper = require('./helpers/branchHelper')
+const DbHelper = require('./helpers/dbHelper')
+const CloudFormationHelper = require('./helpers/cloudFormationHelper')
+const S3Helper = require('./helpers/s3Helper')
 
 AWS.config.update({region: 'us-east-1'})
 
@@ -16,31 +17,31 @@ branchHelper.addProtectedBranch('master')
 branchHelper.addProtectedBranch('develop')
 branchHelper.updateProtectedBranches()
 
+const dbHelper = new DbHelper(MongoClient)
+
+const cloudFormationHelper = new CloudFormationHelper(new AWS.CloudFormation())
+
+const s3Helper = new S3Helper(new AWS.S3())
+
+// ------
 
 class CleanDeployments {
-  constructor () {
-    this.cloudFormation = new AWS.CloudFormation()
-    this.s3 = new AWS.S3()
-    this.baseMongoUrl = process.env.BASE_STAGING_MONGOURL
-    this.db = undefined
-  }
-
   async clean () {
-    const stacks = await this.getStacks()
+    const stacks = await cloudFormationHelper.getStacks()
     for (let i = 0; i < stacks.length; i++) {
       const stack = stacks[i]
       const {StackName} = stack
       const branchVersionLabel = branchHelper.getBranchVersionLabel(StackName)
       let isStackDeleted = false
 
-      if (!branchHelper.isProtectedBranch(branchVersionLabel) && this.isStackOlderThan(7, stack)) {
+      if (!branchHelper.isProtectedBranch(branchVersionLabel) && cloudFormationHelper.isStackOlderThan(7, stack)) {
         console.log(`[Current stack] ${StackName}'\n`)
 
         // Server deploy
         process.stdout.write('[Server deploy] Checking for S3 bucket resources...\t\t\t\t')
         let stackS3Resource
         try {
-          stackS3Resource = await this.getStackS3BucketResource(StackName)
+          stackS3Resource = await cloudFormationHelper.getStackS3BucketResource(StackName)
         }
         catch (e) {
           console.log('[ERROR] ', e.message)
@@ -55,18 +56,18 @@ class CleanDeployments {
           process.stdout.write('[Server deploy] Checking for S3 bucket content...\t\t\t\t')
           let contentKeys
           try {
-            contentKeys = await this.getS3BucketContentsKeys(bucket)
+            contentKeys = await s3Helper.getS3BucketContentsKeys(bucket)
           }
           catch (e) {
             console.log('[ERROR] There is no S3 bucket')
           }
 
           if (contentKeys) {
-            if (this.s3BucketHasContent(contentKeys)) {
+            if (s3Helper.s3BucketHasContent(contentKeys)) {
               console.log('[OK] Found')
               process.stdout.write('[Server deploy] Deleting S3 bucket content...\t\t\t\t\t')
               try {
-                await this.deleteS3BucketContents(bucket, contentKeys)
+                // await s3Helper.deleteS3BucketContents(bucket, contentKeys)
                 console.log('[OK] Done')
               }
               catch (e) {
@@ -80,7 +81,7 @@ class CleanDeployments {
 
         process.stdout.write(`[Server deploy] Deleting stack deploy...\t\t\t\t\t`)
         try {
-          await this.deleteStack(StackName)
+          // await cloudFormationHelper.deleteStack(StackName)
           console.log('[OK] Done\n')
           isStackDeleted = true
         }
@@ -91,25 +92,25 @@ class CleanDeployments {
         if (isStackDeleted) {
           // Server DB
           process.stdout.write('[Server DB] Trying to connect to Mongo db...\t\t\t\t\t')
-          if (this.isMongoUrlExist()) {
+          if (dbHelper.isMongoUrlExist()) {
             try {
-              await this.connectToDatabase(branchVersionLabel)
+              await dbHelper.connectToDatabase(branchVersionLabel)
               console.log('[OK] Connected')
             }
             catch (e) {
               console.log('[ERROR] Can\'t connect to db')
             }
 
-            if (this.isConnectedToDb()) {
+            if (dbHelper.isConnectedToDb()) {
               process.stdout.write('[Server DB] Dropping database...\t\t\t\t\t\t')
               try {
-                await this.dropDatabase(`CI_${branchVersionLabel}`)
+                // await dbHelper.dropDatabase(`CI_${branchVersionLabel}`)
                 console.log('[OK] Done')
               }
               catch (e) {
                 console.log('[ERROR] There is problem deleting db')
               }
-              this.closeDbConnection()
+              dbHelper.closeDbConnection()
             }
           }
           else console.log('[ERROR] There is no Mongo url present in system environment')
@@ -120,18 +121,18 @@ class CleanDeployments {
         let webDeploymentContentKeys
         const webDeploymentBucket = `thebrain-web-${branchVersionLabel}`
         try {
-          webDeploymentContentKeys = await this.getS3BucketContentsKeys(webDeploymentBucket)
+          webDeploymentContentKeys = await s3Helper.getS3BucketContentsKeys(webDeploymentBucket)
         }
         catch (e) {
           console.log('[ERROR] There is no Web deployment')
         }
 
         if (webDeploymentContentKeys) {
-          if (this.s3BucketHasContent(webDeploymentContentKeys)) {
+          if (s3Helper.s3BucketHasContent(webDeploymentContentKeys)) {
             console.log('[OK] Found')
             process.stdout.write('[Web deploy] Deleting S3 bucket content...\t\t\t\t\t')
             try {
-              await this.deleteS3BucketContents(webDeploymentBucket, webDeploymentContentKeys)
+              // await s3Helper.deleteS3BucketContents(webDeploymentBucket, webDeploymentContentKeys)
               console.log('[OK] Done')
             }
             catch (e) {
@@ -143,7 +144,7 @@ class CleanDeployments {
 
         process.stdout.write(`[Web deploy] Deleting web deploy...\t\t\t\t\t\t`)
         try {
-          await this.deleteS3Bucket(webDeploymentBucket)
+          // await s3Helper.deleteS3Bucket(webDeploymentBucket)
           console.log('[OK] Done')
         }
         catch (e) {
@@ -153,101 +154,6 @@ class CleanDeployments {
         console.log('\n---\n')
       }
     }
-  }
-
-  getStacks () {
-    const params = {
-      StackStatusFilter: [
-        'CREATE_COMPLETE',
-        'ROLLBACK_COMPLETE',
-        'UPDATE_COMPLETE',
-        'UPDATE_ROLLBACK_COMPLETE'
-      ]
-    }
-    return new Promise((resolve, reject) => {
-      this.cloudFormation.listStacks(params, (err, data) => {
-        if (err) reject(err)
-        else resolve(data.StackSummaries)
-      })
-    })
-  }
-
-  getStackS3BucketResource (StackName) {
-    return new Promise((resolve, reject) => {
-      this.cloudFormation.listStackResources({StackName}, (err, data) => {
-        if (err) reject(err)
-        else {
-          resolve(data.StackResourceSummaries.filter(resource => this.isS3Bucket(resource.ResourceType) && this.isResourceExists(resource.ResourceStatus))[0])
-        }
-      })
-    })
-  }
-
-  isS3Bucket (resourceType) {
-    return resourceType === 'AWS::S3::Bucket'
-  }
-
-  isResourceExists (resourceStatus) {
-    const resourceStatuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE']
-    return resourceStatuses.indexOf(resourceStatus) !== -1
-  }
-
-  deleteStack (StackName) {
-    return new Promise((resolve, reject) => {
-      this.cloudFormation.deleteStack({StackName}, (err, data) => {
-        if (err) reject(err)
-        else resolve(data)
-      })
-    })
-  }
-
-  getS3BucketContentsKeys (Bucket) {
-    return new Promise((resolve, reject) => {
-      this.s3.listObjects({Bucket}, (err, data) => {
-        if (err) reject(err)
-        else {
-          const keys = []
-          data.Contents.forEach(content => keys.push({Key: content.Key}))
-          resolve(keys)
-        }
-      })
-    })
-  }
-
-  deleteS3BucketContents (Bucket, contentsKeys) {
-    const params = {
-      Bucket,
-      Delete: {
-        Objects: contentsKeys
-      }
-    }
-    return new Promise((resolve, reject) => {
-      this.s3.deleteObjects(params, (err, data) => {
-        if (err) reject(err)
-        else resolve(data)
-      })
-    })
-  }
-
-  s3BucketHasContent (content) {
-    return content.length > 0
-  }
-
-  isStackOlderThan (days, stack) {
-    const stackTime = stack.StackStatus === 'CREATE_COMPLETE' ? stack.CreationTime : stack.LastUpdatedTime
-    const currentTimeObject = moment()
-    const stackTimeObject = moment(stackTime)
-    const diffDays = currentTimeObject.diff(stackTimeObject, 'days')
-    return diffDays > days
-  }
-
-  deleteS3Bucket (Bucket) {
-    return new Promise((resolve, reject) => {
-      this.s3.deleteBucket({Bucket}, (err, data) => {
-        if (err) reject(err)
-        else resolve(data)
-      })
-    })
   }
 }
 

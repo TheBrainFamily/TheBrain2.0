@@ -9,7 +9,7 @@ describe('BranchHelper', () => {
 
       expect(branchHelper.buildVersionLabel).toEqual(versionLabel)
     })
-    it('should set `buildVersionLabel` system env `BUILD_VERSION_LABEL` when no `buildVersionLabel` param is passed', () => {
+    it('should set `buildVersionLabel` from system env `BUILD_VERSION_LABEL` when no `buildVersionLabel` param is passed', () => {
       const versionLabel = 'env-label'
       process.env.BUILD_VERSION_LABEL = versionLabel
 
