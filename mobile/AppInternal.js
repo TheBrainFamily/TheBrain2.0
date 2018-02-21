@@ -15,13 +15,24 @@ import { SafeAreaView, View } from 'react-native'
 import Page from './components/Page'
 
 export class AppInternal extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      backgroundColor: 'white'
+    }
+  }
+
+  changeSafeAreaViewBackground (color) {
+    this.setState({backgroundColor: color || 'white'})
+  }
+
   render () {
     return (<NativeRouter>
-      <SafeAreaView style={{backgroundColor: 'transparent'}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: this.state.backgroundColor}}>
         <View style={styles.mainPage}>
           <View style={styles.topContainer} />
           {this.props.fontLoaded ? <Page>
-            <Route exact path='/' component={Home} />
+            <Route exact path='/' render={routeProps => <Home {...routeProps} changeSafeAreaViewBackground={this.changeSafeAreaViewBackground.bind(this)} />} />
             <Route exact path='/intro' component={Intro} />
             <Route exact path='/congratulations' component={Congratulations} />
             <Route exact path='/questions' component={Questions} />

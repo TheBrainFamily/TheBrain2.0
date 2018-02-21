@@ -193,6 +193,7 @@ class Home extends React.Component {
 
   selectCourse = async (course) => {
     if (!this.props.course.selectedCourse) {
+      this.props.changeSafeAreaViewBackground(course.color)
       const deviceId = Expo.Constants.deviceId
       this.props.dispatch(courseActions.select(course))
       await mutationConnectionHandler(this.props.history, () => {
@@ -240,6 +241,7 @@ class Home extends React.Component {
       this.setState({ isExitAnimationFinished: false })
       this.closeMenu()
       this.enableCourseSelector()
+      this.props.changeSafeAreaViewBackground()
     })
   }
 
@@ -332,7 +334,7 @@ class Home extends React.Component {
 
         {isExitAnimationFinished && <Course closeCourse={this.closeCourse} />}
 
-        {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction} />}
+        {this.props.mainMenu.visible && <MainMenu closeCourse={this.closeCourse} logoutAction={this.logoutAction} changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground} />}
       </View>
     )
   }

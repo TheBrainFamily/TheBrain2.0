@@ -55,6 +55,7 @@ class MainMenuOptions extends React.Component {
 
   go = (path) => () => {
     this.props.history.push(path)
+    this.props.changeSafeAreaViewBackground()
     this.closeMenu()
   }
 
