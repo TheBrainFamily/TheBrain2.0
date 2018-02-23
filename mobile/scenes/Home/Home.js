@@ -55,7 +55,10 @@ class Home extends React.Component {
 
     AsyncStorage.getItem('isIntroDisabled').then((isIntroDisabled) => {
       if (!isIntroDisabled) {
-        props.history.push('/intro')
+        props.history.push({
+          pathname: '/intro',
+          state: {changeSafeAreaViewBackground: props.changeSafeAreaViewBackground}
+        })
       }
     })
   }

@@ -34,7 +34,7 @@ class Lectures extends React.Component {
       return <View />
     }
     return (
-      <PageContainer>
+      <PageContainer changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground}>
         <PageTitle text='LECTURES LIST' />
         <FlatList
           data={this.props.lessons.Lessons}

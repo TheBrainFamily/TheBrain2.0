@@ -35,10 +35,14 @@ class PageContainer extends React.Component {
     }
   }
 
+  changeSafeAreaViewBackground () {
+    return this.props.changeSafeAreaViewBackground || this.props.location.state.changeSafeAreaViewBackground
+  }
+
   renderContainer = () => (
     <View style={{ height: '100%', backgroundColor: 'white' }}>
       <Header />
-      {this.props.mainMenu.visible ? <MainMenu /> : this.props.children}
+      {this.props.mainMenu.visible ? <MainMenu changeSafeAreaViewBackground={this.changeSafeAreaViewBackground()} /> : this.props.children}
     </View>)
 
   renderKeyboardAwareContainer = () => (
@@ -50,7 +54,7 @@ class PageContainer extends React.Component {
         height: '100%'
       }}>
         <Header hideHamburger={this.props.hideHamburger} />
-        {this.props.mainMenu.visible ? <MainMenu /> : this.props.children}
+        {this.props.mainMenu.visible ? <MainMenu changeSafeAreaViewBackground={this.changeSafeAreaViewBackground()} /> : this.props.children}
       </View>
     </KeyboardAwareScrollView>)
 
