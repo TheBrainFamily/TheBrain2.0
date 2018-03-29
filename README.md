@@ -1,16 +1,17 @@
 # TheBrain 2.0 
 This is a repository for TheBrain 2.0 - The app that will make you remember everything forever.
-It is live at [thebrain.pro](https://thebrain.pro), but also currently under a very heavy Work in Progress mode, please give us some time - we will be launching this early February 2018.
+It is live at [thebrain.pro](https://thebrain.pro), but also currently under a very heavy Work in Progress mode, please give us some time - we will be launching this early summer 2018.
 ## Motivation
 We build this because of our passion to effective learning, and also as a showcase of how can you structure, code, and automate test/builds with the great modern tools of JS ecosystem.
-What's unique about this project (besides the testing stack that allows for a huge amount of code reusability between unit/integration/end to end tests and also mobile/web/server, more about those soon ) - is the fantastic CI/CD pipeline - on every commit we deply our app (mobile/web/server) to a serverless architecture, and our Friendly Bot publishes those information in a PR. You can then test the whole stack in a given version, end to end, before merging, and without even checking out the branch :-)
+What's unique about this project (besides the testing stack that allows for a huge amount of code reusability between unit/integration/end to end tests and also mobile/web/server, more about those soon ) - is the fantastic CI/CD pipeline - on every commit we deploy our app (mobile/web/server) to a serverless architecture, and our Friendly Bot publishes those information in a PR. You can then test the whole stack in a given version, end to end, before merging, and without even checking out the branch :-)
 
 You pick up your phone, scan the QR code and you play around with the app connected to the server of a version matching your mobile. This is very powerful.
 
-This is how this looks like: 
+This is how this looks like (please don't try with the links from the screenshot, go to open PR if you want to check and see how it works) 
 
 ![friendly bot](http://i63.tinypic.com/ilccvs.jpg)
 
+Our architecture also solves the problem of code reuse between different platforms. IN MANY CASES, including this one, the functionality of the web and mobile apps are so close to each other that it makes sense to reuse the business logic/queries (in our case mostly graphql queries/mutations) between them. 
 
 ## Our stack
 * Web: [react](https://reactjs.org/) (create-react-app)
