@@ -89,7 +89,7 @@ class Profile extends React.Component {
     const isFacebookUser = this.props.currentUser && this.props.currentUser.CurrentUser ? this.props.currentUser.CurrentUser.facebookId : false
 
     return (
-      <PageContainer>
+      <PageContainer changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground}>
         <PageTitle text='PROFILE' />
 
         <View style={{

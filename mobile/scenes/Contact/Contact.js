@@ -8,7 +8,7 @@ import PageTitle from '../../components/PageTitle'
 class Contact extends React.Component {
   render () {
     return (
-      <PageContainer dontUseKeyboarAware>
+      <PageContainer dontUseKeyboarAware changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground}>
 
         <PageTitle text='CONTACT' />
 

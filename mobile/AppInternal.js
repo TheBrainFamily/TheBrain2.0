@@ -15,22 +15,34 @@ import { SafeAreaView, View } from 'react-native'
 import Page from './components/Page'
 
 export class AppInternal extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      backgroundColor: 'white'
+    }
+    this.RouteWithProps = ({component: Component, ...rest}) => <Route {...rest} render={props => <Component {...props} changeSafeAreaViewBackground={this.changeSafeAreaViewBackground.bind(this)} />} />
+  }
+
+  changeSafeAreaViewBackground (color) {
+    this.setState({backgroundColor: color || 'white'})
+  }
+
   render () {
     return (<NativeRouter>
-      <SafeAreaView style={{backgroundColor: 'transparent'}}>
+      <SafeAreaView style={{backgroundColor: this.state.backgroundColor}}>
         <View style={styles.mainPage}>
           <View style={styles.topContainer} />
           {this.props.fontLoaded ? <Page>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/intro' component={Intro} />
-            <Route exact path='/congratulations' component={Congratulations} />
-            <Route exact path='/questions' component={Questions} />
-            <Route exact path='/login' component={Login} />
-            <Route exact path='/lectures' component={Lectures} />
-            <Route exact path='/calendar' component={Calendar} />
-            <Route exact path='/profile' component={Profile} />
-            <Route exact path='/contact' component={Contact} />
-            <Route exact path='/nointernet' component={NoInternet} />
+            <this.RouteWithProps exact path='/' component={Home} />
+            <this.RouteWithProps exact path='/intro' component={Intro} />
+            <this.RouteWithProps exact path='/congratulations' component={Congratulations} />
+            <this.RouteWithProps exact path='/questions' component={Questions} />
+            <this.RouteWithProps exact path='/login' component={Login} />
+            <this.RouteWithProps exact path='/lectures' component={Lectures} />
+            <this.RouteWithProps exact path='/calendar' component={Calendar} />
+            <this.RouteWithProps exact path='/profile' component={Profile} />
+            <this.RouteWithProps exact path='/contact' component={Contact} />
+            <this.RouteWithProps exact path='/nointernet' component={NoInternet} />
           </Page> : null }
         </View>
       </SafeAreaView>

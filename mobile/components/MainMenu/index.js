@@ -60,7 +60,7 @@ class MainMenu extends React.Component {
 
     return <View style={[{height}]}>
       <MainMenuHeader level={level} currentUser={currentUser} username={username} sessionCount={sessionCount} />
-      <MainMenuOptions activated={activated} currentUser={currentUser} />
+      <MainMenuOptions activated={activated} currentUser={currentUser} changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground} />
     </View>
   }
 

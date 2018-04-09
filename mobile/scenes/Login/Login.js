@@ -90,7 +90,7 @@ class Login extends React.Component {
       return <Loading />
     }
     return (
-      <PageContainer>
+      <PageContainer changeSafeAreaViewBackground={this.props.changeSafeAreaViewBackground}>
 
         <View style={{ alignItems: 'center' }}>
           <Text style={[styles.infoText, { fontWeight: 'bold', fontSize: 20, marginVertical: 20 }]}>
