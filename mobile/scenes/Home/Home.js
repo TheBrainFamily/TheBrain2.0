@@ -171,6 +171,7 @@ class Home extends React.Component {
         if (Platform.OS === 'ios' && this.height === 568) iPhoneOffset = 20
         if (Platform.OS === 'ios' && this.height === 667) iPhoneOffset = 31
         if (Platform.OS === 'ios' && this.height === 736) iPhoneOffset = 38.5
+        if (Platform.OS === 'ios' && this.height === 812) iPhoneOffset = 98.5
         const elementHeightChangeAfterScaling = (height - newSizeY) / 2
         const translateYValue = this.height - pageYOffset - desiredElementTopYOffset - elementHeightChangeAfterScaling - iPhoneOffset
 
