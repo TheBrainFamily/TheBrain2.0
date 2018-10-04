@@ -218,10 +218,10 @@ jobs:
          name: Install server packages
          working_directory: "~/TheBrain2.0/server/"
          command: npm install
-      - run:
-          name: Configure the DB for the serverless server
-          working_directory: ~/TheBrain2.0/
-          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BUILD_VERSION_LABEL}/` npm run createDefaultDB
+#      - run:
+#          name: Configure the DB for the serverless server
+#          working_directory: ~/TheBrain2.0/
+#          command: STAGING_MONGOURL=`echo $BASE_STAGING_MONGOURL | sed s/'${MY_DB_NAME}'/CI_${BUILD_VERSION_LABEL}/` npm run createDefaultDB
       - run:
           name: Extend the serverless service name with a build number
           working_directory: ~/TheBrain2.0/server
